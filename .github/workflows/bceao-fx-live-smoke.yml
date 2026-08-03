@@ -9,6 +9,11 @@ on:
       - ".github/workflows/bceao-fx-live-smoke.yml"
       - "collectors/bceao_fx.py"
       - "collectors/common.py"
+  pull_request:
+    paths:
+      - ".github/workflows/bceao-fx-live-smoke.yml"
+      - "collectors/bceao_fx.py"
+      - "collectors/common.py"
 
 permissions:
   contents: read
