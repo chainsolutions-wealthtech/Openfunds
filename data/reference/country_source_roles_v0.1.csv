@@ -1,0 +1,8 @@
+Role code;Rôle;Domaines alimentés
+CENTRAL_BANK;Banque centrale;D07,D08,D09,D10
+STATISTICS_OFFICE;Institut de statistique;D02,D03,D04,D09,D15
+FINANCE_MINISTRY;Ministère des Finances;D05,D06,D10,D16
+DEBT_OFFICE;Agence de dette / Trésor;D06,D10
+EXCHANGE;Bourse;D10,D11
+SECURITIES_FUND_REGULATOR;Régulateur marchés / OPCVM;D11,D12,D16
+INSURANCE_PENSION_REGULATOR;Régulateur assurance / pensions;D13
