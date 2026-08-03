@@ -1,0 +1,120 @@
+name: Daily Africa FX Staging
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 20 * * 1-5"
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/fx-daily-staging.yml"
+      - "pipelines/fx_daily.py"
+      - "collectors/bceao_fx.py"
+      - "collectors/beac_fx.py"
+      - "collectors/fx_html_common.py"
+      - "collectors/fx_canonical.py"
+      - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: daily-africa-fx-staging
+  cancel-in-progress: false
+
+jobs:
+  collect-stage-and-optionally-persist:
+    name: Daily BCEAO and BEAC FX pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install optional PostgreSQL dependency
+        run: python -m pip install -r requirements/collectors-postgres.txt
+
+      - name: Run daily dual-source pipeline
+        env:
+          OPENFUNDS_DATABASE_URL: ${{ secrets.OPENFUNDS_DATABASE_URL }}
+        run: |
+          rm -rf artifacts/daily/fx
+          python -m pipelines.fx_daily \
+            --output-dir artifacts/daily/fx \
+            --persist-postgres \
+            --raw-retention-status GITHUB_ACTIONS_ARTIFACT_90_DAYS
+
+      - name: Validate coverage manifest and persistence status
+        env:
+          OPENFUNDS_DATABASE_URL: ${{ secrets.OPENFUNDS_DATABASE_URL }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          path = Path("artifacts/daily/fx/coverage/daily_fx_coverage.json")
+          assert path.exists(), "Daily FX coverage manifest is missing"
+          payload = json.loads(path.read_text(encoding="utf-8"))
+
+          assert payload["pipeline_code"] == "DAILY_AFRICA_FX_SNAPSHOTS"
+          assert payload["pipeline_version"] == "0.1.0"
+          assert payload["history_claim"] == "NO_FULL_HISTORY_CLAIM"
+          assert payload["source_count"] == 2
+
+          by_source = {row["source_code"]: row for row in payload["sources"]}
+          assert set(by_source) == {"BCEAO_XOF", "BEAC_XAF"}
+          assert by_source["BCEAO_XOF"]["canonical_pairs"] == ["XOF_EUR", "XOF_USD"]
+          assert by_source["BEAC_XAF"]["canonical_pairs"] == ["XAF_EUR", "XAF_USD"]
+          assert all(row["collection_status"] == "SUCCESS" for row in payload["sources"])
+          assert all(row["canonical_status"] == "SUCCESS" for row in payload["sources"])
+          assert all(row["history_status"] == "CURRENT_SNAPSHOT_ONLY" for row in payload["sources"])
+          assert all(
+              row["raw_retention_status"] == "GITHUB_ACTIONS_ARTIFACT_90_DAYS"
+              for row in payload["sources"]
+          )
+
+          database_configured = bool(os.environ.get("OPENFUNDS_DATABASE_URL"))
+          if database_configured:
+              assert payload["overall_status"] == "SUCCESS", payload
+              assert payload["persistent_database_configured"] is True
+              assert all(row["database_status"] == "SUCCESS" for row in payload["sources"])
+          else:
+              assert payload["overall_status"] == "STAGING_ONLY_DATABASE_NOT_CONFIGURED", payload
+              assert payload["persistent_database_configured"] is False
+              assert all(row["database_status"] == "NOT_CONFIGURED" for row in payload["sources"])
+
+          print(json.dumps({
+              "overall_status": payload["overall_status"],
+              "persistent_database_configured": payload["persistent_database_configured"],
+              "sources": [
+                  {
+                      "source_code": row["source_code"],
+                      "value_dates": row["value_dates"],
+                      "raw_sha256": row["raw_sha256"],
+                      "canonical_pairs": row["canonical_pairs"],
+                      "database_status": row["database_status"],
+                      "history_status": row["history_status"],
+                  }
+                  for row in payload["sources"]
+              ],
+          }, indent=2))
+          PY
+
+      - name: Upload temporary daily FX bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-africa-fx-${{ github.run_id }}
+          path: artifacts/daily/fx
+          if-no-files-found: warn
+          retention-days: 90
