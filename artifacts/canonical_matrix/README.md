@@ -8,7 +8,7 @@ SOURCE CANONIQUE : data/canonical/ + générateur Python
 SOURCE DE VERITE AUTONOME : NON
 CHARGEMENT PRODUCTION : INTERDIT
 VERSION DU MODELE CANONIQUE : 0.1.0
-VERSION DE L’EXPORT EXCEL : 0.4.1
+VERSION DE L’EXPORT EXCEL : 0.4.2
 DATE : 2026-08-03
 ```
 
@@ -34,13 +34,13 @@ BINARY_COMMITTED_TO_REPOSITORY = FALSE
 SHA256 :
 
 ```text
-44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa
+3aa91f71911e282138b6d71342782442ae8a23efc48f4aeb2cd9e102287e56da
 ```
 
 Taille :
 
 ```text
-201462 bytes
+201772 bytes
 ```
 
 ## Volumétrie vérifiée
@@ -216,7 +216,27 @@ ASSET_CLASS_CODE
 ASSET_SUBCLASS_CODE
 ```
 
-Le classeur calcule ensuite les trois catégories, les trois groupes de pairs et les trois blocs de référence.
+Le classeur calcule ensuite automatiquement :
+
+```text
+LOCAL_CATEGORY
+REGIONAL_CATEGORY
+AFRICA_CATEGORY
+
+LOCAL_PEER_GROUP
+REGIONAL_PEER_GROUP
+AFRICA_PEER_GROUP
+
+LOCAL_REFERENCE_BLOCK
+REGIONAL_REFERENCE_BLOCK
+AFRICA_REFERENCE_BLOCK
+
+CATEGORY_WTI
+PRIMARY_BENCHMARK
+WTI_BENCH
+RISK_FREE_RATE
+RANKING_REFERENCE
+```
 
 Cet onglet est une vue d’usage, pas une source canonique.
 
