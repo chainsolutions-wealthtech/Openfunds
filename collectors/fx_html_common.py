@@ -49,6 +49,52 @@ class TableTextParser(HTMLParser):
             self._row = None
 
 
+class DivClassTextBlockParser(HTMLParser):
+    """Collect visible text fragments inside DIV blocks containing a class token.
+
+    This supports official pages that render a logical table as repeated nested
+    DIV blocks instead of semantic TR/TD elements. Each completed target block
+    becomes one row of normalized text fragments.
+    """
+
+    def __init__(self, target_class_token: str) -> None:
+        super().__init__()
+        self.target_class_token = target_class_token
+        self.rows: list[list[str]] = []
+        self._div_depth = 0
+        self._target_depth: int | None = None
+        self._parts: list[str] = []
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag != "div":
+            return
+        self._div_depth += 1
+        if self._target_depth is not None:
+            return
+        attributes = dict(attrs)
+        class_tokens = set((attributes.get("class") or "").split())
+        if self.target_class_token in class_tokens:
+            self._target_depth = self._div_depth
+            self._parts = []
+
+    def handle_data(self, data: str) -> None:
+        if self._target_depth is None:
+            return
+        value = " ".join(unescape(data).split())
+        if value:
+            self._parts.append(value)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag != "div":
+            return
+        if self._target_depth == self._div_depth:
+            if self._parts:
+                self.rows.append(self._parts)
+            self._target_depth = None
+            self._parts = []
+        self._div_depth = max(0, self._div_depth - 1)
+
+
 FRENCH_MONTHS = {
     "JANVIER": 1,
     "FEVRIER": 2,
