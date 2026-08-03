@@ -1,0 +1,230 @@
+# ROADMAP OPENFUNDS
+
+## PRINCIPE
+
+Chaque phase possède une porte de sortie. Une phase aval ne doit pas être présentée comme terminée tant que ses dépendances ne sont pas vérifiées.
+
+## PHASE 0 — CONSOLIDATION ET GOUVERNANCE
+
+**Statut : EN COURS**
+
+Livrables :
+
+- README, TODO, SUIVI ;
+- audit et matrice des écarts ;
+- décisions ;
+- architecture, modèle, dictionnaire, mapping, qualité, sources et changelog ;
+- description PR exacte.
+
+Porte de sortie : documents cohérents, liens valides, point de reprise et CI verte.
+
+Tâches : `OF-DOC-001`, `OF-DEPLOY-001`.
+
+## PHASE 1 — RECONCILIATION DES REFERENTIELS
+
+**Statut : A ARBITRER**
+
+Travaux :
+
+- choisir la source de vérité CSV/SQL ;
+- synchroniser BCEAO/BEAC ;
+- unifier les endpoints ;
+- résoudre les dates métier inconnues ;
+- marquer les fichiers legacy ;
+- adopter un migration runner.
+
+Porte de sortie : une seule représentation maître, migrations testées et aucune divergence de statut.
+
+Tâches : `OF-ARCH-001` à `004`, `OF-SOURCE-001`.
+
+## PHASE 2 — MODELE FONDS ET DICTIONNAIRE
+
+**Statut : NON COMMENCE**
+
+Travaux :
+
+- Fund/SubFund/ShareClass ;
+- identités, noms et alias ;
+- organisations de service ;
+- documents et événements ;
+- dictionnaire canonique ;
+- catalogue D00-D17 machine-readable.
+
+Porte de sortie : modèle approuvé, migrations non destructives, champs versionnés et tests.
+
+Tâches : `OF-DATA-001` à `003`.
+
+## PHASE 3 — MAPPING OPENFUNDS
+
+**Statut : BLOQUE**
+
+Travaux :
+
+- obtenir et versionner le standard officiel ;
+- charger le catalogue ;
+- mapper chaque champ ;
+- documenter transformations et pertes ;
+- tester import/export.
+
+Porte de sortie : rapport de couverture et mapping humain/machine validé.
+
+Tâches : `OF-MAP-001`, `OF-MAP-002`.
+
+## PHASE 4 — PERSISTANCE ET PROVENANCE DURABLES
+
+**Statut : BLOQUE PAR ENVIRONNEMENT**
+
+Travaux :
+
+- PostgreSQL persistant ;
+- stockage brut immuable ;
+- secrets et accès ;
+- sauvegarde/restauration ;
+- métriques et alertes de run.
+
+Porte de sortie : un run quotidien durable charge les deux zones et conserve les artefacts.
+
+Tâches : `OF-IMPORT-001`, `OF-IMPORT-002`, `OF-SEC-001`.
+
+## PHASE 5 — HISTORIQUES FX ET COUVERTURE
+
+**Statut : NON COMMENCE**
+
+Travaux :
+
+- plusieurs dates persistées ;
+- vues de couverture ;
+- calendrier et gaps ;
+- inventaire des archives ;
+- backfill BCEAO/BEAC ;
+- révisions et ruptures.
+
+Porte de sortie : statut `PARTIAL_HISTORY_LOADED`, puis `COMPLETE_HISTORY_LOADED` uniquement après preuve.
+
+Tâches : `OF-HIST-001`, `OF-HIST-002`.
+
+## PHASE 6 — INSTITUTIONS ET SOURCES DES 54 PAYS
+
+**Statut : EN COURS PARTIEL**
+
+Travaux :
+
+- compléter les rôles institutionnels ;
+- vérifier endpoints et séries ;
+- renseigner fréquences, unités et historiques ;
+- déclarer les données non publiées/non applicables.
+
+Porte de sortie : couverture institutionnelle auditée pour chaque pays et zone.
+
+Tâches : `OF-SOURCE-002`, `OF-SOURCE-003`.
+
+## PHASE 7 — INGESTION OPCVM TUNISIE ET NIGERIA
+
+**Statut : A ANALYSER**
+
+Travaux :
+
+- intégrer la base CMF Tunisie ;
+- auditer les archives SEC Nigeria depuis 2011 ;
+- harmoniser identités et événements ;
+- conserver NAV, AUM, dividendes, documents et conflits ;
+- provenance cellule/page.
+
+Porte de sortie : imports idempotents, rapports de couverture et données reliées au modèle fonds.
+
+Tâches : `OF-IMPORT-003`, `OF-IMPORT-004`.
+
+## PHASE 8 — AUTRES DONNEES PAYS ET MARCHE
+
+**Statut : PROPOSE**
+
+Ordre indicatif :
+
+1. taux directeurs ;
+2. taux interbancaires ;
+3. adjudications et courbes ;
+4. indices actions ;
+5. inflation, PIB, dette et réserves ;
+6. autres fonds et institutionnels.
+
+Porte de sortie : chaque série possède source, spécification, historique, qualité et provenance.
+
+## PHASE 9 — TAXONOMIE ET GROUPES DE PAIRS
+
+**Statut : NON COMMENCE**
+
+Travaux :
+
+- classes et sous-classes ;
+- catégories nationales, régionales et Afrique ;
+- appartenances historisées ;
+- univers éligibles ;
+- groupes de pairs.
+
+Porte de sortie : générateur déterministe et couverture fonds suffisante.
+
+Tâches : `OF-TAX-001`, `OF-TAX-002`.
+
+## PHASE 10 — BLOCS DE REFERENCE ET BENCHMARKS
+
+**Statut : NON COMMENCE**
+
+Travaux :
+
+- générer les quatre rôles ;
+- affecter indices officiels ;
+- finaliser WTI Bench actions, obligations, diversifié et monétaire ;
+- versionner les méthodologies.
+
+Porte de sortie : affectations auditées et méthodologies approuvées.
+
+Tâches : `OF-BENCH-001`, `OF-BENCH-002`.
+
+## PHASE 11 — WTI, INDICES, METRIQUES ET CLASSEMENTS
+
+**Statut : BLOQUE PAR LES SERIES AMONT**
+
+Travaux :
+
+- calcul WTI ;
+- indices obligataires/monétaires ;
+- performances et risques ;
+- rangs, quartiles et percentiles ;
+- versions locale/EUR/USD ;
+- contributions et exclusions.
+
+Porte de sortie : reconstruction exacte depuis les entrées et méthodologies.
+
+Tâches : `OF-CALC-001`, `OF-CALC-002`.
+
+## PHASE 12 — API ET ATOMIC DESIGN
+
+**Statut : NON COMMENCE**
+
+Travaux :
+
+- OpenAPI ;
+- ressources temporelles avec provenance ;
+- clients typés ;
+- view models ;
+- atoms, molecules, organisms, templates et pages ;
+- sécurité et contrôle d'accès.
+
+Porte de sortie : API contractuellement testée et pages alimentées exclusivement par les ressources canoniques.
+
+Tâches : `OF-API-001`, `OF-UI-001`.
+
+## ORDRE IMMEDIAT APRES CONSOLIDATION
+
+```text
+OF-ARCH-001
+→ OF-SOURCE-001
+→ OF-ARCH-002
+→ OF-ARCH-003
+→ OF-ARCH-004
+→ OF-DATA-001
+→ OF-DATA-002
+→ OF-DATA-003
+```
+
+La couverture historique persistante ne doit pas précéder la réconciliation des référentiels et migrations.
