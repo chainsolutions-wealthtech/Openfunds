@@ -12,20 +12,35 @@ VERSION DE L’EXPORT EXCEL : 0.4.1
 DATE : 2026-08-03
 ```
 
-Ce répertoire conserve un classeur Excel destiné à la revue fonctionnelle, au contrôle métier et au préremplissage interactif d’un fonds.
+Ce répertoire documente un classeur Excel destiné à la revue fonctionnelle, au contrôle métier et au préremplissage interactif d’un fonds.
+
+Le binaire `.xlsx` a été généré dans l’espace de travail de la conversation. Il n’est pas commité dans cette branche par le connecteur utilisé. Le dépôt conserve son manifeste, son SHA256, sa documentation, les entrées canoniques, le générateur et les tests permettant de contrôler son contenu.
 
 Le classeur ne remplace pas les fichiers normalisés de `data/canonical/` et ne doit jamais devenir une seconde source de vérité. Les modifications métier doivent être apportées d’abord aux entrées canoniques, puis régénérées et réexportées.
 
-## Fichier
+## Fichier produit
 
 ```text
 Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx
+```
+
+Disponibilité :
+
+```text
+GENERATED_IN_CONVERSATION_WORKSPACE
+BINARY_COMMITTED_TO_REPOSITORY = FALSE
 ```
 
 SHA256 :
 
 ```text
 44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa
+```
+
+Taille :
+
+```text
+201462 bytes
 ```
 
 ## Volumétrie vérifiée
@@ -272,6 +287,7 @@ CALCULATION_READY
 - les méthodologies WTI et WTI Bench restent à approuver ;
 - les dates métier inconnues restent vides ;
 - l’export n’est pas chargé en production ;
+- le binaire `.xlsx` n’est pas commité par cette opération ;
 - la source de vérité CSV/SQL globale reste soumise à `ADR-021`.
 
 Aucune valeur manquante n’est remplacée par zéro et aucune date n’est inventée.
