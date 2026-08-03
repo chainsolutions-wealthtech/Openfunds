@@ -1,7 +1,8 @@
--- APPLY AND ASSERT THE BEAC FX PRODUCTION SEED BEFORE LIVE VALIDATION.
+-- APPLY AND ASSERT THE VALIDATED BEAC FX PRODUCTION SEED.
 
 \ir ../../schemas/reference/009_beac_fx_collection_seed.sql
 \ir ../../schemas/reference/010_beac_fx_parser_v0_2.sql
+\ir ../../schemas/reference/011_beac_fx_collection_validation.sql
 
 do $$
 declare
@@ -36,14 +37,15 @@ begin
       and scope_type = 'ZONE'
       and scope_code = 'CEMAC'
       and canonical_url = 'https://www.beac.int/index.php/accueil'
-      and expected_frequency = 'DAILY';
+      and expected_frequency = 'DAILY'
+      and last_verified_at = '2026-08-03T02:34:40Z'::timestamptz;
 
     select count(*)
     into mapping_count
     from source.indicator_source_mapping
     where mapping_code in ('CEMAC_D09_FX_EUR','CEMAC_D09_FX_USD')
       and endpoint_id = 'cb5518cd-236c-5ded-8941-56f09eb74bdc'
-      and collection_status = 'URL_LINKED'
+      and collection_status = 'COLLECTION_TESTED'
       and validation_status = 'VALIDATED';
 
     select count(*)
@@ -55,8 +57,8 @@ begin
         'PS_CEMAC_FX_XAF_USD'
     )
       and endpoint_id = 'cb5518cd-236c-5ded-8941-56f09eb74bdc'
-      and history_status = 'COLLECTOR_IMPLEMENTED'
-      and validation_status = 'PENDING';
+      and history_status = 'COLLECTION_TESTED'
+      and validation_status = 'VALIDATED';
 
     select count(*)
     into specification_count
@@ -67,8 +69,8 @@ begin
       and table_or_selector = 'DIV.taux_de_change|TABLE_FALLBACK'
       and raw_artifact_required
       and hash_required
-      and implementation_status = 'COLLECTOR_IMPLEMENTED'
-      and validation_status = 'PENDING';
+      and implementation_status = 'COLLECTION_TESTED'
+      and validation_status = 'VALIDATED';
 
     if organization_count <> 1 then
         raise exception 'canonical BEAC organization seed is missing or invalid';
@@ -77,16 +79,16 @@ begin
         raise exception 'expected two validated BEAC CEMAC role assignments, got %', role_count;
     end if;
     if endpoint_count <> 1 then
-        raise exception 'validated BEAC FX endpoint seed is missing or invalid';
+        raise exception 'validated BEAC FX endpoint evidence is missing or invalid';
     end if;
     if mapping_count <> 2 then
-        raise exception 'expected two BEAC FX URL-linked mappings, got %', mapping_count;
+        raise exception 'expected two collection-tested BEAC FX mappings, got %', mapping_count;
     end if;
     if provider_series_count <> 3 then
-        raise exception 'expected three pending BEAC provider series, got %', provider_series_count;
+        raise exception 'expected three validated BEAC provider series, got %', provider_series_count;
     end if;
     if specification_count <> 1 then
-        raise exception 'pending BEAC collection specification v0.2.0 is missing or invalid';
+        raise exception 'validated BEAC collection specification v0.2.0 is missing or invalid';
     end if;
 end
 $$;
