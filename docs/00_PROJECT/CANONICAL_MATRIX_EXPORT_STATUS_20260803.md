@@ -5,8 +5,8 @@
 Un classeur de revue a été produit à partir des règles validées de classification des fonds.
 
 ```text
-ARTEFACT
-artifacts/canonical_matrix/Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx
+FILE_NAME
+Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx
 
 EXPORT_VERSION
 0.4.1
@@ -16,6 +16,24 @@ CANONICAL_MODEL_VERSION
 
 STATUS
 NON_CANONICAL_DERIVED_EXPORT
+
+BINARY_STORAGE
+GENERATED_IN_CONVERSATION_WORKSPACE
+
+BINARY_COMMITTED_TO_REPOSITORY
+FALSE
+```
+
+Le dépôt conserve la documentation, le manifeste, le SHA256, les entrées canoniques, le générateur et les tests. Le binaire `.xlsx` reste disponible comme livrable de la conversation, mais n’a pas été commité par le connecteur GitHub utilisé.
+
+## Identité du fichier
+
+```text
+SHA256
+44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa
+
+SIZE_BYTES
+201462
 ```
 
 ## Ce qui est couvert
