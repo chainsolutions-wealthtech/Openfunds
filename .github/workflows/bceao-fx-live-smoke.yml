@@ -1,0 +1,89 @@
+name: BCEAO FX Live Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/bceao-fx-live-smoke.yml"
+      - "collectors/bceao_fx.py"
+      - "collectors/common.py"
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke:
+    name: Live BCEAO FX controlled run
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run first live collection
+        run: |
+          rm -rf artifacts/live/bceao_fx
+          python -m collectors.bceao_fx --output-dir artifacts/live/bceao_fx
+
+      - name: Run second live collection for idempotence
+        run: |
+          python -m collectors.bceao_fx --output-dir artifacts/live/bceao_fx
+
+      - name: Validate manifests and raw artifacts
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("artifacts/live/bceao_fx")
+          manifests = sorted((root / "manifests").glob("*.json"))
+          raw_files = sorted((root / "raw").glob("*"))
+
+          assert manifests, "No collection manifest produced"
+          assert raw_files, "No raw artifact produced"
+
+          manifest = json.loads(manifests[-1].read_text(encoding="utf-8"))
+          raw_path = Path(manifest["raw_artifact"]["storage_path"])
+          assert raw_path.exists(), f"Raw artifact missing: {raw_path}"
+
+          digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+          assert digest == manifest["raw_artifact"]["sha256"], "SHA256 mismatch"
+          assert manifest["run_status"] == "SUCCESS", manifest
+          assert manifest["observations"], "No observations parsed"
+
+          codes = {row["canonical_currency_code"] for row in manifest["observations"]}
+          assert {"EUR", "USD"}.issubset(codes), codes
+
+          # The content-addressed persistence rule means two identical live runs
+          # must not create duplicate raw files.
+          assert len(raw_files) == 1, f"Expected one content-addressed raw file, got {len(raw_files)}"
+
+          print(json.dumps({
+              "run_status": manifest["run_status"],
+              "sha256": digest,
+              "byte_size": manifest["raw_artifact"]["byte_size"],
+              "media_type": manifest["raw_artifact"]["media_type"],
+              "observation_count": len(manifest["observations"]),
+              "currencies": sorted(codes),
+              "warnings": manifest["warnings"],
+              "raw_file_count_after_two_runs": len(raw_files),
+          }, indent=2))
+          PY
+
+      - name: Upload controlled live artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: bceao-fx-live-smoke-${{ github.run_id }}
+          path: artifacts/live/bceao_fx
+          if-no-files-found: warn
+          retention-days: 30
