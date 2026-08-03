@@ -8,154 +8,42 @@ Le projet ne cherche pas à reproduire directement le standard **openfunds** sou
 
 Le dépôt doit permettre à terme de représenter :
 
-- les groupes de fonds et structures juridiques ;
-- les fonds ;
-- les compartiments ;
-- les classes de parts ;
-- les sociétés de gestion ;
-- les dépositaires ;
-- les administrateurs, auditeurs et distributeurs ;
-- les identifiants et anciennes dénominations ;
-- les politiques d'investissement ;
-- les classifications ;
-- les benchmarks et indices ;
-- les frais ;
-- les règles opérationnelles ;
-- les données réglementaires ;
-- les données ESG ;
-- les documents ;
-- les événements et opérations sur fonds ;
-- les valeurs liquidatives ;
-- les actifs nets ;
-- les dividendes et distributions ;
-- les portefeuilles et positions ;
-- les performances et risques ;
-- les notations ;
-- les sources, preuves, extractions et décisions qualité ;
-- les données économiques et financières des 54 pays africains ;
-- les séries en devise locale, EUR et USD ;
-- les catégories nationales, régionales et Afrique ;
-- les indices de marché, WTI et WTI Bench.
+- groupes, structures juridiques, fonds, compartiments et classes de parts ;
+- sociétés de gestion, dépositaires, administrateurs, auditeurs et distributeurs ;
+- identifiants, noms actuels, anciens noms et alias ;
+- politiques d'investissement, classifications, benchmarks et frais ;
+- règles opérationnelles, réglementaires et ESG ;
+- documents, événements et opérations sur fonds ;
+- valeurs liquidatives, actifs nets, dividendes et flux ;
+- portefeuilles, performances, risques, notations et classements ;
+- sources, fichiers, extractions, preuves et décisions qualité ;
+- données économiques et financières des 54 pays africains ;
+- séries en devise locale, EUR et USD ;
+- catégories nationales, régionales et Afrique ;
+- indices de marché, WTI et WTI Bench.
 
 ### Bénéficiaires
-
-Le référentiel cible notamment :
 
 - développeurs et data engineers ;
 - analystes financiers et gérants ;
 - sociétés de gestion, distributeurs et dépositaires ;
 - régulateurs et fournisseurs de données ;
-- équipes de contrôle qualité ;
+- équipes de contrôle et gouvernance ;
 - applications AfricaFunds et ChainSolutions ;
-- systèmes de reporting, API, recherche et intelligence artificielle.
+- API, reportings et systèmes d'intelligence artificielle.
 
 ### Cas d'usage
 
 - reconstituer l'identité et la trajectoire historique d'un fonds ;
 - charger des VL, AUM, dividendes, documents et événements ;
 - comparer des fonds dans des univers de pairs cohérents ;
-- produire des séries locale/EUR/USD ;
+- produire des séries locale, EUR et USD ;
 - calculer performances, risques, classements et benchmarks ;
-- fournir un historique auditable jusqu'au fichier, à la page ou à la cellule source ;
-- alimenter des API, pages fonds, comparateurs, factsheets et outils analytiques ;
-- exporter vers openfunds et d'autres standards.
+- tracer une donnée jusqu'au fichier, à la page ou à la cellule source ;
+- alimenter pages fonds, comparateurs, factsheets et outils analytiques ;
+- importer et exporter vers openfunds et d'autres standards.
 
-## 2. ETAT REEL DU PROJET
-
-### Branche de travail
-
-```text
-architecture/africafunds-country-indicators-v0.1
-```
-
-### Pull request
-
-```text
-PR #1
-BASE : architecture/canonical-model-v1-bootstrap
-STATUT : DRAFT / OPEN / NON FUSIONNEE
-```
-
-La branche `main` est encore minimale. La documentation, les référentiels, les schémas et les pilotes se trouvent principalement dans la PR #1.
-
-### Inventaire audité au 2026-08-03
-
-La branche contient 95 fichiers :
-
-| Famille | Fichiers |
-|---|---:|
-| Workflows GitHub Actions | 5 |
-| Collecteurs Python | 6 |
-| Référentiels CSV | 22 |
-| Documentation | 31 |
-| Chargeurs Python | 2 |
-| Pipelines Python | 2 |
-| Fichier de dépendances | 1 |
-| Schémas SQL | 12 |
-| Tests et fixtures | 13 |
-| README racine | 1 |
-
-Voir : [audit complet du dépôt](docs/00_PROJECT/REPOSITORY_AUDIT_2026_08_03.md).
-
-### Ce qui est réellement implémenté et testé
-
-- collecteur FX BCEAO ;
-- collecteur FX BEAC ;
-- parsing des dates et nombres localisés ;
-- conservation des observations buy/sell ;
-- calcul des midpoints et inversions ;
-- séries `XOF_EUR`, `XOF_USD`, `XAF_EUR`, `XAF_USD` ;
-- lignée SHA256, URL, parseur, formule et date de valeur ;
-- chargeur PostgreSQL idempotent et versionné ;
-- tests PostgreSQL 16 sur base éphémère ;
-- orchestration quotidienne BCEAO + BEAC ;
-- artefacts GitHub Actions temporaires ;
-- tests de réconciliation des modèles d'endpoints.
-
-### Ce qui est structuré mais partiellement peuplé
-
-- 54 pays africains ;
-- 1 continent et 5 régions ;
-- UEMOA, CEMAC et CMA ;
-- 266 relations pays-zone-devise-marché ;
-- 44 devises ;
-- 84 paires FX requises ;
-- 21 rôles institutionnels ;
-- 40 organisations ;
-- 70 affectations organisation × rôle × périmètre ;
-- 43 endpoints ;
-- 55 mappings pays/zone × indicateur × source ;
-- 50 séries fournisseurs ;
-- 17 spécifications ou templates de collecte.
-
-Une grande partie de ces lignes reste `PENDING` ou limitée à quelques pays pilotes.
-
-### Ce qui est documenté mais non implémenté
-
-- catalogue D00-D17 d'environ 420 définitions ;
-- modèle complet des indicateurs pays ;
-- Fund Relationship Information Model ;
-- catégories et sous-catégories nationales, régionales et Afrique ;
-- blocs Primary Market Index / Secondary Market Index / WTI / WTI Bench ;
-- WTI et WTI Bench ;
-- API-first et Atomic Design ;
-- pilotes macro, actions, obligations et OPCVM hors FX.
-
-### Ce qui n'est pas encore disponible
-
-- mapping openfunds champ par champ ;
-- dictionnaire canonique complet ;
-- modèle final Fund / SubFund / ShareClass ;
-- base PostgreSQL persistante de production ;
-- stockage brut permanent ;
-- historique FX multi-dates durable ;
-- historiques complets des 54 pays ;
-- chargeurs OPCVM Tunisie et Nigeria intégrés à ce dépôt ;
-- catégories et blocs de référence générés ;
-- indices, WTI, WTI Bench, métriques et classements calculés ;
-- API, OpenAPI, SDK ou frontend.
-
-## 3. OBJECTIFS FONCTIONNELS
+## 2. OBJECTIFS FONCTIONNELS
 
 Le modèle cible doit :
 
@@ -168,72 +56,70 @@ Le modèle cible doit :
 7. historiser NAV, AUM, dividendes, performances et risques ;
 8. conserver les documents et leurs versions ;
 9. relier chaque valeur à sa source et à sa preuve ;
-10. gérer les conflits entre sources et les corrections ;
+10. gérer conflits, corrections et niveaux de confiance ;
 11. conserver les données brutes sans écrasement ;
-12. attribuer un statut qualité et un niveau de confiance ;
-13. supporter des imports idempotents ;
-14. produire des séries locale, EUR et USD ;
-15. construire des univers nationaux, régionaux et Afrique ;
-16. produire des indices et benchmarks reproductibles ;
-17. publier les données par API et exports standardisés.
+12. supporter des imports reproductibles et idempotents ;
+13. produire des séries locale, EUR et USD ;
+14. construire des univers nationaux, régionaux et Afrique ;
+15. produire indices et benchmarks reproductibles ;
+16. publier les données par API et exports standardisés.
 
-## 4. OPENFUNDS ET MODELE CANONIQUE
+## 3. OPENFUNDS ET MODELE CANONIQUE
 
-### Ce qu'apporte openfunds
+### Rôle d'openfunds
 
-Openfunds fournit un vocabulaire d'échange utile pour de nombreuses données de fonds et classes de parts.
+Openfunds fournit un vocabulaire d'échange utile pour les données de fonds et de classes de parts. Il n'est pas le schéma interne unique.
 
-### Pourquoi il ne devient pas directement la base
-
-Un champ externe ne doit pas devenir automatiquement une colonne physique parce que :
+Un champ externe ne devient pas automatiquement une colonne physique parce que :
 
 - plusieurs champs peuvent décrire le même objet canonique ;
 - un champ peut nécessiter une transformation ;
-- une valeur peut varier dans le temps ;
+- une valeur peut évoluer dans le temps ;
 - plusieurs standards peuvent viser la même donnée ;
 - certaines informations internes ne sont pas couvertes ;
-- une source peut fournir des structures imbriquées, répétées ou multilingues.
+- une source peut être imbriquée, répétée ou multilingue.
 
-### Principe de mapping
+### Chaîne de mapping
 
 ```text
-STANDARD EXTERNE + VERSION + CHAMP
-→ REGLE DE NORMALISATION
-→ OBJET CANONIQUE CIBLE
-→ CHAMP(S) CANONIQUE(S)
-→ REGLE DE VALIDATION
-→ REGLE D'EXPORT
+STANDARD + VERSION + FIELD
+→ NORMALIZATION_RULE
+→ CANONICAL_ENTITY
+→ CANONICAL_FIELD_OR_RELATION
+→ VALIDATION_RULE
+→ EXPORT_RULE
 ```
 
-Le futur mapping devra distinguer :
+Le mapping devra distinguer :
 
-- mapping direct ;
-- mapping avec transformation ;
-- mapping vers plusieurs champs ;
-- mapping depuis plusieurs champs ;
-- champ externe non pris en charge ;
-- champ canonique sans équivalent ;
-- mapping à confirmer ;
-- mapping validé.
+```text
+DIRECT
+TRANSFORMED
+ONE_TO_MANY
+MANY_TO_ONE
+UNSUPPORTED_EXTERNAL_FIELD
+CANONICAL_ONLY
+TO_CONFIRM
+VALIDATED
+```
 
-Voir : [OPENFUNDS_MAPPING.md](OPENFUNDS_MAPPING.md).
+Etat actuel : le principe est accepté, mais le catalogue officiel et le mapping champ par champ ne sont pas encore présents. Voir `OPENFUNDS_MAPPING.md`.
 
-## 5. ARCHITECTURE CONCEPTUELLE
-
-### Chaîne principale
+## 4. ARCHITECTURE CONCEPTUELLE
 
 ```text
 REAL_WORLD_DATA
 → RAW_SOURCE
 → NORMALIZED_SOURCE
 → VALIDATION
-→ CANONICAL_OBJECTS
-→ RELATIONSHIPS_AND_HISTORY
-→ CALCULATION_ENGINES
-→ API_RESOURCES
-→ UI_VIEW_MODELS
-→ ATOMIC_DESIGN_PAGES
+→ CANONICAL_MODEL
+→ ANALYTICAL_MODEL
+→ API_RESOURCE
+→ UI_VIEW_MODEL
+→ ATOMIC_DESIGN
 ```
+
+PostgreSQL est la source canonique de vérité. Les fichiers originaux doivent être conservés dans un stockage immuable. Les index de recherche, caches, graphes et vues analytiques sont dérivés et reconstruisibles.
 
 ### Familles de domaine
 
@@ -270,9 +156,9 @@ REAL_WORLD_DATA
 31. qualité ;
 32. gouvernance.
 
-Voir : [ARCHITECTURE.md](ARCHITECTURE.md) et [DATA_MODEL.md](DATA_MODEL.md).
+Voir `ARCHITECTURE.md` et `DATA_MODEL.md`.
 
-## 6. PRINCIPES DE MODELISATION
+## 5. PRINCIPES DE MODELISATION
 
 - séparer statique et dynamique ;
 - séparer identité et noms ;
@@ -283,38 +169,35 @@ Voir : [ARCHITECTURE.md](ARCHITECTURE.md) et [DATA_MODEL.md](DATA_MODEL.md).
 - conserver les périodes de validité ;
 - historiser les relations ;
 - tracer jusqu'au document, fichier, page, feuille, ligne, colonne ou cellule ;
-- conserver les corrections et conflits ;
+- conserver corrections et conflits ;
 - utiliser des identifiants stables ;
 - interdire les suppressions destructives d'historique ;
-- versionner les référentiels et méthodologies ;
-- rendre les imports reproductibles et idempotents ;
+- versionner référentiels et méthodologies ;
 - mesurer la qualité ;
 - valider progressivement.
 
-Les décisions structurantes sont consolidées dans [DECISIONS.md](DECISIONS.md).
+Les décisions structurantes sont dans `DECISIONS.md`.
 
-## 7. MODELE TEMPOREL
-
-Les dates ne sont pas interchangeables.
+## 6. MODELE TEMPOREL
 
 | Champ | Signification |
 |---|---|
 | `valid_from` | début de validité métier |
 | `valid_to` | fin de validité métier |
-| `observed_at` / `observation_date` | date économique observée |
-| `published_at` / `publication_date` | date de publication |
+| `observation_date` | date économique observée |
+| `publication_date` | date de publication |
 | `effective_at` | date d'effet juridique ou opérationnel |
-| `collected_at` / `retrieved_at` | date de collecte de la source |
-| `ingested_at` / `recorded_at` | date d'entrée dans le système |
+| `retrieved_at` | date de collecte |
+| `recorded_at` | date d'entrée dans le système |
 | `calculated_at` | date d'exécution d'un calcul |
 | `corrected_at` | date de correction |
 | `superseded_at` | date de remplacement d'une version |
 
-Une date métier inconnue ne doit jamais être remplacée par une date artificielle. Le traitement final de `valid_from` inconnu reste à arbitrer dans `ADR-022`.
+Une date métier inconnue ne doit jamais être remplacée par une date artificielle. Le traitement final relève de `ADR-022`.
 
-## 8. MODELE DE PROVENANCE
+## 7. MODELE DE PROVENANCE
 
-Selon la nature de la donnée, la lignée doit permettre de retrouver :
+Selon la donnée, la lignée doit retrouver :
 
 ```text
 COUNTRY_OR_ZONE
@@ -344,7 +227,7 @@ CONFIDENCE_SCORE
 
 Les sources brutes restent distinctes des valeurs normalisées et canoniques.
 
-## 9. GEOGRAPHIE, TAXONOMIE ET REFERENCES
+## 8. GEOGRAPHIE, TAXONOMIE ET REFERENCES
 
 ### Géographie
 
@@ -362,21 +245,17 @@ COUNTRY
 → CENTRAL_BANK / EXCHANGE / REGULATOR / SOURCE
 ```
 
-### Catégorie nationale
+### Catégories
 
 ```text
 COUNTRY + ASSET_CLASS
 → NATIONAL_CATEGORY
-```
 
-### Sous-catégorie nationale
-
-```text
 COUNTRY + ASSET_CLASS + SUB_ASSET_CLASS
 → NATIONAL_SUBCATEGORY
 ```
 
-Même logique aux niveaux régional et Afrique.
+La même logique est reconstruite aux niveaux régional et Afrique.
 
 ### Bloc de référence
 
@@ -389,17 +268,11 @@ WTI
 WTI_BENCH
 ```
 
-### WTI
+Le WTI mesure la performance observée des fonds éligibles. Le WTI Bench est une référence indépendante de marché ou d'allocation.
 
-Le WTI mesure la performance moyenne observée des fonds éligibles. Il n'utilise pas d'interpolation artificielle de VL.
+## 9. DEVISES ET CONVERSIONS
 
-### WTI Bench
-
-Le WTI Bench est une référence indépendante de marché ou d'allocation. Il doit être transparent, versionné, réplicable, backtesté et auditable.
-
-## 10. DEVISES ET CONVERSIONS
-
-La donnée native n'est jamais écrasée.
+La donnée native n'est jamais écrasée :
 
 ```text
 NATIVE_OBSERVATION
@@ -408,75 +281,136 @@ NATIVE_OBSERVATION
 └── USD
 ```
 
-Chaque conversion conserve :
+Chaque conversion conserve l'observation source, la paire FX, la date, le taux, la formule, la méthode et le statut qualité. Les taux, ratios, pourcentages, volatilités et scores ne sont pas convertis comme des montants.
 
-- l'observation source ;
-- la devise source ;
-- la devise cible ;
-- l'observation FX ;
-- le taux ;
-- la formule ;
-- la date économique ;
-- la méthode ;
-- le statut qualité.
+## 10. ETAT REEL DU DEPOT
 
-Les taux, ratios, pourcentages, volatilités et scores ne sont pas convertis comme des montants.
+### Branche et PR
+
+```text
+BRANCH : architecture/africafunds-country-indicators-v0.1
+PR     : #1
+BASE   : architecture/canonical-model-v1-bootstrap
+STATUS : DRAFT / OPEN / NOT_MERGED
+```
+
+La branche `main` reste minimale.
+
+### Inventaire
+
+L'audit initial précédant la consolidation recensait 95 fichiers. Après création des neuf documents transversaux supplémentaires, la comparaison actuelle avec `main` contient **104 fichiers** : 103 ajouts et le README remplacé.
+
+| Famille | Nombre actuel |
+|---|---:|
+| Workflows GitHub Actions | 5 |
+| Collecteurs Python | 6 |
+| Référentiels CSV | 22 |
+| Chargeurs Python | 2 |
+| Pipelines Python | 2 |
+| Dépendances | 1 |
+| Schémas SQL | 12 |
+| Tests et fixtures | 13 |
+| Documentation et fichiers de gouvernance | 41 |
+
+L'audit historique reste dans `docs/00_PROJECT/REPOSITORY_AUDIT_2026_08_03.md`. La matrice des 45 écarts est dans `docs/00_PROJECT/CONVERSATION_REPOSITORY_GAP_MATRIX.md`.
+
+### Réellement implémenté et testé
+
+- collecteur live BCEAO FX ;
+- collecteur live BEAC FX ;
+- parsing dates et nombres localisés ;
+- buy/sell observés conservés ;
+- `XOF_EUR`, `XOF_USD`, `XAF_EUR`, `XAF_USD` ;
+- SHA256, URL, parseur, formule et date de valeur ;
+- chargeur PostgreSQL idempotent ;
+- tests PostgreSQL 16 ;
+- réconciliation des schémas d'endpoints ;
+- orchestrateur quotidien BCEAO + BEAC ;
+- staging et artefacts GitHub Actions temporaires.
+
+### Structurellement peuplé
+
+- 54 pays ;
+- 1 continent et 5 régions ;
+- UEMOA, CEMAC et CMA ;
+- 266 relations ;
+- 44 devises ;
+- 84 paires FX ;
+- 21 rôles institutionnels ;
+- 40 organisations ;
+- 70 affectations de rôles ;
+- 43 endpoints ;
+- 55 mappings indicateur-source ;
+- 50 séries fournisseurs ;
+- 17 spécifications/templates.
+
+Une grande partie reste `PENDING` ou limitée à quelques pays pilotes.
+
+### Documenté mais non implémenté
+
+- environ 420 définitions D00-D17 ;
+- modèle complet des indicateurs pays ;
+- modèle fonds et taxonomie ;
+- catégories et sous-catégories ;
+- blocs de quatre références ;
+- WTI et WTI Bench ;
+- API-first et Atomic Design.
+
+### Absent ou incomplet
+
+- mapping openfunds opérationnel ;
+- dictionnaire canonique machine-readable complet ;
+- modèle final Fund/SubFund/ShareClass ;
+- PostgreSQL persistant de production ;
+- stockage brut permanent ;
+- historique FX multi-dates durable ;
+- historiques complets des 54 pays ;
+- chargeurs OPCVM Tunisie/Nigeria intégrés ;
+- catégories et blocs générés ;
+- indices, WTI, WTI Bench, métriques et classements ;
+- API, OpenAPI, SDK et frontend.
 
 ## 11. ORGANISATION DU DEPOT
 
 | Chemin | Rôle | Etat |
 |---|---|---|
-| `.github/workflows/` | CI, smoke tests live, staging quotidien | Implémenté |
-| `collectors/` | téléchargement et parsing des sources | FX BCEAO/BEAC implémenté |
-| `loaders/` | chargement canonique en base | FX PostgreSQL implémenté |
+| `.github/workflows/` | CI, smoke tests et staging quotidien | implémenté |
+| `collectors/` | téléchargement et parsing | BCEAO/BEAC FX implémentés |
+| `loaders/` | chargement canonique | FX PostgreSQL implémenté |
 | `pipelines/` | orchestration multi-source | FX quotidien implémenté |
-| `data/reference/` | référentiels et registres machine-readable | Partiellement peuplé |
-| `schemas/reference/` | géographie, organisations, sources, séries et seeds | Mélange migration/brouillon |
-| `schemas/taxonomy/` | catégories, fonds, WTI et références | Brouillon non déployé |
-| `schemas/market/` | lignée des observations FX | Testé |
-| `docs/` | architecture, gouvernance, pilotes et preuves | Documenté |
-| `tests/` | fixtures, tests Python et SQL | FX et endpoints couverts |
-| `requirements/` | dépendances minimales des collecteurs/chargeurs | Présent |
+| `data/reference/` | référentiels machine-readable | partiellement peuplé |
+| `schemas/reference/` | géographie, organisations, sources et seeds | mélange de migrations et propositions |
+| `schemas/taxonomy/` | fonds, catégories et références | brouillon |
+| `schemas/market/` | observations FX | testé |
+| `docs/` | architecture, pilotes, sources et preuves | riche et consolidé |
+| `tests/` | fixtures, tests Python et SQL | FX/endpoints couverts |
+| `requirements/` | dépendances minimales | présent |
 
-## 12. INSTALLATION ET COMMANDES VERIFIEES
+## 12. COMMANDES VERIFIEES
 
-Les commandes ci-dessous proviennent des workflows existants. Elles supposent un clone local positionné sur la branche de travail.
+Les commandes ci-dessous proviennent des workflows existants.
 
-### Python
-
-Les tests utilisent Python 3.11 et 3.12.
-
-### Installer la dépendance PostgreSQL
+### Dépendance PostgreSQL
 
 ```bash
 python -m pip install -r requirements/collectors-postgres.txt
 ```
 
-### Compiler les modules
+### Compilation et tests
 
 ```bash
 python -m compileall -q collectors loaders pipelines tests
-```
-
-### Exécuter les tests unitaires
-
-```bash
 python -m unittest discover -s tests -p "test_*.py" -v
 ```
 
-### Collecter le snapshot BCEAO
+### Collectes live
 
 ```bash
 python -m collectors.bceao_fx --output-dir artifacts/live/bceao_fx
-```
-
-### Collecter le snapshot BEAC
-
-```bash
 python -m collectors.beac_fx --output-dir artifacts/live/beac_fx
 ```
 
-### Lancer le pipeline quotidien en staging
+### Pipeline quotidien en staging
 
 ```bash
 python -m pipelines.fx_daily \
@@ -485,13 +419,13 @@ python -m pipelines.fx_daily \
   --raw-retention-status LOCAL_PATH_ONLY
 ```
 
-Sans variable `OPENFUNDS_DATABASE_URL`, le résultat attendu reste :
+Sans `OPENFUNDS_DATABASE_URL`, le statut attendu est :
 
 ```text
 STAGING_ONLY_DATABASE_NOT_CONFIGURED
 ```
 
-### Exiger une persistance PostgreSQL
+### Persistance exigée
 
 ```bash
 export OPENFUNDS_DATABASE_URL='postgresql://USER:PASSWORD@HOST:PORT/DATABASE'
@@ -503,9 +437,7 @@ python -m pipelines.fx_daily \
 
 Ne jamais versionner l'URL de connexion ni les secrets.
 
-### Appliquer les schémas utilisés dans les tests FX
-
-Les workflows utilisent `psql` et appliquent une séquence contrôlée. Cette séquence est destinée aux environnements de test ; elle ne constitue pas encore un migration runner de production.
+### Schémas utilisés dans les tests FX
 
 ```bash
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_bootstrap.sql
@@ -513,55 +445,54 @@ psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series
 psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/market/006_fx_observation_lineage.sql
 ```
 
-Les seeds BCEAO/BEAC et assertions sont ensuite appliqués par les scripts `tests/sql/fx_loader_seed.sql` et `tests/sql/beac_fx_loader_seed.sql` selon le workflow concerné.
+Cette séquence est vérifiée pour les tests ; elle n'est pas encore un migration runner de production.
 
 ## 13. VARIABLES D'ENVIRONNEMENT
 
-| Variable | Obligatoire | Usage |
-|---|---|---|
-| `OPENFUNDS_DATABASE_URL` | Non en staging, oui pour persistance | connexion PostgreSQL du pipeline quotidien |
-| `DATABASE_URL` | Oui dans les tests SQL | connexion PostgreSQL des workflows |
-| `PGPASSWORD` | Selon la configuration psql | mot de passe PostgreSQL de test |
+| Variable | Usage |
+|---|---|
+| `OPENFUNDS_DATABASE_URL` | PostgreSQL persistant du pipeline quotidien |
+| `DATABASE_URL` | PostgreSQL des tests et scripts SQL |
+| `PGPASSWORD` | authentification `psql` selon environnement |
 
-Aucun secret ne doit être ajouté dans un fichier versionné.
+Aucun secret ne doit être ajouté au dépôt.
 
 ## 14. ETAT PAR MODULE
 
-| Module | Statut | Tests | Documentation | Prochaine action |
-|---|---|---|---|---|
-| Géographie | Partiellement validé | Contrôles documentaires | Oui | vérifier les relations et dates |
-| Devises | Référentiel peuplé | Partiel | Oui | vérifier ISO et sources |
-| BCEAO FX | Testé live | Oui | Oui | persistance et backfill |
-| BEAC FX | Testé live | Oui | Oui | persistance et backfill |
-| Organisations | En cours | Seeds partiels | Oui | compléter les 54 pays |
-| Endpoints | En cours | Réconciliation testée | Oui | unifier CSV et SQL |
-| Catalogue D00-D17 | Documenté | Non | Oui | rendre machine-readable |
-| Données macro | Proposé | Non | Oui | implémenter les collecteurs |
-| Fonds | Modèle partiel | Non | Oui | arbitrer Fund/SubFund/ShareClass |
-| Taxonomie | Proposé | Non | Oui | créer les référentiels et générateur |
-| WTI | Décidé | Non | Oui | attendre les séries fonds fiables |
-| WTI Bench | Partiellement décidé | Non | Oui | finaliser les méthodologies |
-| Mapping Openfunds | A construire | Non | Initial | obtenir et versionner le standard |
-| Dictionnaire | A construire | Non | Initial | créer le catalogue canonique |
-| API | Non implémenté | Non | Architecture seulement | définir OpenAPI après le modèle |
-| Atomic Design | Non implémenté | Non | Architecture seulement | créer les view models après l'API |
+| Module | Statut | Tests | Prochaine action |
+|---|---|---|---|
+| Géographie | partiellement validé | contrôles documentaires | vérifier relations et dates |
+| Devises | référentiel peuplé | partiel | vérifier ISO et sources |
+| BCEAO FX | collection testée | live + PostgreSQL | persistance et backfill |
+| BEAC FX | collection testée | live + PostgreSQL | persistance et backfill |
+| Organisations | en cours | seeds partiels | compléter les 54 pays |
+| Endpoints | en cours | réconciliation testée | unifier CSV et SQL |
+| Catalogue D00-D17 | documenté | non | rendre machine-readable |
+| Fonds | modèle partiel | non | arbitrer Fund/SubFund/ShareClass |
+| Taxonomie | proposé | non | créer référentiels et générateur |
+| WTI | décidé, non implémenté | non | attendre les séries fonds |
+| WTI Bench | partiellement décidé | non | finaliser méthodologies |
+| Mapping openfunds | absent | non | obtenir/versionner le standard |
+| Dictionnaire | spécification créée | non | peupler le catalogue maître |
+| API | non implémenté | non | définir OpenAPI après le modèle |
+| Atomic Design | non implémenté | non | définir view models après API |
 
 ## 15. DOCUMENTS DE CONTINUITE
 
-- [TODO.md](TODO.md) — tâches terminées, en cours, restantes et bloquées ;
-- [SUIVI.md](SUIVI.md) — journal de continuité et point exact de reprise ;
-- [DECISIONS.md](DECISIONS.md) — décisions acceptées et propositions ;
-- [ARCHITECTURE.md](ARCHITECTURE.md) — architecture cible et état réel ;
-- [DATA_MODEL.md](DATA_MODEL.md) — domaines, entités et relations ;
-- [DATA_DICTIONARY.md](DATA_DICTIONARY.md) — gouvernance du dictionnaire ;
-- [OPENFUNDS_MAPPING.md](OPENFUNDS_MAPPING.md) — stratégie de mapping ;
-- [GOVERNANCE.md](GOVERNANCE.md) — responsabilités et workflow de validation ;
-- [QUALITY_RULES.md](QUALITY_RULES.md) — règles qualité ;
-- [SOURCE_REGISTRY.md](SOURCE_REGISTRY.md) — sources, endpoints et niveaux de preuve ;
-- [ROADMAP.md](ROADMAP.md) — séquence des phases ;
-- [CHANGELOG.md](CHANGELOG.md) — historique des changements documentaires et fonctionnels ;
-- [audit du dépôt](docs/00_PROJECT/REPOSITORY_AUDIT_2026_08_03.md) ;
-- [matrice des écarts](docs/00_PROJECT/CONVERSATION_REPOSITORY_GAP_MATRIX.md).
+- `TODO.md` — tâches et critères d'acceptation ;
+- `SUIVI.md` — historique et point exact de reprise ;
+- `DECISIONS.md` — décisions et propositions ;
+- `ARCHITECTURE.md` — architecture cible et actuelle ;
+- `DATA_MODEL.md` — domaines, entités et relations ;
+- `DATA_DICTIONARY.md` — structure du dictionnaire ;
+- `OPENFUNDS_MAPPING.md` — stratégie de mapping ;
+- `GOVERNANCE.md` — workflow de validation ;
+- `QUALITY_RULES.md` — règles qualité ;
+- `SOURCE_REGISTRY.md` — chaîne des sources ;
+- `ROADMAP.md` — phases et portes de sortie ;
+- `CHANGELOG.md` — changements ;
+- `docs/00_PROJECT/REPOSITORY_AUDIT_2026_08_03.md` — audit ;
+- `docs/00_PROJECT/CONVERSATION_REPOSITORY_GAP_MATRIX.md` — écarts.
 
 ## 16. ROADMAP RESUMEE
 
@@ -572,7 +503,7 @@ Aucun secret ne doit être ajouté dans un fichier versionné.
 4. DICTIONNAIRE CANONIQUE
 5. MAPPING OPENFUNDS
 6. PERSISTANCE ET STOCKAGE BRUT
-7. HISTORIQUES FX ET COUVERTURE
+7. HISTORIQUES ET COUVERTURE
 8. SOURCES MACRO / MARCHE / OPCVM
 9. TAXONOMIE ET BLOCS DE REFERENCE
 10. INDICES / WTI / WTI BENCH
@@ -580,26 +511,26 @@ Aucun secret ne doit être ajouté dans un fichier versionné.
 12. API / VIEW MODELS / ATOMIC DESIGN
 ```
 
-La roadmap détaillée est maintenue dans [ROADMAP.md](ROADMAP.md).
+Le détail est dans `ROADMAP.md`.
 
 ## 17. REGLE DE CONTRIBUTION
 
 Avant toute modification importante :
 
-1. lire `README.md`, `DECISIONS.md`, `TODO.md` et `SUIVI.md` ;
+1. lire README, DECISIONS, TODO et SUIVI ;
 2. identifier la tâche `OF-*` ;
 3. vérifier les dépendances et décisions ;
 4. éviter toute modification à l'aveugle ;
-5. préserver les données brutes et historiques ;
+5. préserver données brutes et historiques ;
 6. ajouter ou mettre à jour les tests ;
-7. documenter l'écart entre avant et après ;
+7. documenter l'avant et l'après ;
 8. mettre à jour le point exact de reprise.
 
 ## 18. AVERTISSEMENT DE COMPLETUDE
 
-Le dépôt contient une architecture avancée, des référentiels structurés et un pilote FX fonctionnel. Il ne contient pas encore l'ensemble des historiques africains, des fonds, des mappings Openfunds, des indices ou des produits analytiques.
+Le dépôt contient une architecture avancée, des référentiels structurés et un pilote FX fonctionnel. Il ne contient pas encore tous les historiques africains, fonds, mappings openfunds, indices ou produits analytiques.
 
-Les termes suivants doivent rester distincts :
+Les niveaux suivants restent distincts :
 
 ```text
 ARCHITECTURE_PRESENTE
