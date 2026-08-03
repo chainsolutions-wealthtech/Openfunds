@@ -8,11 +8,13 @@ on:
     paths:
       - ".github/workflows/bceao-fx-live-smoke.yml"
       - "collectors/bceao_fx.py"
+      - "collectors/fx_canonical.py"
       - "collectors/common.py"
   pull_request:
     paths:
       - ".github/workflows/bceao-fx-live-smoke.yml"
       - "collectors/bceao_fx.py"
+      - "collectors/fx_canonical.py"
       - "collectors/common.py"
 
 permissions:
@@ -64,6 +66,9 @@ jobs:
           assert digest == manifest["raw_artifact"]["sha256"], "SHA256 mismatch"
           assert manifest["run_status"] == "SUCCESS", manifest
           assert manifest["observations"], "No observations parsed"
+          assert not manifest["warnings"], manifest["warnings"]
+          assert not manifest["errors"], manifest["errors"]
+          assert all(row["value_date"] for row in manifest["observations"]), "Missing value date"
 
           codes = {row["canonical_currency_code"] for row in manifest["observations"]}
           assert {"EUR", "USD"}.issubset(codes), codes
@@ -79,9 +84,45 @@ jobs:
               "media_type": manifest["raw_artifact"]["media_type"],
               "observation_count": len(manifest["observations"]),
               "currencies": sorted(codes),
+              "value_dates": sorted({row["value_date"] for row in manifest["observations"]}),
               "warnings": manifest["warnings"],
               "raw_file_count_after_two_runs": len(raw_files),
           }, indent=2))
+          PY
+
+      - name: Build canonical XOF EUR and XOF USD staging observations
+        run: |
+          MANIFEST=$(find artifacts/live/bceao_fx/manifests -name '*.json' | sort | tail -n 1)
+          python -m collectors.fx_canonical \
+            --input-manifest "$MANIFEST" \
+            --output artifacts/live/bceao_fx/staging/canonical_fx.json
+
+      - name: Validate canonical staging observations
+        run: |
+          python - <<'PY'
+          import json
+          from decimal import Decimal
+          from pathlib import Path
+
+          path = Path("artifacts/live/bceao_fx/staging/canonical_fx.json")
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          observations = payload["observations"]
+          by_pair = {row["canonical_pair_code"]: row for row in observations}
+
+          assert payload["methodology_version"] == "FX_CANONICAL_0.1.0"
+          assert payload["observation_count"] == 2
+          assert set(by_pair) == {"XOF_EUR", "XOF_USD"}
+          assert all(row["value_date"] for row in observations)
+          assert all(Decimal(row["canonical_rate"]) > 0 for row in observations)
+          assert all(row["source_raw_sha256"] for row in observations)
+          assert all(row["source_parser_version"] == "0.2.0" for row in observations)
+          assert all(
+              row["transformation_formula"]
+              == "1 / ((PROVIDER_BUY_RATE + PROVIDER_SELL_RATE) / 2)"
+              for row in observations
+          )
+
+          print(json.dumps(payload, indent=2))
           PY
 
       - name: Upload controlled live artifacts
