@@ -1,0 +1,46 @@
+{
+  "artifact_type": "CANONICAL_MATRIX_REVIEW_EXPORT",
+  "artifact_status": "NON_CANONICAL_DERIVED_EXPORT",
+  "production_status": "NOT_ACTIVE",
+  "file_name": "Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx",
+  "sha256": "44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa",
+  "file_size_bytes": 201728,
+  "export_version": "0.4.1",
+  "canonical_model_version": "0.1.0",
+  "export_date": "2026-08-03",
+  "source_branch": "architecture/africafunds-country-indicators-v0.1",
+  "source_head_before_export_documentation": "85e295fe5ea50acae24e7334442dc6906661a9f9",
+  "canonical_authority": {
+    "inputs": "data/canonical/",
+    "generator": "scripts/generate_fund_category_matrices.py",
+    "tests": "tests/test_fund_category_matrices.py",
+    "expanded_views": "build/canonical/"
+  },
+  "verified_counts": {
+    "legal_countries": 54,
+    "local_market_scopes": 42,
+    "geographic_regions": 5,
+    "continents": 1,
+    "taxonomy_leaves": 9,
+    "country_category_routing_rules": 486,
+    "unique_categories": 432,
+    "unique_peer_groups": 432,
+    "unique_reference_blocks": 432
+  },
+  "routing_rules": {
+    "uemoa": "UEMOA -> AFRICA_OUEST -> AFRICA",
+    "cemac": "CEMAC -> AFRICA_CENTRALE -> AFRICA",
+    "other": "COUNTRY -> GEOGRAPHIC_REGION -> AFRICA"
+  },
+  "quality": {
+    "qa_checks": 11,
+    "qa_result": "PASS",
+    "formula_error_scan": "NO_MATCH"
+  },
+  "governance": {
+    "may_be_edited_as_master": false,
+    "may_be_loaded_to_production": false,
+    "unknown_dates_are_invented": false,
+    "missing_values_are_zero_filled": false
+  }
+}
