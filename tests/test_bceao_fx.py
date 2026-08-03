@@ -1,7 +1,7 @@
 from pathlib import Path
 import unittest
 
-from collectors.bceao_fx import normalize_decimal, parse_bceao_fx_html
+from collectors.bceao_fx import detect_value_date, normalize_decimal, parse_bceao_fx_html
 
 
 FIXTURE = Path(__file__).parent / "fixtures" / "bceao_fx_sample.html"
@@ -19,6 +19,19 @@ class BceaoFxParserTests(unittest.TestCase):
         self.assertEqual("570.125", by_code["USD"].provider_buy_rate)
         self.assertEqual("575.875", by_code["USD"].provider_sell_rate)
         self.assertEqual("XOF_PER_1_FOREIGN_CURRENCY", by_code["USD"].quote_convention_source)
+
+    def test_detects_live_french_heading_date(self) -> None:
+        self.assertEqual(
+            "2026-07-31",
+            detect_value_date("Cours des devises du vendredi 31 juillet 2026"),
+        )
+        self.assertEqual(
+            "2026-08-03",
+            detect_value_date("Cours des devises du lundi 3 août 2026"),
+        )
+
+    def test_rejects_invalid_calendar_date(self) -> None:
+        self.assertIsNone(detect_value_date("Cours des devises du lundi 31 février 2026"))
 
     def test_numeric_parser_handles_localized_formats(self) -> None:
         self.assertEqual("1234.56", normalize_decimal("1 234,56"))
