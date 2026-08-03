@@ -1,5 +1,32 @@
 -- REFERENCE ROWS REQUIRED BY THE BCEAO FX LOADER INTEGRATION TEST.
 
+-- The bitemporal migration must remove the original four-column UNIQUE
+-- constraint. The current-version partial index replaces it.
+do $$
+begin
+    if exists (
+        select 1
+        from pg_constraint constraint_row
+        where constraint_row.conrelid = 'market.fx_observation'::regclass
+          and constraint_row.contype = 'u'
+          and (
+              select array_agg(attribute_row.attname order by key_row.ordinality)
+              from unnest(constraint_row.conkey) with ordinality as key_row(attnum, ordinality)
+              join pg_attribute attribute_row
+                on attribute_row.attrelid = constraint_row.conrelid
+               and attribute_row.attnum = key_row.attnum
+          ) = array[
+              'observation_date',
+              'source_currency_id',
+              'target_currency_id',
+              'source_id'
+          ]::text[]
+    ) then
+        raise exception 'legacy FX uniqueness constraint was not removed';
+    end if;
+end
+$$;
+
 insert into source.provider_series (
     provider_series_id,
     provider_series_code,
