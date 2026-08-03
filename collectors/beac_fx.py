@@ -11,6 +11,7 @@ from collectors.common import (
     write_result_manifest,
 )
 from collectors.fx_html_common import (
+    DivClassTextBlockParser,
     FxObservation,
     TableTextParser,
     detect_value_date,
@@ -19,7 +20,7 @@ from collectors.fx_html_common import (
 )
 
 COLLECTOR_CODE = "BEAC_FX_SNAPSHOT"
-PARSER_VERSION = "0.1.0"
+PARSER_VERSION = "0.2.0"
 DEFAULT_URL = "https://www.beac.int/index.php/accueil"
 
 PAIR_TO_FOREIGN_CURRENCY = {
@@ -72,14 +73,45 @@ def rows_to_observations(rows: Iterable[list[str]], value_date: str | None) -> l
     return observations
 
 
+def _deduplicate_observations(
+    observations: Iterable[FxObservation],
+) -> tuple[list[FxObservation], list[str]]:
+    by_currency: dict[str, FxObservation] = {}
+    warnings: list[str] = []
+    for item in observations:
+        code = item.canonical_currency_code
+        if not code:
+            continue
+        existing = by_currency.get(code)
+        if existing is None:
+            by_currency[code] = item
+            continue
+        if (
+            existing.provider_buy_rate == item.provider_buy_rate
+            and existing.provider_sell_rate == item.provider_sell_rate
+            and existing.value_date == item.value_date
+        ):
+            continue
+        warnings.append(f"CONFLICTING_DUPLICATE_PAIR:{code}")
+    return [by_currency[code] for code in sorted(by_currency)], warnings
+
+
 def parse_beac_fx_html(payload: bytes) -> tuple[list[FxObservation], list[str]]:
     text = payload.decode("utf-8", errors="replace")
-    parser = TableTextParser()
-    parser.feed(text)
-    value_date = detect_value_date(visible_html_text(payload))
-    observations = rows_to_observations(parser.rows, value_date)
 
-    warnings: list[str] = []
+    table_parser = TableTextParser()
+    table_parser.feed(text)
+
+    div_parser = DivClassTextBlockParser("taux_de_change")
+    div_parser.feed(text)
+
+    value_date = detect_value_date(visible_html_text(payload))
+    parsed = rows_to_observations(
+        [*table_parser.rows, *div_parser.rows],
+        value_date,
+    )
+    observations, warnings = _deduplicate_observations(parsed)
+
     if value_date is None:
         warnings.append("VALUE_DATE_NOT_FOUND")
     expected = {"EUR", "USD"}
