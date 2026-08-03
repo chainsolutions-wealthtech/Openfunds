@@ -10,7 +10,7 @@ from typing import Any
 METHODOLOGY_VERSION = "FX_CANONICAL_0.1.0"
 RATE_QUANTUM = Decimal("0.000000000000000001")
 SUPPORTED_TARGET_CURRENCIES = {"EUR", "USD"}
-EXPECTED_SOURCE_QUOTE_CONVENTION = "XOF_PER_1_FOREIGN_CURRENCY"
+SUPPORTED_LOCAL_CURRENCIES = {"XOF", "XAF"}
 
 getcontext().prec = 40
 
@@ -51,7 +51,13 @@ def _format_rate(value: Decimal) -> str:
     return format(value.quantize(RATE_QUANTUM, rounding=ROUND_HALF_EVEN), "f")
 
 
-def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservation]:
+def transform_local_manifest(
+    manifest: dict[str, Any], local_currency_code: str
+) -> list[CanonicalFxObservation]:
+    local_currency = local_currency_code.upper()
+    if local_currency not in SUPPORTED_LOCAL_CURRENCIES:
+        raise ValueError(f"unsupported local currency: {local_currency_code!r}")
+
     raw_artifact = manifest.get("raw_artifact") or {}
     raw_sha256 = raw_artifact.get("sha256")
     source_url = raw_artifact.get("source_url")
@@ -60,6 +66,7 @@ def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservat
     if not raw_sha256 or not source_url or not parser_version:
         raise ValueError("manifest lineage is incomplete")
 
+    expected_quote_convention = f"{local_currency}_PER_1_FOREIGN_CURRENCY"
     transformed: list[CanonicalFxObservation] = []
     seen_pairs: set[str] = set()
 
@@ -73,7 +80,7 @@ def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservat
             raise ValueError(f"missing value_date for {target_currency}")
 
         quote_convention = row.get("quote_convention_source")
-        if quote_convention != EXPECTED_SOURCE_QUOTE_CONVENTION:
+        if quote_convention != expected_quote_convention:
             raise ValueError(
                 f"unexpected quote convention for {target_currency}: {quote_convention!r}"
             )
@@ -82,7 +89,7 @@ def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservat
         sell = _positive_decimal(row.get("provider_sell_rate"), "provider_sell_rate")
         midpoint = (buy + sell) / Decimal(2)
         canonical_rate = Decimal(1) / midpoint
-        pair_code = f"XOF_{target_currency}"
+        pair_code = f"{local_currency}_{target_currency}"
 
         if pair_code in seen_pairs:
             raise ValueError(f"duplicate provider row for {pair_code}")
@@ -93,7 +100,7 @@ def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservat
                 observation_type="CALCULATED_FX",
                 value_date=value_date,
                 canonical_pair_code=pair_code,
-                source_currency_code="XOF",
+                source_currency_code=local_currency,
                 target_currency_code=target_currency,
                 canonical_rate=_format_rate(canonical_rate),
                 rate_type="MIDPOINT_INVERTED",
@@ -111,13 +118,21 @@ def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservat
             )
         )
 
-    expected_pairs = {"XOF_EUR", "XOF_USD"}
+    expected_pairs = {
+        f"{local_currency}_EUR",
+        f"{local_currency}_USD",
+    }
     found_pairs = {item.canonical_pair_code for item in transformed}
     missing = expected_pairs - found_pairs
     if missing:
         raise ValueError(f"missing required canonical pairs: {sorted(missing)}")
 
     return sorted(transformed, key=lambda item: item.canonical_pair_code)
+
+
+def transform_xof_manifest(manifest: dict[str, Any]) -> list[CanonicalFxObservation]:
+    """Backward-compatible BCEAO wrapper."""
+    return transform_local_manifest(manifest, "XOF")
 
 
 def write_canonical_observations(
@@ -137,14 +152,19 @@ def write_canonical_observations(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Transform a BCEAO FX collection manifest into canonical XOF/EUR and XOF/USD observations."
+        description="Transform an observed local/foreign FX manifest into canonical LOCAL/EUR and LOCAL/USD observations."
     )
     parser.add_argument("--input-manifest", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--local-currency",
+        choices=sorted(SUPPORTED_LOCAL_CURRENCIES),
+        default="XOF",
+    )
     args = parser.parse_args()
 
     manifest = json.loads(args.input_manifest.read_text(encoding="utf-8"))
-    observations = transform_xof_manifest(manifest)
+    observations = transform_local_manifest(manifest, args.local_currency)
     write_canonical_observations(observations, args.output)
     print(
         f"{METHODOLOGY_VERSION}: wrote {len(observations)} canonical observations to {args.output}"
