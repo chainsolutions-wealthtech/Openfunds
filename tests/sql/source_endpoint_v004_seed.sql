@@ -1,0 +1,58 @@
+insert into ref.organization (
+    organization_id,
+    organization_code
+)
+values (
+    '40000000-0000-0000-0000-000000000001',
+    'ORG_V004'
+);
+
+insert into source.endpoint (
+    endpoint_id,
+    endpoint_code,
+    organization_id,
+    scope_type,
+    scope_code,
+    endpoint_type,
+    data_portal_url,
+    access_method,
+    auth_required,
+    file_formats,
+    expected_frequency,
+    history_start,
+    validation_status,
+    source_note
+)
+values
+    (
+        '40000000-0000-0000-0000-000000000002',
+        'ENDPOINT_V004',
+        '40000000-0000-0000-0000-000000000001',
+        'ZONE',
+        'UEMOA',
+        'DATA_PORTAL',
+        'https://relational.example.test/data',
+        'PUBLIC_WEB',
+        false,
+        array['HTML','CSV']::text[],
+        'DAILY',
+        '2018-01-01',
+        'VALIDATED',
+        'VERIFIED_TEST_ENDPOINT'
+    ),
+    (
+        '40000000-0000-0000-0000-000000000003',
+        'ENDPOINT_PENDING_NO_URL',
+        '40000000-0000-0000-0000-000000000001',
+        'ZONE',
+        'UEMOA',
+        'DATA_PORTAL',
+        null,
+        'PUBLIC_WEB',
+        false,
+        null,
+        'DAILY',
+        null,
+        'PENDING',
+        'URL_TO_VERIFY'
+    );
