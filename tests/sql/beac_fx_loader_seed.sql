@@ -1,6 +1,7 @@
 -- APPLY AND ASSERT THE BEAC FX PRODUCTION SEED BEFORE LIVE VALIDATION.
 
 \ir ../../schemas/reference/009_beac_fx_collection_seed.sql
+\ir ../../schemas/reference/010_beac_fx_parser_v0_2.sql
 
 do $$
 declare
@@ -62,7 +63,8 @@ begin
     from source.collection_specification
     where collection_specification_id = '128bb2f4-ff2d-5633-8e13-b5e1cb72c88d'
       and collection_specification_code = 'CS_CEMAC_BEAC_FX_SNAPSHOT'
-      and parser_version = '0.1.0'
+      and parser_version = '0.2.0'
+      and table_or_selector = 'DIV.taux_de_change|TABLE_FALLBACK'
       and raw_artifact_required
       and hash_required
       and implementation_status = 'COLLECTOR_IMPLEMENTED'
@@ -84,7 +86,7 @@ begin
         raise exception 'expected three pending BEAC provider series, got %', provider_series_count;
     end if;
     if specification_count <> 1 then
-        raise exception 'pending BEAC collection specification is missing or invalid';
+        raise exception 'pending BEAC collection specification v0.2.0 is missing or invalid';
     end if;
 end
 $$;
