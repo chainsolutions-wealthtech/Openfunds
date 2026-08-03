@@ -1,0 +1,55 @@
+ISO3;Pays;Région;Devise;Zone monétaire;Indicateurs attendus;Domaines attendus
+DZA;Algérie;Afrique du Nord;DZD;Nationale;420;18
+AGO;Angola;Afrique centrale;AOA;Nationale;420;18
+BEN;Bénin;Afrique de l’Ouest;XOF;UEMOA;420;18
+BWA;Botswana;Afrique australe;BWP;Nationale;420;18
+BFA;Burkina Faso;Afrique de l’Ouest;XOF;UEMOA;420;18
+BDI;Burundi;Afrique de l’Est;BIF;Nationale;420;18
+CPV;Cabo Verde;Afrique de l’Ouest;CVE;Nationale;420;18
+CMR;Cameroun;Afrique centrale;XAF;CEMAC;420;18
+CAF;République centrafricaine;Afrique centrale;XAF;CEMAC;420;18
+TCD;Tchad;Afrique centrale;XAF;CEMAC;420;18
+COM;Comores;Afrique de l’Est;KMF;Nationale;420;18
+COG;République du Congo;Afrique centrale;XAF;CEMAC;420;18
+COD;République démocratique du Congo;Afrique centrale;CDF;Nationale;420;18
+CIV;Côte d’Ivoire;Afrique de l’Ouest;XOF;UEMOA;420;18
+DJI;Djibouti;Afrique de l’Est;DJF;Nationale;420;18
+EGY;Égypte;Afrique du Nord;EGP;Nationale;420;18
+GNQ;Guinée équatoriale;Afrique centrale;XAF;CEMAC;420;18
+ERI;Érythrée;Afrique de l’Est;ERN;Nationale;420;18
+SWZ;Eswatini;Afrique australe;SZL;CMA / arrimage ZAR;420;18
+ETH;Éthiopie;Afrique de l’Est;ETB;Nationale;420;18
+GAB;Gabon;Afrique centrale;XAF;CEMAC;420;18
+GMB;Gambie;Afrique de l’Ouest;GMD;Nationale;420;18
+GHA;Ghana;Afrique de l’Ouest;GHS;Nationale;420;18
+GIN;Guinée;Afrique de l’Ouest;GNF;Nationale;420;18
+GNB;Guinée-Bissau;Afrique de l’Ouest;XOF;UEMOA;420;18
+KEN;Kenya;Afrique de l’Est;KES;Nationale;420;18
+LSO;Lesotho;Afrique australe;LSL;CMA / arrimage ZAR;420;18
+LBR;Liberia;Afrique de l’Ouest;LRD;Nationale;420;18
+LBY;Libye;Afrique du Nord;LYD;Nationale;420;18
+MDG;Madagascar;Afrique de l’Est;MGA;Nationale;420;18
+MWI;Malawi;Afrique de l’Est;MWK;Nationale;420;18
+MLI;Mali;Afrique de l’Ouest;XOF;UEMOA;420;18
+MRT;Mauritanie;Afrique de l’Ouest;MRU;Nationale;420;18
+MUS;Maurice;Afrique de l’Est;MUR;Nationale;420;18
+MAR;Maroc;Afrique du Nord;MAD;Nationale;420;18
+MOZ;Mozambique;Afrique de l’Est;MZN;Nationale;420;18
+NAM;Namibie;Afrique australe;NAD;CMA / arrimage ZAR;420;18
+NER;Niger;Afrique de l’Ouest;XOF;UEMOA;420;18
+NGA;Nigeria;Afrique de l’Ouest;NGN;Nationale;420;18
+RWA;Rwanda;Afrique de l’Est;RWF;Nationale;420;18
+STP;Sao Tomé-et-Principe;Afrique centrale;STN;Nationale;420;18
+SEN;Sénégal;Afrique de l’Ouest;XOF;UEMOA;420;18
+SYC;Seychelles;Afrique de l’Est;SCR;Nationale;420;18
+SLE;Sierra Leone;Afrique de l’Ouest;SLE;Nationale;420;18
+SOM;Somalie;Afrique de l’Est;SOS;Nationale;420;18
+ZAF;Afrique du Sud;Afrique australe;ZAR;CMA;420;18
+SSD;Soudan du Sud;Afrique de l’Est;SSP;Nationale;420;18
+SDN;Soudan;Afrique du Nord;SDG;Nationale;420;18
+TZA;Tanzanie;Afrique de l’Est;TZS;Nationale;420;18
+TGO;Togo;Afrique de l’Ouest;XOF;UEMOA;420;18
+TUN;Tunisie;Afrique du Nord;TND;Nationale;420;18
+UGA;Ouganda;Afrique de l’Est;UGX;Nationale;420;18
+ZMB;Zambie;Afrique de l’Est;ZMW;Nationale;420;18
+ZWE;Zimbabwe;Afrique de l’Est;ZWG / multidevise;Nationale;420;18
