@@ -10,12 +10,24 @@ on:
       - "collectors/bceao_fx.py"
       - "collectors/fx_canonical.py"
       - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
+      - "schemas/reference/005_provider_series_and_collection_specifications.sql"
+      - "schemas/market/006_fx_observation_lineage.sql"
+      - "tests/sql/fx_loader_bootstrap.sql"
+      - "tests/sql/fx_loader_seed.sql"
   pull_request:
     paths:
       - ".github/workflows/bceao-fx-live-smoke.yml"
       - "collectors/bceao_fx.py"
       - "collectors/fx_canonical.py"
       - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
+      - "schemas/reference/005_provider_series_and_collection_specifications.sql"
+      - "schemas/market/006_fx_observation_lineage.sql"
+      - "tests/sql/fx_loader_bootstrap.sql"
+      - "tests/sql/fx_loader_seed.sql"
 
 permissions:
   contents: read
@@ -24,7 +36,26 @@ jobs:
   live-smoke:
     name: Live BCEAO FX controlled run
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
+      PGPASSWORD: openfunds
 
     steps:
       - name: Checkout repository
@@ -34,6 +65,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
+      - name: Install PostgreSQL loader dependency
+        run: python -m pip install -r requirements/collectors-postgres.txt
 
       - name: Run first live collection
         run: |
@@ -72,9 +106,6 @@ jobs:
 
           codes = {row["canonical_currency_code"] for row in manifest["observations"]}
           assert {"EUR", "USD"}.issubset(codes), codes
-
-          # The content-addressed persistence rule means two identical live runs
-          # must not create duplicate raw files.
           assert len(raw_files) == 1, f"Expected one content-addressed raw file, got {len(raw_files)}"
 
           print(json.dumps({
@@ -123,6 +154,79 @@ jobs:
           )
 
           print(json.dumps(payload, indent=2))
+          PY
+
+      - name: Apply canonical PostgreSQL schemas
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_bootstrap.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series_and_collection_specifications.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/market/006_fx_observation_lineage.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_seed.sql
+
+      - name: Load live bundle twice into PostgreSQL
+        run: |
+          MANIFEST=$(find artifacts/live/bceao_fx/manifests -name '*.json' | sort | tail -n 1)
+          CANONICAL=artifacts/live/bceao_fx/staging/canonical_fx.json
+          RAW=$(find artifacts/live/bceao_fx/raw -type f | sort | tail -n 1)
+
+          python -m loaders.fx_postgres \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/live/bceao_fx/first-database-load.json
+
+          python -m loaders.fx_postgres \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/live/bceao_fx/second-database-load.json
+
+      - name: Validate live PostgreSQL load
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import psycopg
+
+          first = json.loads(Path("artifacts/live/bceao_fx/first-database-load.json").read_text())
+          second = json.loads(Path("artifacts/live/bceao_fx/second-database-load.json").read_text())
+          assert first["actions"] == {"INSERTED": 6}, first
+          assert second["actions"] == {"SKIPPED_IDENTICAL": 6}, second
+          assert first["collection_run_id"] == second["collection_run_id"]
+          assert first["raw_artifact_id"] == second["raw_artifact_id"]
+
+          with psycopg.connect("postgresql://openfunds:openfunds@localhost:5432/openfunds") as conn:
+              rows = conn.execute("""
+                  select
+                      sc.iso_code as source_currency,
+                      tc.iso_code as target_currency,
+                      f.rate_type,
+                      f.observation_kind,
+                      f.fx_rate::text,
+                      f.observation_date::text,
+                      f.source_raw_sha256
+                  from market.current_fx_observation f
+                  join ref.currency sc on sc.currency_id = f.source_currency_id
+                  join ref.currency tc on tc.currency_id = f.target_currency_id
+                  order by 1, 2, 3
+              """).fetchall()
+              run_count = conn.execute("select count(*) from source.collection_run").fetchone()[0]
+              artifact_count = conn.execute("select count(*) from source.raw_artifact").fetchone()[0]
+
+          assert len(rows) == 6, rows
+          assert sum(1 for row in rows if row[3] == "OBSERVED") == 4
+          assert sum(1 for row in rows if row[3] == "CALCULATED") == 2
+          assert run_count == 1
+          assert artifact_count == 1
+          assert all(row[5] for row in rows)
+          assert all(row[6] for row in rows)
+          print(json.dumps({
+              "first_load": first,
+              "second_load": second,
+              "database_rows": rows,
+          }, indent=2, default=str))
           PY
 
       - name: Upload controlled live artifacts
