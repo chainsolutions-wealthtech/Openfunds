@@ -3,8 +3,17 @@
   "artifact_status": "NON_CANONICAL_DERIVED_EXPORT",
   "production_status": "NOT_ACTIVE",
   "file_name": "Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx",
+  "binary_committed_to_repository": false,
+  "binary_storage_status": "GENERATED_IN_CONVERSATION_WORKSPACE",
+  "repository_contains": [
+    "documentation",
+    "export_manifest",
+    "canonical_inputs",
+    "generator",
+    "tests"
+  ],
   "sha256": "44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa",
-  "file_size_bytes": 201728,
+  "file_size_bytes": 201462,
   "export_version": "0.4.1",
   "canonical_model_version": "0.1.0",
   "export_date": "2026-08-03",
