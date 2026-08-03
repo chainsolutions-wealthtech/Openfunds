@@ -12,9 +12,9 @@
     "generator",
     "tests"
   ],
-  "sha256": "44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa",
-  "file_size_bytes": 201462,
-  "export_version": "0.4.1",
+  "sha256": "3aa91f71911e282138b6d71342782442ae8a23efc48f4aeb2cd9e102287e56da",
+  "file_size_bytes": 201772,
+  "export_version": "0.4.2",
   "canonical_model_version": "0.1.0",
   "export_date": "2026-08-03",
   "source_branch": "architecture/africafunds-country-indicators-v0.1",
@@ -35,6 +35,26 @@
     "unique_categories": 432,
     "unique_peer_groups": 432,
     "unique_reference_blocks": 432
+  },
+  "interactive_prefill": {
+    "input_fields": [
+      "FUND_ID",
+      "LEGAL_COUNTRY_CODE",
+      "ASSET_CLASS_CODE",
+      "ASSET_SUBCLASS_CODE"
+    ],
+    "resolved_outputs": [
+      "LOCAL_CATEGORY",
+      "REGIONAL_CATEGORY",
+      "AFRICA_CATEGORY",
+      "PEER_GROUPS",
+      "REFERENCE_BLOCKS",
+      "CATEGORY_WTI",
+      "PRIMARY_BENCHMARK",
+      "WTI_BENCH",
+      "RISK_FREE_RATE",
+      "RANKING_REFERENCE"
+    ]
   },
   "routing_rules": {
     "uemoa": "UEMOA -> AFRICA_OUEST -> AFRICA",
