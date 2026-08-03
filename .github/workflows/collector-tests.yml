@@ -1,0 +1,80 @@
+name: Collector Tests
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "collectors/**"
+      - "tests/**"
+      - ".github/workflows/collector-tests.yml"
+  pull_request:
+    paths:
+      - "collectors/**"
+      - "tests/**"
+      - ".github/workflows/collector-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Python ${{ matrix.python-version }} unit tests
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+
+      - name: Show runtime information
+        run: |
+          python --version
+          python -m pip --version
+
+      - name: Compile collectors
+        run: python -m compileall -q collectors tests
+
+      - name: Run collector unit tests
+        run: python -m unittest discover -s tests -p "test_*.py" -v
+
+  fixture-smoke-test:
+    name: BCEAO FX fixture smoke test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Parse deterministic BCEAO fixture
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from collectors.bceao_fx import parse_bceao_fx_html
+
+          fixture = Path("tests/fixtures/bceao_fx_sample.html").read_text(encoding="utf-8")
+          result = parse_bceao_fx_html(fixture)
+
+          assert result["value_date"] == "2026-08-03"
+          currencies = {row["canonical_currency_code"] for row in result["observations"]}
+          assert {"EUR", "USD"}.issubset(currencies)
+          assert not result["errors"]
+
+          print(f"Parsed {len(result['observations'])} observations")
+          print(f"Currencies: {sorted(currencies)}")
+          PY
