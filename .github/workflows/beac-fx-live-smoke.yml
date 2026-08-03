@@ -17,6 +17,7 @@ on:
       - "schemas/reference/005_provider_series_and_collection_specifications.sql"
       - "schemas/reference/007_source_endpoint_reconciliation.sql"
       - "schemas/reference/009_beac_fx_collection_seed.sql"
+      - "schemas/reference/010_beac_fx_parser_v0_2.sql"
       - "schemas/market/006_fx_observation_lineage.sql"
       - "tests/sql/fx_loader_bootstrap.sql"
       - "tests/sql/beac_fx_loader_seed.sql"
@@ -33,6 +34,7 @@ on:
       - "schemas/reference/005_provider_series_and_collection_specifications.sql"
       - "schemas/reference/007_source_endpoint_reconciliation.sql"
       - "schemas/reference/009_beac_fx_collection_seed.sql"
+      - "schemas/reference/010_beac_fx_parser_v0_2.sql"
       - "schemas/market/006_fx_observation_lineage.sql"
       - "tests/sql/fx_loader_bootstrap.sql"
       - "tests/sql/beac_fx_loader_seed.sql"
@@ -110,6 +112,7 @@ jobs:
           assert manifest["observations"], "No BEAC observations parsed"
           assert not manifest["warnings"], manifest["warnings"]
           assert not manifest["errors"], manifest["errors"]
+          assert manifest["parser_version"] == "0.2.0"
           assert all(row["value_date"] for row in manifest["observations"]), "Missing value date"
           assert all(
               row["quote_convention_source"] == "XAF_PER_1_FOREIGN_CURRENCY"
@@ -122,6 +125,7 @@ jobs:
 
           print(json.dumps({
               "run_status": manifest["run_status"],
+              "parser_version": manifest["parser_version"],
               "sha256": digest,
               "byte_size": manifest["raw_artifact"]["byte_size"],
               "media_type": manifest["raw_artifact"]["media_type"],
@@ -160,7 +164,7 @@ jobs:
           assert all(row["value_date"] for row in observations)
           assert all(Decimal(row["canonical_rate"]) > 0 for row in observations)
           assert all(row["source_raw_sha256"] for row in observations)
-          assert all(row["source_parser_version"] == "0.1.0" for row in observations)
+          assert all(row["source_parser_version"] == "0.2.0" for row in observations)
           assert all(
               row["source_quote_convention"] == "XAF_PER_1_FOREIGN_CURRENCY"
               for row in observations
