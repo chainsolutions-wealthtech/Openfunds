@@ -6,14 +6,16 @@ IN PROGRESS — NON DESTRUCTIVE
 
 ## OBJECTIVE
 
-Reconcile the country-indicator framework from PR #1 with the accepted canonical geography, country, market-zone and fund-relationship model without changing the validated taxonomy, category hierarchy, reference-block roles, WTI naming or WTI Bench independence principles.
+Reconcile the country-indicator framework from PR #1 with the accepted canonical geography, country, market-zone, currency and fund-relationship model without changing the validated taxonomy, category hierarchy, reference-block roles, WTI naming or WTI Bench independence principles.
 
 ## CANONICAL SOURCES OF TRUTH
 
 - `data/reference/AFRICA_REGIONS.csv` — canonical continent and region registry.
 - `data/reference/AFRICA_COUNTRIES.csv` — canonical country registry.
 - `data/reference/MARKET_ZONES.csv` — canonical common monetary and market zones.
-- `data/reference/COUNTRY_RELATIONSHIPS.csv` — canonical normalised country relationships; still to be brought into this PR branch from the base branch.
+- `data/reference/COUNTRY_RELATIONSHIPS.csv` — canonical normalised country relationships.
+- `data/reference/CURRENCIES.csv` — canonical working currency registry pending external ISO/source verification.
+- `data/reference/FX_PAIRS.csv` — required daily LOCAL-to-EUR and LOCAL-to-USD pair registry.
 
 The legacy `data/reference/african_countries_v0.1.csv` remains a source/proposal file and must not become a competing canonical country registry.
 
@@ -47,19 +49,28 @@ The legacy `data/reference/african_countries_v0.1.csv` remains a source/proposal
 - Added canonical `AFRICA_REGIONS.csv` to the PR branch.
 - Added canonical `MARKET_ZONES.csv` to the PR branch.
 - Added canonical `AFRICA_COUNTRIES.csv` to the PR branch.
-- Recorded the canonical/source-of-truth precedence rules in this document.
+- Added the complete 266-row `COUNTRY_RELATIONSHIPS.csv` registry.
+- Added the country-relationship functional model, validation document and PostgreSQL schema.
+- Added `CURRENCIES.csv` with all local currency codes used by the 54-country registry plus EUR and USD.
+- Added `FX_PAIRS.csv` with the required daily LOCAL-to-EUR and LOCAL-to-USD pairs.
+- Added `docs/05_CURRENCIES/DAILY_CONVERSION_RULES.md`.
+- Recorded the canonical/source-of-truth precedence and non-regression rules.
+
+## IMPORTANT CURRENCY STATUS
+
+Currency codes and required pair relationships are now structurally populated, but provider names, official source URLs, direct/triangulated route decisions, ISO metadata, effective dates and historical FX observations remain `PENDING` until verified and collected.
 
 ## REMAINING RECONCILIATION ACTIONS
 
-1. Bring `COUNTRY_RELATIONSHIPS.csv`, its validation document and SQL relationship model into the PR branch.
-2. Compare `african_countries_v0.1.csv` with `AFRICA_COUNTRIES.csv`; retain only non-conflicting enrichment fields.
-3. Map the 420 definitions to canonical domain and indicator codes in uppercase without accents.
-4. Link every country-indicator applicability record to a country or market-zone canonical code.
-5. Link benchmark-plan products to category reference-block roles without replacing WTI naming.
-6. Add currencies and explicit LOCAL/EUR/USD FX-pair rules.
-7. Add organisations, source endpoints and collection specifications.
-8. Generate categories, subcategories and reference blocks only after the canonical registries pass validation.
+1. Compare `african_countries_v0.1.csv` with `AFRICA_COUNTRIES.csv`; retain only non-conflicting enrichment fields.
+2. Map the 420 definitions to canonical domain and indicator codes in uppercase without accents.
+3. Link every country-indicator applicability record to a country or market-zone canonical code.
+4. Link benchmark-plan products to category reference-block roles without replacing WTI naming.
+5. Add organisations, source endpoints and collection specifications.
+6. Verify currency metadata and select official FX sources and fallback routes.
+7. Generate categories, subcategories and reference blocks only after canonical registries pass validation.
+8. Load real historical observations and build auditable LOCAL, EUR and USD series.
 
 ## DEFINITION OF DONE
 
-The reconciliation is complete when the PR contains one non-duplicated canonical registry for geography/countries/zones, the full D00–D17 catalogue, canonical country-indicator relationships, source and quality models, and explicit mappings from input series to market indices, WTI, WTI Bench, metrics, rankings, APIs and Atomic Design view models.
+The reconciliation is complete when the PR contains one non-duplicated canonical registry for geography, countries, zones and currencies; the full D00–D17 catalogue; canonical country-indicator relationships; source and quality models; and explicit mappings from input series to market indices, WTI, WTI Bench, metrics, rankings, APIs and Atomic Design view models.
