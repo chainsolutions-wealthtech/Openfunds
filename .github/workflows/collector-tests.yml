@@ -35,7 +35,6 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-          cache: pip
 
       - name: Show runtime information
         run: |
@@ -67,14 +66,16 @@ jobs:
           from pathlib import Path
           from collectors.bceao_fx import parse_bceao_fx_html
 
-          fixture = Path("tests/fixtures/bceao_fx_sample.html").read_text(encoding="utf-8")
-          result = parse_bceao_fx_html(fixture)
+          payload = Path("tests/fixtures/bceao_fx_sample.html").read_bytes()
+          observations, warnings = parse_bceao_fx_html(payload)
 
-          assert result["value_date"] == "2026-08-03"
-          currencies = {row["canonical_currency_code"] for row in result["observations"]}
+          assert observations
+          assert all(item.value_date == "2026-08-03" for item in observations)
+          currencies = {item.canonical_currency_code for item in observations}
           assert {"EUR", "USD"}.issubset(currencies)
-          assert not result["errors"]
+          assert "VALUE_DATE_NOT_FOUND" not in warnings
 
-          print(f"Parsed {len(result['observations'])} observations")
+          print(f"Parsed {len(observations)} observations")
           print(f"Currencies: {sorted(currencies)}")
+          print(f"Warnings: {warnings}")
           PY
