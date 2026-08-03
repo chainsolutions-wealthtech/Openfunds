@@ -1,6 +1,6 @@
 -- MINIMAL PREREQUISITES FOR APPLYING THE CANONICAL REFERENCE, SOURCE AND FX MIGRATIONS.
--- Organizations and endpoints are deliberately not defined here: the integration
--- tests must exercise the real 003, 004, 007 and 008 migrations.
+-- Organizations and endpoints are deliberately not redefined here: the integration
+-- tests exercise the real 003, 004 and 007 migrations in their canonical order.
 
 create schema if not exists ref;
 create schema if not exists source;
@@ -33,3 +33,7 @@ values
     ('00000000-0000-0000-0000-000000000002', 'EUR', 'EURO', 'EURO', 2),
     ('00000000-0000-0000-0000-000000000003', 'USD', 'DOLLAR US', 'US DOLLAR', 2)
 on conflict (iso_code) do nothing;
+
+\ir ../../schemas/reference/003_organizations_and_roles.sql
+\ir ../../schemas/reference/004_source_endpoints_and_indicator_mapping.sql
+\ir ../../schemas/reference/007_source_endpoint_reconciliation.sql
