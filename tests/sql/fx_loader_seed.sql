@@ -1,5 +1,6 @@
--- ASSERTIONS FOR THE CANONICAL BCEAO FX SEED AND FX LINEAGE MIGRATION.
--- The real reference rows are created by 008_bceao_fx_collection_seed.sql.
+-- APPLY AND ASSERT THE CANONICAL BCEAO FX SEED AND FX LINEAGE MIGRATION.
+
+\ir ../../schemas/reference/008_bceao_fx_collection_seed.sql
 
 do $$
 declare
