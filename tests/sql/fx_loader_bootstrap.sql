@@ -31,7 +31,8 @@ insert into ref.currency (currency_id, iso_code, name_fr, name_en, decimal_place
 values
     ('00000000-0000-0000-0000-000000000001', 'XOF', 'FRANC CFA BCEAO', 'CFA FRANC BCEAO', 0),
     ('00000000-0000-0000-0000-000000000002', 'EUR', 'EURO', 'EURO', 2),
-    ('00000000-0000-0000-0000-000000000003', 'USD', 'DOLLAR US', 'US DOLLAR', 2)
+    ('00000000-0000-0000-0000-000000000003', 'USD', 'DOLLAR US', 'US DOLLAR', 2),
+    ('00000000-0000-0000-0000-000000000004', 'XAF', 'FRANC CFA BEAC', 'CFA FRANC BEAC', 0)
 on conflict (iso_code) do nothing;
 
 \ir ../../schemas/reference/003_organizations_and_roles.sql
