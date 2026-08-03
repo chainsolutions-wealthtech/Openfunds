@@ -17,12 +17,23 @@ on:
       - "collectors/common.py"
       - "loaders/fx_postgres.py"
       - "requirements/collectors-postgres.txt"
+  pull_request:
+    paths:
+      - ".github/workflows/fx-daily-staging.yml"
+      - "pipelines/fx_daily.py"
+      - "collectors/bceao_fx.py"
+      - "collectors/beac_fx.py"
+      - "collectors/fx_html_common.py"
+      - "collectors/fx_canonical.py"
+      - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
 
 permissions:
   contents: read
 
 concurrency:
-  group: daily-africa-fx-staging
+  group: daily-africa-fx-staging-${{ github.event_name }}
   cancel-in-progress: false
 
 jobs:
