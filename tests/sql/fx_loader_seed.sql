@@ -1,9 +1,17 @@
--- REFERENCE ROWS REQUIRED BY THE BCEAO FX LOADER INTEGRATION TEST.
+-- ASSERTIONS FOR THE CANONICAL BCEAO FX SEED AND FX LINEAGE MIGRATION.
+-- The real reference rows are created by 008_bceao_fx_collection_seed.sql.
 
--- The bitemporal migration must remove the original four-column UNIQUE
--- constraint. The current-version partial index replaces it.
 do $$
+declare
+    organization_count integer;
+    role_count integer;
+    endpoint_count integer;
+    mapping_count integer;
+    provider_series_count integer;
+    specification_count integer;
 begin
+    -- The bitemporal migration must remove the original four-column UNIQUE
+    -- constraint. The current-version partial index replaces it.
     if exists (
         select 1
         from pg_constraint constraint_row
@@ -24,124 +32,81 @@ begin
     ) then
         raise exception 'legacy FX uniqueness constraint was not removed';
     end if;
+
+    select count(*)
+    into organization_count
+    from ref.organization
+    where organization_id = '302dbf2d-4a75-5e9f-84eb-d6b5368cf4ab'
+      and organization_code = 'BCEAO'
+      and primary_zone_code = 'UEMOA'
+      and validation_status = 'VALIDATED';
+
+    select count(*)
+    into role_count
+    from ref.organization_scope_role
+    where organization_id = '302dbf2d-4a75-5e9f-84eb-d6b5368cf4ab'
+      and scope_entity_code = 'UEMOA'
+      and role_code in ('CENTRAL_BANK','FX_REFERENCE_RATE_PROVIDER')
+      and validation_status = 'VALIDATED';
+
+    select count(*)
+    into endpoint_count
+    from source.current_endpoint
+    where endpoint_id = '857a19f9-8c29-5dff-a84c-c0c93a540bf8'
+      and endpoint_code = 'BCEAO_FX_DAILY'
+      and scope_type = 'ZONE'
+      and scope_code = 'UEMOA'
+      and canonical_url = 'https://www.bceao.int/fr'
+      and expected_frequency = 'DAILY';
+
+    select count(*)
+    into mapping_count
+    from source.indicator_source_mapping
+    where mapping_code in ('UEMOA_D09_FX_EUR','UEMOA_D09_FX_USD')
+      and endpoint_id = '857a19f9-8c29-5dff-a84c-c0c93a540bf8'
+      and collection_status = 'COLLECTION_TESTED'
+      and validation_status = 'VALIDATED';
+
+    select count(*)
+    into provider_series_count
+    from source.provider_series
+    where provider_series_code in (
+        'PS_UEMOA_BCEAO_FX_SNAPSHOT',
+        'PS_UEMOA_FX_XOF_EUR',
+        'PS_UEMOA_FX_XOF_USD'
+    )
+      and endpoint_id = '857a19f9-8c29-5dff-a84c-c0c93a540bf8'
+      and history_status = 'COLLECTION_TESTED'
+      and validation_status = 'VALIDATED';
+
+    select count(*)
+    into specification_count
+    from source.collection_specification
+    where collection_specification_id = '11464493-a058-5ff6-98ad-4f0a3ba8d82b'
+      and collection_specification_code = 'CS_UEMOA_BCEAO_FX_SNAPSHOT'
+      and parser_version = '0.2.0'
+      and raw_artifact_required
+      and hash_required
+      and implementation_status = 'COLLECTION_TESTED'
+      and validation_status = 'VALIDATED';
+
+    if organization_count <> 1 then
+        raise exception 'canonical BCEAO organization seed is missing or invalid';
+    end if;
+    if role_count <> 2 then
+        raise exception 'expected two validated BCEAO UEMOA role assignments, got %', role_count;
+    end if;
+    if endpoint_count <> 1 then
+        raise exception 'validated BCEAO FX endpoint seed is missing or invalid';
+    end if;
+    if mapping_count <> 2 then
+        raise exception 'expected two validated BCEAO FX mappings, got %', mapping_count;
+    end if;
+    if provider_series_count <> 3 then
+        raise exception 'expected three validated BCEAO provider series, got %', provider_series_count;
+    end if;
+    if specification_count <> 1 then
+        raise exception 'validated BCEAO collection specification is missing or invalid';
+    end if;
 end
 $$;
-
-insert into source.provider_series (
-    provider_series_id,
-    provider_series_code,
-    mapping_code,
-    organization_id,
-    endpoint_id,
-    canonical_indicator_code,
-    native_series_code,
-    native_series_name,
-    native_series_url,
-    native_frequency,
-    native_unit,
-    native_currency_code,
-    revision_policy,
-    history_status,
-    validation_status
-)
-values
-    (
-        '10000000-0000-0000-0000-000000000001',
-        'PS_UEMOA_BCEAO_FX_SNAPSHOT',
-        'UEMOA_D09_FX_SNAPSHOT',
-        '00000000-0000-0000-0000-000000000010',
-        '00000000-0000-0000-0000-000000000020',
-        'FX_XOF_EUR_USD_RAW',
-        'BCEAO_FX_DAILY_TABLE',
-        'COURS DES DEVISES BCEAO',
-        'https://www.bceao.int/fr',
-        'DAILY',
-        'FX_RATE',
-        'XOF',
-        'KEEP_ALL_REVISIONS',
-        'COLLECTION_TESTED',
-        'VALIDATED'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000002',
-        'PS_UEMOA_FX_XOF_EUR',
-        'UEMOA_D09_FX_EUR',
-        '00000000-0000-0000-0000-000000000010',
-        '00000000-0000-0000-0000-000000000020',
-        'FX_XOF_EUR',
-        null,
-        'XOF VERS EUR CALCULE DEPUIS LE MIDPOINT BCEAO',
-        null,
-        'DAILY',
-        'FX_RATE',
-        'XOF',
-        'KEEP_ALL_REVISIONS',
-        'COLLECTION_TESTED',
-        'VALIDATED'
-    ),
-    (
-        '10000000-0000-0000-0000-000000000003',
-        'PS_UEMOA_FX_XOF_USD',
-        'UEMOA_D09_FX_USD',
-        '00000000-0000-0000-0000-000000000010',
-        '00000000-0000-0000-0000-000000000020',
-        'FX_XOF_USD',
-        null,
-        'XOF VERS USD CALCULE DEPUIS LE MIDPOINT BCEAO',
-        null,
-        'DAILY',
-        'FX_RATE',
-        'XOF',
-        'KEEP_ALL_REVISIONS',
-        'COLLECTION_TESTED',
-        'VALIDATED'
-    )
-on conflict (provider_series_code) do nothing;
-
-insert into source.collection_specification (
-    collection_specification_id,
-    collection_specification_code,
-    provider_series_id,
-    collection_method,
-    request_method,
-    discovery_rule,
-    table_or_selector,
-    date_extraction_rule,
-    value_extraction_rule,
-    number_parsing_rule,
-    currency_rule,
-    frequency_check,
-    deduplication_key,
-    revision_handling,
-    raw_artifact_required,
-    hash_required,
-    parser_version,
-    retry_policy,
-    quality_check_profile,
-    implementation_status,
-    validation_status
-)
-values (
-    '20000000-0000-0000-0000-000000000001',
-    'CS_UEMOA_BCEAO_FX_SNAPSHOT',
-    '10000000-0000-0000-0000-000000000001',
-    'HTML_SNAPSHOT',
-    'GET',
-    'DOWNLOAD_BCEAO_HOME_PAGE_AND_PARSE_FX_TABLE',
-    'COURS_DES_DEVISES_TABLE',
-    'FRENCH_TEXT_DATE_OR_NUMERIC_DATE',
-    'PROVIDER_BUY_AND_SELL_RATES',
-    'LOCALE_AWARE_DECIMAL',
-    'PRESERVE_PROVIDER_QUOTE_THEN_INVERT_MIDPOINT',
-    'DAILY_BUSINESS_DAY_CHECK',
-    'RAW_SHA256|VALUE_DATE|CURRENCY|RATE_TYPE',
-    'KEEP_ALL_REVISIONS',
-    true,
-    true,
-    '0.2.0',
-    'STANDARD_BACKOFF',
-    'FX_BUY_SELL_DATE_AND_LINEAGE_CHECKS',
-    'COLLECTION_TESTED',
-    'VALIDATED'
-)
-on conflict (collection_specification_code) do nothing;
