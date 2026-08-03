@@ -1,0 +1,10 @@
+Table;Clé primaire;Clés étrangères;Contenu
+country;iso3;;54 pays
+domain;domain_id;;18 domaines
+indicator;indicator_code;domain_id;Catalogue commun
+country_domain_status;iso3 + domain_id;country, domain;Avancement pays × domaine
+country_source;source_id;country;Institution et URL
+country_series;country_series_id;country, indicator, source;Mapping série nationale vers indicateur canonique
+observation;series + date + vintage;country_series, source_document;Valeurs historisées
+benchmark_definition;benchmark_id;country, indicator;Méthode de calcul
+benchmark_level;benchmark + date;benchmark_definition;Niveaux d’indice
