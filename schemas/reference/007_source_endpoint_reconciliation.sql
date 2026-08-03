@@ -125,7 +125,8 @@ alter table source.endpoint
         check (valid_to is null or valid_from is null or valid_to >= valid_from),
     add constraint endpoint_reconciled_url_check
         check (
-            url is not null
+            validation_status <> 'VALIDATED'
+            or url is not null
             or official_url is not null
             or data_portal_url is not null
             or api_base_url is not null
