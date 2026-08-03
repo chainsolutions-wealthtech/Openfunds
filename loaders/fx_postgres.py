@@ -4,7 +4,6 @@ import argparse
 import json
 import uuid
 from dataclasses import dataclass
-from datetime import datetime
 from decimal import Decimal
 from pathlib import Path
 from typing import Any, Iterable
@@ -18,13 +17,59 @@ except ImportError as exc:  # pragma: no cover - exercised by CLI environments.
     ) from exc
 
 NAMESPACE = uuid.UUID("8a15dcc4-f0f5-4fb4-99e1-b87da1f1dfc6")
-DEFAULT_COLLECTION_SPEC_CODE = "CS_UEMOA_BCEAO_FX_SNAPSHOT"
-DEFAULT_OBSERVED_PROVIDER_SERIES_CODE = "PS_UEMOA_BCEAO_FX_SNAPSHOT"
-CANONICAL_PROVIDER_SERIES_BY_TARGET = {
-    "EUR": "PS_UEMOA_FX_XOF_EUR",
-    "USD": "PS_UEMOA_FX_XOF_USD",
+
+
+@dataclass(frozen=True)
+class FxLoadProfile:
+    profile_code: str
+    local_currency_code: str
+    collection_specification_code: str
+    observed_provider_series_code: str
+    canonical_provider_series_by_target: dict[str, str]
+
+    @property
+    def supported_targets(self) -> frozenset[str]:
+        return frozenset(self.canonical_provider_series_by_target)
+
+    @property
+    def expected_quote_convention(self) -> str:
+        return f"{self.local_currency_code}_PER_1_FOREIGN_CURRENCY"
+
+
+BCEAO_XOF_PROFILE = FxLoadProfile(
+    profile_code="BCEAO_XOF",
+    local_currency_code="XOF",
+    collection_specification_code="CS_UEMOA_BCEAO_FX_SNAPSHOT",
+    observed_provider_series_code="PS_UEMOA_BCEAO_FX_SNAPSHOT",
+    canonical_provider_series_by_target={
+        "EUR": "PS_UEMOA_FX_XOF_EUR",
+        "USD": "PS_UEMOA_FX_XOF_USD",
+    },
+)
+
+BEAC_XAF_PROFILE = FxLoadProfile(
+    profile_code="BEAC_XAF",
+    local_currency_code="XAF",
+    collection_specification_code="CS_CEMAC_BEAC_FX_SNAPSHOT",
+    observed_provider_series_code="PS_CEMAC_BEAC_FX_SNAPSHOT",
+    canonical_provider_series_by_target={
+        "EUR": "PS_CEMAC_FX_XAF_EUR",
+        "USD": "PS_CEMAC_FX_XAF_USD",
+    },
+)
+
+LOAD_PROFILES = {
+    BCEAO_XOF_PROFILE.profile_code: BCEAO_XOF_PROFILE,
+    BEAC_XAF_PROFILE.profile_code: BEAC_XAF_PROFILE,
 }
-SUPPORTED_TARGETS = frozenset(CANONICAL_PROVIDER_SERIES_BY_TARGET)
+
+# Backward-compatible BCEAO constants used by earlier integrations.
+DEFAULT_COLLECTION_SPEC_CODE = BCEAO_XOF_PROFILE.collection_specification_code
+DEFAULT_OBSERVED_PROVIDER_SERIES_CODE = BCEAO_XOF_PROFILE.observed_provider_series_code
+CANONICAL_PROVIDER_SERIES_BY_TARGET = dict(
+    BCEAO_XOF_PROFILE.canonical_provider_series_by_target
+)
+SUPPORTED_TARGETS = BCEAO_XOF_PROFILE.supported_targets
 
 
 @dataclass(frozen=True)
@@ -92,7 +137,10 @@ def _read_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def build_observed_records(manifest: dict[str, Any]) -> list[FxLoadRecord]:
+def build_observed_records(
+    manifest: dict[str, Any],
+    profile: FxLoadProfile = BCEAO_XOF_PROFILE,
+) -> list[FxLoadRecord]:
     raw_artifact = manifest.get("raw_artifact") or {}
     raw_sha256 = str(raw_artifact.get("sha256") or "")
     retrieved_at = str(raw_artifact.get("retrieved_at") or "")
@@ -103,7 +151,7 @@ def build_observed_records(manifest: dict[str, Any]) -> list[FxLoadRecord]:
     records: list[FxLoadRecord] = []
     for row in manifest.get("observations") or []:
         foreign_currency = str(row.get("canonical_currency_code") or "").upper()
-        if foreign_currency not in SUPPORTED_TARGETS:
+        if foreign_currency not in profile.supported_targets:
             continue
         value_date = str(row.get("value_date") or "")
         if not value_date:
@@ -112,15 +160,17 @@ def build_observed_records(manifest: dict[str, Any]) -> list[FxLoadRecord]:
         sell = _positive_decimal(row.get("provider_sell_rate"), "provider_sell_rate")
         midpoint = (buy + sell) / Decimal(2)
         quote = str(row.get("quote_convention_source") or "")
-        if quote != "XOF_PER_1_FOREIGN_CURRENCY":
-            raise ValueError(f"unsupported source quote convention: {quote!r}")
+        if quote != profile.expected_quote_convention:
+            raise ValueError(
+                f"unsupported source quote convention for {profile.profile_code}: {quote!r}"
+            )
 
         common = dict(
             observation_date=value_date,
             source_currency_code=foreign_currency,
-            target_currency_code="XOF",
+            target_currency_code=profile.local_currency_code,
             observation_kind="OBSERVED",
-            provider_series_code=DEFAULT_OBSERVED_PROVIDER_SERIES_CODE,
+            provider_series_code=profile.observed_provider_series_code,
             quality_status="OBSERVED_DIRECT",
             validation_status="VALIDATED",
             source_buy_rate=buy,
@@ -136,22 +186,43 @@ def build_observed_records(manifest: dict[str, Any]) -> list[FxLoadRecord]:
         records.append(FxLoadRecord(fx_rate=buy, rate_type="BUY", **common))
         records.append(FxLoadRecord(fx_rate=sell, rate_type="SELL", **common))
 
-    if len(records) != 4:
-        raise ValueError(f"expected four observed EUR/USD buy/sell records, got {len(records)}")
+    expected_count = len(profile.supported_targets) * 2
+    if len(records) != expected_count:
+        raise ValueError(
+            f"expected {expected_count} observed EUR/USD buy/sell records for "
+            f"{profile.profile_code}, got {len(records)}"
+        )
     return records
 
 
-def build_canonical_records(payload: dict[str, Any], collected_at: str) -> list[FxLoadRecord]:
+def build_canonical_records(
+    payload: dict[str, Any],
+    collected_at: str,
+    profile: FxLoadProfile = BCEAO_XOF_PROFILE,
+) -> list[FxLoadRecord]:
     records: list[FxLoadRecord] = []
     for row in payload.get("observations") or []:
         target = str(row.get("target_currency_code") or "").upper()
-        if target not in SUPPORTED_TARGETS:
+        if target not in profile.supported_targets:
             continue
-        provider_series_code = CANONICAL_PROVIDER_SERIES_BY_TARGET[target]
+        source_currency = str(row.get("source_currency_code") or "").upper()
+        if source_currency != profile.local_currency_code:
+            raise ValueError(
+                f"canonical source currency mismatch for {profile.profile_code}: "
+                f"{source_currency!r}"
+            )
+        pair_code = str(row.get("canonical_pair_code") or "").upper()
+        expected_pair_code = f"{profile.local_currency_code}_{target}"
+        if pair_code != expected_pair_code:
+            raise ValueError(
+                f"canonical pair mismatch for {profile.profile_code}: {pair_code!r}"
+            )
+
+        provider_series_code = profile.canonical_provider_series_by_target[target]
         records.append(
             FxLoadRecord(
                 observation_date=str(row.get("value_date") or ""),
-                source_currency_code="XOF",
+                source_currency_code=profile.local_currency_code,
                 target_currency_code=target,
                 fx_rate=_positive_decimal(row.get("canonical_rate"), "canonical_rate"),
                 observation_kind="CALCULATED",
@@ -171,8 +242,12 @@ def build_canonical_records(payload: dict[str, Any], collected_at: str) -> list[
             )
         )
 
-    if {record.target_currency_code for record in records} != SUPPORTED_TARGETS:
-        raise ValueError("canonical payload must contain XOF_EUR and XOF_USD")
+    if {record.target_currency_code for record in records} != profile.supported_targets:
+        expected = sorted(
+            f"{profile.local_currency_code}_{target}"
+            for target in profile.supported_targets
+        )
+        raise ValueError(f"canonical payload must contain {expected}")
     return records
 
 
@@ -223,6 +298,7 @@ def _ensure_collection_lineage(
     manifest: dict[str, Any],
     storage_uri: str,
     observation_count: int,
+    profile: FxLoadProfile,
 ) -> tuple[uuid.UUID, uuid.UUID]:
     raw = manifest.get("raw_artifact") or {}
     sha256 = str(raw.get("sha256") or "")
@@ -237,19 +313,23 @@ def _ensure_collection_lineage(
     specification_id = _lookup_single_id(
         connection,
         "select collection_specification_id from source.collection_specification where collection_specification_code = %s",
-        DEFAULT_COLLECTION_SPEC_CODE,
+        profile.collection_specification_code,
         "collection specification",
     )
     run_id = uuid.uuid5(
         NAMESPACE,
-        f"COLLECTION_RUN|{DEFAULT_COLLECTION_SPEC_CODE}|{sha256}|{parser_version}",
+        f"COLLECTION_RUN|{profile.collection_specification_code}|{sha256}|{parser_version}",
     )
-    artifact_id = uuid.uuid5(NAMESPACE, f"RAW_ARTIFACT|{sha256}|{storage_uri}")
+    artifact_id = uuid.uuid5(
+        NAMESPACE,
+        f"RAW_ARTIFACT|{profile.collection_specification_code}|{sha256}|{storage_uri}",
+    )
     warning_count = len(manifest.get("warnings") or [])
     error_count = len(manifest.get("errors") or [])
     execution_metadata = json.dumps(
         {
             "collector_code": manifest.get("collector_code"),
+            "fx_load_profile": profile.profile_code,
             "source_run_status": manifest.get("run_status"),
             "source_raw_sha256": sha256,
         },
@@ -301,7 +381,13 @@ def _ensure_collection_lineage(
             byte_size,
             retrieved_at,
             storage_uri,
-            json.dumps({"parser_version": parser_version}, sort_keys=True),
+            json.dumps(
+                {
+                    "fx_load_profile": profile.profile_code,
+                    "parser_version": parser_version,
+                },
+                sort_keys=True,
+            ),
         ),
     )
     return run_id, artifact_id
@@ -460,21 +546,30 @@ def load_fx_bundle(
     manifest: dict[str, Any],
     canonical_payload: dict[str, Any],
     storage_uri: str,
+    profile: FxLoadProfile = BCEAO_XOF_PROFILE,
 ) -> dict[str, Any]:
-    observed_records = build_observed_records(manifest)
+    observed_records = build_observed_records(manifest, profile)
     collected_at = str((manifest.get("raw_artifact") or {}).get("retrieved_at") or "")
-    canonical_records = build_canonical_records(canonical_payload, collected_at)
+    canonical_records = build_canonical_records(canonical_payload, collected_at, profile)
     records = [*observed_records, *canonical_records]
 
     currency_ids = _resolve_currency_ids(
         connection,
-        [code for record in records for code in (record.source_currency_code, record.target_currency_code)],
+        [
+            code
+            for record in records
+            for code in (record.source_currency_code, record.target_currency_code)
+        ],
     )
     provider_series_ids = _resolve_provider_series_ids(
         connection, [record.provider_series_code for record in records]
     )
     collection_run_id, raw_artifact_id = _ensure_collection_lineage(
-        connection, manifest, storage_uri, len(records)
+        connection,
+        manifest,
+        storage_uri,
+        len(records),
+        profile,
     )
 
     actions: dict[str, int] = {}
@@ -490,6 +585,8 @@ def load_fx_bundle(
         actions[action] = actions.get(action, 0) + 1
 
     return {
+        "fx_load_profile": profile.profile_code,
+        "local_currency_code": profile.local_currency_code,
         "collection_run_id": str(collection_run_id),
         "raw_artifact_id": str(raw_artifact_id),
         "record_count": len(records),
@@ -499,13 +596,18 @@ def load_fx_bundle(
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Load observed BCEAO FX quotes and calculated XOF/EUR and XOF/USD observations into PostgreSQL."
+        description="Load observed and calculated BCEAO or BEAC FX observations into PostgreSQL."
     )
     parser.add_argument("--dsn", required=True)
     parser.add_argument("--observed-manifest", type=Path, required=True)
     parser.add_argument("--canonical-staging", type=Path, required=True)
     parser.add_argument("--storage-uri")
     parser.add_argument("--summary-output", type=Path)
+    parser.add_argument(
+        "--profile",
+        choices=sorted(LOAD_PROFILES),
+        default=BCEAO_XOF_PROFILE.profile_code,
+    )
     args = parser.parse_args()
 
     manifest = _read_json(args.observed_manifest)
@@ -513,9 +615,16 @@ def main() -> int:
     storage_uri = args.storage_uri or str(
         (manifest.get("raw_artifact") or {}).get("storage_path") or ""
     )
+    profile = LOAD_PROFILES[args.profile]
 
     with psycopg.connect(args.dsn) as connection:
-        summary = load_fx_bundle(connection, manifest, canonical_payload, storage_uri)
+        summary = load_fx_bundle(
+            connection,
+            manifest,
+            canonical_payload,
+            storage_uri,
+            profile,
+        )
 
     rendered = json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True)
     print(rendered)
