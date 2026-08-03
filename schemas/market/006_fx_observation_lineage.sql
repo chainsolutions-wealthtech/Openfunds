@@ -40,7 +40,7 @@ begin
     where constraint_row.conrelid = 'market.fx_observation'::regclass
       and constraint_row.contype = 'u'
       and (
-          select array_agg(attribute_row.attname order by key_row.ordinality)
+          select array_agg(attribute_row.attname::text order by key_row.ordinality)
           from unnest(constraint_row.conkey) with ordinality as key_row(attnum, ordinality)
           join pg_attribute attribute_row
             on attribute_row.attrelid = constraint_row.conrelid
