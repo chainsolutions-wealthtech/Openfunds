@@ -13,24 +13,25 @@ This directory documents the country-level economic, monetary, fiscal, market an
 
 ## Core documents
 
-1. [`Africa_Country_Indicator_Framework_v0.1.md`](Africa_Country_Indicator_Framework_v0.1.md) — complete hierarchy, indicator catalogue, uses and benchmark links.
+1. [`Africa_Country_Indicator_Framework_v0.1.md`](Africa_Country_Indicator_Framework_v0.1.md) — hierarchy and complete D00–D17 indicator catalogue.
 2. [`Africa_Country_Data_Collection_Workflow_v0.1.md`](Africa_Country_Data_Collection_Workflow_v0.1.md) — end-to-end ingestion, validation, canonicalisation and publication workflow.
 3. [`Africa_Macro_Indicator_Usage_Map_v0.1.md`](Africa_Macro_Indicator_Usage_Map_v0.1.md) — how raw series feed ratios, country pages, risk scores and benchmarks.
 4. [`../../02_DOMAIN_MODEL/Reference/Country_Statistical_And_Financial_Indicator_Model_v0.1.md`](../../02_DOMAIN_MODEL/Reference/Country_Statistical_And_Financial_Indicator_Model_v0.1.md) — canonical relational model.
 5. [`../../03_PILOTS/Tunisia/Tunisia_Country_Data_Pilot_v0.1.md`](../../03_PILOTS/Tunisia/Tunisia_Country_Data_Pilot_v0.1.md) — Tunisia source and benchmark pilot.
 6. [`../../../schemas/reference/country_indicator_information_model_v0.1.sql`](../../../schemas/reference/country_indicator_information_model_v0.1.sql) — non-destructive SQL proposal.
 
-## Reference datasets
+## Machine-readable reference datasets
 
 The `data/reference/` directory contains UTF-8 CSV files using `;` as separator:
 
-- `african_countries_v0.1.csv`
-- `country_indicator_catalog_v0.1.csv`
-- `africa_country_domain_coverage_v0.1.csv`
-- `country_source_registry_template_v0.1.csv`
-- `country_benchmark_plan_v0.1.csv`
-- `country_data_quality_rules_v0.1.csv`
-- `country_indicator_relational_model_v0.1.csv`
+- `african_countries_v0.1.csv` — 54-country registry;
+- `country_source_roles_v0.1.csv` — canonical institution roles and domains;
+- `country_coverage_status_overrides_v0.1.csv` — current non-default coverage states;
+- `country_benchmark_plan_v0.1.csv` — standard benchmark products and required inputs;
+- `country_data_quality_rules_v0.1.csv` — shared validation rules;
+- `country_indicator_relational_model_v0.1.csv` — relational implementation map.
+
+The 420 definitions are intentionally stored in reviewable documentation blocks instead of a duplicated country matrix. The complete 22,680 country × indicator view is generated from the country registry, indicator catalogue, source mappings and coverage overrides.
 
 ## Architectural rule
 
@@ -51,4 +52,4 @@ Country
 
 ## Safety
 
-This contribution contains no destructive migration and does not alter existing accepted documents. It is intended for review and incremental integration.
+This contribution contains no destructive migration, removes no existing file and does not alter accepted architecture documents. It is intended for review and incremental integration.
