@@ -1,6 +1,6 @@
 import unittest
 
-from collectors.fx_canonical import transform_xof_manifest
+from collectors.fx_canonical import transform_local_manifest, transform_xof_manifest
 
 
 class CanonicalFxTransformationTests(unittest.TestCase):
@@ -56,6 +56,41 @@ class CanonicalFxTransformationTests(unittest.TestCase):
             by_pair["XOF_USD"].transformation_formula,
         )
 
+    def test_transforms_xaf_pairs_without_reusing_xof_codes(self) -> None:
+        manifest = {
+            "parser_version": "0.1.0",
+            "raw_artifact": {
+                "sha256": "BEAC123",
+                "source_url": "https://www.beac.int/index.php/accueil",
+            },
+            "observations": [
+                {
+                    "canonical_currency_code": "EUR",
+                    "provider_currency_label": "EUR/XAF",
+                    "provider_buy_rate": "655.957",
+                    "provider_sell_rate": "655.957",
+                    "quote_convention_source": "XAF_PER_1_FOREIGN_CURRENCY",
+                    "value_date": "2026-07-14",
+                },
+                {
+                    "canonical_currency_code": "USD",
+                    "provider_currency_label": "USD/XAF",
+                    "provider_buy_rate": "571.0072",
+                    "provider_sell_rate": "575.9103",
+                    "quote_convention_source": "XAF_PER_1_FOREIGN_CURRENCY",
+                    "value_date": "2026-07-14",
+                },
+            ],
+        }
+        observations = transform_local_manifest(manifest, "XAF")
+        by_pair = {item.canonical_pair_code: item for item in observations}
+
+        self.assertEqual({"XAF_EUR", "XAF_USD"}, set(by_pair))
+        self.assertEqual("XAF", by_pair["XAF_USD"].source_currency_code)
+        self.assertEqual("573.458750000000000000", by_pair["XAF_USD"].source_midpoint)
+        self.assertEqual("0.001743804589257728", by_pair["XAF_USD"].canonical_rate)
+        self.assertEqual("BEAC123", by_pair["XAF_USD"].source_raw_sha256)
+
     def test_rejects_missing_value_date(self) -> None:
         manifest = self._manifest()
         manifest["observations"][0]["value_date"] = None
@@ -73,6 +108,10 @@ class CanonicalFxTransformationTests(unittest.TestCase):
         manifest["observations"].append(dict(manifest["observations"][0]))
         with self.assertRaisesRegex(ValueError, "duplicate provider row"):
             transform_xof_manifest(manifest)
+
+    def test_rejects_unsupported_local_currency(self) -> None:
+        with self.assertRaisesRegex(ValueError, "unsupported local currency"):
+            transform_local_manifest(self._manifest(), "NGN")
 
 
 if __name__ == "__main__":
