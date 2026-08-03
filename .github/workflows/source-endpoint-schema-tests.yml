@@ -55,15 +55,17 @@ jobs:
           createdb -h localhost -U openfunds endpoint_v003
           createdb -h localhost -U openfunds endpoint_v004
 
-      - name: Test legacy 003 model then reconciliation
+      - name: Test production 003 then 004 then reconciliation
         run: |
           DB=postgresql://openfunds:openfunds@localhost:5432/endpoint_v003
           psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/003_organizations_and_roles.sql
           psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_seed.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/004_source_endpoints_and_indicator_mapping.sql
           psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
           psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_assert.sql
 
-          # Reapplying the reconciliation migration must remain safe.
+          # Reapplying both additive and reconciliation migrations must remain safe.
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/004_source_endpoints_and_indicator_mapping.sql
           psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
           psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_assert.sql
 
@@ -82,7 +84,7 @@ jobs:
 
       - name: Print reconciled endpoint views
         run: |
-          echo "V003-FIRST RESULT"
+          echo "V003-THEN-004 RESULT"
           psql postgresql://openfunds:openfunds@localhost:5432/endpoint_v003 \
             -c "select endpoint_code, endpoint_type, canonical_url, file_formats, expected_frequency, history_start, validation_status from source.current_endpoint order by endpoint_code"
 
