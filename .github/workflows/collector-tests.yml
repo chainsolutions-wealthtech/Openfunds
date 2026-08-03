@@ -7,6 +7,7 @@ on:
     paths:
       - "collectors/**"
       - "loaders/**"
+      - "pipelines/**"
       - "tests/**"
       - "requirements/**"
       - "schemas/**"
@@ -15,6 +16,7 @@ on:
     paths:
       - "collectors/**"
       - "loaders/**"
+      - "pipelines/**"
       - "tests/**"
       - "requirements/**"
       - "schemas/**"
@@ -48,9 +50,9 @@ jobs:
           python -m pip --version
 
       - name: Compile Python packages
-        run: python -m compileall -q collectors loaders tests
+        run: python -m compileall -q collectors loaders pipelines tests
 
-      - name: Run collector unit tests
+      - name: Run collector and pipeline unit tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
 
   fixture-smoke-test:
