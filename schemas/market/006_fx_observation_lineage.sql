@@ -28,16 +28,36 @@ alter table market.fx_observation
     add column if not exists validation_status text not null default 'PENDING';
 
 -- Replace the original non-vintage uniqueness rule with a current-version rule.
+-- PostgreSQL truncates identifiers longer than 63 bytes, so the legacy constraint
+-- must be found by its column definition rather than by a hard-coded name.
 do $$
+declare
+    legacy_constraint_name text;
 begin
-    if exists (
-        select 1
-        from pg_constraint
-        where conrelid = 'market.fx_observation'::regclass
-          and conname = 'fx_observation_observation_date_source_currency_id_target_currency_id_source_id_key'
-    ) then
-        alter table market.fx_observation
-            drop constraint fx_observation_observation_date_source_currency_id_target_currency_id_source_id_key;
+    select constraint_row.conname
+    into legacy_constraint_name
+    from pg_constraint constraint_row
+    where constraint_row.conrelid = 'market.fx_observation'::regclass
+      and constraint_row.contype = 'u'
+      and (
+          select array_agg(attribute_row.attname order by key_row.ordinality)
+          from unnest(constraint_row.conkey) with ordinality as key_row(attnum, ordinality)
+          join pg_attribute attribute_row
+            on attribute_row.attrelid = constraint_row.conrelid
+           and attribute_row.attnum = key_row.attnum
+      ) = array[
+          'observation_date',
+          'source_currency_id',
+          'target_currency_id',
+          'source_id'
+      ]::text[]
+    limit 1;
+
+    if legacy_constraint_name is not null then
+        execute format(
+            'alter table market.fx_observation drop constraint %I',
+            legacy_constraint_name
+        );
     end if;
 end
 $$;
