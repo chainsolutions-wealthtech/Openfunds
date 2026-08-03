@@ -1,6 +1,7 @@
 -- SOURCE ENDPOINT AND INDICATOR MAPPING MODEL
 -- POSTGRESQL
 -- ALL TECHNICAL CODES MUST BE UPPERCASE AND WITHOUT ACCENTS.
+-- This migration is additive when source.endpoint was already created by 003.
 
 create schema if not exists source;
 create schema if not exists ref;
@@ -29,6 +30,25 @@ create table if not exists source.endpoint (
     updated_at timestamptz not null default now(),
     check (valid_to is null or valid_from is null or valid_to >= valid_from)
 );
+
+-- If 003 created source.endpoint first, CREATE TABLE IF NOT EXISTS does not add
+-- the relational columns. Add them before creating indexes or mappings.
+-- They remain nullable until 007 performs reconciliation and validation.
+alter table source.endpoint
+    add column if not exists scope_type text,
+    add column if not exists scope_code text,
+    add column if not exists official_url text,
+    add column if not exists data_portal_url text,
+    add column if not exists api_base_url text,
+    add column if not exists auth_required boolean not null default false,
+    add column if not exists file_formats text[],
+    add column if not exists expected_frequency text,
+    add column if not exists history_start date,
+    add column if not exists valid_from date,
+    add column if not exists valid_to date,
+    add column if not exists source_note text,
+    add column if not exists created_at timestamptz not null default now(),
+    add column if not exists updated_at timestamptz not null default now();
 
 create table if not exists source.indicator_source_mapping (
     mapping_id uuid primary key,
