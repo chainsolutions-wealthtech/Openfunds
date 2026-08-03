@@ -6,12 +6,18 @@ on:
       - architecture/africafunds-country-indicators-v0.1
     paths:
       - "collectors/**"
+      - "loaders/**"
       - "tests/**"
+      - "requirements/**"
+      - "schemas/**"
       - ".github/workflows/collector-tests.yml"
   pull_request:
     paths:
       - "collectors/**"
+      - "loaders/**"
       - "tests/**"
+      - "requirements/**"
+      - "schemas/**"
       - ".github/workflows/collector-tests.yml"
   workflow_dispatch:
 
@@ -41,8 +47,8 @@ jobs:
           python --version
           python -m pip --version
 
-      - name: Compile collectors
-        run: python -m compileall -q collectors tests
+      - name: Compile Python packages
+        run: python -m compileall -q collectors loaders tests
 
       - name: Run collector unit tests
         run: python -m unittest discover -s tests -p "test_*.py" -v
@@ -78,4 +84,151 @@ jobs:
           print(f"Parsed {len(observations)} observations")
           print(f"Currencies: {sorted(currencies)}")
           print(f"Warnings: {warnings}")
+          PY
+
+  postgres-fx-loader:
+    name: PostgreSQL FX loader integration
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
+      PGPASSWORD: openfunds
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL loader dependency
+        run: python -m pip install -r requirements/collectors-postgres.txt
+
+      - name: Apply canonical source and FX schemas
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_bootstrap.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series_and_collection_specifications.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/market/006_fx_observation_lineage.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_seed.sql
+
+      - name: Build deterministic observed and canonical staging files
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from collectors.bceao_fx import COLLECTOR_CODE, PARSER_VERSION, parse_bceao_fx_html
+          from collectors.common import CollectionResult, persist_raw_artifact, write_result_manifest
+          from collectors.fx_canonical import transform_xof_manifest, write_canonical_observations
+          from dataclasses import asdict
+          import json
+
+          root = Path("artifacts/integration/bceao_fx")
+          payload = Path("tests/fixtures/bceao_fx_sample.html").read_bytes()
+          artifact = persist_raw_artifact(
+              payload,
+              "https://www.bceao.int/fr",
+              "text/html",
+              root / "raw",
+              "bceao_fx_fixture",
+          )
+          observations, warnings = parse_bceao_fx_html(payload)
+          result = CollectionResult(
+              collector_code=COLLECTOR_CODE,
+              run_status="SUCCESS",
+              raw_artifact=artifact,
+              observations=[asdict(item) for item in observations],
+              warnings=warnings,
+              errors=[],
+              parser_version=PARSER_VERSION,
+          )
+          manifest_path = root / "manifests" / f"{artifact.sha256}.json"
+          write_result_manifest(result, manifest_path)
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          canonical = transform_xof_manifest(manifest)
+          write_canonical_observations(canonical, root / "staging" / "canonical_fx.json")
+          print(manifest_path)
+          PY
+
+      - name: Load fixture bundle twice
+        run: |
+          MANIFEST=$(find artifacts/integration/bceao_fx/manifests -name '*.json' | sort | tail -n 1)
+          CANONICAL=artifacts/integration/bceao_fx/staging/canonical_fx.json
+          RAW=$(find artifacts/integration/bceao_fx/raw -type f | sort | tail -n 1)
+
+          python -m loaders.fx_postgres \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/integration/first-load.json
+
+          python -m loaders.fx_postgres \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/integration/second-load.json
+
+      - name: Validate idempotence, lineage and current observations
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import psycopg
+
+          first = json.loads(Path("artifacts/integration/first-load.json").read_text())
+          second = json.loads(Path("artifacts/integration/second-load.json").read_text())
+          assert first["record_count"] == 6, first
+          assert first["actions"] == {"INSERTED": 6}, first
+          assert second["actions"] == {"SKIPPED_IDENTICAL": 6}, second
+          assert first["collection_run_id"] == second["collection_run_id"]
+          assert first["raw_artifact_id"] == second["raw_artifact_id"]
+
+          with psycopg.connect("postgresql://openfunds:openfunds@localhost:5432/openfunds") as conn:
+              counts = conn.execute("""
+                  select
+                      count(*) as total,
+                      count(*) filter (where is_current) as current_count,
+                      count(*) filter (where observation_kind = 'OBSERVED') as observed_count,
+                      count(*) filter (where observation_kind = 'CALCULATED') as calculated_count
+                  from market.fx_observation
+              """).fetchone()
+              run_count = conn.execute("select count(*) from source.collection_run").fetchone()[0]
+              artifact_count = conn.execute("select count(*) from source.raw_artifact").fetchone()[0]
+              validated_current = conn.execute("select count(*) from market.current_fx_observation").fetchone()[0]
+              pairs = conn.execute("""
+                  select sc.iso_code, tc.iso_code, f.rate_type, f.observation_kind
+                  from market.current_fx_observation f
+                  join ref.currency sc on sc.currency_id = f.source_currency_id
+                  join ref.currency tc on tc.currency_id = f.target_currency_id
+                  order by 1, 2, 3
+              """).fetchall()
+
+          assert counts == (6, 6, 4, 2), counts
+          assert run_count == 1, run_count
+          assert artifact_count == 1, artifact_count
+          assert validated_current == 6, validated_current
+          assert len(pairs) == 6, pairs
+          print(json.dumps({
+              "first_load": first,
+              "second_load": second,
+              "database_counts": counts,
+              "pairs": pairs,
+          }, indent=2, default=str))
           PY
