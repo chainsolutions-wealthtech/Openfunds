@@ -9,7 +9,7 @@ FILE_NAME
 Matrice_Canonique_AfricaFunds_54_Pays_V4_20260803.xlsx
 
 EXPORT_VERSION
-0.4.1
+0.4.2
 
 CANONICAL_MODEL_VERSION
 0.1.0
@@ -30,10 +30,10 @@ Le dépôt conserve la documentation, le manifeste, le SHA256, les entrées cano
 
 ```text
 SHA256
-44e632766b1f43a9b33bab97f4a986d82f17d9b57e55694026c42942c823a9fa
+3aa91f71911e282138b6d71342782442ae8a23efc48f4aeb2cd9e102287e56da
 
 SIZE_BYTES
-201462
+201772
 ```
 
 ## Ce qui est couvert
@@ -52,7 +52,8 @@ SIZE_BYTES
 - taux sans risque et rendement minimal acceptable ;
 - séries à afficher ;
 - dépendances de calcul des ratios ;
-- exemple de préremplissage automatique d’un fonds.
+- exemple de préremplissage automatique d’un fonds ;
+- résolution automatique du WTI, du benchmark principal, du WTI Bench, du taux sans risque et de la référence de classement.
 
 ## Règle validée
 
