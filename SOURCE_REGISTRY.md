@@ -22,16 +22,57 @@ COUNTRY_OR_ZONE
 | Fichier | Rôle | Etat |
 |---|---|---|
 | `ORGANIZATION_ROLES.csv` | vocabulaire des rôles | 21 rôles présents |
-| `ORGANIZATIONS.csv` | identité des institutions | 40 organisations, couverture partielle |
-| `ORGANIZATION_SCOPE_ROLES.csv` | rôle par périmètre | 70 relations, statuts mixtes |
-| `SOURCE_ENDPOINTS.csv` | pages, portails, API et répertoires | 43 endpoints, plusieurs `PENDING` |
-| `COUNTRY_OR_ZONE_INDICATOR_SOURCE_MAPPING.csv` | indicateur vers source | 55 mappings initiaux |
-| `PROVIDER_SERIES.csv` | séries natives | 50 lignes, majorité à préciser |
-| `COLLECTION_SPECIFICATIONS.csv` | règles d'extraction | 17 specs/templates |
+| `ORGANIZATIONS.csv` | inventaire d'identité des institutions | 40 organisations, couverture partielle |
+| `ORGANIZATION_SCOPE_ROLES.csv` | inventaire des rôles par périmètre | 70 relations, statuts mixtes |
+| `SOURCE_ENDPOINTS.csv` | inventaire pages, portails, API et répertoires | découverte partielle |
+| `COUNTRY_OR_ZONE_INDICATOR_SOURCE_MAPPING.csv` | inventaire indicateur vers source | 55 mappings initiaux |
+| `PROVIDER_SERIES.csv` | inventaire de séries candidates | couverture partielle |
+| `COLLECTION_SPECIFICATIONS.csv` | templates et règles d'extraction | couverture partielle |
 | `COLLECTION_TEST_EVIDENCE.csv` | preuve de tests live | BCEAO et BEAC FX |
+| `VALIDATED_FX_REFERENCE_REGISTRY.csv` | authoring gouverné des pilotes FX validés | BCEAO/XOF et BEAC/XAF |
 | `PILOT_COLLECTION_READINESS.csv` | préparation des pilotes | 6 lignes |
 
-## 3. STATUTS DE SOURCE
+## 3. MODELE D'AUTORITE
+
+Conformément à `ADR-003` et `ADR-021` :
+
+```text
+INVENTAIRES CSV GENERAUX
+→ DECOUVERTE ET REVUE, STATUTS MIXTES
+
+VALIDATED_FX_REFERENCE_REGISTRY.csv
+→ AUTHORING GOUVERNE DES PILOTES FX COLLECTION_TESTED
+
+GENERATION SQL DETERMINISTE
+→ SYNCHRONISATION ADDITIVE
+
+POSTGRESQL
+→ SOURCE DE VERITE RUNTIME
+```
+
+Le générateur est :
+
+```text
+scripts/generate_validated_fx_reference_sql.py
+```
+
+La migration est générée sous :
+
+```text
+schemas/reference/012_validated_fx_reference_registry.sql
+```
+
+Commandes :
+
+```bash
+python scripts/generate_validated_fx_reference_sql.py
+python scripts/generate_validated_fx_reference_sql.py --check
+python -m unittest tests/test_validated_fx_reference_registry.py -v
+```
+
+Les migrations historiques 008 à 011 restent conservées et rejouables. La migration 012 est régénérée depuis le registre gouverné, puis appliquée deux fois dans PostgreSQL 16 avec assertions.
+
+## 4. STATUTS DE SOURCE
 
 ```text
 TO_IDENTIFY
@@ -50,17 +91,19 @@ REPLACED
 
 Le statut d'organisation, d'endpoint, de série et d'historique reste séparé.
 
-## 4. SOURCES LIVE VALIDEES
+## 5. SOURCES LIVE VALIDEES
 
 ### BCEAO FX
 
 ```text
 SCOPE                 UEMOA
 LOCAL_CURRENCY        XOF
-COLLECTOR             BCEAO_FX_SNAPSHOT
-CANONICAL_OUTPUTS     XOF_EUR, XOF_USD
-STATUS                COLLECTION_TESTED
-HISTORY               CURRENT_SNAPSHOT_ONLY
+ENDPOINT               BCEAO_FX_DAILY
+COLLECTOR              BCEAO_FX_SNAPSHOT
+CANONICAL_OUTPUTS      XOF_EUR, XOF_USD
+STATUS                 COLLECTION_TESTED
+HISTORY                CURRENT_SNAPSHOT_ONLY
+EVIDENCE_RUN           30777722357
 ```
 
 Preuve : `docs/06_SOURCES/BCEAO_FX_COLLECTION_TEST_EVIDENCE.md`.
@@ -70,40 +113,27 @@ Preuve : `docs/06_SOURCES/BCEAO_FX_COLLECTION_TEST_EVIDENCE.md`.
 ```text
 SCOPE                 CEMAC
 LOCAL_CURRENCY        XAF
-COLLECTOR             BEAC_FX_SNAPSHOT
-CANONICAL_OUTPUTS     XAF_EUR, XAF_USD
-STATUS                COLLECTION_TESTED
-HISTORY               CURRENT_SNAPSHOT_ONLY
+ENDPOINT               BEAC_FX_DAILY
+COLLECTOR              BEAC_FX_SNAPSHOT
+CANONICAL_OUTPUTS      XAF_EUR, XAF_USD
+STATUS                 COLLECTION_TESTED
+HISTORY                CURRENT_SNAPSHOT_ONLY
+EVIDENCE_RUN           30779605759
 ```
 
 Preuve : `docs/06_SOURCES/BEAC_FX_COLLECTION_TEST_EVIDENCE.md`.
 
-## 5. SOURCES PARTIELLEMENT INVENTORIEES
+Les endpoints génériques de découverte restent distincts des endpoints de collecte validés.
 
-Premiers périmètres amorcés :
+## 6. SOURCES PARTIELLEMENT INVENTORIEES
 
-- Maroc ;
-- Ghana ;
-- Nigeria ;
-- Tunisie ;
-- Egypte ;
-- Kenya ;
-- Afrique du Sud ;
-- UEMOA ;
-- CEMAC.
+Premiers périmètres amorcés : Maroc, Ghana, Nigeria, Tunisie, Egypte, Kenya, Afrique du Sud, UEMOA et CEMAC.
 
-Domaines principalement ciblés :
-
-- PIB et inflation ;
-- taux directeurs ;
-- FX ;
-- dette et courbes ;
-- indices actions ;
-- fonds et OPCVM.
+Domaines principalement ciblés : PIB, inflation, taux directeurs, FX, dette, courbes, indices actions, fonds et OPCVM.
 
 La présence d'une URL officielle ne prouve pas que la série exacte, son historique et son parseur sont identifiés.
 
-## 6. SOURCES OPCVM
+## 7. SOURCES OPCVM
 
 ### Tunisie
 
@@ -113,62 +143,33 @@ Le CMF et la base SQLite analysée constituent un pilote riche. La base n'est pa
 
 La SEC Nigeria est identifiée comme régulateur et source des fichiers hebdomadaires. Le pipeline complet d'audit et d'import depuis 2011 n'est pas présent. Statut : `SOURCE_IDENTIFIED / INGESTION_NOT_IMPLEMENTED`.
 
-## 7. PREUVE OBLIGATOIRE
+## 8. PREUVE OBLIGATOIRE
 
-Un endpoint ou une série validée doit conserver :
+Un endpoint ou une série validée doit conserver : URL officielle, date de vérification, organisation et rôle, périmètre, fréquence, formats, conditions d'accès, méthode, spécification, test de collecte, artefact, SHA256, date économique, avertissements et erreurs.
 
-- URL officielle ;
-- date de vérification ;
-- organisation et rôle ;
-- périmètre pays/zone ;
-- fréquence ;
-- formats ;
-- historique disponible ;
-- conditions d'accès ;
-- méthode de découverte ;
-- spécification ;
-- test de collecte ;
-- artefact et SHA256 ;
-- date économique extraite ;
-- avertissements et erreurs.
+Le registre gouverné stocke explicitement le run ID, le SHA256, la date de valeur, le timestamp de récupération, la version du parseur et le nombre d'observations.
 
-## 8. DIVERGENCE ACTUELLE CSV / SQL
+## 9. SYNCHRONISATION BCEAO / BEAC
 
-Les seeds SQL BCEAO/BEAC portent des objets spécifiques validés, alors que certains CSV conservent des objets génériques `PENDING`.
+`OF-ARCH-001` et `OF-SOURCE-001` sont implémentés pour les pilotes FX testés :
 
-Cette divergence est suivie par :
+- source d'authoring unique déclarée ;
+- endpoints de collecte spécifiques ;
+- mappings bruts, EUR et USD ;
+- séries brutes et calculées ;
+- spécifications brutes et calculées ;
+- preuve de run reliée ;
+- génération SQL déterministe ;
+- double application PostgreSQL ;
+- test de corruption de preuve ;
+- aucune revendication d'historique complet.
 
-```text
-OF-ARCH-001
-OF-SOURCE-001
-ADR-021
-```
+Cette clôture ne concerne pas les taux directeurs, interbancaires, indices ou historiques complets.
 
-Aucune nouvelle source ne doit multiplier les représentations avant la résolution de cet écart.
+## 10. COUVERTURE CIBLE PAR PAYS
 
-## 9. COUVERTURE CIBLE PAR PAYS
+Au minimum : banque centrale, institut statistique, ministère des finances, agence de dette, bourse, régulateur marchés/fonds, régulateur assurance/pension, dépositaire central si utile, séries macro/marché prioritaires et statut explicite pour les données non publiées.
 
-Au minimum :
+## 11. REGLE DE PUBLICATION
 
-- banque centrale ou autorité monétaire ;
-- institut statistique ;
-- ministère des finances ;
-- trésor ou agence de dette ;
-- bourse, si applicable ;
-- régulateur marchés/fonds ;
-- régulateur assurance/pension ;
-- dépositaire central, si utile ;
-- séries macro et marché prioritaires ;
-- statut explicite pour les données non publiées.
-
-## 10. REGLE DE PUBLICATION
-
-Une source ne peut alimenter une donnée canonique publiée que si :
-
-1. son identité et son rôle sont connus ;
-2. l'endpoint est vérifié ;
-3. la série et son unité sont identifiées ;
-4. la collecte conserve l'artefact brut ;
-5. les contrôles qualité passent ;
-6. la provenance est disponible ;
-7. le statut de validation l'autorise.
+Une source ne peut alimenter une donnée canonique publiée que si son identité et son rôle sont connus, l'endpoint est vérifié, la série et son unité sont identifiées, l'artefact brut est conservé, les contrôles passent, la provenance est disponible et le statut l'autorise.

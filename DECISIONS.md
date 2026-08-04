@@ -194,16 +194,34 @@ CALCULATED_PRODUCTS_AVAILABLE
 
 - **Conséquence :** une structure SQL ou un fichier CSV ne prouve pas qu'un historique réel est chargé.
 
-## ADR-021 — UNE SOURCE DE VERITE POUR LES REFERENTIELS
+## ADR-021 — UNE SOURCE D'AUTHORING POUR LES REFERENTIELS
 
-- **Statut :** PROPOSE
-- **Problème :** les CSV et seeds SQL présentent actuellement des statuts divergents pour BCEAO et BEAC.
-- **Proposition :** désigner un registre canonique machine-readable et générer les autres représentations.
-- **Options :**
-  1. CSV gouverné → migrations générées ;
-  2. PostgreSQL canonique → exports CSV ;
-  3. manifeste YAML/JSON → CSV et SQL générés.
-- **Validation nécessaire :** choix de la stratégie.
+- **Statut :** ACCEPTE
+- **Date de validation :** 2026-08-05
+- **Problème résolu :** les inventaires CSV et les seeds SQL présentaient des statuts divergents pour BCEAO et BEAC.
+- **Décision :**
+
+```text
+VALIDATED_FX_REFERENCE_REGISTRY.csv
+= SOURCE D'AUTHORING GOUVERNEE DES PILOTES FX VALIDES
+
+SQL GENERE DETERMINISTE
+= REPRESENTATION DE SYNCHRONISATION ADDITIVE
+
+POSTGRESQL
+= SOURCE DE VERITE RUNTIME APRES APPLICATION
+```
+
+- **Règle :** les grands CSV existants restent des inventaires de découverte et de revue. Ils ne concurrencent pas le registre compact des pilotes validés. Les seeds SQL historiques restent rejouables mais ne sont plus une source d'authoring concurrente.
+- **Générateur :** `scripts/generate_validated_fx_reference_sql.py`.
+- **Sortie générée :** `schemas/reference/012_validated_fx_reference_registry.sql` lors des contrôles et applications.
+- **Contrôles :** validation UTF-8/CSV, en-tête exact, complétude, preuves de run, SHA256, dates, génération déterministe et double application PostgreSQL.
+- **Portée initiale :** pilotes FX BCEAO/XOF et BEAC/XAF classés `COLLECTION_TESTED`.
+- **Limite :** cette décision ne choisit pas le migration runner global de `ADR-023` et ne transforme pas les snapshots en historiques.
+- **Options rejetées :**
+  1. PostgreSQL comme seule surface d'authoring, car les référentiels doivent rester revus dans Git ;
+  2. la réécriture des grands inventaires comme registre de validation, car elle mélangerait découverte et preuve de collecte ;
+  3. un manifeste YAML/JSON supplémentaire, qui créerait une autre représentation.
 
 ## ADR-022 — DATE METIER INCONNUE
 
