@@ -178,3 +178,43 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - quatre rôles de référence ;
 - WTI distinct du WTI Bench ;
 - niveaux national, régional et Afrique.
+
+
+## [2026-08-04] — BASELINE GITHUB ET HANDOFF DOCUMENTAIRE
+
+### Ajouté
+
+- `docs/00_PROJECT/BRANCH_INVENTORY_AND_EXPLOITATION_PLAN.md` ;
+- `docs/00_PROJECT/GITHUB_BASELINE_AUDIT_20260804.md` ;
+- `docs/00_PROJECT/BRANCH_INVENTORY_20260804.csv` ;
+- `docs/00_PROJECT/BOOTSTRAP_INTEGRATION_ASSESSMENT_20260804.md` ;
+- `docs/00_PROJECT/PR_CONTENT_RECONCILIATION_20260804.csv` ;
+- `docs/00_PROJECT/CANONICAL_PROJECT_STATE_20260804.md` ;
+- `docs/00_PROJECT/OPEN_DECISIONS_AND_EXECUTION_GATES_20260804.md` ;
+- `docs/00_PROJECT/ISSUE_MIGRATION_DRAFT_20260804.csv` ;
+- `docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md`.
+
+### Vérifié
+
+- le HEAD de la branche de travail correspondait au SHA de contrôle `cce82f3276d408ddb71366f5236c10282f0b6614` ;
+- les douze branches ont été inventoriées sans modification ;
+- les treize actifs du bootstrap ont le même SHA de blob dans la branche complète ;
+- la PR nº 1 reste ouverte, en brouillon et non fusionnée ;
+- la PR nº 2 reste ouverte, en brouillon et non fusionnée ;
+- les deux CSV de la PR nº 2 sont préservés exactement dans `research_queue` ;
+- trois documents Markdown détaillés de la PR nº 2 restent uniques ou seulement résumés.
+
+### Statuts corrigés
+
+- la PR nº 1 compte actuellement 122 fichiers modifiés ; les chiffres 95 et 104 restent conservés comme états historiques ;
+- la taxonomie, les 486 règles de routage et les 432 catégories/blocs sont `STRUCTURE_PRESENT / TESTED / NOT_ACTIVE` ;
+- WTI, WTI Bench, ratios, classements et historiques complets restent non actifs ;
+- le classeur Excel reste un export dérivé non canonique dont la reproductibilité complète demeure une porte ouverte.
+
+### Non modifié
+
+- aucune branche ou PR ;
+- aucune issue ;
+- aucun workflow ;
+- aucun code, SQL, donnée canonique/de référence, générateur ou test ;
+- aucun environnement, secret ou déploiement.

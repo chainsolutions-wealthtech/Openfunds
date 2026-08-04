@@ -314,3 +314,180 @@ REGISTRE MAITRE CHOISI
 - README, TODO, SUIVI, ADR et CHANGELOG mis à jour.
 
 Ne pas commencer la couverture historique persistante avant cette réconciliation.
+
+
+---
+
+## MISE A JOUR DU 4 AOUT 2026 — BASELINE GITHUB IMMUTABLE
+
+### Périmètre
+
+Intervention documentaire uniquement sur :
+
+```text
+architecture/africafunds-country-indicators-v0.1
+```
+
+SHA de départ vérifié :
+
+```text
+cce82f3276d408ddb71366f5236c10282f0b6614
+```
+
+Le SHA correspondait exactement au dernier point connu avant toute écriture.
+
+### Actions réalisées
+
+- inventaire des douze branches ;
+- audit des trois branches significatives ;
+- comparaison du bootstrap et de la branche complète ;
+- audit de la PR nº 1 et de la PR nº 2 ;
+- réconciliation du contenu de la PR nº 2 ;
+- état canonique par niveau de maturité ;
+- préparation des décisions ouvertes et portes d'exécution ;
+- préparation d'une migration progressive des tâches P0/P1 vers GitHub Issues, sans créer d'issue ;
+- préparation du handoff pour la prochaine intervention.
+
+### Etat GitHub vérifié avant commit
+
+```text
+MAIN_HEAD_SHA
+946145e4b33a6289eb340a16bf5c651cb9bbee7c
+
+WORK_BRANCH_START_HEAD_SHA
+cce82f3276d408ddb71366f5236c10282f0b6614
+
+BOOTSTRAP_HEAD_SHA
+136abf71f0825075361f8c7446e19c6f6476a3a5
+
+PR2_HEAD_SHA
+81d32b83e6a87d01c4e66c2c2db00199b4553d70
+```
+
+PR nº 1 :
+
+```text
+OPEN
+DRAFT
+NOT_MERGED
+MERGEABLE
+173 COMMITS
+122 CHANGED FILES
+0 FORMAL REVIEWS
+```
+
+PR nº 2 :
+
+```text
+OPEN
+DRAFT
+NOT_MERGED
+MERGEABLE
+5 COMMITS
+5 CHANGED FILES
+0 FORMAL REVIEWS
+```
+
+### Workflows
+
+Les cinq derniers runs observés au HEAD audité de la PR nº 1 étaient `SUCCESS` :
+
+```text
+Collector Tests
+Source Endpoint Schema Tests
+Daily Africa FX Staging
+BCEAO FX Live Smoke
+BEAC FX Live Smoke
+```
+
+Aucun workflow n'a été modifié par cette intervention.
+
+### Bootstrap
+
+Le bootstrap et la branche complète sont historiquement divergents. Toutefois, les treize actifs du bootstrap ont été comparés par SHA de blob et sont tous identiques dans la branche complète.
+
+Recommandation documentaire :
+
+```text
+STRATEGY_B
+BRANCHE COMPLETE → MAIN DIRECTEMENT
+```
+
+Cette recommandation reste soumise à revue et ne constitue ni retargeting ni autorisation de fusion.
+
+### Etat canonique corrigé
+
+```text
+TAXONOMIE                         STRUCTURE_PRESENT / TESTED
+486 REGLES DE ROUTAGE             IMPLEMENTED / TESTED / NOT_ACTIVE
+432 CATEGORIES ET PEER GROUPS     STRUCTURE_PRESENT / TESTED / NOT_ACTIVE
+432 BLOCS DE REFERENCE            STRUCTURE_PRESENT / TESTED / NOT_ACTIVE
+WTI                               NOT_IMPLEMENTED / NOT_ACTIVE
+WTI BENCH                         NOT_CALCULATED / NOT_ACTIVE
+RATIOS ET CLASSEMENTS             NOT_IMPLEMENTED
+HISTORIQUES FX COMPLETS           NON
+PRODUCTION PERSISTANTE            NON
+```
+
+Les nombres 95 et 104 restent des états historiques. Le volume courant de la PR nº 1 est 122 fichiers modifiés.
+
+### PR nº 2
+
+Préservés exactement dans `research_queue` :
+
+- `OFFICIAL_SOURCE_INVENTORY_20260803.csv` ;
+- `CANONICAL_INTEGRATION_MATRIX_20260803.csv`.
+
+Restent uniques ou seulement résumés :
+
+- `AFRICA_MARKET_RATES_MACRO_SOURCE_HANDOFF_20260803.md` ;
+- `NON_REGRESSION_AND_STATUS_RULES_20260803.md` ;
+- `PR1_RESEARCH_ASSET_EXPLOITATION_GUIDE_20260803.md`.
+
+La PR nº 2 ne doit pas être fermée avant préservation ou décision explicite sur ces trois documents.
+
+### Identifiants proposés
+
+- `OF-SCOPE-001` : aucune collision observée ;
+- `OF-EXPORT-001` : aucune collision observée ;
+- `OF-DOC-002` : aucune collision observée ;
+- le nouvel usage proposé de `OF-GEO-001` entre en collision avec la tâche existante « Référentiel pays et régions ». Aucun nouvel identifiant géographique n'a été décidé.
+
+### Rapports ajoutés
+
+```text
+docs/00_PROJECT/BRANCH_INVENTORY_AND_EXPLOITATION_PLAN.md
+docs/00_PROJECT/GITHUB_BASELINE_AUDIT_20260804.md
+docs/00_PROJECT/BRANCH_INVENTORY_20260804.csv
+docs/00_PROJECT/BOOTSTRAP_INTEGRATION_ASSESSMENT_20260804.md
+docs/00_PROJECT/PR_CONTENT_RECONCILIATION_20260804.csv
+docs/00_PROJECT/CANONICAL_PROJECT_STATE_20260804.md
+docs/00_PROJECT/OPEN_DECISIONS_AND_EXECUTION_GATES_20260804.md
+docs/00_PROJECT/ISSUE_MIGRATION_DRAFT_20260804.csv
+docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md
+```
+
+## POINT EXACT DE REPRISE APRES CETTE BASELINE
+
+Lire d'abord le document maître vivant et les huit rapports datés du 4 août 2026.
+
+L'ordre fonctionnel reste :
+
+```text
+OF-ARCH-001
+→ OF-SOURCE-001
+→ OF-ARCH-002
+→ OF-ARCH-003
+→ OF-ARCH-004
+```
+
+Ne pas commencer :
+
+- l'historique persistant ;
+- l'import massif de fonds ;
+- un migration runner choisi implicitement ;
+- l'activation WTI/WTI Bench ;
+- un déploiement ;
+- un retargeting ou une fusion ;
+
+avant validation explicite des portes correspondantes.

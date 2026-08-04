@@ -375,3 +375,92 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 | OF-CALC-001/002 | historiques fonds, taxonomie et benchmarks absents |
 | OF-API-001 | modèle canonique non stabilisé |
 | OF-UI-001 | API absente |
+
+
+---
+
+# I. MISE A JOUR DOCUMENTAIRE — 2026-08-04
+
+Cette section complète le registre sans modifier les résultats historiques du 3 août 2026.
+
+## Correction de volumétrie courante
+
+La PR nº 1 contient actuellement **122 fichiers modifiés** selon les métadonnées GitHub. Les nombres 95 et 104 restent conservés ci-dessus comme états historiques de l'audit initial et de la première consolidation.
+
+Pour `OF-DEPLOY-001`, le critère courant devient : revue des 122 fichiers au HEAD audité, sans considérer ce volume comme figé si la branche évolue.
+
+## Correction de statut — Taxonomie et matrices
+
+| Tâche | Statut courant au 2026-08-04 | Limite |
+|---|---|---|
+| `OF-TAX-001` | `STRUCTURE_PRESENT / TESTED` | référentiels et tests présents ; aucune activation ou migration de production revendiquée |
+| `OF-TAX-002` | `STRUCTURE_PRESENT / IMPLEMENTED / TESTED / NOT_ACTIVE` | générateur déterministe, 486 règles ; membres fonds et historique non disponibles |
+| `OF-BENCH-001` | `STRUCTURE_PRESENT / IMPLEMENTED / TESTED / NOT_ACTIVE` | 432 blocs structurels ; séries, licences et méthodologies non validées |
+| `OF-BENCH-002` | `EN_COURS` | WTI Bench non calculé et non actif |
+| `OF-CALC-001` | `BLOQUE` | aucun WTI calculé |
+| `OF-CALC-002` | `BLOQUE` | aucun moteur actif de ratios ou classements |
+
+Cette correction de statut ne transforme jamais une structure générée en produit analytique actif.
+
+## Sujets proposés — sans réordonner les tâches existantes
+
+L'ordre immédiat reste :
+
+```text
+OF-ARCH-001
+→ OF-SOURCE-001
+→ OF-ARCH-002
+→ OF-ARCH-003
+→ OF-ARCH-004
+```
+
+### Collision d'identifiant géographique
+
+Le nouvel intitulé proposé « Réconcilier NATIONAL et LOCAL_MARKET » ne peut pas utiliser `OF-GEO-001`, car cet identifiant est déjà attribué à « Référentiel pays et régions ».
+
+```text
+STATUT                  PROPOSE
+IDENTIFIANT DEMANDE     OF-GEO-001
+COLLISION               OUI
+IDENTIFIANT FINAL       A ARBITRER
+CANDIDATS NON VALIDES   OF-GEO-003 / OF-MARKET-001
+```
+
+Aucune nouvelle tâche avec un identifiant collisionné n'est créée dans ce registre.
+
+### OF-SCOPE-001 — Introduire INVESTMENT_SCOPE
+
+- **Statut :** PROPOSE
+- **Priorité proposée :** P0
+- **Dépendances :** OF-DATA-001, classification et benchmarks
+- **Objet :** séparer domicile juridique, périmètre réglementaire, géographie d'investissement, marché principal, benchmark déclaré et devise de référence.
+- **Interdiction :** ne pas déduire automatiquement le mandat d'investissement du seul pays juridique.
+
+### OF-EXPORT-001 — Rendre le classeur reproductible
+
+- **Statut :** PROPOSE
+- **Priorité proposée :** P1
+- **Dépendances :** entrées canoniques et générateur
+- **Objet :** prouver que le classeur de revue peut être régénéré de manière déterministe depuis le dépôt.
+- **Interdiction :** le classeur reste un export dérivé et ne devient pas une source canonique.
+
+### OF-DOC-002 — Réaligner les statuts documentaires
+
+- **Statut :** PROPOSE
+- **Priorité proposée :** P1
+- **Objet :** maintenir l'alignement entre documentation, matrices, SQL, code et statuts GitHub.
+- **Etat apporté par cette intervention :** baseline et rapports préparés ; la gouvernance documentaire reste une obligation continue.
+
+## Point d’entrée permanent et rapports de préparation
+
+- `docs/00_PROJECT/BRANCH_INVENTORY_AND_EXPLOITATION_PLAN.md`
+- `docs/00_PROJECT/GITHUB_BASELINE_AUDIT_20260804.md`
+- `docs/00_PROJECT/BRANCH_INVENTORY_20260804.csv`
+- `docs/00_PROJECT/BOOTSTRAP_INTEGRATION_ASSESSMENT_20260804.md`
+- `docs/00_PROJECT/PR_CONTENT_RECONCILIATION_20260804.csv`
+- `docs/00_PROJECT/CANONICAL_PROJECT_STATE_20260804.md`
+- `docs/00_PROJECT/OPEN_DECISIONS_AND_EXECUTION_GATES_20260804.md`
+- `docs/00_PROJECT/ISSUE_MIGRATION_DRAFT_20260804.csv`
+- `docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md`
+
+Aucune issue GitHub n'a été créée par cette intervention.

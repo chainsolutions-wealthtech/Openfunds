@@ -228,3 +228,74 @@ OF-ARCH-001
 ```
 
 La couverture historique persistante ne doit pas précéder la réconciliation des référentiels et migrations.
+
+
+---
+
+## MISE A JOUR DOCUMENTAIRE — 2026-08-04
+
+Cette section corrige l'état courant sans réécrire les états historiques du 3 août 2026.
+
+### Phase 0
+
+**Statut courant : BASELINE DOCUMENTAIRE ETABLIE / REVUE ET INTEGRATION ENCORE OUVERTES**
+
+Le point d’entrée permanent est :
+
+- `docs/00_PROJECT/BRANCH_INVENTORY_AND_EXPLOITATION_PLAN.md`.
+
+Les rapports de contrôle datés sont :
+
+- `docs/00_PROJECT/GITHUB_BASELINE_AUDIT_20260804.md` ;
+- `docs/00_PROJECT/BRANCH_INVENTORY_20260804.csv` ;
+- `docs/00_PROJECT/BOOTSTRAP_INTEGRATION_ASSESSMENT_20260804.md` ;
+- `docs/00_PROJECT/PR_CONTENT_RECONCILIATION_20260804.csv` ;
+- `docs/00_PROJECT/CANONICAL_PROJECT_STATE_20260804.md` ;
+- `docs/00_PROJECT/OPEN_DECISIONS_AND_EXECUTION_GATES_20260804.md` ;
+- `docs/00_PROJECT/ISSUE_MIGRATION_DRAFT_20260804.csv` ;
+- `docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md`.
+
+La PR nº 1 reste en brouillon, ouverte et non fusionnée. `main` reste minimale.
+
+### Phase 9 — Taxonomie et groupes de pairs
+
+**Statut courant corrigé : STRUCTURE_PRESENT / TESTED / NOT_ACTIVE**
+
+Sont présents et testés :
+
+- quatre classes d'actifs ;
+- sept sous-classes autorisées ;
+- neuf modèles de classification ;
+- 54 routes pays vers niveau local de marché, région et Afrique ;
+- 486 règles de routage développées ;
+- 432 catégories et groupes de pairs structurels.
+
+Restent ouverts :
+
+- modèle final Fund/SubFund/ShareClass ;
+- membres réels et historiques des groupes de pairs ;
+- bornes obligataires et profils diversifiés ;
+- distinction définitive `NATIONAL` / `LOCAL_MARKET` ;
+- `INVESTMENT_SCOPE`.
+
+### Phase 10 — Blocs de référence et benchmarks
+
+**Statut courant corrigé : STRUCTURE_PRESENT / TESTED / NOT_ACTIVE**
+
+Les 432 blocs et leurs rôles sont générés de manière déterministe. Cette présence structurelle ne signifie pas que les séries fournisseurs, licences, méthodologies WTI Bench, taux sans risque ou MAR sont validés.
+
+### Phase 11
+
+Le statut reste inchangé : WTI, WTI Bench, ratios et classements ne sont pas actifs.
+
+### Ordre immédiat préservé
+
+```text
+OF-ARCH-001
+→ OF-SOURCE-001
+→ OF-ARCH-002
+→ OF-ARCH-003
+→ OF-ARCH-004
+```
+
+Les sujets `LOCAL_MARKET`, `INVESTMENT_SCOPE`, reproductibilité du classeur et alignement documentaire restent proposés et ne réordonnent pas cette chaîne.
