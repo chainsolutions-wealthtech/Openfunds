@@ -1,0 +1,59 @@
+name: Business Date Semantics
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "schemas/reference/002_country_relationships.sql"
+      - "schemas/reference/014_business_date_semantics.sql"
+      - "tests/sql/business_date_*.sql"
+      - ".github/workflows/business-date-semantics.yml"
+  pull_request:
+    paths:
+      - "schemas/reference/002_country_relationships.sql"
+      - "schemas/reference/014_business_date_semantics.sql"
+      - "tests/sql/business_date_*.sql"
+      - ".github/workflows/business-date-semantics.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  postgres-date-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
+      PGPASSWORD: openfunds
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create historical schema and dated row
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/business_date_prerequisites.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/002_country_relationships.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/business_date_legacy_seed.sql
+      - name: Apply date semantics and verify twice
+        run: |
+          for i in 1 2; do
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/014_business_date_semantics.sql
+            psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/business_date_semantics_assert.sql
+          done
+      - name: Display date contract
+        run: |
+          psql "$DATABASE_URL" -c "select relationship_type,target_entity_code,valid_from,valid_from_status,valid_to,valid_to_status from ref.entity_relationship_date_contract order by relationship_id"
