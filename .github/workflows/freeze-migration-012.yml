@@ -1,0 +1,52 @@
+name: Freeze migration 012 once
+
+on:
+  push:
+    branches: [architecture/africafunds-country-indicators-v0.1]
+    paths:
+      - 'scripts/generate_validated_fx_reference_sql.py'
+      - 'migrations/sources/012_validated_fx_reference_registry.csv'
+      - '.github/workflows/freeze-migration-012.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  materialize-frozen-artifact:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Materialize the exact frozen artifact
+        run: |
+          python - <<'PY'
+          import importlib.util
+          from pathlib import Path
+
+          root = Path.cwd()
+          script = root / 'scripts/generate_validated_fx_reference_sql.py'
+          spec = importlib.util.spec_from_file_location('fx_registry', script)
+          assert spec and spec.loader
+          module = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(module)
+          output = root / 'schemas/reference/012_validated_fx_reference_registry.sql'
+          output.write_text(module.render(module.FROZEN_SOURCE), encoding='utf-8', newline='\n')
+          print(output)
+          PY
+      - name: Commit only the frozen SQL when absent
+        run: |
+          git add schemas/reference/012_validated_fx_reference_registry.sql
+          if git diff --cached --quiet; then
+            echo 'Frozen SQL already committed; no write required.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'fix(migrations): commit frozen migration 012 artifact [OF-ARCH-005]'
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
