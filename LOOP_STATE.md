@@ -4,30 +4,33 @@
 LOOP_ID: OF-LOOP-DATA-001
 TASK_ID: OF-DATA-001
 LOOP_TYPE: CANONICAL_FUND_DOMAIN
-STATUS: IMPLEMENTATION_IN_PROGRESS
+STATUS: VERIFIED_COMPLETE
 START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
-VALIDATED_TECHNICAL_HEAD: PENDING
+VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
 BRANCH: architecture/africafunds-country-indicators-v0.1
 PRODUCTION_DEPLOYED: NO
 FUND_HISTORY_LOADED: NO
 ```
 
-## Hypothèse
+## Résultat
 
-Un modèle unique peut couvrir fonds autonomes et umbrellas sans faux
-compartiment, tout en séparant identité, profils, noms, identifiants, relations
-et événements.
+Le modèle canonique couvre deux chemins : fonds autonome vers classe de parts,
+ou umbrella vers compartiment puis classe de parts. Aucun faux compartiment
+n’est créé. Identité, états, profils, noms, identifiants, relations et événements
+sont séparés et historisables.
 
-## Implémentation préparée
+## Preuves
 
-- migration gouvernée `015` ;
-- `ADR-030` ;
-- tests unitaires et PostgreSQL 16 ;
+- migration `015` au SHA-256
+  `5ce14ea3de866c31c0452fccfe77827873dec976be3391b2d323e7daf88ef15d` ;
+- quatorze tests Python ;
+- quinze migrations gouvernées ;
+- PostgreSQL 16 vide, double apply et ledger ;
 - fixtures Maroc, Tunisie et Nigeria ;
-- contrôles de non-duplication et de cardinalité.
+- adoption sans ledger ;
+- quatre workflows du HEAD technique en `SUCCESS`.
 
-## Porte actuelle
+## Sortie
 
-Le statut reste `IMPLEMENTATION_IN_PROGRESS` tant que le commit technique et ses
-workflows ne sont pas tous vérifiés. Aucun statut `VERIFIED_COMPLETE` n’est
-revendiqué avant ces preuves.
+Boucle fermée. `OF-DATA-002` n’est pas démarré et requiert une nouvelle
+autorisation.

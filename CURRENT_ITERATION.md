@@ -4,22 +4,21 @@
 LOOP_ID: OF-LOOP-DATA-001
 ITERATION: 001
 TASK_ID: OF-DATA-001
-STATUS: IMPLEMENTATION_IN_PROGRESS
+STATUS: VERIFIED_COMPLETE
 START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
-TECHNICAL_HEAD: PENDING
+VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
 DATE: 2026-08-05
 ```
 
-## Hypothèse à tester
+## Hypothèse et verdict
 
-Les structures africaines ciblées peuvent être représentées par deux chemins
-canoniques seulement : `FUND -> SHARE_CLASS` pour un fonds autonome et
-`FUND -> SUBFUND -> SHARE_CLASS` pour un umbrella.
+**Hypothèse :** fonds autonomes et umbrellas peuvent partager une identité
+canonique sans imposer un compartiment fictif.
 
-## Critères de sortie
+**Verdict : confirmé.** Les deux chemins structurels, les versions, noms,
+identifiants et événements sont appliqués et testés dans PostgreSQL 16.
 
-- migration `015` gouvernée ;
-- brouillon historique toujours exclu ;
-- tests de cardinalité, identité, noms, identifiants et événements ;
-- PostgreSQL 16 et adoption sans ledger réussis ;
-- aucun historique de fonds ou déploiement production.
+## Limite
+
+Cette itération ne peuple pas le dictionnaire, n’importe aucun historique de
+fonds et ne configure aucun environnement de production.

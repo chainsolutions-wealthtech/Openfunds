@@ -1,26 +1,26 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-LOOP-DATA-001
-TASK_ID: OF-DATA-001
-STATUS: TECHNICAL_COMMIT_AND_CI_PENDING
+CURRENT_LOOP: OF-LOOP-DATA-001_COMPLETED
+CURRENT_TASK: OF-DATA-001_VERIFIED_COMPLETE
+NEXT_CANDIDATE: OF-DATA-002
+STATUS: STOPPED_PENDING_USER_AUTHORIZATION
 ```
 
-## Action immédiate
+## Phase candidate
 
-Créer un commit fast-forward sur la branche de contrôle avec la migration `015`,
-le manifeste, `ADR-030`, les tests et les documents de boucle, puis attendre et
-inspecter les workflows GitHub Actions.
+Peupler le dictionnaire canonique machine-readable avec, pour chaque champ :
+identifiant, définition, entité, type, unité, devise, cardinalité, contraintes,
+validation, normalisation, historique, provenance, sensibilité, confiance,
+mapping et version.
 
-## Décision conditionnelle
+## Préconditions
 
-- CI verte : documenter la clôture et passer `OF-DATA-001` à
-  `VERIFIED_COMPLETE` ;
-- CI rouge : conserver les preuves, analyser les logs et corriger uniquement par
-  un nouveau commit forward.
+Nouvel audit dynamique, format maître arbitré, collision check, allowlist,
+fixtures couvrant Fund/SubFund/ShareClass et génération de vues humaines.
 
 ## Interdictions maintenues
 
-Ne pas charger de fonds réels, commencer `OF-DATA-002`, modifier la PR nº 2,
-retargeter ou fusionner la PR nº 1, travailler sur `main`, créer une branche ou
-une PR, réécrire l’historique ou déployer.
+Ne pas commencer automatiquement `OF-DATA-002`, charger des historiques,
+modifier la PR nº 2, fusionner ou retargeter la PR nº 1, travailler sur `main`,
+créer une branche/PR ou déployer sans nouvelle autorisation.

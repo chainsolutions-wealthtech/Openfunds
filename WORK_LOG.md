@@ -5,29 +5,33 @@
 ```text
 TASK_ID: OF-DATA-001
 START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
-BRANCH: architecture/africafunds-country-indicators-v0.1
-STATUS: IMPLEMENTATION_IN_PROGRESS
+VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
+STATUS: VERIFIED_COMPLETE
 ```
 
-### Audit initial
+### Audit
 
-Le HEAD, la baseline, les douze branches, les PR nº 1 et nº 2, `ADR-009`, le
-modèle de données, le brouillon SQL, le manifeste et les pilotes Maroc/Tunisie ont
-été relus. Aucun `schemas/fund/` runtime, `ADR-030` ou
-`OF-LOOP-DATA-001` concurrent n’a été trouvé.
+HEAD, baseline, branches, PR, ADR-009, modèle de données, brouillon SQL, manifeste
+et pilotes Maroc/Tunisie ont été vérifiés avant écriture. Aucun modèle runtime
+SubFund ni collision `ADR-030` / `OF-LOOP-DATA-001` n’existait.
 
-### Décision
+### Implémentation
 
-Adopter deux chemins seulement : fonds autonome vers classe de parts, ou umbrella
-vers compartiment puis classe de parts. Les noms, alias, identifiants et événements
-restent séparés de l’identité stable.
+Migration `015`, manifeste à quinze entrées, ADR-030, modèle détaillé, tests
+Python et fixtures PostgreSQL Maroc/Tunisie/Nigeria.
 
-### Implémentation préparée
+### Validation
 
-Migration `015`, manifeste à quinze migrations, contrôle CI PostgreSQL 16,
-fixtures Maroc/Tunisie/Nigeria, ADR, diagramme et mémoire de boucle.
+Quatorze tests Python, base PostgreSQL 16 vide, double apply, ledger, contrôles
+runtime, rejets de duplication/cardinalité et adoption sans ledger ont réussi.
+Les runs `30994140842`, `30994140840`, `30994140910` et `30994140896` sont verts.
 
-### État
+### Incident transparent
 
-Les objets Git sont préparés mais aucune réussite CI n’est encore revendiquée.
-L’écriture de branche doit rester fast-forward depuis le HEAD audité.
+Le commit intermédiaire `8fa7c13b...` a ajouté accidentellement `NONEXISTENT`.
+Le commit descendant `8ab1e75b...` l’a retiré et a appliqué l’arbre technique
+attendu, sans force-push ni réécriture.
+
+### Sortie
+
+`OF-DATA-001` est fermé. Aucun historique de fonds ni déploiement n’a été lancé.
