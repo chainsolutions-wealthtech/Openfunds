@@ -9,94 +9,38 @@
     "checksum": "sha256",
     "transactional": true,
     "immutable_after_application": true,
+    "generated_migration_policy": "COMMITTED_FROZEN_ARTIFACT_WITH_FROZEN_SOURCE_SNAPSHOT",
     "unknown_ledger_entry": "FAIL",
     "checksum_mismatch": "FAIL",
     "repair": "NEW_FORWARD_MIGRATION_OR_EXPLICIT_AUDITED_MANUAL_REPAIR"
   },
   "migrations": [
-    {
-      "order": 10,
-      "id": "001_REFERENCE_MARKET_CORE",
-      "path": "schemas/migrations/001_reference_market_core.sql"
-    },
-    {
-      "order": 20,
-      "id": "002_COUNTRY_RELATIONSHIPS",
-      "path": "schemas/reference/002_country_relationships.sql"
-    },
-    {
-      "order": 30,
-      "id": "003_ORGANIZATIONS_AND_ROLES",
-      "path": "schemas/reference/003_organizations_and_roles.sql"
-    },
-    {
-      "order": 40,
-      "id": "004_SOURCE_ENDPOINTS_AND_MAPPING",
-      "path": "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"
-    },
-    {
-      "order": 50,
-      "id": "007_SOURCE_ENDPOINT_RECONCILIATION",
-      "path": "schemas/reference/007_source_endpoint_reconciliation.sql"
-    },
-    {
-      "order": 60,
-      "id": "005_PROVIDER_SERIES_AND_COLLECTIONS",
-      "path": "schemas/reference/005_provider_series_and_collection_specifications.sql"
-    },
-    {
-      "order": 70,
-      "id": "006_FX_OBSERVATION_LINEAGE",
-      "path": "schemas/market/006_fx_observation_lineage.sql"
-    },
-    {
-      "order": 80,
-      "id": "008_BCEAO_FX_COLLECTION_SEED",
-      "path": "schemas/reference/008_bceao_fx_collection_seed.sql"
-    },
-    {
-      "order": 90,
-      "id": "009_BEAC_FX_COLLECTION_SEED",
-      "path": "schemas/reference/009_beac_fx_collection_seed.sql"
-    },
-    {
-      "order": 100,
-      "id": "010_BEAC_FX_PARSER_V0_2",
-      "path": "schemas/reference/010_beac_fx_parser_v0_2.sql"
-    },
-    {
-      "order": 110,
-      "id": "011_BEAC_FX_COLLECTION_VALIDATION",
-      "path": "schemas/reference/011_beac_fx_collection_validation.sql"
-    },
+    {"order": 10, "id": "001_REFERENCE_MARKET_CORE", "path": "schemas/migrations/001_reference_market_core.sql"},
+    {"order": 20, "id": "002_COUNTRY_RELATIONSHIPS", "path": "schemas/reference/002_country_relationships.sql"},
+    {"order": 30, "id": "003_ORGANIZATIONS_AND_ROLES", "path": "schemas/reference/003_organizations_and_roles.sql"},
+    {"order": 40, "id": "004_SOURCE_ENDPOINTS_AND_MAPPING", "path": "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"},
+    {"order": 50, "id": "007_SOURCE_ENDPOINT_RECONCILIATION", "path": "schemas/reference/007_source_endpoint_reconciliation.sql"},
+    {"order": 60, "id": "005_PROVIDER_SERIES_AND_COLLECTIONS", "path": "schemas/reference/005_provider_series_and_collection_specifications.sql"},
+    {"order": 70, "id": "006_FX_OBSERVATION_LINEAGE", "path": "schemas/market/006_fx_observation_lineage.sql"},
+    {"order": 80, "id": "008_BCEAO_FX_COLLECTION_SEED", "path": "schemas/reference/008_bceao_fx_collection_seed.sql"},
+    {"order": 90, "id": "009_BEAC_FX_COLLECTION_SEED", "path": "schemas/reference/009_beac_fx_collection_seed.sql"},
+    {"order": 100, "id": "010_BEAC_FX_PARSER_V0_2", "path": "schemas/reference/010_beac_fx_parser_v0_2.sql"},
+    {"order": 110, "id": "011_BEAC_FX_COLLECTION_VALIDATION", "path": "schemas/reference/011_beac_fx_collection_validation.sql"},
     {
       "order": 120,
       "id": "012_VALIDATED_FX_REFERENCE_REGISTRY",
       "path": "schemas/reference/012_validated_fx_reference_registry.sql",
       "generator": {
         "script": "scripts/generate_validated_fx_reference_sql.py",
-        "arguments": []
+        "arguments": ["--check", "--source", "migrations/sources/012_validated_fx_reference_registry.csv", "--output", "schemas/reference/012_validated_fx_reference_registry.sql"],
+        "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
       }
     },
-    {
-      "order": 130,
-      "id": "013_CANONICAL_ENDPOINT_MODEL",
-      "path": "schemas/reference/013_canonical_endpoint_model.sql"
-    },
-    {
-      "order": 140,
-      "id": "014_BUSINESS_DATE_SEMANTICS",
-      "path": "schemas/reference/014_business_date_semantics.sql"
-    }
+    {"order": 130, "id": "013_CANONICAL_ENDPOINT_MODEL", "path": "schemas/reference/013_canonical_endpoint_model.sql"},
+    {"order": 140, "id": "014_BUSINESS_DATE_SEMANTICS", "path": "schemas/reference/014_business_date_semantics.sql"}
   ],
   "excluded_sql": [
-    {
-      "path": "schemas/reference/country_indicator_information_model_v0.1.sql",
-      "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"
-    },
-    {
-      "path": "schemas/taxonomy/fund_relationship_information_model_v0.1.sql",
-      "reason": "DRAFT_PENDING_OF_DATA_001_FUND_SUBFUND_SHARECLASS_DECISION"
-    }
+    {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
+    {"path": "schemas/taxonomy/fund_relationship_information_model_v0.1.sql", "reason": "DRAFT_PENDING_OF_DATA_001_FUND_SUBFUND_SHARECLASS_DECISION"}
   ]
 }

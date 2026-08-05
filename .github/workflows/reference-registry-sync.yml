@@ -2,9 +2,27 @@ name: Reference Registry Synchronization
 on:
   push:
     branches: [architecture/africafunds-country-indicators-v0.1]
-    paths: ["data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv","scripts/generate_validated_fx_reference_sql.py","tests/test_validated_fx_reference_registry.py","tests/sql/validated_fx_reference_assert.sql",".github/workflows/reference-registry-sync.yml"]
+    paths:
+      - "data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv"
+      - "migrations/manifest.json"
+      - "migrations/sources/**"
+      - "schemas/reference/012_validated_fx_reference_registry.sql"
+      - "scripts/generate_validated_fx_reference_sql.py"
+      - "tests/test_validated_fx_reference_registry.py"
+      - "tests/test_migration_runner.py"
+      - "tests/sql/validated_fx_reference_assert.sql"
+      - ".github/workflows/reference-registry-sync.yml"
   pull_request:
-    paths: ["data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv","scripts/generate_validated_fx_reference_sql.py","tests/test_validated_fx_reference_registry.py","tests/sql/validated_fx_reference_assert.sql",".github/workflows/reference-registry-sync.yml"]
+    paths:
+      - "data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv"
+      - "migrations/manifest.json"
+      - "migrations/sources/**"
+      - "schemas/reference/012_validated_fx_reference_registry.sql"
+      - "scripts/generate_validated_fx_reference_sql.py"
+      - "tests/test_validated_fx_reference_registry.py"
+      - "tests/test_migration_runner.py"
+      - "tests/sql/validated_fx_reference_assert.sql"
+      - ".github/workflows/reference-registry-sync.yml"
   workflow_dispatch:
 permissions: {contents: read}
 jobs:
@@ -14,9 +32,13 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}
-      - run: python -m py_compile scripts/generate_validated_fx_reference_sql.py tests/test_validated_fx_reference_registry.py
-      - run: python scripts/generate_validated_fx_reference_sql.py
-      - run: python scripts/generate_validated_fx_reference_sql.py --check
+      - run: python -m py_compile scripts/generate_validated_fx_reference_sql.py tests/test_validated_fx_reference_registry.py tests/test_migration_runner.py
+      - name: Verify frozen migration 012 without rewriting it
+        run: |
+          before="$(sha256sum schemas/reference/012_validated_fx_reference_registry.sql)"
+          python scripts/generate_validated_fx_reference_sql.py --check
+          after="$(sha256sum schemas/reference/012_validated_fx_reference_registry.sql)"
+          test "$before" = "$after"
       - run: python -m unittest tests/test_validated_fx_reference_registry.py -v
   postgres-idempotence:
     runs-on: ubuntu-latest
@@ -30,10 +52,11 @@ jobs:
     env: {DATABASE_URL: "postgresql://openfunds:openfunds@localhost:5432/openfunds", PGPASSWORD: openfunds}
     steps:
       - uses: actions/checkout@v4
-      - run: python scripts/generate_validated_fx_reference_sql.py
+      - name: Verify committed synchronization migration
+        run: python scripts/generate_validated_fx_reference_sql.py --check
       - name: Apply schemas and historical seeds
         run: |
           for f in 003_organizations_and_roles.sql 004_source_endpoints_and_indicator_mapping.sql 007_source_endpoint_reconciliation.sql 005_provider_series_and_collection_specifications.sql 008_bceao_fx_collection_seed.sql 009_beac_fx_collection_seed.sql 010_beac_fx_parser_v0_2.sql 011_beac_fx_collection_validation.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "schemas/reference/$f"; done
-      - name: Apply generated synchronization twice
+      - name: Apply frozen synchronization twice
         run: |
           for i in 1 2; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/012_validated_fx_reference_registry.sql; psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/validated_fx_reference_assert.sql; done
