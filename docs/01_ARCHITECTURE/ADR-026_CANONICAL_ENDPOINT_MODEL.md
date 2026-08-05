@@ -8,16 +8,23 @@ TASK: OF-ARCH-002
 
 ## Context
 
-Migrations `003_organizations_and_roles.sql` and `004_source_endpoints_and_indicator_mapping.sql` historically define two shapes of the same physical relation: `source.endpoint`.
+Migrations `003_organizations_and_roles.sql` and
+`004_source_endpoints_and_indicator_mapping.sql` historically define two shapes
+of the same physical runtime relation: `source.endpoint`.
 
-No `source.source_endpoint` relation exists in the repository. The previously documented conflict between two physical tables was therefore inaccurate. The real issue was the coexistence of legacy and normalized columns within one relation.
+A separate `source.source_endpoint` definition is present only in
+`schemas/reference/country_indicator_information_model_v0.1.sql`. That file is
+explicitly marked `Proposal only` and `not a migration`. It is retained as
+research history, rejected from the governed runtime path and excluded by
+`migrations/manifest.json`.
 
-Migration `007_source_endpoint_reconciliation.sql` already preserves and reconciles both shapes additively.
+Migration `007_source_endpoint_reconciliation.sql` preserves and reconciles the
+two historical `source.endpoint` shapes additively.
 
 ## Decision
 
 ```text
-CANONICAL PHYSICAL RELATION
+CANONICAL PHYSICAL RUNTIME RELATION
 source.endpoint
 
 NORMALIZED CONTRACT VIEW
@@ -26,11 +33,12 @@ source.endpoint_contract
 CURRENT VALIDATED VIEW
 source.current_endpoint
 
-PARALLEL LEGACY RELATION
-NONE
+PARALLEL PROPOSAL
+source.source_endpoint — PRESERVED BUT NOT EXECUTED
 ```
 
-New code and migrations must target `source.endpoint` and its normalized columns:
+New code and governed migrations must target `source.endpoint` and its normalized
+columns:
 
 - `scope_type` and `scope_code`;
 - `official_url`, `data_portal_url`, `api_base_url`;
@@ -40,7 +48,8 @@ New code and migrations must target `source.endpoint` and its normalized columns
 - `history_start`;
 - validation and validity fields.
 
-The following columns remain compatibility fields for historical migrations and existing rows:
+The following columns remain compatibility fields for historical migrations and
+existing rows:
 
 - `url`;
 - `file_format`;
@@ -48,7 +57,8 @@ The following columns remain compatibility fields for historical migrations and 
 - `publication_frequency`;
 - `expected_history_start`.
 
-They are preserved non-destructively and synchronized by migration 007. They are not a second endpoint model.
+They are synchronized by migration 007 and do not constitute a second runtime
+model.
 
 ## Implementation
 
@@ -57,40 +67,35 @@ Migration `013_canonical_endpoint_model.sql`:
 - declares the canonical relation in a machine-readable registry;
 - publishes the normalized `source.endpoint_contract` view;
 - records compatibility columns;
-- adds no competing endpoint table;
+- creates no competing endpoint table;
 - deletes and renames nothing.
 
-The CI tests apply migrations in both historical orders:
-
-```text
-003 → seed → 004 → 007 → 005 → 013
-004 → seed → 007 → 005 → 013
-```
-
-Both paths are reapplied to verify idempotence.
+The CI tests apply migrations in both historical orders and the governed
+migration runner additionally asserts that `source.source_endpoint` is absent
+from the runtime database.
 
 ## Foreign keys
 
-The canonical endpoint relation is the target of the endpoint foreign keys from:
+The canonical endpoint relation is the target of endpoint foreign keys from:
 
 - `source.indicator_source_mapping`;
 - `source.provider_series`.
 
-No FK points to a parallel endpoint relation.
+No governed runtime FK targets the proposal relation.
 
 ## Consequences
 
-- one physical endpoint model;
+- one physical runtime endpoint model;
 - compatibility retained for historical migrations;
 - normalized contract available to consumers;
-- future creation of `source.source_endpoint` is treated as a regression;
-- no destructive migration is required.
+- proposal preserved without accidental execution;
+- no destructive migration required.
 
 ## Non-goals
 
 This decision does not:
 
-- choose the global migration runner (`OF-ARCH-004`);
+- delete the proposal file;
 - remove compatibility columns;
 - change source validation statuses;
 - deploy to production;

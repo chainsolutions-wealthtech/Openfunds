@@ -1,0 +1,98 @@
+name: Governed Migration Runner
+
+on:
+  pull_request:
+    paths:
+      - 'migrations/**'
+      - 'schemas/**'
+      - 'scripts/run_migrations.py'
+      - 'scripts/generate_validated_fx_reference_sql.py'
+      - 'tests/test_migration_runner.py'
+      - '.github/workflows/migration-runner.yml'
+  push:
+    paths:
+      - 'migrations/**'
+      - 'schemas/**'
+      - 'scripts/run_migrations.py'
+      - 'scripts/generate_validated_fx_reference_sql.py'
+      - 'tests/test_migration_runner.py'
+      - '.github/workflows/migration-runner.yml'
+  workflow_dispatch:
+
+jobs:
+  governed-migrations:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
+      PGPASSWORD: openfunds
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Unit tests
+        run: python -m unittest -v tests.test_migration_runner
+
+      - name: Validate and display governed plan
+        run: python scripts/run_migrations.py --plan
+
+      - name: Apply to an empty PostgreSQL 16 database
+        run: |
+          python scripts/run_migrations.py --apply
+          python scripts/run_migrations.py --apply
+          python scripts/run_migrations.py --verify
+
+      - name: Assert governed runtime contract
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
+          do $$
+          declare
+              migration_count integer;
+          begin
+              select count(*) into migration_count
+              from openfunds_migration.schema_migration;
+              if migration_count <> 14 then
+                  raise exception 'expected 14 governed migrations, got %', migration_count;
+              end if;
+              if to_regclass('source.endpoint') is null then
+                  raise exception 'canonical source.endpoint is missing';
+              end if;
+              if to_regclass('source.source_endpoint') is not null then
+                  raise exception 'excluded proposal table source.source_endpoint was created';
+              end if;
+              if to_regclass('market.fx_observation') is null then
+                  raise exception 'market.fx_observation is missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='ref'
+                    and table_name='entity_relationship'
+                    and column_name='valid_from_status'
+              ) then
+                  raise exception 'business-date status contract is missing';
+              end if;
+          end
+          $$;
+          SQL
+
+      - name: Adopt an already initialized database without a ledger
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 \
+            -c "drop schema openfunds_migration cascade"
+          python scripts/run_migrations.py --apply
+          python scripts/run_migrations.py --verify
