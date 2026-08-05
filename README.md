@@ -542,3 +542,32 @@ COMPLETE_HISTORY_LOADED
 INDEX_CALCULATED
 PRODUCTION_DEPLOYED
 ```
+
+---
+
+## 19. POINT D'ENTREE LOOP ENGINEERING — 2026-08-05
+
+Les sections précédentes restent l'historique canonique du projet. Pour l'état vivant et l'ordre de reprise, lire désormais :
+
+1. `00_START_HERE.md` ;
+2. `AGENTS.md` ;
+3. `SOURCE_OF_TRUTH.md` ;
+4. `STATUS.md` ;
+5. `NEXT_ACTION.md` ;
+6. `LOOP_STATE.md` et `CURRENT_ITERATION.md` ;
+7. `DOCUMENT_INTEGRATION_MATRIX.md`.
+
+Statuts vérifiés :
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+OF-DATA-001   NOT_STARTED
+```
+
+Le blocker de `OF-ARCH-004` est l'immuabilité historique de la migration générée `012`. La boucle `OF-LOOP-DOC-003` n'apporte aucune modification technique, ne rend pas la PR nº 1 fusionnable et ne modifie pas la PR nº 2.
+
+Les volumes 95 et 104 et les comptes de workflows ci-dessus sont historiques. L'état GitHub doit toujours être résolu dynamiquement ; l'observation initiale de cette boucle est le HEAD `3c54c54733e116f35ff63a0759c921afd58c57a6`, avec une PR nº 1 à 184 commits et 162 fichiers modifiés avant l'intégration documentaire.

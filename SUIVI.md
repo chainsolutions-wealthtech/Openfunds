@@ -491,3 +491,64 @@ Ne pas commencer :
 - un retargeting ou une fusion ;
 
 avant validation explicite des portes correspondantes.
+
+---
+
+## MISE A JOUR DU 5 AOUT 2026 — AUDIT FINAL ET LOOP ENGINEERING
+
+### État dynamique avant la boucle
+
+```text
+CONTROL_BRANCH
+architecture/africafunds-country-indicators-v0.1
+
+OBSERVED_HEAD
+3c54c54733e116f35ff63a0759c921afd58c57a6
+
+DOCUMENTARY_BASELINE_END
+59f6475102b8a0c5b1274060afc412db787f2caf
+
+RELATION
+10 commits ahead / 0 behind
+
+MAIN_HEAD
+946145e4b33a6289eb340a16bf5c651cb9bbee7c
+```
+
+Douze branches, PR nº 1 ouverte/draft/non fusionnée/non fusionnable à l'observation et PR nº 2 ouverte/draft/non fusionnée ont été vérifiées. Aucun changement de PR ou de branche n'a été réalisé.
+
+### Gates vérifiés
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+Le blocker maintenu est l'immuabilité de la migration générée `012`. La concurrence du runner et les scénarios d'adoption partielle restent également seulement partiellement couverts. `OF-DATA-001` n'est pas commencé.
+
+### Boucle documentaire
+
+```text
+TASK_ID
+OF-DOC-003
+
+LOOP_ID
+OF-LOOP-DOC-003
+
+OBJECTIF
+Intégrer le standard Loop Engineering complet sans remplacer les sources canoniques historiques.
+```
+
+Livrables principaux : réconciliation permanente, matrice des 176 fichiers, `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, mémoire de boucle, catalogues, manifestes, politiques, modèles et adaptateurs IA.
+
+### Nouveau point exact de reprise
+
+1. lire `00_START_HERE.md` et `AGENTS.md` ;
+2. résoudre le HEAD courant et comparer à la baseline ;
+3. lire `STATUS.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md`, `WORK_LOG.md`, `NEXT_ACTION.md` et `HANDOFF.md` ;
+4. terminer et vérifier `OF-DOC-003` ;
+5. n'autoriser qu'ensuite une phase séparée pour le blocker de migration `012` ;
+6. ne pas commencer `OF-DATA-001`, fusionner ou retargeter une PR, modifier `main` ou déployer.

@@ -464,3 +464,42 @@ Aucune nouvelle tâche avec un identifiant collisionné n'est créée dans ce re
 - `docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md`
 
 Aucune issue GitHub n'a été créée par cette intervention.
+
+---
+
+# J. RECONCILIATION ET LOOP ENGINEERING — 2026-08-05
+
+Cette section supersède les statuts courants obsolètes sans supprimer les sections historiques.
+
+## Statuts vérifiés
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+OF-DATA-001   NOT_STARTED
+```
+
+Le blocker de `OF-ARCH-004` concerne l'immuabilité historique de la migration générée `012`. Le runner est implémenté et testé dans ses scénarios documentés, mais la migration historique peut être rematérialisée depuis le CSV avant hashing. Aucune correction technique n'est apportée dans `OF-DOC-003`.
+
+## OF-DOC-003 — Intégrer le standard Loop Engineering complet
+
+- **Statut :** EN_COURS
+- **Priorité :** P0_DOCUMENTATION
+- **Boucle :** `OF-LOOP-DOC-003`
+- **Branche :** `architecture/africafunds-country-indicators-v0.1`
+- **Objet :** réconcilier la mémoire permanente, créer la matrice de correspondance et tous les chemins Markdown du kit, initialiser les règles communes IA/humains, les catalogues, manifestes et handoffs.
+- **Critères d'acceptation :** 176 chemins du kit présents ; aucun document vide ; canoniques historiques conservés ; zéro modification technique ; contrôles et CI rapportés honnêtement ; aucune opération Git/PR interdite ; `OF-DATA-001` non commencé.
+- **Livrables :** `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, `STATUS.md`, `LOOP_STATE.md`, `DOCUMENT_INTEGRATION_MATRIX.md`, `FILES_CATALOG.md`, `MANIFEST.md`, documents sous `docs/01-governance/` à `docs/12-optional/`, réconciliation permanente et rapport final.
+
+## Prochaine action autorisée
+
+```text
+CLOTURER OF-DOC-003
+→ VERIFIER LE HEAD ET LA CI
+→ AUTORISER SEPAREMENT LA RESOLUTION DU BLOCKER 012
+```
+
+Ne pas retargeter ou fusionner la PR nº 1, ne pas modifier la PR nº 2 et ne pas commencer `OF-DATA-001`.

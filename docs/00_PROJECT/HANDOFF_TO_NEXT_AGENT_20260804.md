@@ -410,3 +410,38 @@ reproducibility as already decided. Do not create a new branch, modify main,
 retarget, merge or close a PR, create issues, add reviewers or comments, or modify
 code, data, SQL, workflows or tests unless the user explicitly authorizes a new execution phase.
 ```
+
+---
+
+## 13. LOOP ENGINEERING HANDOFF ADDENDUM — 2026-08-05
+
+The baseline above remains immutable historical evidence. The living handoff is now `../../HANDOFF.md` and the common entry point is `../../00_START_HERE.md`.
+
+```text
+OBSERVED_HEAD_BEFORE_LOOP
+3c54c54733e116f35ff63a0759c921afd58c57a6
+
+TASK_ID
+OF-DOC-003
+
+LOOP_ID
+OF-LOOP-DOC-003
+
+BASELINE_RELATION_AT_START
+10 commits ahead / 0 behind
+```
+
+All ten post-baseline commits were reviewed before the Loop Engineering write. The current interpretation is:
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+OF-DATA-001   NOT_STARTED
+```
+
+The blocker is the historical immutability of generated migration `012`; this documentary mission does not modify it. Before any future action, resolve the current HEAD again, compare it with the last commit of `OF-DOC-003`, read `STATUS.md`, `LOOP_STATE.md`, `WORK_LOG.md`, `NEXT_ACTION.md` and the permanent reconciliation report.
+
+PR nº 1 and PR nº 2 must still be verified dynamically. No merge, retargeting, closure or branch deletion is authorized by this addendum.

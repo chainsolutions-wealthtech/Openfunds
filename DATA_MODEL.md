@@ -237,3 +237,23 @@ Le modèle d'une date d'effet inconnue doit être finalisé avant les migrations
 4. temporalité des dates inconnues ;
 5. dictionnaire machine-readable ;
 6. stratégie de migrations.
+
+---
+
+## 14. RECONCILIATION DOCUMENTAIRE — 2026-08-05
+
+Cette section conserve les états historiques ci-dessus et actualise uniquement leur statut.
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+`source.endpoint` est désormais le modèle physique runtime canonique ; `source.source_endpoint` reste une proposition non opérationnelle. Les dates métier inconnues sont modélisées par des statuts explicites et une valeur `NULL`, sans date sentinelle. Le runner gouverné possède un manifeste de 14 migrations et un ledger PostgreSQL.
+
+La table de la section 12 reste une photographie ancienne : `schemas/reference/002_country_relationships.sql` et la sémantique des dates ont été corrigés et testés. Le blocker de migration `012` demeure ouvert : le SQL historique généré n'est pas figé comme artefact Git immuable.
+
+Le domaine fonds demeure non stabilisé. `OF-DATA-001` n'est pas commencé et aucun import massif de fonds n'est autorisé. Pour l'état vivant, consulter `STATUS.md`, `SOURCE_OF_TRUTH.md` et `docs/00_PROJECT/ARCHITECTURE_GATE_CHAIN_FINAL_AUDIT_20260805.md`. `docs/03-architecture/DATA_MODEL.md` est un index vers le présent document canonique.

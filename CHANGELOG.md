@@ -218,3 +218,33 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - aucun workflow ;
 - aucun code, SQL, donnée canonique/de référence, générateur ou test ;
 - aucun environnement, secret ou déploiement.
+
+## [2026-08-05] — ARCHITECTURE GATES ET LOOP ENGINEERING
+
+### Vérifié
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+- source d'authoring compacte des pilotes FX, endpoint runtime canonique et dates métier explicites ;
+- runner de 14 migrations et run PostgreSQL 16 réussi ;
+- blocker de gouvernance maintenu pour l'immuabilité de la migration générée `012` ;
+- PR nº 1 toujours draft, non fusionnée et non fusionnable dans sa base observée ;
+- PR nº 2 non modifiée, trois Markdown uniques toujours à décider.
+
+### Ajouté — OF-DOC-003
+
+- standard Loop Engineering complet et 176 chemins Markdown ;
+- `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, mémoire de boucle et handoff ;
+- `DOCUMENT_INTEGRATION_MATRIX.md` ;
+- catalogue, manifest, politiques, registres, modèles et fichiers conditionnels ;
+- `docs/00_PROJECT/PERMANENT_DOCUMENT_RECONCILIATION_20260805.md`.
+
+### Limites
+
+Cette intégration est documentaire. Elle ne modifie pas la migration `012`, ne commence pas `OF-DATA-001`, ne rend pas la PR nº 1 fusionnable et n'effectue aucun déploiement.

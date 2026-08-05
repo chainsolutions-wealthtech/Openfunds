@@ -299,3 +299,41 @@ OF-ARCH-001
 ```
 
 Les sujets `LOCAL_MARKET`, `INVESTMENT_SCOPE`, reproductibilité du classeur et alignement documentaire restent proposés et ne réordonnent pas cette chaîne.
+
+---
+
+## MISE A JOUR LOOP ENGINEERING — 2026-08-05
+
+Les phases historiques restent ci-dessus. L'état courant vérifié est :
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+### Phase 0 — état courant
+
+**Statut : LOOP_ENGINEERING_INTEGRATION / OF-DOC-003**
+
+La mémoire permanente est réconciliée et le standard documentaire complet est intégré sans remplacer les canoniques historiques. Les nouveaux points d'entrée sont `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, `STATUS.md` et `NEXT_ACTION.md`.
+
+### Phase 1 — état courant
+
+**Statut : IMPLEMENTED, AUDITED, BLOCKER DE GOUVERNANCE 012 OUVERT**
+
+Les quatre premiers gates et `OF-SOURCE-001` ont été mis en œuvre. La sortie complète de phase reste bloquée par l'immuabilité historique de la migration générée `012` et par des limites de concurrence/adoption documentées.
+
+### Ordre de reprise
+
+```text
+1. clôturer OF-DOC-003 et vérifier la CI documentaire ;
+2. autoriser séparément la résolution du blocker migration 012 ;
+3. réconcilier la stratégie d'intégration de la PR nº 1 ;
+4. décider le traitement des trois Markdown uniques de la PR nº 2 ;
+5. seulement ensuite évaluer le démarrage de OF-DATA-001.
+```
+
+`OF-DATA-001` reste `NOT_STARTED`. Aucune phase technique ou production n'est lancée par cette mise à jour.

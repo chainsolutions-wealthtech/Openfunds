@@ -267,3 +267,34 @@ Après toute décision structurante :
 3. consigner l'intervention dans `SUIVI.md` ;
 4. ajouter l'impact à `CHANGELOG.md` ;
 5. mettre à jour les schémas, dictionnaires et mappings concernés.
+
+---
+
+## RECONCILIATION DES DECISIONS — 2026-08-05
+
+Cette note ne supprime pas les propositions historiques ADR-022 et ADR-023 ; elle enregistre leur supersession par les décisions détaillées acceptées.
+
+- `ADR-026_CANONICAL_ENDPOINT_MODEL.md` : `source.endpoint` est le modèle physique runtime canonique ; la proposition `source.source_endpoint` reste non opérationnelle.
+- `ADR-027_EXPLICIT_BUSINESS_DATE_KNOWLEDGE.md` : les dates métier inconnues utilisent un statut explicite et `NULL`, sans date inventée. La proposition ADR-022 est donc `REMPLACEE` pour ce périmètre.
+- `ADR-028_GOVERNED_MIGRATION_RUNNER.md` : manifeste de 14 migrations, ledger, SHA-256, modes plan/apply/verify et échec fermé. La proposition ADR-023 est `REMPLACEE` pour l'outil et l'ordre opérationnel.
+
+Statuts vérifiés :
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+Le statut de `OF-ARCH-004` reste inférieur à `VERIFIED_COMPLETE` : la migration générée `012` peut être rematérialisée avant hashing et n'est pas figée comme artefact historique. Cette décision ne corrige pas ce blocker et n'autorise pas `OF-DATA-001`.
+
+## DECISION DOCUMENTAIRE — OF-DOC-003
+
+- **Statut :** ACCEPTE POUR LA MISSION DOCUMENTAIRE
+- **Date :** 2026-08-05
+- **Décision :** intégrer le standard Loop Engineering sans remplacer les documents historiques canoniques ; utiliser des index/adaptateurs pour les chemins redondants.
+- **Boucle :** `OF-LOOP-DOC-003`.
+- **Autorité :** `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, `STATUS.md` et `DOCUMENT_INTEGRATION_MATRIX.md` organisent la navigation ; ils ne remplacent pas les ADR, TODO, SUIVI ou rapports datés.
+- **Limites :** documentation seulement, aucune modification de migration 012, aucun démarrage de `OF-DATA-001`, aucune opération de branche, PR, fusion ou déploiement.

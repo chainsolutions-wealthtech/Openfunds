@@ -156,3 +156,25 @@ Le workflow quotidien peut charger PostgreSQL via `OPENFUNDS_DATABASE_URL`, mais
 - catalogue machine-readable des champs et indicateurs.
 
 Les décisions sont suivies dans `DECISIONS.md` et les tâches dans `TODO.md`.
+
+---
+
+## 11. RECONCILIATION DOCUMENTAIRE — 2026-08-05
+
+Cette section supersède uniquement l'état courant de la section 10 ; elle ne supprime pas son historique.
+
+```text
+OF-ARCH-001   VERIFIED_COMPLETE
+OF-SOURCE-001 VERIFIED_COMPLETE
+OF-ARCH-002   VERIFIED_COMPLETE
+OF-ARCH-003   VERIFIED_COMPLETE
+OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
+```
+
+Les écarts `source.endpoint`, authoring CSV/SQL et dates métier inconnues ont été décidés, implémentés et testés. Un runner de 14 migrations existe et a réussi ses scénarios PostgreSQL 16 documentés. `source.endpoint` est le modèle physique runtime ; la proposition `source.source_endpoint` reste non opérationnelle. Les dates inconnues sont explicites et ne sont pas inventées.
+
+Le blocker restant porte sur l'immuabilité historique de la migration générée `012`, rematérialisée avant le calcul de checksum. Cette mission documentaire ne modifie pas ce mécanisme.
+
+Le modèle Fund/SubFund/ShareClass, le stockage brut durable, PostgreSQL persistant et le catalogue machine-readable restent ouverts. `OF-DATA-001` n'est pas commencé.
+
+Pour l'état vivant, lire `STATUS.md`, `SOURCE_OF_TRUTH.md`, `NEXT_ACTION.md` et `docs/00_PROJECT/PERMANENT_DOCUMENT_RECONCILIATION_20260805.md`. Le chemin `docs/03-architecture/ARCHITECTURE.md` est un index vers le présent document canonique.
