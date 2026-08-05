@@ -66,23 +66,33 @@ create index if not exists idx_entity_relationship_active
 -- ONE ACTIVE PRIMARY RELATION PER COUNTRY AND RELATIONSHIP TYPE IS ENFORCED
 -- BY THE APPLICATION VALIDATION LAYER BECAUSE THE ACTIVE DATE IS TEMPORAL.
 
-create or replace view ref.current_entity_relationship as
-select
-    relationship_id,
-    source_entity_id,
-    relationship_type,
-    target_entity_code,
-    relationship_domain,
-    relationship_role,
-    valid_from,
-    valid_to,
-    is_primary,
-    source_id,
-    validation_status
-from ref.entity_relationship
-where valid_from <= current_date
-  and (valid_to is null or valid_to >= current_date)
-  and validation_status = 'VALIDATED';
+-- Create only the historical base view. Later migrations may append columns;
+-- replaying 002 on an existing database must never try to remove them.
+do $$
+begin
+    if to_regclass('ref.current_entity_relationship') is null then
+        execute $view$
+            create view ref.current_entity_relationship as
+            select
+                relationship_id,
+                source_entity_id,
+                relationship_type,
+                target_entity_code,
+                relationship_domain,
+                relationship_role,
+                valid_from,
+                valid_to,
+                is_primary,
+                source_id,
+                validation_status
+            from ref.entity_relationship
+            where valid_from <= current_date
+              and (valid_to is null or valid_to >= current_date)
+              and validation_status = 'VALIDATED'
+        $view$;
+    end if;
+end
+$$;
 
 -- EXPECTED UEMOA RELATIONS
 -- COUNTRY -> AFRICA_OUEST
