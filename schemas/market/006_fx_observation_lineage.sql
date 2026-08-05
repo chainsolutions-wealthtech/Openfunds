@@ -4,8 +4,22 @@
 
 create schema if not exists market;
 
-alter table market.fx_observation
-    alter column fx_rate type numeric(38,18) using fx_rate::numeric(38,18);
+-- Alter precision only when the base type has not already been upgraded.
+-- Replaying 006 after current_fx_observation exists must not touch the column.
+do $$
+begin
+    if exists (
+        select 1
+        from information_schema.columns
+        where table_schema = 'market'
+          and table_name = 'fx_observation'
+          and column_name = 'fx_rate'
+          and (numeric_precision is distinct from 38 or numeric_scale is distinct from 18)
+    ) then
+        execute 'alter table market.fx_observation alter column fx_rate type numeric(38,18) using fx_rate::numeric(38,18)';
+    end if;
+end
+$$;
 
 alter table market.fx_observation
     add column if not exists observation_kind text not null default 'OBSERVED',
