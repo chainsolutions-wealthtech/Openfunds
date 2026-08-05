@@ -88,6 +88,8 @@ select
     er.updated_at
 from ref.entity_relationship er;
 
+-- Preserve the historical output column order of current_entity_relationship.
+-- New knowledge-status columns are appended to avoid a destructive view replacement.
 create or replace view ref.current_entity_relationship as
 select
     relationship_id,
@@ -97,12 +99,12 @@ select
     relationship_domain,
     relationship_role,
     valid_from,
-    valid_from_status,
     valid_to,
-    valid_to_status,
     is_primary,
     source_id,
-    validation_status
+    validation_status,
+    valid_from_status,
+    valid_to_status
 from ref.entity_relationship
 where (
         valid_from_status = 'NOT_APPLICABLE'
