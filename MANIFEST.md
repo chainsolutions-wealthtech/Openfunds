@@ -7,6 +7,9 @@ TASK_ID: OF-DOC-003
 LOOP_ID: OF-LOOP-DOC-003
 KIT_VERSION: 1.0.0
 EXPECTED_KIT_MARKDOWN: 176
+KIT_PATHS_PRESENT: 176
+MARKDOWN_BEFORE: 71
+MARKDOWN_AFTER: 244
 EXTRA_OPENFUNDS_REPORTS: 2
 DOCUMENTARY_BASELINE_END: 59f6475102b8a0c5b1274060afc412db787f2caf
 OF_DATA_001_STARTED: NO
@@ -31,6 +34,8 @@ OF-ARCH-003   VERIFIED_COMPLETE
 OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
 ```
 
-## Contrats
+## Validation enregistrée
 
-Tous les chemins du kit doivent exister, avoir un contenu utile et correspondre à la matrice. Les documents conditionnels restent inactifs. Les fichiers techniques, migration 012, branches, PR, main et environnements ne sont pas modifiés. Les contrôles finaux et le SHA de clôture sont rapportés extérieurement après leur exécution, sans auto-référence impossible dans ce fichier.
+Le diff de la mission contient 173 ajouts Markdown, 10 modifications Markdown, zéro suppression, zéro renommage et zéro changement des chemins techniques protégés. Les workflows du dépôt n’ont pas été déclenchés au HEAD documentaire final en raison de leurs filtres de chemins ; cela est rapporté comme `NOT_TRIGGERED`, pas comme `PASS`.
+
+Le SHA de clôture est résolu dans le rapport externe afin d’éviter toute auto-référence impossible.

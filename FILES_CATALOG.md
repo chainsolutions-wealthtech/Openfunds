@@ -12,7 +12,7 @@ CANONICAL_HISTORICAL_DOCUMENTS_PRESERVED: YES
 
 | Domaine | Chemins | Fonction |
 |---|---:|---|
-| Racine et mémoire | 47 | contexte, statut, boucle, sécurité, backlog et handoff |
+| Racine et mémoire | 41 | contexte, statut, boucle, sécurité, backlog et handoff |
 | `.github` Markdown | 6 | templates et adaptateur Copilot |
 | Gouvernance | 11 | décisions, ownership, exceptions et critères |
 | Produit | 8 | vision, use cases, validation et release |
@@ -27,6 +27,7 @@ CANONICAL_HISTORICAL_DOCUMENTS_PRESERVED: YES
 | Modèles | 9 | tâches, PR, specs, incidents et rétrospectives |
 | Optionnels | 13 | données, conformité, production et services tiers |
 | ADR | 2 | index et modèle de décision |
+| **Total** | **176** | standard complet |
 
 ## Autorité
 
