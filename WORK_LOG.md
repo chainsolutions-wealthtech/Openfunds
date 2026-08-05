@@ -1,36 +1,33 @@
 # Journal de travail Loop Engineering
 
-## Boucle OF-LOOP-ARCH-005 — 2026-08-05
+## Boucle OF-LOOP-DATA-001 — 2026-08-05
 
 ```text
-TASK_ID: OF-ARCH-005
-START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
-VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
+TASK_ID: OF-DATA-001
+START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
 BRANCH: architecture/africafunds-country-indicators-v0.1
-STATUS: VERIFIED_COMPLETE
+STATUS: IMPLEMENTATION_IN_PROGRESS
 ```
 
 ### Audit initial
 
-Baseline toujours ancêtre, douze branches présentes, PR nº 1 et nº 2 ouvertes/draft/non fusionnées, aucune collision pour `OF-ARCH-005`, `OF-LOOP-ARCH-005` ou `ADR-029`. Le SQL `012` était absent de Git et le générateur pouvait le recréer depuis le CSV actif avant le contrôle de checksum.
+Le HEAD, la baseline, les douze branches, les PR nº 1 et nº 2, `ADR-009`, le
+modèle de données, le brouillon SQL, le manifeste et les pilotes Maroc/Tunisie ont
+été relus. Aucun `schemas/fund/` runtime, `ADR-030` ou
+`OF-LOOP-DATA-001` concurrent n’a été trouvé.
 
-### Historique transparent des écritures
+### Décision
 
-1. `a5796821904fd9ca8178b5579a3da44bfe1c3465` — commit intermédiaire accidentel ajoutant un README d’un mot ;
-2. `b07c3153cb3d6d5c5270760b3b00e600bbcbc4f5` — correction immédiate du README, snapshot figé, générateur et workflow ponctuel ;
-3. `54284d83bcee537b559dfbfd057ad23e39776844` — commit du bot matérialisant exactement le SQL `012` ;
-4. `ec5a2fd2efe89f008c05d4443001790450090523` — politique définitive, workflows en lecture seule, tests et ADR-029.
+Adopter deux chemins seulement : fonds autonome vers classe de parts, ou umbrella
+vers compartiment puis classe de parts. Les noms, alias, identifiants et événements
+restent séparés de l’identité stable.
 
-Aucun historique n’a été réécrit. Le workflow ponctuel avec droit d’écriture a été remplacé dans le commit technique final par un garde `contents: read`.
+### Implémentation préparée
 
-### Contrôles finaux
+Migration `015`, manifeste à quinze migrations, contrôle CI PostgreSQL 16,
+fixtures Maroc/Tunisie/Nigeria, ADR, diagramme et mémoire de boucle.
 
-- Reference Registry Synchronization `30989910122`: SUCCESS ;
-- Governed Migration Runner `30989910488`: SUCCESS ;
-- Frozen Migration 012 Guard `30989910399`: SUCCESS ;
-- Collector Tests `30989909622`: SUCCESS ;
-- SQL SHA-256 exact : `fb1e82536717082092e762706f29d51dd834dd5b2f0ea1b10193665f9f48bda0`.
+### État
 
-### Non réalisé
-
-Aucune branche/PR/issue, aucun merge, retargeting, force-push, déploiement ou démarrage de `OF-DATA-001`.
+Les objets Git sont préparés mais aucune réussite CI n’est encore revendiquée.
+L’écriture de branche doit rester fast-forward depuis le HEAD audité.

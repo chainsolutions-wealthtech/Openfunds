@@ -8,6 +8,8 @@ on:
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
       - 'tests/test_migration_runner.py'
+      - 'tests/test_fund_domain_model.py'
+      - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
     paths:
@@ -16,6 +18,8 @@ on:
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
       - 'tests/test_migration_runner.py'
+      - 'tests/test_fund_domain_model.py'
+      - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
 
@@ -46,7 +50,10 @@ jobs:
           python-version: '3.12'
 
       - name: Unit tests
-        run: python -m unittest -v tests.test_migration_runner
+        run: >-
+          python -m unittest -v
+          tests.test_migration_runner
+          tests.test_fund_domain_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -66,8 +73,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 14 then
-                  raise exception 'expected 14 governed migrations, got %', migration_count;
+              if migration_count <> 15 then
+                  raise exception 'expected 15 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -86,9 +93,23 @@ jobs:
               ) then
                   raise exception 'business-date status contract is missing';
               end if;
+              if to_regclass('fund.entity') is null
+                 or to_regclass('fund.current_share_class_path') is null
+                 or to_regclass('fund.structure_quality_issue') is null then
+                  raise exception 'canonical fund domain objects are missing';
+              end if;
+              if to_regclass('fund.fund') is not null
+                 or to_regclass('fund.share_class') is not null then
+                  raise exception 'legacy draft fund tables were activated';
+              end if;
           end
           $$;
           SQL
+
+      - name: Validate Fund SubFund ShareClass fixtures
+        run: >-
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1
+          -f tests/sql/fund_domain_model_assert.sql
 
       - name: Adopt an already initialized database without a ledger
         run: |
@@ -96,3 +117,5 @@ jobs:
             -c "drop schema openfunds_migration cascade"
           python scripts/run_migrations.py --apply
           python scripts/run_migrations.py --verify
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 \
+            -f tests/sql/fund_domain_model_assert.sql

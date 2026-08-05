@@ -3,13 +3,10 @@
 ```text
 STATUS_DATE: 2026-08-05
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
-DOCUMENTARY_BASELINE_END: 59f6475102b8a0c5b1274060afc412db787f2caf
-LOOP_START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
-VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
-CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
-TASK_ID: OF-ARCH-005
-LOOP_ID: OF-LOOP-ARCH-005
-LOOP_STATUS: VERIFIED_COMPLETE
+CURRENT_HEAD_AT_LOOP_START: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
+TASK_ID: OF-DATA-001
+LOOP_ID: OF-LOOP-DATA-001
+LOOP_STATUS: IMPLEMENTATION_IN_PROGRESS
 ```
 
 ## Architecture gates
@@ -21,34 +18,26 @@ OF-ARCH-002   VERIFIED_COMPLETE
 OF-ARCH-003   VERIFIED_COMPLETE
 OF-ARCH-004   VERIFIED_COMPLETE
 OF-ARCH-005   VERIFIED_COMPLETE
-OF-DATA-001   NOT_STARTED
+OF-DATA-001   IMPLEMENTATION_IN_PROGRESS
 ```
 
-Le blocker de gouvernance de `OF-ARCH-004` est fermé : la migration générée `012` possède désormais un snapshot d’entrée immuable et un SQL immuable commité. Les hooks du manifeste vérifient la reproductibilité en lecture seule ; ils ne rematérialisent plus un ancien artefact.
+## Scope de la boucle
 
-## Preuves techniques du HEAD validé
+Stabiliser le modèle runtime `Fund / SubFund / ShareClass`, sans faux
+compartiment, avec identité stable, versions, noms, identifiants, événements et
+provenance.
+
+## État des preuves
 
 ```text
-FROZEN_SQL_SHA256
-fb1e82536717082092e762706f29d51dd834dd5b2f0ea1b10193665f9f48bda0
-
-REFERENCE_REGISTRY_RUN
-30989910122 — SUCCESS
-
-GOVERNED_MIGRATION_RUN
-30989910488 — SUCCESS
-
-FROZEN_MIGRATION_GUARD_RUN
-30989910399 — SUCCESS
-
-COLLECTOR_TESTS_RUN
-30989909622 — SUCCESS
+MIGRATION_015_PREPARED: YES
+ADR_030_PREPARED: YES
+UNIT_TESTS_PREPARED: YES
+POSTGRES_FIXTURES_PREPARED: YES
+CI_RESULT: PENDING
+PRODUCTION_DEPLOYMENT: NO
+HISTORY_LOADED: NO
 ```
 
-## Limites conservées
-
-Le runner n’acquiert pas encore de verrou advisory global pendant tout le plan et ne prétend pas couvrir exhaustivement toutes les bases historiques partiellement initialisées ou incompatibles. L’exécution concurrente en production reste interdite. Aucun environnement persistant, stockage brut durable, merge ou déploiement n’a été réalisé.
-
-## Prochaine porte fonctionnelle
-
-`OF-DATA-001 — Stabiliser Fund / SubFund / ShareClass`, uniquement après une nouvelle autorisation explicite, un nouvel audit dynamique et des critères de modélisation approuvés.
+Aucun statut de réussite technique n’est attribué avant les résultats du workflow
+sur le futur HEAD technique.

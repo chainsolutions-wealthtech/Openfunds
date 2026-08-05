@@ -1,35 +1,33 @@
 # État de la boucle
 
 ```text
-LOOP_ID: OF-LOOP-ARCH-005
-TASK_ID: OF-ARCH-005
-LOOP_TYPE: TECHNICAL_MIGRATION_GOVERNANCE
-STATUS: VERIFIED_COMPLETE
-START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
-VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
+LOOP_ID: OF-LOOP-DATA-001
+TASK_ID: OF-DATA-001
+LOOP_TYPE: CANONICAL_FUND_DOMAIN
+STATUS: IMPLEMENTATION_IN_PROGRESS
+START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
+VALIDATED_TECHNICAL_HEAD: PENDING
 BRANCH: architecture/africafunds-country-indicators-v0.1
-OF_DATA_001_STARTED: NO
 PRODUCTION_DEPLOYED: NO
+FUND_HISTORY_LOADED: NO
 ```
 
-## Objectif atteint
+## Hypothèse
 
-La migration générée `012` est désormais un artefact Git figé, produit depuis un snapshot d’authoring figé. Le générateur est un vérificateur en lecture seule pour les migrations historiques et un outil create-only pour une future migration forward.
+Un modèle unique peut couvrir fonds autonomes et umbrellas sans faux
+compartiment, tout en séparant identité, profils, noms, identifiants, relations
+et événements.
 
-## Preuves
+## Implémentation préparée
 
-- SQL figé et checksum exact vérifié ;
-- manifest check-only ;
-- tests unitaires du générateur et du runner ;
-- PostgreSQL 16 vide puis double application ;
-- contrat runtime et ledger vérifiés ;
-- adoption d’une base initialisée sans ledger ;
-- workflows du HEAD technique tous `SUCCESS`.
+- migration gouvernée `015` ;
+- `ADR-030` ;
+- tests unitaires et PostgreSQL 16 ;
+- fixtures Maroc, Tunisie et Nigeria ;
+- contrôles de non-duplication et de cardinalité.
 
-## Résidus hors boucle
+## Porte actuelle
 
-Advisory lock global, inspection structurée des bases legacy partielles, production persistante et merge de la PR nº 1 restent hors périmètre.
-
-## Sortie
-
-Boucle fermée. Aucune action fonctionnelle suivante n’est autorisée sans nouvelle instruction.
+Le statut reste `IMPLEMENTATION_IN_PROGRESS` tant que le commit technique et ses
+workflows ne sont pas tous vérifiés. Aucun statut `VERIFIED_COMPLETE` n’est
+revendiqué avant ces preuves.

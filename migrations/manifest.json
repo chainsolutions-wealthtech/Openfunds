@@ -37,10 +37,11 @@
       }
     },
     {"order": 130, "id": "013_CANONICAL_ENDPOINT_MODEL", "path": "schemas/reference/013_canonical_endpoint_model.sql"},
-    {"order": 140, "id": "014_BUSINESS_DATE_SEMANTICS", "path": "schemas/reference/014_business_date_semantics.sql"}
+    {"order": 140, "id": "014_BUSINESS_DATE_SEMANTICS", "path": "schemas/reference/014_business_date_semantics.sql"},
+    {"order": 150, "id": "015_FUND_SUBFUND_SHARECLASS_CORE", "path": "schemas/fund/015_fund_subfund_shareclass_core.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
-    {"path": "schemas/taxonomy/fund_relationship_information_model_v0.1.sql", "reason": "DRAFT_PENDING_OF_DATA_001_FUND_SUBFUND_SHARECLASS_DECISION"}
+    {"path": "schemas/taxonomy/fund_relationship_information_model_v0.1.sql", "reason": "SUPERSEDED_DRAFT_PRESERVED_FOR_HISTORY; CANONICAL_RUNTIME_MODEL_IS_MIGRATION_015"}
   ]
 }

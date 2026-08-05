@@ -1,23 +1,26 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-LOOP-ARCH-005_COMPLETED
-STATUS: STOPPED_PENDING_USER_AUTHORIZATION
-NEXT_CANDIDATE_TASK: OF-DATA-001
+CURRENT_LOOP: OF-LOOP-DATA-001
+TASK_ID: OF-DATA-001
+STATUS: TECHNICAL_COMMIT_AND_CI_PENDING
 ```
 
-## Action candidate
+## Action immédiate
 
-Stabiliser le modèle `Fund / SubFund / ShareClass`, les structures sans compartiment, les identités/noms/alias et les événements de fusion ou transfert.
+Créer un commit fast-forward sur la branche de contrôle avec la migration `015`,
+le manifeste, `ADR-030`, les tests et les documents de boucle, puis attendre et
+inspecter les workflows GitHub Actions.
 
-## Préconditions
+## Décision conditionnelle
 
-- résoudre à nouveau le HEAD, les branches et les deux PR ;
-- vérifier les rapports `OF-ARCH-005` et les workflows du HEAD technique ;
-- définir exemples juridiques Maroc, Tunisie, Nigeria et cas de fonds sans compartiment ;
-- approuver cardinalités, temporalité, provenance, migration et tests de non-duplication ;
-- rechercher la collision de l’identifiant et créer une nouvelle boucle.
+- CI verte : documenter la clôture et passer `OF-DATA-001` à
+  `VERIFIED_COMPLETE` ;
+- CI rouge : conserver les preuves, analyser les logs et corriger uniquement par
+  un nouveau commit forward.
 
 ## Interdictions maintenues
 
-Ne pas fusionner ou retargeter la PR nº 1, modifier la PR nº 2, travailler sur `main`, déployer ou charger des historiques avant autorisation explicite.
+Ne pas charger de fonds réels, commencer `OF-DATA-002`, modifier la PR nº 2,
+retargeter ou fusionner la PR nº 1, travailler sur `main`, créer une branche ou
+une PR, réécrire l’historique ou déployer.
