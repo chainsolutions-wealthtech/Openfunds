@@ -1,0 +1,13 @@
+Code;Produit;Périmètre;Entrées;Méthode;Fréquence;Devise;Utilité;Fonds concernés;Historique;Statut;Contrôle clé
+AF_{ISO3}_CASH;Indice cash local;Pays/zone;Taux overnight/7J/TMM + calendrier;Capitalisation documentée;Quotidienne;Locale;Taux sans risque;Monétaire;10 ans;Obligatoire;Continuité des taux
+AF_{ISO3}_TBILL_3M_TR;T-Bill 3M roulant;Pays;Adjudications, règlement, échéance;Renouvellement périodique;Hebdo/quotidienne;Locale;Benchmark monétaire investissable;Monétaire;10 ans;Si marché actif;Trous d’adjudication
+AF_{ISO3}_SOV_0_1Y_TR;Souverain 0–1A TR;Pays;Titres, prix/courbe, coupons, encours;Total Return pondéré;Quotidienne;Locale;Obligataire très court;Monétaire/obligataire CT;10 ans;Obligatoire;Coupon couru
+AF_{ISO3}_SOV_1_3Y_TR;Souverain 1–3A TR;Pays;Socle D10;Total Return par segment;Quotidienne;Locale;Obligataire court;Obligataire CT;10 ans;Obligatoire;Éligibilité
+AF_{ISO3}_SOV_3_5Y_TR;Souverain 3–5A TR;Pays;Socle D10;Total Return par segment;Quotidienne;Locale;Obligataire moyen;Obligataire MT;10 ans;Obligatoire;Duration
+AF_{ISO3}_SOV_5_7Y_TR;Souverain 5–7A TR;Pays;Socle D10;Total Return par segment;Quotidienne;Locale;Obligataire moyen-long;Obligataire LT;10 ans;Selon profondeur;Liquidité
+AF_{ISO3}_SOV_7_10Y_TR;Souverain 7–10A TR;Pays;Socle D10;Total Return par segment;Quotidienne;Locale;Obligataire long;Obligataire LT;10 ans;Selon profondeur;Liquidité
+AF_{ISO3}_SOV_ALL_TR;Souverain global TR;Pays;Tous titres éligibles;Pondération par encours plafonné;Quotidienne;Locale;Benchmark obligataire global;Tous obligataires;10 ans;Obligatoire;Rebalancement
+AF_{ISO3}_EQUITY_TR;Actions nationales TR;Pays;Cours, dividendes, corporate actions;Dividendes réinvestis;Quotidienne;Locale;Benchmark actions;Actions;10 ans;Si bourse active;Diviseur
+AF_{ISO3}_CAT_{CAT}_EW;Catégorie fonds EW;Pays/catégorie;VL et événements;Moyenne équipondérée;Quotidienne/mensuelle;Locale;Comparaison de pairs;Toutes;5–10 ans;Si OPCVM;Biais de survivance
+AF_{ISO3}_CAT_{CAT}_AUM;Catégorie fonds AUM;Pays/catégorie;VL et AUM;Pondération AUM retardée;Quotidienne/mensuelle;Locale;Marché réellement investi;Toutes;5–10 ans;Si OPCVM;Concentration
+AF_{ISO3}_COUNTRY_SCORE;Score pays;Pays;D03–D09 et D16;Score versionné;Mensuelle/trimestrielle;Score;Comparaison macro-risque;Toutes;10 ans;Analytique;Pas d’imputation silencieuse

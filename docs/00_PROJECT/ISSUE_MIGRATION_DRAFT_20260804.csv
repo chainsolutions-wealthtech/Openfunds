@@ -1,0 +1,24 @@
+PROPOSED_ISSUE_KEY;SOURCE_TASK_ID;TITLE;PRIORITY;CURRENT_STATUS;DOMAIN;DEPENDENCIES;MIGRATION_READINESS;COLLISION_STATUS;RECOMMENDED_PROJECT_STATUS;NOTES
+OF-ARCH-001;OF-ARCH-001;Choose governed reference authoring source;P0_CRITIQUE;A_ARBITRER;Architecture/Governance;ADR-021;READY_FOR_ISSUE;NO_COLLISION;BACKLOG;Preserve as first task
+OF-SOURCE-001;OF-SOURCE-001;Synchronize BCEAO/BEAC CSV and SQL representations;P0_CRITIQUE;A_CORRIGER;Sources/References;OF-ARCH-001;BLOCKED_BY_DEPENDENCY;NO_COLLISION;BLOCKED;Second task
+OF-ARCH-002;OF-ARCH-002;Unify endpoint model;P0_CRITIQUE;A_CORRIGER;Architecture;OF-ARCH-001;BLOCKED_BY_DEPENDENCY;NO_COLLISION;BLOCKED;Third task
+OF-ARCH-003;OF-ARCH-003;Define unknown business-date semantics;P0_CRITIQUE;A_ARBITRER;Architecture/Temporal;ADR-022;READY_FOR_ISSUE;NO_COLLISION;BACKLOG;Fourth task
+OF-ARCH-004;OF-ARCH-004;Adopt governed migration strategy;P0_CRITIQUE;PROPOSE;Architecture/Database;"OF-ARCH-001;OF-ARCH-002;ADR-023";BLOCKED_BY_DEPENDENCY;NO_COLLISION;BLOCKED;"Fifth task; no runner selected"
+OF-DATA-001;OF-DATA-001;Stabilize Fund/SubFund/ShareClass;P0_CRITIQUE;A_ARBITRER;Data model;ADR-009;READY_FOR_ISSUE;NO_COLLISION;BACKLOG;Required before fund imports
+OF-DATA-002;OF-DATA-002;Populate canonical data dictionary;P0_CRITIQUE;EN_COURS;Data governance;"OF-DATA-001;ADR-024";BLOCKED_BY_DEPENDENCY;NO_COLLISION;IN_PROGRESS;"Structure documented; catalogue not populated"
+OF-DATA-003;OF-DATA-003;Centralize D00-D17 definitions;P0_CRITIQUE;EN_COURS;Data governance;OF-DATA-002;BLOCKED_BY_DEPENDENCY;NO_COLLISION;IN_PROGRESS;Markdown definitions not one master catalogue
+OF-MAP-001;OF-MAP-001;Integrate official Openfunds catalogue;P0_CRITIQUE;BLOQUE;Mapping;"Official version/license;OF-DATA-002";BLOCKED_EXTERNAL;NO_COLLISION;BLOCKED;No official catalogue in repo
+OF-MAP-002;OF-MAP-002;Build Openfunds-to-canonical mapping;P0_CRITIQUE;BLOQUE;Mapping;"OF-MAP-001;OF-DATA-001;OF-DATA-002";BLOCKED_BY_DEPENDENCY;NO_COLLISION;BLOCKED;No field mapping yet
+OF-SOURCE-002;OF-SOURCE-002;Complete institutions for 54 countries;P1_HAUTE;EN_COURS;Sources;OF-ARCH-001;BLOCKED_BY_DEPENDENCY;NO_COLLISION;IN_PROGRESS;Research queue can accelerate later
+OF-SOURCE-003;OF-SOURCE-003;Verify initial indicator-source mappings;P1_HAUTE;EN_COURS;Sources;OF-ARCH-001;BLOCKED_BY_DEPENDENCY;NO_COLLISION;IN_PROGRESS;Verify exact endpoint/series/frequency
+OF-IMPORT-001;OF-IMPORT-001;Configure persistent PostgreSQL;P1_HAUTE;BLOQUE;Persistence;"OF-ARCH-004;environment";BLOCKED_EXTERNAL;NO_COLLISION;BLOCKED;No production secret/environment
+OF-IMPORT-002;OF-IMPORT-002;Configure immutable raw storage;P1_HAUTE;BLOQUE;Provenance;Storage environment;BLOCKED_EXTERNAL;NO_COLLISION;BLOCKED;GitHub artifacts are temporary
+OF-HIST-001;OF-HIST-001;Build durable FX history coverage;P1_HAUTE;PROPOSE;History;"OF-IMPORT-001;OF-IMPORT-002";BLOCKED_BY_DEPENDENCY;NO_COLLISION;BLOCKED;Collection-tested snapshots only
+OF-IMPORT-003;OF-IMPORT-003;Integrate Tunisia OPCVM source base;P1_HAUTE;A_ANALYSER;Funds import;"OF-DATA-001;provenance";BLOCKED_BY_DEPENDENCY;NO_COLLISION;BACKLOG;External source analysed only
+OF-IMPORT-004;OF-IMPORT-004;Integrate Nigeria OPCVM archives;P1_HAUTE;A_ANALYSER;Funds import;"OF-DATA-001;SEC access";BLOCKED_BY_DEPENDENCY;NO_COLLISION;BACKLOG;No complete repository loader
+OF-QA-001;OF-QA-001;Make quality rules executable;P1_HAUTE;EN_COURS;Quality;Canonical models;PARTIAL;NO_COLLISION;IN_PROGRESS;Initial machine-readable rules only
+OF-DEPLOY-001;OF-DEPLOY-001;Prepare PR #1 baseline integration;P1_HAUTE;EN_COURS;Git governance;"Critical decisions;CI;review";BLOCKED_BY_REVIEW;NO_COLLISION;IN_PROGRESS;Current PR changed-file count 122
+TBD_GEO_LOCAL_MARKET;OF-GEO-001_PROPOSED;Reconcile NATIONAL and LOCAL_MARKET;P0_PROPOSED;PROPOSE;Geography/Market;"ADR-010;ADR-011";NOT_READY_ID_COLLISION;COLLIDES_WITH_EXISTING_OF-GEO-001;BLOCKED;Choose a new stable OF-* identifier before issue creation
+OF-SCOPE-001;OF-SCOPE-001;Introduce investment scope;P0_PROPOSED;PROPOSE;Funds/Classification;"Fund model;benchmark rules";READY_AS_DRAFT_ONLY;NO_COLLISION_OBSERVED;BACKLOG;Do not implement in this audit
+OF-EXPORT-001;OF-EXPORT-001;Make workbook export reproducible;P1_PROPOSED;PROPOSE;Data export/Quality;"Canonical inputs;generator";READY_AS_DRAFT_ONLY;NO_COLLISION_OBSERVED;BACKLOG;Workbook remains derived and non-canonical
+OF-DOC-002;OF-DOC-002;Realign documentary status and immutable baseline;P1_PROPOSED;PROPOSE;Documentation/Governance;None;PARTIALLY_DOCUMENTED_BY_BASELINE;NO_COLLISION_OBSERVED;BACKLOG;"This audit establishes baseline; ongoing alignment remains governed"

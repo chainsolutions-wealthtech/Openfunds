@@ -1,0 +1,270 @@
+name: BEAC FX Live Smoke
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/beac-fx-live-smoke.yml"
+      - "collectors/beac_fx.py"
+      - "collectors/fx_html_common.py"
+      - "collectors/fx_canonical.py"
+      - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
+      - "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"
+      - "schemas/reference/005_provider_series_and_collection_specifications.sql"
+      - "schemas/reference/007_source_endpoint_reconciliation.sql"
+      - "schemas/reference/009_beac_fx_collection_seed.sql"
+      - "schemas/reference/010_beac_fx_parser_v0_2.sql"
+      - "schemas/reference/011_beac_fx_collection_validation.sql"
+      - "schemas/market/006_fx_observation_lineage.sql"
+      - "tests/sql/fx_loader_bootstrap.sql"
+      - "tests/sql/beac_fx_loader_seed.sql"
+  pull_request:
+    paths:
+      - ".github/workflows/beac-fx-live-smoke.yml"
+      - "collectors/beac_fx.py"
+      - "collectors/fx_html_common.py"
+      - "collectors/fx_canonical.py"
+      - "collectors/common.py"
+      - "loaders/fx_postgres.py"
+      - "requirements/collectors-postgres.txt"
+      - "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"
+      - "schemas/reference/005_provider_series_and_collection_specifications.sql"
+      - "schemas/reference/007_source_endpoint_reconciliation.sql"
+      - "schemas/reference/009_beac_fx_collection_seed.sql"
+      - "schemas/reference/010_beac_fx_parser_v0_2.sql"
+      - "schemas/reference/011_beac_fx_collection_validation.sql"
+      - "schemas/market/006_fx_observation_lineage.sql"
+      - "tests/sql/fx_loader_bootstrap.sql"
+      - "tests/sql/beac_fx_loader_seed.sql"
+
+permissions:
+  contents: read
+
+jobs:
+  live-smoke:
+    name: Live BEAC FX controlled run
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
+      PGPASSWORD: openfunds
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install PostgreSQL loader dependency
+        run: python -m pip install -r requirements/collectors-postgres.txt
+
+      - name: Run first live collection
+        run: |
+          rm -rf artifacts/live/beac_fx
+          python -m collectors.beac_fx --output-dir artifacts/live/beac_fx
+
+      - name: Run second live collection for idempotence
+        run: |
+          python -m collectors.beac_fx --output-dir artifacts/live/beac_fx
+
+      - name: Validate manifests and raw artifacts
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("artifacts/live/beac_fx")
+          manifests = sorted((root / "manifests").glob("*.json"))
+          raw_files = sorted((root / "raw").glob("*"))
+
+          assert manifests, "No BEAC collection manifest produced"
+          assert raw_files, "No BEAC raw artifact produced"
+
+          manifest = json.loads(manifests[-1].read_text(encoding="utf-8"))
+          raw_path = Path(manifest["raw_artifact"]["storage_path"])
+          assert raw_path.exists(), f"Raw artifact missing: {raw_path}"
+
+          digest = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+          assert digest == manifest["raw_artifact"]["sha256"], "SHA256 mismatch"
+          assert manifest["run_status"] == "SUCCESS", manifest
+          assert manifest["observations"], "No BEAC observations parsed"
+          assert not manifest["warnings"], manifest["warnings"]
+          assert not manifest["errors"], manifest["errors"]
+          assert manifest["parser_version"] == "0.2.0"
+          assert all(row["value_date"] for row in manifest["observations"]), "Missing value date"
+          assert all(
+              row["quote_convention_source"] == "XAF_PER_1_FOREIGN_CURRENCY"
+              for row in manifest["observations"]
+          )
+
+          codes = {row["canonical_currency_code"] for row in manifest["observations"]}
+          assert {"EUR", "USD"}.issubset(codes), codes
+          assert len(raw_files) == 1, f"Expected one content-addressed raw file, got {len(raw_files)}"
+
+          print(json.dumps({
+              "run_status": manifest["run_status"],
+              "parser_version": manifest["parser_version"],
+              "sha256": digest,
+              "byte_size": manifest["raw_artifact"]["byte_size"],
+              "media_type": manifest["raw_artifact"]["media_type"],
+              "observation_count": len(manifest["observations"]),
+              "currencies": sorted(codes),
+              "value_dates": sorted({row["value_date"] for row in manifest["observations"]}),
+              "warnings": manifest["warnings"],
+              "raw_file_count_after_two_runs": len(raw_files),
+          }, indent=2))
+          PY
+
+      - name: Build canonical XAF EUR and XAF USD staging observations
+        run: |
+          MANIFEST=$(find artifacts/live/beac_fx/manifests -name '*.json' | sort | tail -n 1)
+          python -m collectors.fx_canonical \
+            --input-manifest "$MANIFEST" \
+            --local-currency XAF \
+            --output artifacts/live/beac_fx/staging/canonical_fx.json
+
+      - name: Validate canonical XAF staging observations
+        run: |
+          python - <<'PY'
+          import json
+          from decimal import Decimal
+          from pathlib import Path
+
+          path = Path("artifacts/live/beac_fx/staging/canonical_fx.json")
+          payload = json.loads(path.read_text(encoding="utf-8"))
+          observations = payload["observations"]
+          by_pair = {row["canonical_pair_code"]: row for row in observations}
+
+          assert payload["methodology_version"] == "FX_CANONICAL_0.1.0"
+          assert payload["observation_count"] == 2
+          assert set(by_pair) == {"XAF_EUR", "XAF_USD"}
+          assert all(row["source_currency_code"] == "XAF" for row in observations)
+          assert all(row["value_date"] for row in observations)
+          assert all(Decimal(row["canonical_rate"]) > 0 for row in observations)
+          assert all(row["source_raw_sha256"] for row in observations)
+          assert all(row["source_parser_version"] == "0.2.0" for row in observations)
+          assert all(
+              row["source_quote_convention"] == "XAF_PER_1_FOREIGN_CURRENCY"
+              for row in observations
+          )
+          assert all(
+              row["transformation_formula"]
+              == "1 / ((PROVIDER_BUY_RATE + PROVIDER_SELL_RATE) / 2)"
+              for row in observations
+          )
+
+          print(json.dumps(payload, indent=2))
+          PY
+
+      - name: Apply canonical PostgreSQL schemas and BEAC seed
+        run: |
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/fx_loader_bootstrap.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series_and_collection_specifications.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/market/006_fx_observation_lineage.sql
+          psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/beac_fx_loader_seed.sql
+
+      - name: Load live BEAC bundle twice into PostgreSQL
+        run: |
+          MANIFEST=$(find artifacts/live/beac_fx/manifests -name '*.json' | sort | tail -n 1)
+          CANONICAL=artifacts/live/beac_fx/staging/canonical_fx.json
+          RAW=$(find artifacts/live/beac_fx/raw -type f | sort | tail -n 1)
+
+          python -m loaders.fx_postgres \
+            --profile BEAC_XAF \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/live/beac_fx/first-database-load.json
+
+          python -m loaders.fx_postgres \
+            --profile BEAC_XAF \
+            --dsn "$DATABASE_URL" \
+            --observed-manifest "$MANIFEST" \
+            --canonical-staging "$CANONICAL" \
+            --storage-uri "$RAW" \
+            --summary-output artifacts/live/beac_fx/second-database-load.json
+
+      - name: Validate live BEAC PostgreSQL load
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import psycopg
+
+          first = json.loads(Path("artifacts/live/beac_fx/first-database-load.json").read_text())
+          second = json.loads(Path("artifacts/live/beac_fx/second-database-load.json").read_text())
+          assert first["fx_load_profile"] == "BEAC_XAF", first
+          assert first["local_currency_code"] == "XAF", first
+          assert first["actions"] == {"INSERTED": 6}, first
+          assert second["actions"] == {"SKIPPED_IDENTICAL": 6}, second
+          assert first["collection_run_id"] == second["collection_run_id"]
+          assert first["raw_artifact_id"] == second["raw_artifact_id"]
+
+          with psycopg.connect("postgresql://openfunds:openfunds@localhost:5432/openfunds") as conn:
+              rows = conn.execute("""
+                  select
+                      sc.iso_code as source_currency,
+                      tc.iso_code as target_currency,
+                      f.rate_type,
+                      f.observation_kind,
+                      f.fx_rate::text,
+                      f.observation_date::text,
+                      f.source_raw_sha256
+                  from market.current_fx_observation f
+                  join ref.currency sc on sc.currency_id = f.source_currency_id
+                  join ref.currency tc on tc.currency_id = f.target_currency_id
+                  order by 1, 2, 3
+              """).fetchall()
+              run_count = conn.execute("select count(*) from source.collection_run").fetchone()[0]
+              artifact_count = conn.execute("select count(*) from source.raw_artifact").fetchone()[0]
+
+          assert len(rows) == 6, rows
+          assert sum(1 for row in rows if row[3] == "OBSERVED") == 4
+          assert sum(1 for row in rows if row[3] == "CALCULATED") == 2
+          assert sum(1 for row in rows if row[0] == "XAF") == 2
+          assert sum(1 for row in rows if row[1] == "XAF") == 4
+          assert not any(row[0] == "XOF" or row[1] == "XOF" for row in rows)
+          assert run_count == 1
+          assert artifact_count == 1
+          assert all(row[5] for row in rows)
+          assert all(row[6] for row in rows)
+          print(json.dumps({
+              "first_load": first,
+              "second_load": second,
+              "database_rows": rows,
+          }, indent=2, default=str))
+          PY
+
+      - name: Upload controlled BEAC live artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: beac-fx-live-smoke-${{ github.run_id }}
+          path: artifacts/live/beac_fx
+          if-no-files-found: warn
+          retention-days: 30

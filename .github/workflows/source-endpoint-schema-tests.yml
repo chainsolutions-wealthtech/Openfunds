@@ -1,0 +1,103 @@
+name: Source Endpoint Schema Tests
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "schemas/reference/003_organizations_and_roles.sql"
+      - "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"
+      - "schemas/reference/007_source_endpoint_reconciliation.sql"
+      - "schemas/reference/013_canonical_endpoint_model.sql"
+      - "tests/sql/source_endpoint_*.sql"
+      - ".github/workflows/source-endpoint-schema-tests.yml"
+  pull_request:
+    paths:
+      - "schemas/reference/003_organizations_and_roles.sql"
+      - "schemas/reference/004_source_endpoints_and_indicator_mapping.sql"
+      - "schemas/reference/007_source_endpoint_reconciliation.sql"
+      - "schemas/reference/013_canonical_endpoint_model.sql"
+      - "tests/sql/source_endpoint_*.sql"
+      - ".github/workflows/source-endpoint-schema-tests.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  reconciliation-order-tests:
+    name: Endpoint schema order independence and canonical contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: openfunds
+          POSTGRES_PASSWORD: openfunds
+          POSTGRES_DB: openfunds
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      PGPASSWORD: openfunds
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Create isolated test databases
+        run: |
+          createdb -h localhost -U openfunds endpoint_v003
+          createdb -h localhost -U openfunds endpoint_v004
+
+      - name: Test production 003 then 004 then canonical contract
+        run: |
+          DB=postgresql://openfunds:openfunds@localhost:5432/endpoint_v003
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/003_organizations_and_roles.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_seed.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/004_source_endpoints_and_indicator_mapping.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series_and_collection_specifications.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/013_canonical_endpoint_model.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_assert.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_canonical_assert.sql
+
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/004_source_endpoints_and_indicator_mapping.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/013_canonical_endpoint_model.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v003_assert.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_canonical_assert.sql
+
+      - name: Test relational 004 model then canonical contract
+        run: |
+          DB=postgresql://openfunds:openfunds@localhost:5432/endpoint_v004
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v004_prerequisites.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/004_source_endpoints_and_indicator_mapping.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v004_seed.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/005_provider_series_and_collection_specifications.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/013_canonical_endpoint_model.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v004_assert.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_canonical_assert.sql
+
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/007_source_endpoint_reconciliation.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f schemas/reference/013_canonical_endpoint_model.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_v004_assert.sql
+          psql "$DB" -v ON_ERROR_STOP=1 -f tests/sql/source_endpoint_canonical_assert.sql
+
+      - name: Print canonical endpoint contracts
+        run: |
+          echo "V003-THEN-004 RESULT"
+          psql postgresql://openfunds:openfunds@localhost:5432/endpoint_v003 \
+            -c "select endpoint_code, canonical_url, file_formats, expected_frequency, history_start, validation_status from source.endpoint_contract order by endpoint_code"
+
+          echo "V004-FIRST RESULT"
+          psql postgresql://openfunds:openfunds@localhost:5432/endpoint_v004 \
+            -c "select endpoint_code, scope_type, scope_code, canonical_url, file_formats, expected_frequency, history_start, validation_status from source.endpoint_contract order by endpoint_code"

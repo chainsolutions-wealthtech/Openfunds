@@ -1,0 +1,26 @@
+METRIC_CODE;METRIC_NAME_FR;FUND_SERIES_REQUIRED;PEER_GROUP_REQUIRED;CATEGORY_WTI_REQUIRED;PRIMARY_BENCHMARK_REQUIRED;SECONDARY_BENCHMARK_REQUIRED;RISK_FREE_RATE_REQUIRED;MAR_REQUIRED;COMPARISON_FAMILY;METHODOLOGY_CODE;STATUS;NOTES
+TOTAL_RETURN;Performance totale;True;False;False;False;False;False;False;FUND;TOTAL_RETURN_V1;READY_STRUCTURE;Série du fonds uniquement
+ANNUALIZED_RETURN;Performance annualisée;True;False;False;False;False;False;False;FUND;ANNUALIZED_RETURN_V1;READY_STRUCTURE;Série du fonds uniquement
+VOLATILITY;Volatilité;True;False;False;False;False;False;False;FUND;ANNUALIZED_VOLATILITY_V1;READY_STRUCTURE;Série du fonds uniquement
+MAX_DRAWDOWN;Perte maximale;True;False;False;False;False;False;False;FUND;MAX_DRAWDOWN_V1;READY_STRUCTURE;Série du fonds uniquement
+HISTORICAL_VAR;VaR historique;True;False;False;False;False;False;False;FUND;HISTORICAL_VAR_V1;METHODOLOGY_TO_VALIDATE;Série du fonds et niveau de confiance
+PEER_RANK;Rang dans la catégorie;True;True;False;False;False;False;False;CATEGORY;RANK_TOTAL_RETURN_DESC_V1;READY_STRUCTURE;Même catégorie, période et convention de devise
+PEER_PERCENTILE;Percentile dans la catégorie;True;True;False;False;False;False;False;CATEGORY;PEER_PERCENTILE_V1;READY_STRUCTURE;Même univers éligible que le rang
+PEER_QUARTILE;Quartile dans la catégorie;True;True;False;False;False;False;False;CATEGORY;PEER_QUARTILE_V1;READY_STRUCTURE;Même univers éligible que le rang
+PEER_MEAN_GAP;Écart à la moyenne des pairs;True;True;False;False;False;False;False;CATEGORY;PEER_MEAN_GAP_V1;READY_STRUCTURE;Moyenne arithmétique de la catégorie
+CATEGORY_EXCESS_RETURN;Surperformance face à la catégorie;True;False;True;False;False;False;False;CATEGORY;CATEGORY_EXCESS_RETURN_V1;READY_STRUCTURE;Fonds moins WTI de catégorie
+CATEGORY_CORRELATION;Corrélation à la catégorie;True;False;True;False;False;False;False;CATEGORY;CATEGORY_CORRELATION_V1;READY_STRUCTURE;WTI de catégorie requis
+CATEGORY_TRACKING_ERROR;Tracking error face à la catégorie;True;False;True;False;False;False;False;CATEGORY;CATEGORY_TRACKING_ERROR_V1;READY_STRUCTURE;Écart des rendements au WTI
+ACTIVE_RETURN;Performance active;True;False;False;True;False;False;False;MARKET;ACTIVE_RETURN_V1;READY_STRUCTURE;Fonds moins benchmark principal
+TRACKING_ERROR;Tracking error de marché;True;False;False;True;False;False;False;MARKET;MARKET_TRACKING_ERROR_V1;READY_STRUCTURE;Benchmark principal requis
+INFORMATION_RATIO;Ratio d’information;True;False;False;True;False;False;False;MARKET;INFORMATION_RATIO_V1;READY_STRUCTURE;Performance active divisée par tracking error
+BETA;Bêta;True;False;False;True;False;False;False;MARKET;BETA_V1;READY_STRUCTURE;Benchmark principal requis
+R_SQUARED;R²;True;False;False;True;False;False;False;MARKET;R_SQUARED_V1;READY_STRUCTURE;Benchmark principal requis
+MARKET_CORRELATION;Corrélation au marché;True;False;False;True;False;False;False;MARKET;MARKET_CORRELATION_V1;READY_STRUCTURE;Benchmark principal requis
+UPSIDE_CAPTURE;Capture haussière;True;False;False;True;False;False;False;MARKET;UPSIDE_CAPTURE_V1;READY_STRUCTURE;Périodes positives du benchmark
+DOWNSIDE_CAPTURE;Capture baissière;True;False;False;True;False;False;False;MARKET;DOWNSIDE_CAPTURE_V1;READY_STRUCTURE;Périodes négatives du benchmark
+SHARPE;Ratio de Sharpe;True;False;False;False;False;True;False;RISK_ADJUSTED;SHARPE_V1;READY_STRUCTURE;Taux sans risque requis
+TREYNOR;Ratio de Treynor;True;False;False;True;False;True;False;RISK_ADJUSTED;TREYNOR_V1;READY_STRUCTURE;Bêta et taux sans risque requis
+JENSEN_ALPHA;Alpha de Jensen;True;False;False;True;False;True;False;RISK_ADJUSTED;JENSEN_ALPHA_V1;READY_STRUCTURE;Benchmark, bêta et taux sans risque requis
+M_SQUARED;Mesure M²;True;False;False;True;False;True;False;RISK_ADJUSTED;M_SQUARED_V1;METHODOLOGY_TO_VALIDATE;Sharpe et volatilité du benchmark
+SORTINO;Ratio de Sortino;True;False;False;False;False;False;True;RISK_ADJUSTED;SORTINO_V1;READY_STRUCTURE;Rendement minimal acceptable requis

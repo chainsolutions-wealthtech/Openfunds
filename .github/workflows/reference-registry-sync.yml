@@ -1,0 +1,39 @@
+name: Reference Registry Synchronization
+on:
+  push:
+    branches: [architecture/africafunds-country-indicators-v0.1]
+    paths: ["data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv","scripts/generate_validated_fx_reference_sql.py","tests/test_validated_fx_reference_registry.py","tests/sql/validated_fx_reference_assert.sql",".github/workflows/reference-registry-sync.yml"]
+  pull_request:
+    paths: ["data/reference/VALIDATED_FX_REFERENCE_REGISTRY.csv","scripts/generate_validated_fx_reference_sql.py","tests/test_validated_fx_reference_registry.py","tests/sql/validated_fx_reference_assert.sql",".github/workflows/reference-registry-sync.yml"]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  deterministic-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - run: python -m py_compile scripts/generate_validated_fx_reference_sql.py tests/test_validated_fx_reference_registry.py
+      - run: python scripts/generate_validated_fx_reference_sql.py
+      - run: python scripts/generate_validated_fx_reference_sql.py --check
+      - run: python -m unittest tests/test_validated_fx_reference_registry.py -v
+  postgres-idempotence:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: {POSTGRES_USER: openfunds, POSTGRES_PASSWORD: openfunds, POSTGRES_DB: openfunds}
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U openfunds -d openfunds" --health-interval 5s --health-timeout 5s --health-retries 10
+    env: {DATABASE_URL: "postgresql://openfunds:openfunds@localhost:5432/openfunds", PGPASSWORD: openfunds}
+    steps:
+      - uses: actions/checkout@v4
+      - run: python scripts/generate_validated_fx_reference_sql.py
+      - name: Apply schemas and historical seeds
+        run: |
+          for f in 003_organizations_and_roles.sql 004_source_endpoints_and_indicator_mapping.sql 007_source_endpoint_reconciliation.sql 005_provider_series_and_collection_specifications.sql 008_bceao_fx_collection_seed.sql 009_beac_fx_collection_seed.sql 010_beac_fx_parser_v0_2.sql 011_beac_fx_collection_validation.sql; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f "schemas/reference/$f"; done
+      - name: Apply generated synchronization twice
+        run: |
+          for i in 1 2; do psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f schemas/reference/012_validated_fx_reference_registry.sql; psql "$DATABASE_URL" -v ON_ERROR_STOP=1 -f tests/sql/validated_fx_reference_assert.sql; done

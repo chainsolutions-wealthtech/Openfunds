@@ -1,0 +1,15 @@
+ID;Niveau;Règle;Test;Action si échec;Sévérité
+Q001;Document;Fichier lisible;Taille > 0 et ouverture réussie;Quarantaine et reprise;Critique
+Q002;Document;Déduplication;SHA-256 unique;Ne pas réimporter;Haute
+Q003;Série;Unité obligatoire;Unité et multiplicateur non nuls;Bloquer publication;Critique
+Q004;Observation;Date cohérente;Date compatible avec fréquence;Marquer suspecte;Haute
+Q005;Observation;Nombre interprétable;Virgule, point, espaces et NBSP gérés;Quarantaine ciblée;Critique
+Q006;Observation;Révisions conservées;Clé avec vintage;Créer nouvelle version;Critique
+Q007;Marché;Prix/rendement plausible;Bornes par instrument;Alerte sans correction aveugle;Haute
+Q008;Fonds;Unicité fonds/date/classe;Clé canonique unique;Résolution entité;Critique
+Q009;Fonds;Rapprochement AUM;Somme = total source;Alerte et revue;Haute
+Q010;Courbe;Ténors cohérents;Ténors croissants;Rejeter courbe;Haute
+Q011;Indice;Pas de biais futur;Pondérations connues avant période;Bloquer recalcul;Critique
+Q012;Source;URL et institution présentes;Champs non nuls;Statut incomplet;Haute
+Q013;Fraîcheur;Respect SLA;Dernière observation vs fréquence;Alerte;Moyenne
+Q014;Licence;Droits documentés;Licence renseignée;Limiter diffusion;Haute
