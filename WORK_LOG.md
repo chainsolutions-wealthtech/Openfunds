@@ -1,30 +1,36 @@
 # Journal de travail Loop Engineering
 
-## Boucle OF-LOOP-DOC-003 — 2026-08-05
+## Boucle OF-LOOP-ARCH-005 — 2026-08-05
 
 ```text
-TASK_ID: OF-DOC-003
-START_HEAD: 3c54c54733e116f35ff63a0759c921afd58c57a6
-BASELINE_END_SHA: 59f6475102b8a0c5b1274060afc412db787f2caf
+TASK_ID: OF-ARCH-005
+START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
+VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
 BRANCH: architecture/africafunds-country-indicators-v0.1
-STATUS: COMPLETED
+STATUS: VERIFIED_COMPLETE
 ```
 
-### Avant écriture
+### Audit initial
 
-HEAD, baseline, dix commits post-baseline, douze branches, PR nº 1, PR nº 2, rapports datés, documents canoniques, arborescence et 176 fichiers du kit ont été vérifiés. Aucune collision de `OF-DOC-003` ou `OF-LOOP-DOC-003` n’a été trouvée.
+Baseline toujours ancêtre, douze branches présentes, PR nº 1 et nº 2 ouvertes/draft/non fusionnées, aucune collision pour `OF-ARCH-005`, `OF-LOOP-ARCH-005` ou `ADR-029`. Le SQL `012` était absent de Git et le générateur pouvait le recréer depuis le CSV actif avant le contrôle de checksum.
 
-### Commits atomiques
+### Historique transparent des écritures
 
-1. réconciliation des documents permanents ;
-2. matrice d’intégration ;
-3. points d’entrée et mémoire de boucle ;
-4. gouvernance, produit, architecture et développement ;
-5. qualité, livraison, opérations et sécurité ;
-6. boucle et gouvernance IA ;
-7. templates, optionnels, ADR, catalogue et manifest ;
-8. clôture des métriques et du handoff.
+1. `a5796821904fd9ca8178b5579a3da44bfe1c3465` — commit intermédiaire accidentel ajoutant un README d’un mot ;
+2. `b07c3153cb3d6d5c5270760b3b00e600bbcbc4f5` — correction immédiate du README, snapshot figé, générateur et workflow ponctuel ;
+3. `54284d83bcee537b559dfbfd057ad23e39776844` — commit du bot matérialisant exactement le SQL `012` ;
+4. `ec5a2fd2efe89f008c05d4443001790450090523` — politique définitive, workflows en lecture seule, tests et ADR-029.
+
+Aucun historique n’a été réécrit. Le workflow ponctuel avec droit d’écriture a été remplacé dans le commit technique final par un garde `contents: read`.
 
 ### Contrôles finaux
 
-173 fichiers Markdown ajoutés, 10 modifiés, zéro suppression ou renommage ; 176/176 chemins kit ; 244 Markdown au total ; aucune modification technique ; recherches `BEGIN PRIVATE KEY`, `ghp_` et `sk-proj-` sans résultat. Les workflows n’ont pas été déclenchés au HEAD documentaire final.
+- Reference Registry Synchronization `30989910122`: SUCCESS ;
+- Governed Migration Runner `30989910488`: SUCCESS ;
+- Frozen Migration 012 Guard `30989910399`: SUCCESS ;
+- Collector Tests `30989909622`: SUCCESS ;
+- SQL SHA-256 exact : `fb1e82536717082092e762706f29d51dd834dd5b2f0ea1b10193665f9f48bda0`.
+
+### Non réalisé
+
+Aucune branche/PR/issue, aucun merge, retargeting, force-push, déploiement ou démarrage de `OF-DATA-001`.

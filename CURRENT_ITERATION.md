@@ -1,23 +1,25 @@
 # Itération courante
 
 ```text
-LOOP_ID: OF-LOOP-DOC-003
+LOOP_ID: OF-LOOP-ARCH-005
 ITERATION: 001
-TASK_ID: OF-DOC-003
-STATUS: COMPLETED
-START_HEAD: 3c54c54733e116f35ff63a0759c921afd58c57a6
-END_HEAD_POLICY: RESOLVE_DYNAMICALLY
+TASK_ID: OF-ARCH-005
+STATUS: VERIFIED_COMPLETE
+START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
+VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
 DATE: 2026-08-05
 ```
 
 ## Hypothèse et verdict
 
-Le standard Loop Engineering pouvait être intégré sans déplacer ni remplacer les documents historiques. **Verdict : confirmé.** Les canoniques racine restent autorités et les chemins redondants sont des index ou adaptateurs.
+**Hypothèse :** le blocker de la migration `012` pouvait être fermé sans réécrire son historique ni modifier les données runtime.
 
-## Résultats
+**Verdict : confirmé.** Le SQL historique et son entrée sont figés, les vérifications sont non mutatrices, et les changements futurs doivent utiliser une migration forward numérotée.
 
-176 chemins du kit présents, deux rapports Openfunds spécifiques, 71→244 Markdown, aucun fichier technique modifié, aucune opération interdite et `OF-DATA-001` non commencé.
+## Résultat
+
+`OF-ARCH-004` et `OF-ARCH-005` sont `VERIFIED_COMPLETE`. `OF-DATA-001` reste `NOT_STARTED`.
 
 ## Limite
 
-Aucun workflow n’a été déclenché par le HEAD documentaire final ; la CI est `NOT_TRIGGERED`, non `PASS`.
+Cette itération ne traite ni le verrou global du runner, ni toutes les topologies de bases legacy, ni la stratégie de merge de la PR nº 1.

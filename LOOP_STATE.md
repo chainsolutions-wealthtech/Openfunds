@@ -1,26 +1,35 @@
 # État de la boucle
 
 ```text
-LOOP_ID: OF-LOOP-DOC-003
-TASK_ID: OF-DOC-003
-LOOP_TYPE: DOCUMENTATION_AND_GOVERNANCE
-STATUS: COMPLETED
-START_HEAD: 3c54c54733e116f35ff63a0759c921afd58c57a6
-BASELINE_END_SHA: 59f6475102b8a0c5b1274060afc412db787f2caf
-FINAL_HEAD_POLICY: RESOLVE_DYNAMICALLY_FROM_GITHUB
+LOOP_ID: OF-LOOP-ARCH-005
+TASK_ID: OF-ARCH-005
+LOOP_TYPE: TECHNICAL_MIGRATION_GOVERNANCE
+STATUS: VERIFIED_COMPLETE
+START_HEAD: d81f78942c18f4f908da8e8500f83d1280eea570
+VALIDATED_TECHNICAL_HEAD: ec5a2fd2efe89f008c05d4443001790450090523
 BRANCH: architecture/africafunds-country-indicators-v0.1
 OF_DATA_001_STARTED: NO
-TECHNICAL_FILES_CHANGED: NO
+PRODUCTION_DEPLOYED: NO
 ```
 
-## Résultat
+## Objectif atteint
 
-La mémoire permanente a été réconciliée, les 176 chemins du kit ont été créés ou enrichis, les canoniques historiques ont été conservés, et les index/adaptateurs empêchent la duplication d’autorité.
+La migration générée `012` est désormais un artefact Git figé, produit depuis un snapshot d’authoring figé. Le générateur est un vérificateur en lecture seule pour les migrations historiques et un outil create-only pour une future migration forward.
 
-## Contrôles
+## Preuves
 
-Présence des chemins, volumétrie, fichiers non vides, diff Markdown uniquement, absence de suppression/renommage, recherche de secrets, état de `main` et des deux PR vérifiés. Aucun workflow n’a été déclenché au HEAD documentaire final ; aucun succès CI n’est donc revendiqué.
+- SQL figé et checksum exact vérifié ;
+- manifest check-only ;
+- tests unitaires du générateur et du runner ;
+- PostgreSQL 16 vide puis double application ;
+- contrat runtime et ledger vérifiés ;
+- adoption d’une base initialisée sans ledger ;
+- workflows du HEAD technique tous `SUCCESS`.
+
+## Résidus hors boucle
+
+Advisory lock global, inspection structurée des bases legacy partielles, production persistante et merge de la PR nº 1 restent hors périmètre.
 
 ## Sortie
 
-La boucle est fermée. La prochaine boucle nécessite une autorisation explicite et doit traiter le blocker 012 avant `OF-DATA-001`.
+Boucle fermée. Aucune action fonctionnelle suivante n’est autorisée sans nouvelle instruction.

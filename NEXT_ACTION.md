@@ -1,19 +1,23 @@
 # Prochaine action autorisée
 
 ```text
-TASK_ID: TO_BE_AUTHORIZED
-CURRENT_LOOP: OF-LOOP-DOC-003_COMPLETED
+CURRENT_LOOP: OF-LOOP-ARCH-005_COMPLETED
 STATUS: STOPPED_PENDING_USER_AUTHORIZATION
+NEXT_CANDIDATE_TASK: OF-DATA-001
 ```
 
 ## Action candidate
 
-Résoudre dans une phase technique séparée le blocker de gouvernance de `OF-ARCH-004` : figer la migration générée `012`, transformer la génération historique en contrôle de reproductibilité et imposer une nouvelle migration forward pour toute évolution.
+Stabiliser le modèle `Fund / SubFund / ShareClass`, les structures sans compartiment, les identités/noms/alias et les événements de fusion ou transfert.
 
 ## Préconditions
 
-Nouvel identifiant de tâche libre, audit du HEAD, allowlist technique, ADR actualisé, tests du runner, verrouillage/concurrence évalués et CI PostgreSQL 16.
+- résoudre à nouveau le HEAD, les branches et les deux PR ;
+- vérifier les rapports `OF-ARCH-005` et les workflows du HEAD technique ;
+- définir exemples juridiques Maroc, Tunisie, Nigeria et cas de fonds sans compartiment ;
+- approuver cardinalités, temporalité, provenance, migration et tests de non-duplication ;
+- rechercher la collision de l’identifiant et créer une nouvelle boucle.
 
 ## Interdictions maintenues
 
-Ne pas commencer `OF-DATA-001`, retargeter ou fusionner la PR nº 1, modifier la PR nº 2, travailler sur `main` ou déployer sans autorisation explicite.
+Ne pas fusionner ou retargeter la PR nº 1, modifier la PR nº 2, travailler sur `main`, déployer ou charger des historiques avant autorisation explicite.
