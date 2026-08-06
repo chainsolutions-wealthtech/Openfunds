@@ -1,0 +1,294 @@
+{
+  "subfund_profile": {
+    "ENTITY_CODE": "SUBFUND_PROFILE",
+    "DESCRIPTION_FR": "Profil historisé d’un compartiment réel.",
+    "DESCRIPTION_EN": "Versioned profile of a real subfund.",
+    "HISTORY_METHOD": "BITEMPORAL_VERSIONED_ASSERTION",
+    "columns": [
+      {
+        "name": "subfund_profile_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "subfund_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "compartment_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "base_currency_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "effective_from",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_from_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "effective_to",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_to_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "recorded_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "superseded_at",
+        "pg_type": "timestamptz",
+        "nullable": true
+      },
+      {
+        "name": "is_current",
+        "pg_type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "validation_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_artifact_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "source_locator",
+        "pg_type": "jsonb",
+        "nullable": true
+      },
+      {
+        "name": "source_note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  },
+  "share_class_profile": {
+    "ENTITY_CODE": "SHARE_CLASS_PROFILE",
+    "DESCRIPTION_FR": "Profil économique et opérationnel historisé d’une classe de parts.",
+    "DESCRIPTION_EN": "Versioned economic and operational share-class profile.",
+    "HISTORY_METHOD": "BITEMPORAL_VERSIONED_ASSERTION",
+    "columns": [
+      {
+        "name": "share_class_profile_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "share_class_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "currency_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "distribution_policy",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "hedging_policy",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "nav_frequency",
+        "pg_type": "text",
+        "nullable": true
+      },
+      {
+        "name": "is_representative",
+        "pg_type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "effective_from",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_from_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "effective_to",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_to_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "recorded_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "superseded_at",
+        "pg_type": "timestamptz",
+        "nullable": true
+      },
+      {
+        "name": "is_current",
+        "pg_type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "validation_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_artifact_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "source_locator",
+        "pg_type": "jsonb",
+        "nullable": true
+      },
+      {
+        "name": "source_note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  },
+  "entity_event": {
+    "ENTITY_CODE": "FUND_ENTITY_EVENT",
+    "DESCRIPTION_FR": "Événements juridiques, structurels et opérationnels.",
+    "DESCRIPTION_EN": "Legal, structural and operational events.",
+    "HISTORY_METHOD": "APPEND_ONLY_EVENT_WITH_BUSINESS_DATE_KNOWLEDGE",
+    "columns": [
+      {
+        "name": "event_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "event_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "effective_date",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_date_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "publication_date",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "event_summary",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "recorded_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "validation_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_artifact_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "source_locator",
+        "pg_type": "jsonb",
+        "nullable": true
+      },
+      {
+        "name": "source_note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  },
+  "event_participant": {
+    "ENTITY_CODE": "FUND_EVENT_PARTICIPANT",
+    "DESCRIPTION_FR": "Participants structurés aux événements.",
+    "DESCRIPTION_EN": "Structured event participants.",
+    "HISTORY_METHOD": "APPEND_ONLY_EVENT_PARTICIPATION",
+    "columns": [
+      {
+        "name": "event_participant_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "event_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "organization_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "participant_role",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  }
+}

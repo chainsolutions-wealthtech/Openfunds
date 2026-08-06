@@ -1,0 +1,128 @@
+{
+  "base_currency_id": {
+    "FUNCTIONAL_NAME_FR": "Devise de base",
+    "FUNCTIONAL_NAME_EN": "Base currency",
+    "DEFINITION": "Devise de base déclarée du fonds ou du compartiment ; distincte de la devise de chaque classe.",
+    "DEFINITION_EN": "Declared base currency of the fund or subfund, distinct from each share-class currency."
+  },
+  "canonical_code": {
+    "FUNCTIONAL_NAME_FR": "Code canonique",
+    "FUNCTIONAL_NAME_EN": "Canonical code",
+    "DEFINITION": "Code lisible, stable et unique ; il ne change pas lors d’un renommage.",
+    "DEFINITION_EN": "Readable stable unique code that does not change when the object is renamed."
+  },
+  "child_entity_id": {
+    "FUNCTIONAL_NAME_FR": "Entité enfant",
+    "FUNCTIONAL_NAME_EN": "Child Entity Id",
+    "DEFINITION": "Identité canonique de l’objet enfant.",
+    "DEFINITION_EN": "Canonical identity of the child object."
+  },
+  "child_entity_type": {
+    "FUNCTIONAL_NAME_FR": "Type de l’entité enfant",
+    "FUNCTIONAL_NAME_EN": "Child Entity Type",
+    "DEFINITION": "Type canonique attendu de l’objet enfant.",
+    "DEFINITION_EN": "Expected canonical type of the child object."
+  },
+  "compartment_type": {
+    "FUNCTIONAL_NAME_FR": "Type de compartiment",
+    "FUNCTIONAL_NAME_EN": "Compartment type",
+    "DEFINITION": "Qualification opérationnelle du sous-ensemble réel d’un fonds ombrelle.",
+    "DEFINITION_EN": "Operational qualification of the real sub-entity of an umbrella fund."
+  },
+  "created_at": {
+    "FUNCTIONAL_NAME_FR": "Date de création système",
+    "FUNCTIONAL_NAME_EN": "System creation timestamp",
+    "DEFINITION": "Horodatage de création de l’identité dans le système canonique.",
+    "DEFINITION_EN": "Timestamp when the canonical identity was created in the system."
+  },
+  "currency_id": {
+    "FUNCTIONAL_NAME_FR": "Devise de la classe",
+    "FUNCTIONAL_NAME_EN": "Share-class currency",
+    "DEFINITION": "Devise dans laquelle la valeur liquidative de la classe est publiée.",
+    "DEFINITION_EN": "Currency in which the share-class NAV is published."
+  },
+  "distribution_policy": {
+    "FUNCTIONAL_NAME_FR": "Politique de distribution",
+    "FUNCTIONAL_NAME_EN": "Distribution policy",
+    "DEFINITION": "Politique de traitement des revenus de la classe.",
+    "DEFINITION_EN": "Share-class income treatment policy."
+  },
+  "domicile_country_id": {
+    "FUNCTIONAL_NAME_FR": "Pays de domicile",
+    "FUNCTIONAL_NAME_EN": "Domicile country",
+    "DEFINITION": "Pays de domicile juridique observé ; distinct du périmètre d’investissement.",
+    "DEFINITION_EN": "Observed legal domicile country, distinct from investment scope."
+  },
+  "effective_date": {
+    "FUNCTIONAL_NAME_FR": "Date d’effet",
+    "FUNCTIONAL_NAME_EN": "Effective date",
+    "DEFINITION": "Date métier de prise d’effet de l’événement lorsqu’elle est connue ou approximative.",
+    "DEFINITION_EN": "Business effective date of the event when known or approximate."
+  },
+  "effective_date_status": {
+    "FUNCTIONAL_NAME_FR": "Statut de connaissance de la date d’effet",
+    "FUNCTIONAL_NAME_EN": "Effective-date knowledge status",
+    "DEFINITION": "Niveau de connaissance de la date d’effet ; UNKNOWN impose une valeur NULL.",
+    "DEFINITION_EN": "Knowledge level of the effective date; UNKNOWN requires NULL."
+  },
+  "effective_from": {
+    "FUNCTIONAL_NAME_FR": "Début de validité métier",
+    "FUNCTIONAL_NAME_EN": "Business validity start",
+    "DEFINITION": "Date métier de début, renseignée seulement si le statut est KNOWN ou APPROXIMATE.",
+    "DEFINITION_EN": "Business start date, populated only when status is KNOWN or APPROXIMATE."
+  },
+  "effective_from_status": {
+    "FUNCTIONAL_NAME_FR": "Statut de connaissance du début",
+    "FUNCTIONAL_NAME_EN": "Start-date knowledge status",
+    "DEFINITION": "Niveau de connaissance de la borne de début ; UNKNOWN interdit l’invention d’une date.",
+    "DEFINITION_EN": "Knowledge level of the start boundary; UNKNOWN prevents inventing a date."
+  },
+  "effective_to": {
+    "FUNCTIONAL_NAME_FR": "Fin de validité métier",
+    "FUNCTIONAL_NAME_EN": "Business validity end",
+    "DEFINITION": "Date métier de fin, renseignée seulement si le statut est KNOWN ou APPROXIMATE.",
+    "DEFINITION_EN": "Business end date, populated only when status is KNOWN or APPROXIMATE."
+  },
+  "effective_to_status": {
+    "FUNCTIONAL_NAME_FR": "Statut de connaissance de la fin",
+    "FUNCTIONAL_NAME_EN": "End-date knowledge status",
+    "DEFINITION": "Niveau de connaissance de la borne de fin ; NOT_APPLICABLE autorise une borne ouverte.",
+    "DEFINITION_EN": "Knowledge level of the end boundary; NOT_APPLICABLE permits an open boundary."
+  },
+  "entity_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant canonique de l’entité",
+    "FUNCTIONAL_NAME_EN": "Canonical entity identifier",
+    "DEFINITION": "Identité interne stable d’un fonds, d’un compartiment ou d’une classe de parts.",
+    "DEFINITION_EN": "Stable internal identity of a fund, subfund or share class."
+  },
+  "entity_identifier_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant de l’identifiant externe",
+    "FUNCTIONAL_NAME_EN": "Entity Identifier Id",
+    "DEFINITION": "Identifiant technique d’une version d’identifiant externe.",
+    "DEFINITION_EN": "Technical identifier of an external-identifier version."
+  },
+  "entity_name_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du nom",
+    "FUNCTIONAL_NAME_EN": "Entity Name Id",
+    "DEFINITION": "Identifiant technique d’une version de nom ou d’un alias.",
+    "DEFINITION_EN": "Technical identifier of a name version or alias."
+  },
+  "entity_state_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant de l’état",
+    "FUNCTIONAL_NAME_EN": "Entity State Id",
+    "DEFINITION": "Identifiant technique stable d’une version d’état métier.",
+    "DEFINITION_EN": "Identifiant technique stable d’une version d’état métier."
+  },
+  "entity_type": {
+    "FUNCTIONAL_NAME_FR": "Type d’entité",
+    "FUNCTIONAL_NAME_EN": "Entity type",
+    "DEFINITION": "Niveau canonique de l’objet dans la hiérarchie FUND / SUBFUND / SHARE_CLASS.",
+    "DEFINITION_EN": "Canonical object level in the FUND / SUBFUND / SHARE_CLASS hierarchy."
+  },
+  "event_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant d’événement",
+    "FUNCTIONAL_NAME_EN": "Event Id",
+    "DEFINITION": "Identifiant stable d’un événement juridique, structurel ou opérationnel.",
+    "DEFINITION_EN": "Stable identifier of a legal, structural or operational event."
+  }
+}

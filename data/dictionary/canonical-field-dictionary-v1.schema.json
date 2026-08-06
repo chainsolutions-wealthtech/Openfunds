@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Canonical field dictionary authoring package v1",
+  "type": "object",
+  "description": "Logical schema assembled from the nine governed JSON files under data/dictionary/spec_v1/.",
+  "required": [
+    "dictionary_id",
+    "dictionary_version",
+    "status",
+    "authoring_format",
+    "authoritative_path",
+    "generated_artifacts",
+    "scope",
+    "governance",
+    "required_attributes",
+    "defaults",
+    "column_semantics",
+    "tables",
+    "allowed_values",
+    "foreign_keys"
+  ],
+  "properties": {
+    "dictionary_id": {
+      "const": "OPENFUNDS_CANONICAL_FIELD_DICTIONARY"
+    },
+    "dictionary_version": {
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "status": {
+      "const": "VALIDATED_FUND_CORE_SCOPE"
+    },
+    "authoring_format": {
+      "const": "JSON_PACKAGE"
+    },
+    "authoritative_path": {
+      "const": "data/dictionary/spec_v1/"
+    },
+    "required_attributes": {
+      "type": "array",
+      "minItems": 36,
+      "uniqueItems": true
+    },
+    "tables": {
+      "type": "object",
+      "minProperties": 10,
+      "maxProperties": 10
+    },
+    "column_semantics": {
+      "type": "object",
+      "minProperties": 1
+    },
+    "allowed_values": {
+      "type": "object"
+    },
+    "foreign_keys": {
+      "type": "object"
+    }
+  },
+  "additionalProperties": true
+}

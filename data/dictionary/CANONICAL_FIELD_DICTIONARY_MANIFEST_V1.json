@@ -1,0 +1,69 @@
+{
+  "manifest_version": "1.0.0",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_FUND_CORE_SCOPE",
+  "generated_at": "2026-08-06",
+  "authoritative_source": {
+    "path": "data/dictionary/spec_v1/",
+    "format": "JSON_PACKAGE",
+    "package_files": [
+      "00_metadata.json",
+      "10_tables_identity.json",
+      "11_tables_profiles_events.json",
+      "12_tables_names_identifiers_structure.json",
+      "20_column_semantics.json",
+      "21_column_semantics.json",
+      "22_column_semantics.json",
+      "30_allowed_values.json",
+      "31_foreign_keys.json"
+    ],
+    "field_count_after_expansion": 143,
+    "entity_count": 10
+  },
+  "generated_artifacts": [
+    {
+      "path": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.json",
+      "format": "JSON_EXPANDED",
+      "publication": "GITHUB_ACTIONS_ARTIFACT"
+    },
+    {
+      "path": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.csv",
+      "format": "CSV_UTF8_SEMICOLON",
+      "publication": "GITHUB_ACTIONS_ARTIFACT"
+    },
+    {
+      "path": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.md",
+      "format": "MARKDOWN_UTF8_EXHAUSTIVE",
+      "publication": "GITHUB_ACTIONS_ARTIFACT"
+    }
+  ],
+  "committed_human_summary": {
+    "path": "docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md",
+    "purpose": "SCOPE_COUNTS_GOVERNANCE_AND_LIMITS",
+    "exhaustive_field_view_generated": true
+  },
+  "checksums": {
+    "authoritative_package_sha256": "e07ded9d02a0c334ac8c2e0368d24d903d82f35716585a46d6ddf7c375e18e95",
+    "expanded_json_sha256": "2590f0eb439ce230770e22583e5fdec4df122219a74f8ca3c6e7f421a196bb09",
+    "csv_sha256": "4d05f8bdadc171522c3518bf54a65ac689d2e5921c034ab29cb5b15d35c26fe9",
+    "markdown_sha256": "3827b74da9c40f561608b196e047bf8254f8c20e0b58fac33b6ca485b13d2138"
+  },
+  "implementation": {
+    "schema_path": "data/dictionary/canonical-field-dictionary-v1.schema.json",
+    "schema_sha256": "febbd430717cf0457ce1cfcc2e3a7ce4bca3bc74fd3175de2d68c6154d1cd21f",
+    "core_library_path": "scripts/canonical_field_dictionary.py",
+    "core_library_sha256": "9da0622b0e49fefb6478f39f52e64f16380f753a004396ad742f612cda99d9ed",
+    "generator_path": "scripts/generate_canonical_field_dictionary.py",
+    "generator_sha256": "33f3730b6b640459354149b149b4eea533800dc70167b63069cab5ba8007558c",
+    "tests_path": "tests/test_canonical_field_dictionary.py",
+    "tests_sha256": "687e126309045881f0933c0c38a0d6b114865da892f9c2d3cd3d54a241ac1051",
+    "workflow_path": ".github/workflows/canonical-field-dictionary.yml",
+    "workflow_sha256": "317c114f11fd4e5d06b1a3f5eb9f56348a97a554520ca0f6c74abb5a7edc3802"
+  },
+  "source_contract": {
+    "migration": "schemas/fund/015_fund_subfund_shareclass_core.sql",
+    "expected_physical_columns": 143,
+    "openfunds_mapping_policy": "NO_IDENTIFIER_INVENTED",
+    "runtime_schema_modified": false
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_FIELD_DICTIONARY",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_FUND_CORE_SCOPE",
+  "authoring_format": "JSON_PACKAGE",
+  "generated_artifacts": {
+    "expanded_json": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.json",
+    "csv": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.csv",
+    "markdown": "build/dictionary/CANONICAL_FIELD_DICTIONARY_V1.md"
+  },
+  "scope": {
+    "included": "All 143 physical columns of canonical fund schema from migration 015",
+    "excluded": [
+      "derived views",
+      "ref.*",
+      "source.*",
+      "market.*",
+      "D00-D17",
+      "official Openfunds mappings"
+    ]
+  },
+  "governance": {
+    "field_id_pattern": "OF_<DOMAIN>_<ENTITY>_<FIELD>",
+    "csv_delimiter": ";",
+    "openfunds_mapping_policy": "NO_IDENTIFIER_INVENTED",
+    "semantic_break_policy": "NEW_FIELD_ID_OR_NEW_DICTIONARY_VERSION"
+  },
+  "required_attributes": [
+    "FIELD_ID",
+    "TECHNICAL_NAME",
+    "FUNCTIONAL_NAME_FR",
+    "FUNCTIONAL_NAME_EN",
+    "DEFINITION",
+    "DEFINITION_EN",
+    "DOMAIN_CODE",
+    "ENTITY_CODE",
+    "DATA_TYPE",
+    "FORMAT",
+    "UNIT_CODE",
+    "CURRENCY_RULE",
+    "NULLABILITY",
+    "CARDINALITY",
+    "ALLOWED_VALUES",
+    "CONSTRAINTS",
+    "VALIDATION_RULE",
+    "NORMALIZATION_RULE",
+    "CALCULATION_RULE",
+    "SOURCE_ROLE",
+    "SOURCE_PRIORITY_RULE",
+    "HISTORY_METHOD",
+    "SENSITIVITY_LEVEL",
+    "CONFIDENCE_RULE",
+    "OPENFUNDS_FIELD_ID",
+    "EXTERNAL_MAPPINGS",
+    "EXAMPLE_VALUE",
+    "STATUS",
+    "SCHEMA_VERSION",
+    "CREATED_AT",
+    "UPDATED_AT",
+    "PHYSICAL_SCHEMA",
+    "PHYSICAL_TABLE",
+    "PHYSICAL_COLUMN",
+    "PROVENANCE_PATH",
+    "DEFINITION_SOURCE"
+  ],
+  "defaults": {
+    "DOMAIN_CODE": "FUND",
+    "UNIT_CODE": "NOT_APPLICABLE",
+    "CALCULATION_RULE": "NOT_CALCULATED",
+    "SENSITIVITY_LEVEL": "PUBLIC_BUSINESS_DATA",
+    "CONFIDENCE_RULE": "VALIDATION_STATUS_PLUS_SOURCE_ARTIFACT_AND_LOCATOR",
+    "OPENFUNDS_FIELD_ID": null,
+    "STATUS": "VALIDATED",
+    "SCHEMA_VERSION": "1.0.0",
+    "CREATED_AT": "2026-08-06",
+    "UPDATED_AT": "2026-08-06",
+    "PHYSICAL_SCHEMA": "fund",
+    "PROVENANCE_PATH": "schemas/fund/015_fund_subfund_shareclass_core.sql",
+    "DEFINITION_SOURCE": "CURATED_FROM_GOVERNED_MIGRATION_015_AND_ADR_030"
+  },
+  "authoritative_path": "data/dictionary/spec_v1/"
+}

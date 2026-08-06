@@ -1,0 +1,247 @@
+{
+  "entity.entity_type": [
+    "FUND",
+    "SUBFUND",
+    "SHARE_CLASS"
+  ],
+  "entity_state.lifecycle_status": [
+    "PENDING",
+    "ACTIVE",
+    "SUSPENDED",
+    "CLOSED",
+    "LIQUIDATED",
+    "MERGED",
+    "DISSOLVED",
+    "UNKNOWN"
+  ],
+  "fund_profile.entity_type": [
+    "FUND"
+  ],
+  "fund_profile.structure_type": [
+    "STANDALONE",
+    "UMBRELLA"
+  ],
+  "subfund_profile.entity_type": [
+    "SUBFUND"
+  ],
+  "subfund_profile.compartment_type": [
+    "COMPARTMENT",
+    "PORTFOLIO",
+    "SERIES",
+    "OTHER"
+  ],
+  "share_class_profile.entity_type": [
+    "SHARE_CLASS"
+  ],
+  "share_class_profile.distribution_policy": [
+    "ACCUMULATING",
+    "DISTRIBUTING",
+    "MIXED",
+    "UNKNOWN"
+  ],
+  "share_class_profile.hedging_policy": [
+    "HEDGED",
+    "UNHEDGED",
+    "PARTIALLY_HEDGED",
+    "UNKNOWN"
+  ],
+  "entity_event.event_type": [
+    "LAUNCH",
+    "RENAME",
+    "MERGER",
+    "ABSORPTION",
+    "SPLIT",
+    "MANAGEMENT_TRANSFER",
+    "DOMICILE_TRANSFER",
+    "LEGAL_FORM_CHANGE",
+    "SUSPENSION",
+    "REACTIVATION",
+    "CLOSURE",
+    "LIQUIDATION",
+    "OTHER"
+  ],
+  "event_participant.participant_role": [
+    "SUBJECT",
+    "PREDECESSOR",
+    "SUCCESSOR",
+    "SURVIVING_ENTITY",
+    "ABSORBED_ENTITY",
+    "SOURCE_ENTITY",
+    "TARGET_ENTITY",
+    "TRANSFERRED_ENTITY",
+    "FROM_MANAGER",
+    "TO_MANAGER",
+    "FORMER_DOMICILE",
+    "NEW_DOMICILE",
+    "OTHER"
+  ],
+  "entity_name.name_role": [
+    "LEGAL_NAME",
+    "DISPLAY_NAME",
+    "SHORT_NAME",
+    "FORMER_NAME",
+    "ALIAS"
+  ],
+  "entity_identifier.identifier_scheme": [
+    "ISIN",
+    "LEI",
+    "REGULATOR_ID",
+    "LOCAL_CODE",
+    "OPENFUNDS_ID",
+    "INTERNAL_LEGACY_ID",
+    "OTHER"
+  ],
+  "structure_relationship.parent_entity_type": [
+    "FUND",
+    "SUBFUND",
+    "SHARE_CLASS"
+  ],
+  "structure_relationship.child_entity_type": [
+    "FUND",
+    "SUBFUND",
+    "SHARE_CLASS"
+  ],
+  "structure_relationship.relationship_type": [
+    "FUND_HAS_SUBFUND",
+    "FUND_HAS_SHARE_CLASS",
+    "SUBFUND_HAS_SHARE_CLASS"
+  ],
+  "entity_state.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_state.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_state.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "fund_profile.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "fund_profile.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "fund_profile.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "subfund_profile.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "subfund_profile.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "subfund_profile.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "share_class_profile.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "share_class_profile.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "share_class_profile.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "entity_event.effective_date_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_event.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "entity_name.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_name.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_name.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "entity_identifier.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_identifier.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "entity_identifier.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ],
+  "structure_relationship.effective_from_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "structure_relationship.effective_to_status": [
+    "KNOWN",
+    "APPROXIMATE",
+    "UNKNOWN",
+    "NOT_APPLICABLE"
+  ],
+  "structure_relationship.validation_status": [
+    "PENDING",
+    "VALIDATED",
+    "REJECTED",
+    "SUPERSEDED"
+  ]
+}

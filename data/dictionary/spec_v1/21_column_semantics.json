@@ -1,0 +1,128 @@
+{
+  "event_participant_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du participant",
+    "FUNCTIONAL_NAME_EN": "Event Participant Id",
+    "DEFINITION": "Identifiant technique d’une participation à un événement.",
+    "DEFINITION_EN": "Technical identifier of an event participation."
+  },
+  "event_summary": {
+    "FUNCTIONAL_NAME_FR": "Résumé de l’événement",
+    "FUNCTIONAL_NAME_EN": "Event summary",
+    "DEFINITION": "Résumé factuel de l’événement sans remplacer les participants structurés ni les sources.",
+    "DEFINITION_EN": "Factual event summary that does not replace structured participants or sources."
+  },
+  "event_type": {
+    "FUNCTIONAL_NAME_FR": "Type d’événement",
+    "FUNCTIONAL_NAME_EN": "Event type",
+    "DEFINITION": "Nature canonique de l’événement affectant une ou plusieurs entités ou organisations.",
+    "DEFINITION_EN": "Canonical nature of the event affecting entities or organizations."
+  },
+  "fund_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du fonds",
+    "FUNCTIONAL_NAME_EN": "Fund Id",
+    "DEFINITION": "Référence à l’identité canonique de type FUND décrite par le profil.",
+    "DEFINITION_EN": "Reference to the canonical FUND identity described by the profile."
+  },
+  "fund_profile_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du profil fonds",
+    "FUNCTIONAL_NAME_EN": "Fund Profile Id",
+    "DEFINITION": "Identifiant technique d’une version du profil juridique et structurel du fonds.",
+    "DEFINITION_EN": "Technical identifier of a fund legal and structural profile version."
+  },
+  "has_legal_personality": {
+    "FUNCTIONAL_NAME_FR": "Personnalité juridique",
+    "FUNCTIONAL_NAME_EN": "Legal personality flag",
+    "DEFINITION": "Indique si le véhicule possède une personnalité juridique propre lorsque l’information est étayée.",
+    "DEFINITION_EN": "Indicates whether the vehicle has separate legal personality when supported."
+  },
+  "hedging_policy": {
+    "FUNCTIONAL_NAME_FR": "Politique de couverture",
+    "FUNCTIONAL_NAME_EN": "Hedging policy",
+    "DEFINITION": "Politique déclarée de couverture de change de la classe.",
+    "DEFINITION_EN": "Declared currency-hedging policy of the share class."
+  },
+  "identifier_scheme": {
+    "FUNCTIONAL_NAME_FR": "Schéma d’identifiant",
+    "FUNCTIONAL_NAME_EN": "Identifier scheme",
+    "DEFINITION": "Système dans lequel l’identifiant est émis ou maintenu.",
+    "DEFINITION_EN": "Scheme under which the identifier is issued or maintained."
+  },
+  "identifier_value": {
+    "FUNCTIONAL_NAME_FR": "Valeur publiée de l’identifiant",
+    "FUNCTIONAL_NAME_EN": "Published identifier value",
+    "DEFINITION": "Valeur telle que publiée, conservée pour audit.",
+    "DEFINITION_EN": "Identifier value as published and preserved for audit."
+  },
+  "is_current": {
+    "FUNCTIONAL_NAME_FR": "Indicateur de version courante",
+    "FUNCTIONAL_NAME_EN": "Current-version flag",
+    "DEFINITION": "Indique que la version est la version système courante et non supersédée.",
+    "DEFINITION_EN": "Indicates the current non-superseded system version."
+  },
+  "is_representative": {
+    "FUNCTIONAL_NAME_FR": "Classe représentative",
+    "FUNCTIONAL_NAME_EN": "Representative share-class flag",
+    "DEFINITION": "Indique la classe retenue pour l’affichage selon une règle séparée et gouvernée.",
+    "DEFINITION_EN": "Indicates the share class selected for display under a separate governed rule."
+  },
+  "issuer_organization_id": {
+    "FUNCTIONAL_NAME_FR": "Organisation émettrice de l’identifiant",
+    "FUNCTIONAL_NAME_EN": "Identifier-issuing organization",
+    "DEFINITION": "Organisation ayant attribué ou maintenu l’identifiant lorsqu’elle est connue.",
+    "DEFINITION_EN": "Organization that assigned or maintained the identifier when known."
+  },
+  "language_code": {
+    "FUNCTIONAL_NAME_FR": "Code de langue",
+    "FUNCTIONAL_NAME_EN": "Language code",
+    "DEFINITION": "Code de langue BCP 47 ou und lorsque la langue n’est pas déterminée.",
+    "DEFINITION_EN": "BCP 47 language code, or und when language is undetermined."
+  },
+  "legal_form_code": {
+    "FUNCTIONAL_NAME_FR": "Code de forme juridique",
+    "FUNCTIONAL_NAME_EN": "Legal-form code",
+    "DEFINITION": "Code canonique de forme juridique, par exemple SICAV, FCP ou UNIT_TRUST, sans déduire la structure.",
+    "DEFINITION_EN": "Canonical legal-form code, such as SICAV, FCP or UNIT_TRUST, without inferring structure."
+  },
+  "lifecycle_status": {
+    "FUNCTIONAL_NAME_FR": "Statut de cycle de vie",
+    "FUNCTIONAL_NAME_EN": "Lifecycle status",
+    "DEFINITION": "État opérationnel ou juridique observé pendant la période de validité.",
+    "DEFINITION_EN": "Observed operational or legal state during the business-validity period."
+  },
+  "name_role": {
+    "FUNCTIONAL_NAME_FR": "Rôle du nom",
+    "FUNCTIONAL_NAME_EN": "Name role",
+    "DEFINITION": "Rôle sémantique du nom : légal, affichage, court, ancien nom ou alias.",
+    "DEFINITION_EN": "Semantic role of the name: legal, display, short, former name or alias."
+  },
+  "name_text": {
+    "FUNCTIONAL_NAME_FR": "Nom publié",
+    "FUNCTIONAL_NAME_EN": "Published name",
+    "DEFINITION": "Nom tel que publié, avec sa graphie source.",
+    "DEFINITION_EN": "Name as published, preserving source spelling."
+  },
+  "nav_frequency": {
+    "FUNCTIONAL_NAME_FR": "Fréquence de valeur liquidative",
+    "FUNCTIONAL_NAME_EN": "NAV frequency",
+    "DEFINITION": "Fréquence native déclarée ou observée de calcul ou publication de la valeur liquidative.",
+    "DEFINITION_EN": "Declared or observed native NAV calculation or publication frequency."
+  },
+  "normalized_name": {
+    "FUNCTIONAL_NAME_FR": "Nom normalisé",
+    "FUNCTIONAL_NAME_EN": "Normalized name",
+    "DEFINITION": "Forme normalisée utilisée pour le rapprochement sans remplacer le nom publié.",
+    "DEFINITION_EN": "Normalized form used for matching without replacing the published name."
+  },
+  "normalized_value": {
+    "FUNCTIONAL_NAME_FR": "Valeur normalisée de l’identifiant",
+    "FUNCTIONAL_NAME_EN": "Normalized identifier value",
+    "DEFINITION": "Valeur normalisée utilisée pour l’unicité et le rapprochement.",
+    "DEFINITION_EN": "Normalized value used for uniqueness and matching."
+  },
+  "note": {
+    "FUNCTIONAL_NAME_FR": "Note",
+    "FUNCTIONAL_NAME_EN": "Note",
+    "DEFINITION": "Précision complémentaire sur la participation.",
+    "DEFINITION_EN": "Additional note about the participation."
+  }
+}

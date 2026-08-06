@@ -1,0 +1,216 @@
+{
+  "entity": {
+    "ENTITY_CODE": "FUND_ENTITY",
+    "DESCRIPTION_FR": "Identité stable des fonds, compartiments et classes de parts.",
+    "DESCRIPTION_EN": "Stable identity of funds, subfunds and share classes.",
+    "HISTORY_METHOD": "STABLE_IDENTITY_WITH_SYSTEM_RETIREMENT",
+    "columns": [
+      {
+        "name": "entity_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "canonical_code",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "created_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "retired_at",
+        "pg_type": "timestamptz",
+        "nullable": true
+      }
+    ]
+  },
+  "entity_state": {
+    "ENTITY_CODE": "FUND_ENTITY_STATE",
+    "DESCRIPTION_FR": "États de cycle de vie et domicile historisés.",
+    "DESCRIPTION_EN": "Versioned lifecycle and domicile states.",
+    "HISTORY_METHOD": "BITEMPORAL_VERSIONED_ASSERTION",
+    "columns": [
+      {
+        "name": "entity_state_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "lifecycle_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "domicile_country_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "effective_from",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_from_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "effective_to",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_to_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "recorded_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "superseded_at",
+        "pg_type": "timestamptz",
+        "nullable": true
+      },
+      {
+        "name": "is_current",
+        "pg_type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "validation_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_artifact_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "source_locator",
+        "pg_type": "jsonb",
+        "nullable": true
+      },
+      {
+        "name": "source_note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  },
+  "fund_profile": {
+    "ENTITY_CODE": "FUND_PROFILE",
+    "DESCRIPTION_FR": "Profil juridique et structurel historisé du fonds.",
+    "DESCRIPTION_EN": "Versioned fund legal and structural profile.",
+    "HISTORY_METHOD": "BITEMPORAL_VERSIONED_ASSERTION",
+    "columns": [
+      {
+        "name": "fund_profile_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "fund_id",
+        "pg_type": "uuid",
+        "nullable": false
+      },
+      {
+        "name": "entity_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "structure_type",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "legal_form_code",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "has_legal_personality",
+        "pg_type": "boolean",
+        "nullable": true
+      },
+      {
+        "name": "base_currency_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "effective_from",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_from_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "effective_to",
+        "pg_type": "date",
+        "nullable": true
+      },
+      {
+        "name": "effective_to_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "recorded_at",
+        "pg_type": "timestamptz",
+        "nullable": false
+      },
+      {
+        "name": "superseded_at",
+        "pg_type": "timestamptz",
+        "nullable": true
+      },
+      {
+        "name": "is_current",
+        "pg_type": "boolean",
+        "nullable": false
+      },
+      {
+        "name": "validation_status",
+        "pg_type": "text",
+        "nullable": false
+      },
+      {
+        "name": "source_artifact_id",
+        "pg_type": "uuid",
+        "nullable": true
+      },
+      {
+        "name": "source_locator",
+        "pg_type": "jsonb",
+        "nullable": true
+      },
+      {
+        "name": "source_note",
+        "pg_type": "text",
+        "nullable": true
+      }
+    ]
+  }
+}

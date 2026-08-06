@@ -1,0 +1,46 @@
+name: Canonical Field Dictionary
+
+on:
+  pull_request:
+    paths:
+      - 'data/dictionary/**'
+      - 'docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md'
+      - 'scripts/canonical_field_dictionary.py'
+      - 'scripts/generate_canonical_field_dictionary.py'
+      - 'tests/test_canonical_field_dictionary.py'
+      - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
+      - '.github/workflows/canonical-field-dictionary.yml'
+  push:
+    paths:
+      - 'data/dictionary/**'
+      - 'docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md'
+      - 'scripts/canonical_field_dictionary.py'
+      - 'scripts/generate_canonical_field_dictionary.py'
+      - 'tests/test_canonical_field_dictionary.py'
+      - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
+      - '.github/workflows/canonical-field-dictionary.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-dictionary:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11','3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Generate and verify governed dictionary artifacts
+        run: python scripts/generate_canonical_field_dictionary.py --check-manifest
+      - name: Run dictionary contract tests
+        run: python -m unittest -v tests.test_canonical_field_dictionary
+      - name: Upload generated review artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: canonical-field-dictionary-py${{ matrix.python-version }}
+          path: build/dictionary/
+          if-no-files-found: error
+          retention-days: 30

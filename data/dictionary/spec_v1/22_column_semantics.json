@@ -1,0 +1,116 @@
+{
+  "organization_id": {
+    "FUNCTIONAL_NAME_FR": "Organisation",
+    "FUNCTIONAL_NAME_EN": "Organization Id",
+    "DEFINITION": "Organisation participant à l’événement.",
+    "DEFINITION_EN": "Organization participating in the event."
+  },
+  "parent_entity_id": {
+    "FUNCTIONAL_NAME_FR": "Entité parente",
+    "FUNCTIONAL_NAME_EN": "Parent Entity Id",
+    "DEFINITION": "Identité canonique de l’objet parent.",
+    "DEFINITION_EN": "Canonical identity of the parent object."
+  },
+  "parent_entity_type": {
+    "FUNCTIONAL_NAME_FR": "Type de l’entité parente",
+    "FUNCTIONAL_NAME_EN": "Parent Entity Type",
+    "DEFINITION": "Type canonique attendu de l’objet parent.",
+    "DEFINITION_EN": "Expected canonical type of the parent object."
+  },
+  "participant_role": {
+    "FUNCTIONAL_NAME_FR": "Rôle dans l’événement",
+    "FUNCTIONAL_NAME_EN": "Event participant role",
+    "DEFINITION": "Rôle canonique de l’entité ou de l’organisation dans l’événement.",
+    "DEFINITION_EN": "Canonical role of the entity or organization in the event."
+  },
+  "publication_date": {
+    "FUNCTIONAL_NAME_FR": "Date de publication",
+    "FUNCTIONAL_NAME_EN": "Publication date",
+    "DEFINITION": "Date de publication de la preuve, distincte de la date d’effet.",
+    "DEFINITION_EN": "Publication date of the evidence, distinct from the effective date."
+  },
+  "recorded_at": {
+    "FUNCTIONAL_NAME_FR": "Date d’enregistrement système",
+    "FUNCTIONAL_NAME_EN": "System recording timestamp",
+    "DEFINITION": "Horodatage auquel l’assertion est connue du système.",
+    "DEFINITION_EN": "Timestamp when the assertion became known to the system."
+  },
+  "relationship_type": {
+    "FUNCTIONAL_NAME_FR": "Type de relation structurelle",
+    "FUNCTIONAL_NAME_EN": "Structural relationship type",
+    "DEFINITION": "Relation autorisée entre FUND, SUBFUND et SHARE_CLASS.",
+    "DEFINITION_EN": "Permitted relation between FUND, SUBFUND and SHARE_CLASS."
+  },
+  "retired_at": {
+    "FUNCTIONAL_NAME_FR": "Date de retrait système",
+    "FUNCTIONAL_NAME_EN": "System retirement timestamp",
+    "DEFINITION": "Horodatage de retrait de l’identité de l’usage courant sans suppression de l’historique.",
+    "DEFINITION_EN": "Timestamp when the identity was retired from current use without deleting history."
+  },
+  "share_class_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant de la classe de parts",
+    "FUNCTIONAL_NAME_EN": "Share Class Id",
+    "DEFINITION": "Référence à l’identité canonique de type SHARE_CLASS décrite par le profil.",
+    "DEFINITION_EN": "Reference to the canonical SHARE_CLASS identity described by the profile."
+  },
+  "share_class_profile_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du profil de classe",
+    "FUNCTIONAL_NAME_EN": "Share Class Profile Id",
+    "DEFINITION": "Identifiant technique d’une version du profil de classe de parts.",
+    "DEFINITION_EN": "Technical identifier of a share-class profile version."
+  },
+  "source_artifact_id": {
+    "FUNCTIONAL_NAME_FR": "Artefact source",
+    "FUNCTIONAL_NAME_EN": "Source artifact",
+    "DEFINITION": "Référence à l’artefact brut immuable étayant l’assertion.",
+    "DEFINITION_EN": "Reference to the immutable raw artifact supporting the assertion."
+  },
+  "source_locator": {
+    "FUNCTIONAL_NAME_FR": "Localisation dans la source",
+    "FUNCTIONAL_NAME_EN": "Source locator",
+    "DEFINITION": "Coordonnées structurées dans l’artefact : page, feuille, ligne, cellule ou sélecteur.",
+    "DEFINITION_EN": "Structured coordinates inside the artifact: page, sheet, row, cell or selector."
+  },
+  "source_note": {
+    "FUNCTIONAL_NAME_FR": "Note de provenance",
+    "FUNCTIONAL_NAME_EN": "Provenance note",
+    "DEFINITION": "Note de provenance ou de limite ; elle ne remplace pas la preuve source.",
+    "DEFINITION_EN": "Provenance or limitation note that does not replace source evidence."
+  },
+  "structure_relationship_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant de relation structurelle",
+    "FUNCTIONAL_NAME_EN": "Structure Relationship Id",
+    "DEFINITION": "Identifiant technique d’une version de relation structurelle.",
+    "DEFINITION_EN": "Technical identifier of a structural-relationship version."
+  },
+  "structure_type": {
+    "FUNCTIONAL_NAME_FR": "Type de structure",
+    "FUNCTIONAL_NAME_EN": "Fund structure type",
+    "DEFINITION": "Distingue un fonds autonome d’un fonds ombrelle et gouverne le chemin structurel autorisé.",
+    "DEFINITION_EN": "Distinguishes standalone and umbrella funds and governs the permitted structural path."
+  },
+  "subfund_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du compartiment",
+    "FUNCTIONAL_NAME_EN": "Subfund Id",
+    "DEFINITION": "Référence à l’identité canonique de type SUBFUND décrite par le profil.",
+    "DEFINITION_EN": "Reference to the canonical SUBFUND identity described by the profile."
+  },
+  "subfund_profile_id": {
+    "FUNCTIONAL_NAME_FR": "Identifiant du profil compartiment",
+    "FUNCTIONAL_NAME_EN": "Subfund Profile Id",
+    "DEFINITION": "Identifiant technique d’une version du profil d’un compartiment réel.",
+    "DEFINITION_EN": "Technical identifier of a real subfund profile version."
+  },
+  "superseded_at": {
+    "FUNCTIONAL_NAME_FR": "Date de remplacement système",
+    "FUNCTIONAL_NAME_EN": "System supersession timestamp",
+    "DEFINITION": "Horodatage auquel cette version est remplacée par une version ultérieure.",
+    "DEFINITION_EN": "Timestamp when this version was replaced by a later version."
+  },
+  "validation_status": {
+    "FUNCTIONAL_NAME_FR": "Statut de validation",
+    "FUNCTIONAL_NAME_EN": "Validation status",
+    "DEFINITION": "État de revue ; seules les versions VALIDATED alimentent les vues courantes.",
+    "DEFINITION_EN": "Review state; only VALIDATED versions feed current views."
+  }
+}
