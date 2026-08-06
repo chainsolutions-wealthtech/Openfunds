@@ -1,5 +1,5 @@
 {
-  "manifest_version": "1.0.1",
+  "manifest_version": "1.0.2",
   "dictionary_version": "1.0.0",
   "status": "VALIDATED_FUND_CORE_SCOPE",
   "generated_at": "2026-08-06",
@@ -62,7 +62,7 @@
     "generator_path": "scripts/generate_canonical_field_dictionary.py",
     "generator_git_blob_sha1": "74cbb5d91834fe399680b1c0bf825bda7e7486c9",
     "tests_path": "tests/test_canonical_field_dictionary.py",
-    "tests_git_blob_sha1": "9d2e2a19b76216b6f832164accff705d4602eb37",
+    "tests_git_blob_sha1": "1d22f9f57cbbe14e1f641a6d6785517e595f274d",
     "workflow_path": ".github/workflows/canonical-field-dictionary.yml",
     "workflow_git_blob_sha1": "2ae67916c72774c036201b7cd968b3f61f8e054b"
   },

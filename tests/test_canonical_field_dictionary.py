@@ -20,8 +20,8 @@ def extract_table_columns(sql:str,table:str)->tuple[str,...]:
     if start<0: raise AssertionError(f"missing table declaration: fund.{table}")
     fragment=sql[start+len(marker):]; columns=[]; depth=1
     for raw_line in fragment.splitlines():
-        stripped=raw_line.strip()
-        if depth==1 and raw_line.startswith("    ") and stripped:
+        stripped=raw_line.strip(); indentation=len(raw_line)-len(raw_line.lstrip())
+        if depth==1 and indentation==4 and stripped:
             token=stripped.split(None,1)[0].rstrip(",")
             if token not in {"check","foreign","unique","constraint","primary"} and token.replace("_","").isalnum() and token[0].isalpha(): columns.append(token)
         depth += raw_line.count("(")-raw_line.count(")")
