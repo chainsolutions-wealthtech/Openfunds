@@ -1,43 +1,61 @@
 # Handoff Loop Engineering
 
 ```text
-LOOP_ID: OF-LOOP-DATA-001
-TASK_ID: OF-DATA-001
+LOOP_ID: OF-LOOP-DATA-002
+TASK_ID: OF-DATA-002
 STATUS: VERIFIED_COMPLETE
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
-START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
-VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
+START_HEAD: 0a48c14999a5f173fa5ab3ce4b91109e24092c2c
+VALIDATED_TECHNICAL_HEAD: 1fb49075abdfb958e152accf915c37ac86b9a54e
+NEXT_CANDIDATE: OF-DATA-003
 ```
 
-## Canonical model
+## Résultat canonique
 
 ```text
-STANDALONE FUND -> SHARE_CLASS
-UMBRELLA FUND -> SUBFUND -> SHARE_CLASS
+SOURCE D’AUTHORING
+data/dictionary/spec_v1/
+
+COUVERTURE
+10 tables fund.*
+143 colonnes physiques
+36 attributs par champ
+
+SORTIES
+JSON expansé
+CSV UTF-8 séparé par ;
+Markdown exhaustif
 ```
 
-Stable identity, versioned state/profile, names, identifiers, structural edges
-and events are separate. Standalone funds never require a synthetic subfund.
+Les sorties sont reproductibles et les artefacts Python 3.11/3.12 possèdent le
+même digest. Aucun identifiant Openfunds n’a été inventé.
 
-## Entry points
+## Entrées principales
 
-- `docs/01_ARCHITECTURE/ADR-030_FUND_SUBFUND_SHARECLASS_CANONICAL_MODEL.md` ;
-- `docs/02_DOMAIN_MODEL/FUND_SUBFUND_SHARECLASS_MODEL_V1.md` ;
-- `schemas/fund/015_fund_subfund_shareclass_core.sql` ;
-- `tests/test_fund_domain_model.py` ;
-- `tests/sql/fund_domain_model_assert.sql` ;
-- `docs/00_PROJECT/OF_DATA_001_COMPLETION_20260805.md`.
+- `DATA_DICTIONARY.md` ;
+- `data/dictionary/spec_v1/` ;
+- `data/dictionary/CANONICAL_FIELD_DICTIONARY_MANIFEST_V1.json` ;
+- `data/dictionary/canonical-field-dictionary-v1.schema.json` ;
+- `scripts/canonical_field_dictionary.py` ;
+- `scripts/generate_canonical_field_dictionary.py` ;
+- `tests/test_canonical_field_dictionary.py` ;
+- `.github/workflows/canonical-field-dictionary.yml` ;
+- `docs/01_ARCHITECTURE/ADR-031_CANONICAL_FIELD_DICTIONARY_AUTHORING.md` ;
+- `docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md` ;
+- `docs/00_PROJECT/OF_DATA_002_COMPLETION_20260806.md`.
 
-## Verified evidence
+## Preuves finales
 
-Migration SHA-256:
-`5ce14ea3de866c31c0452fccfe77827873dec976be3391b2d323e7daf88ef15d`.
+```text
+RUN 31113488180 — Canonical Field Dictionary — SUCCESS
+RUN 31113488273 — Collector Tests — SUCCESS
+ARTIFACTS 8972675555 / 8972676098
+DIGEST sha256:a237c13e85fc486dcab515b3508fd92479596438acdb327679920d442596b67f
+```
 
-Four workflows succeeded, including PostgreSQL 16, double application, ledger,
-country fixtures and adoption without ledger.
+## Point de reprise
 
-## Restart point
-
-Do not infer that `OF-DATA-002` has started. Resolve the current HEAD, read the
-completion record and request explicit authorization before selecting the master
-format of the canonical dictionary.
+Résoudre le HEAD dynamiquement, lire le rapport de clôture, puis auditer D00–D17
+avant de proposer `OF-DATA-003`. Ne pas élargir la déclaration de complétude du
+Fund core aux autres domaines. Ne pas interpréter une définition comme une
+preuve de collecte ou d’historique chargé.

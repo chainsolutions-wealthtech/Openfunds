@@ -5,11 +5,14 @@
 ```text
 TASK: OF-DATA-002
 SCOPE: CANONICAL_FUND_CORE
-STATUS: IMPLEMENTED_AWAITING_CI
+STATUS: VERIFIED_COMPLETE
 DICTIONARY_VERSION: 1.0.0
+MANIFEST_VERSION: 1.0.2
 FIELD_COUNT: 143
 ENTITY_COUNT: 10
+ATTRIBUTES_PER_FIELD: 36
 AUTHORING_FORMAT: JSON_PACKAGE
+VALIDATED_TECHNICAL_HEAD: 1fb49075abdfb958e152accf915c37ac86b9a54e
 ```
 
 La version 1 inventorie intégralement les colonnes physiques du schéma canonique
@@ -33,10 +36,12 @@ Les sorties suivantes sont générées sous `build/dictionary/` :
 ```text
 CANONICAL_FIELD_DICTIONARY_V1.json   # vue JSON expansée, 143 champs
 CANONICAL_FIELD_DICTIONARY_V1.csv    # vue UTF-8 séparée par ;
-CANONICAL_FIELD_DICTIONARY_V1.md     # vue humaine
+CANONICAL_FIELD_DICTIONARY_V1.md     # vue humaine exhaustive
 ```
 
-Le résumé humain commis est `docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md`. La vue exhaustive est générée sous `build/dictionary/` et publiée comme artefact CI.
+Le résumé humain commis est
+`docs/04_DATA_GOVERNANCE/CANONICAL_FIELD_DICTIONARY_V1.md`. La vue exhaustive
+est générée sous `build/dictionary/` et publiée comme artefact CI.
 
 Le manifeste est :
 
@@ -159,7 +164,7 @@ champs d’authoring.
 ## 8. Politique Openfunds
 
 Aucun catalogue officiel Openfunds versionné et archivé n’est disponible dans le
-dépôt. La règle obligatoire est donc :
+dépôt. La règle obligatoire et testée pour les 143 champs est donc :
 
 ```text
 OPENFUNDS_FIELD_ID = null
@@ -175,15 +180,49 @@ Le workflow `.github/workflows/canonical-field-dictionary.yml` exécute sur
 Python 3.11 et 3.12 :
 
 - expansion et validation de la spécification compacte ;
-- concordance exacte avec les 143 colonnes de la migration `015` ;
+- concordance exacte avec les 143 colonnes top-level de la migration `015` ;
 - unicité des IDs et noms techniques ;
 - contrôle des attributs, valeurs autorisées et clés étrangères ;
 - interdiction des mappings Openfunds inventés ;
 - production du CSV `;` ;
 - vérification des SHA-256 ;
 - génération déterministe de la vue Markdown exhaustive ;
-- contrôle du résumé humain commis (périmètre, volumétrie et limites) ;
 - publication des trois artefacts générés pour revue.
+
+### Preuves finales
+
+```text
+CANONICAL_FIELD_DICTIONARY_RUN
+31113488180 — SUCCESS
+
+COLLECTOR_TESTS_RUN
+31113488273 — SUCCESS
+
+PYTHON_3_11_ARTIFACT
+8972675555
+
+PYTHON_3_12_ARTIFACT
+8972676098
+
+COMMON_ARTIFACT_DIGEST
+sha256:a237c13e85fc486dcab515b3508fd92479596438acdb327679920d442596b67f
+```
+
+### Empreintes des sorties
+
+```text
+AUTHORITATIVE_PACKAGE_SHA256
+e07ded9d02a0c334ac8c2e0368d24d903d82f35716585a46d6ddf7c375e18e95
+
+EXPANDED_JSON_SHA256
+dadc834e31b677bbd4e3e5e4406d985a73724d5f3fd86530518b08b7d086eeb4
+
+CSV_SHA256
+374c10b8ac9d92d0f025400933cfcb2e41970f1f4f7bd4f95d9bce08e536f068
+
+MARKDOWN_SHA256
+3827b74da9c40f561608b196e047bf8254f8c20e0b58fac33b6ca485b13d2138
+```
 
 ## 10. Extensions non encore complètes
 
@@ -191,5 +230,5 @@ La v1 ne couvre pas encore `ref.*`, `source.*`, `market.*`, D00–D17, les objet
 NAV/AUM/dividendes/portefeuilles/frais/documents/prestataires non modélisés, le
 réglementaire, l’ESG, l’analytique ni le mapping officiel Openfunds.
 
-`OF-DATA-003` doit traiter séparément le catalogue D00–D17, sans élargir
-silencieusement le statut de cette version.
+`OF-DATA-003` doit traiter séparément le catalogue D00–D17, après autorisation et
+audit dynamique, sans élargir silencieusement le statut de cette version.

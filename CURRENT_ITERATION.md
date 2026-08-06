@@ -1,24 +1,33 @@
 # Itération courante
 
 ```text
-LOOP_ID: OF-LOOP-DATA-001
+LOOP_ID: OF-LOOP-DATA-002
 ITERATION: 001
-TASK_ID: OF-DATA-001
+TASK_ID: OF-DATA-002
 STATUS: VERIFIED_COMPLETE
-START_HEAD: e79c735b2cda8cc40a237b7deb3e379cc42bf1d9
-VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
-DATE: 2026-08-05
+START_HEAD: 0a48c14999a5f173fa5ab3ce4b91109e24092c2c
+VALIDATED_TECHNICAL_HEAD: 1fb49075abdfb958e152accf915c37ac86b9a54e
+DATE: 2026-08-06
 ```
 
 ## Hypothèse et verdict
 
-**Hypothèse :** fonds autonomes et umbrellas peuvent partager une identité
-canonique sans imposer un compartiment fictif.
+**Hypothèse :** les 143 colonnes physiques du cœur fonds peuvent être décrites
+par une source d’authoring machine-readable unique, sans modifier le runtime ni
+inventer le catalogue Openfunds.
 
-**Verdict : confirmé.** Les deux chemins structurels, les versions, noms,
-identifiants et événements sont appliqués et testés dans PostgreSQL 16.
+**Verdict : confirmé.** Le paquet JSON gouverné se développe en 143 contrats de
+36 attributs, réconciliés exactement avec la migration `015`. Les sorties JSON,
+CSV `;` et Markdown sont reproductibles sur Python 3.11 et 3.12.
+
+## Corrections de boucle
+
+- alignement des empreintes du manifeste sur le générateur commité ;
+- correction du test SQL afin de ne lire que les déclarations de colonnes au
+  niveau top-level ;
+- aucune réécriture d’historique et aucune modification SQL.
 
 ## Limite
 
-Cette itération ne peuple pas le dictionnaire, n’importe aucun historique de
-fonds et ne configure aucun environnement de production.
+Cette itération ne couvre pas D00–D17, les autres schémas, le mapping officiel
+Openfunds, les historiques réels ou la production.
