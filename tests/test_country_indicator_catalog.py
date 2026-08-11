@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import hashlib
 import importlib.util
+import json
 import re
 import unittest
 from collections import Counter
@@ -9,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CORE = ROOT / "scripts/country_indicator_catalog.py"
 AUTHORING = ROOT / "data/indicator_catalog/v1"
+SCHEMA = ROOT / "data/indicator_catalog/country-indicator-catalog-v1.schema.json"
+FROZEN_SQL = ROOT / "schemas/reference/016_country_indicator_catalog.sql"
+CATALOG_MANIFEST = ROOT / "data/indicator_catalog/COUNTRY_INDICATOR_CATALOG_MANIFEST_V1.json"
 
 EXPECTED_DOMAIN_COUNTS = {
     "D00": 15,
@@ -168,6 +173,66 @@ class CountryIndicatorCatalogLegacyContractTests(unittest.TestCase):
             self.assertEqual(nature, by_code[code]["canonical_nature"], code)
         self.assertEqual("Brute", by_code["D00.SOURCE_HASH"]["source_nature"])
         self.assertEqual("METADATA", by_code["D00.SOURCE_HASH"]["canonical_nature"])
+
+    def test_json_schema_declares_required_governed_contract(self):
+        self.assertTrue(SCHEMA.is_file(), "TDD RED: catalogue JSON schema not created yet")
+        schema = json.loads(SCHEMA.read_text(encoding="utf-8"))
+        self.assertEqual("https://json-schema.org/draft/2020-12/schema", schema["$schema"])
+        required = set(schema["$defs"]["indicator"]["required"])
+        self.assertTrue({
+            "indicator_code",
+            "domain_code",
+            "label_fr",
+            "canonical_nature",
+            "canonical_nature_status",
+            "source_file",
+            "source_sha256",
+            "history_status",
+        }.issubset(required))
+
+    def test_derived_outputs_are_deterministic_and_complete(self):
+        self.assertTrue(
+            hasattr(self.core, "build_derived_outputs"),
+            "TDD RED: deterministic derived renderer is not implemented yet",
+        )
+        first = self.core.build_derived_outputs(self.package)
+        second = self.core.build_derived_outputs(self.package)
+        self.assertEqual(first, second)
+        self.assertEqual({"json", "csv", "markdown", "sql"}, set(first))
+
+        expanded = json.loads(first["json"])
+        self.assertEqual(18, len(expanded["domains"]))
+        self.assertEqual(420, len(expanded["indicators"]))
+
+        csv_lines = first["csv"].splitlines()
+        self.assertEqual(421, len(csv_lines))
+        self.assertIn(";", csv_lines[0])
+        self.assertNotIn(",", csv_lines[0])
+
+        markdown = first["markdown"]
+        self.assertEqual(18, markdown.count("\n## D"))
+        self.assertEqual(420, markdown.count("\n| D"))
+        self.assertIn("NOT_ASSERTED_BY_DEFINITION_CATALOGUE", markdown)
+
+        sql = first["sql"]
+        self.assertIn("create table if not exists ref.indicator_domain", sql.lower())
+        self.assertIn("create table if not exists ref.indicator_definition", sql.lower())
+        self.assertNotRegex(sql.lower(), r"(?m)^\s*(drop|delete|truncate)\b")
+        self.assertNotIn("statistical_observation", sql.lower())
+        self.assertNotIn("country_series", sql.lower())
+
+    def test_frozen_sql_and_manifest_match_derived_outputs(self):
+        self.assertTrue(FROZEN_SQL.is_file(), "TDD RED: frozen SQL seed not materialized yet")
+        self.assertTrue(CATALOG_MANIFEST.is_file(), "TDD RED: catalogue manifest not materialized yet")
+        outputs = self.core.build_derived_outputs(self.package)
+        self.assertEqual(outputs["sql"], FROZEN_SQL.read_text(encoding="utf-8"))
+        manifest = json.loads(CATALOG_MANIFEST.read_text(encoding="utf-8"))
+        self.assertEqual(18, manifest["domain_count"])
+        self.assertEqual(420, manifest["indicator_count"])
+        self.assertEqual("OF-DATA-003-A", manifest["classification_decision_id"])
+        for key in ("json", "csv", "markdown", "sql"):
+            expected_sha = hashlib.sha256(outputs[key].encode("utf-8")).hexdigest()
+            self.assertEqual(expected_sha, manifest["outputs"][key]["sha256"])
 
 
 if __name__ == "__main__":
