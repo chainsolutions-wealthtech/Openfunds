@@ -1,0 +1,43 @@
+name: Country Indicator Catalog
+
+on:
+  pull_request:
+    paths:
+      - 'data/indicator_catalog/**'
+      - 'docs/04_DATA_GOVERNANCE/indicator_catalog/**'
+      - 'docs/04_DATA_GOVERNANCE/COUNTRY_INDICATOR_CATALOG_V1.md'
+      - 'docs/01_ARCHITECTURE/ADR-032_COUNTRY_INDICATOR_CATALOG_MIRROR_FIRST.md'
+      - 'scripts/country_indicator_catalog.py'
+      - 'scripts/generate_country_indicator_catalog.py'
+      - 'tests/test_country_indicator_catalog.py'
+      - 'schemas/reference/016_country_indicator_catalog.sql'
+      - 'migrations/manifest.json'
+      - '.github/workflows/country-indicator-catalog.yml'
+  push:
+    paths:
+      - 'data/indicator_catalog/**'
+      - 'docs/04_DATA_GOVERNANCE/indicator_catalog/**'
+      - 'docs/04_DATA_GOVERNANCE/COUNTRY_INDICATOR_CATALOG_V1.md'
+      - 'docs/01_ARCHITECTURE/ADR-032_COUNTRY_INDICATOR_CATALOG_MIRROR_FIRST.md'
+      - 'scripts/country_indicator_catalog.py'
+      - 'scripts/generate_country_indicator_catalog.py'
+      - 'tests/test_country_indicator_catalog.py'
+      - 'schemas/reference/016_country_indicator_catalog.sql'
+      - 'migrations/manifest.json'
+      - '.github/workflows/country-indicator-catalog.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-country-indicator-catalog:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run country indicator catalogue contract tests
+        run: python -m unittest -v tests.test_country_indicator_catalog
