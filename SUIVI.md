@@ -1,6 +1,6 @@
 # SUIVI — JOURNAL DE CONTINUITE DU PROJET OPENFUNDS
 
-Dernière mise à jour : `2026-08-03`  
+Dernière mise à jour : `2026-08-11`  
 Branche : `architecture/africafunds-country-indicators-v0.1`  
 PR principale : `#1` — brouillon, ouverte, fusionnable, non fusionnée.
 
@@ -41,11 +41,11 @@ DOCUMENTATION PERMANENTE                 TERMINEE
 ARCHITECTURE ET PRINCIPES                DOCUMENTES
 REFERENTIELS GEOGRAPHIQUES               STRUCTURELLEMENT PEUPLES
 ORGANISATIONS ET SOURCES                 PARTIELLEMENT PEUPLEES
-CATALOGUE D00-D17                        DOCUMENTE, NON CENTRALISE
+CATALOGUE D00-D17                        CENTRALISE JSON / TESTE / MIGRATION 016
 BCEAO FX / BEAC FX                       COLLECTION_TESTED
 HISTORIQUE DURABLE MULTI-DATES           NON
-MODELE FUND/SUBFUND/SHARECLASS           A ARBITRER
-DICTIONNAIRE MACHINE-READABLE            NON PEUPLE
+MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE
+DICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES
 MAPPING OPENFUNDS                        ABSENT
 CATEGORIES / BLOCS DE REFERENCE          NON GENERES
 WTI / WTI BENCH / METRIQUES              NON CALCULES
@@ -552,3 +552,50 @@ Livrables principaux : réconciliation permanente, matrice des 176 fichiers, `00
 4. terminer et vérifier `OF-DOC-003` ;
 5. n'autoriser qu'ensuite une phase séparée pour le blocker de migration `012` ;
 6. ne pas commencer `OF-DATA-001`, fusionner ou retargeter une PR, modifier `main` ou déployer.
+
+## MISE A JOUR DU 11 AOUT 2026 — OF-DATA-003 VERIFIED COMPLETE
+
+```text
+TASK_ID: OF-DATA-003
+LOOP_ID: OF-LOOP-DATA-003
+LOOP_START_HEAD: 145461e04ba9affd2b11fedaf56ed4ad49171b5d
+VALIDATED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
+CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
+PRODUCTION_DEPLOYED: NO
+REAL_COUNTRY_HISTORY_LOADED: NO
+```
+
+### Résultat
+
+- les sept Markdown D00–D17 historiques ont été figés comme sources de bootstrap et de fidélité ;
+- `data/indicator_catalog/v1/` est la source d’authoring logique gouvernée ;
+- 18 domaines et exactement 420 codes canoniques uniques sont présents ;
+- les absences restent `null` / `NOT_AUTHORED` au lieu d’être inventées ;
+- `source_nature` reste distinct de `canonical_nature` ;
+- la classification gouvernée `OF-DATA-003-A` compte 298 `RAW`, 85 `METADATA`, 7 `EVENT` et 30 `CALCULATED` ;
+- `target_history` reste une exigence et tous les `history_status` restent `NOT_ASSERTED_BY_DEFINITION_CATALOGUE` ;
+- JSON expansé, CSV UTF-8 `;`, Markdown et SQL sont générés déterministement ;
+- la migration `016_COUNTRY_INDICATOR_CATALOG` crée uniquement `ref.indicator_domain` et `ref.indicator_definition` ;
+- aucune observation, série pays, historique réel, secret, base persistante ou production n’a été chargé.
+
+### Preuves
+
+```text
+COUNTRY_INDICATOR_CATALOG_RUN: 31484468846 — SUCCESS
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+MIGRATION_RUNNER_RUN: 31484586710 — SUCCESS
+POSTGRESQL_16_DOUBLE_APPLY: SUCCESS
+POSTGRESQL_16_VERIFY: SUCCESS
+RUNTIME_COUNTS: 18 DOMAINS / 420 DEFINITIONS
+```
+
+Le run de migrations valide aussi les fixtures Fund/SubFund/ShareClass et le scénario d’adoption d’une base déjà initialisée sans ledger.
+
+### Correction transparente de boucle
+
+La CI a révélé qu’une étape réappliquait la classification dans son workspace avant de figer le manifeste. Le SQL était identique, mais la phrase de métadonnées rendait le hash JSON différent. La cause a été corrigée au commit `d8b3a2d697e9bfdad9a022ba8379494fcaa17608` : le paquet JSON commité est désormais strictement autoritaire et la CI le vérifie sans le réécrire. Un test fonds supposait ensuite à tort que la migration `015` devait rester la dernière migration globale ; le commit `0777afffad950e779234ef09f3f2b9031ec41ce7` a recentré l’invariant sur l’unicité de la migration canonique du domaine `fund`.
+
+### Prochaine porte
+
+`OF-MAP-001` reste bloqué tant qu’un catalogue Openfunds officiel, versionné et licencié n’est pas archivé. La prochaine tâche non bloquée de priorité haute est `OF-SOURCE-002` : compléter les institutions des 54 pays. La reprise doit commencer en lecture seule par un audit de couverture et de preuve ; aucune donnée réelle ne doit être inventée ou déclarée complète sans source vérifiée.

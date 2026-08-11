@@ -6,13 +6,10 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ### A décider
 
-- source de vérité des référentiels CSV/SQL ;
-- modèle canonique d'endpoint ;
-- traitement des dates métier inconnues ;
-- stratégie de migrations ;
-- modèle final Fund/SubFund/ShareClass ;
-- format maître du dictionnaire ;
-- version officielle openfunds à intégrer.
+- version officielle Openfunds à intégrer et sa licence ;
+- PostgreSQL persistant et stockage brut immuable ;
+- complétude des institutions et mappings sources des 54 pays ;
+- méthodologies WTI Bench, risque sans risque et MAR encore ouvertes.
 
 ### Limites connues
 
@@ -23,6 +20,48 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - historique FX limité à un snapshot validé par zone ;
 - mapping openfunds absent ;
 - API, catégories, WTI et WTI Bench non implémentés.
+
+
+## [2026-08-11] — OF-DATA-003 CATALOGUE D00-D17 GOUVERNE
+
+### Décidé
+
+- Option A `MIRROR_FIRST` : les sept Markdown historiques restent des sources de bootstrap/audit et le paquet JSON `data/indicator_catalog/v1/` devient l’autorité d’authoring ;
+- les valeurs absentes restent `null` avec statut explicite ;
+- `source_nature` et `canonical_nature` sont séparés ;
+- la classification `RAW / METADATA / EVENT / CALCULATED` est une décision de gouvernance versionnée, pas une assertion fournisseur ;
+- `target_history` ne prouve jamais qu’un historique est chargé.
+
+### Ajouté
+
+- 19 fichiers d’authoring (`00_metadata.json` + D00 à D17) ;
+- JSON Schema du catalogue ;
+- générateur déterministe JSON/CSV `;`/Markdown/SQL ;
+- manifeste SHA-256 ;
+- migration gouvernée `016_COUNTRY_INDICATOR_CATALOG` ;
+- tests contractuels et workflow Python 3.11/3.12 ;
+- ADR-032, documentation de gouvernance et rapport de clôture.
+
+### Vérifié
+
+- 18 domaines / 420 codes uniques ;
+- 298 `RAW`, 85 `METADATA`, 7 `EVENT`, 30 `CALCULATED` ;
+- aucun historique chargé revendiqué ;
+- run catalogue `31484468846` : `SUCCESS` ;
+- run migrations `31484586710` : `SUCCESS` ;
+- double application PostgreSQL 16, vérification runtime et scénario d’adoption sans ledger : `SUCCESS`.
+
+### Corrigé
+
+- suppression d’une mutation CI du paquet d’authoring avant génération du manifeste ;
+- découplage du test Fund/SubFund/ShareClass de la position globale de la migration `015`.
+
+### Non réalisé
+
+- aucune production persistante ;
+- aucune observation ou histoire pays chargée ;
+- aucun mapping officiel Openfunds inventé ;
+- aucun merge, retargeting, nouvelle branche, nouvelle PR ou déploiement.
 
 ## [2026-08-03] — CONSOLIDATION DOCUMENTAIRE
 

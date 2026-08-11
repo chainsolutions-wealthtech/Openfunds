@@ -1,33 +1,29 @@
+
 # Itération courante
 
 ```text
-LOOP_ID: OF-LOOP-DATA-002
+LOOP_ID: OF-LOOP-DATA-003
 ITERATION: 001
-TASK_ID: OF-DATA-002
+TASK_ID: OF-DATA-003
 STATUS: VERIFIED_COMPLETE
-START_HEAD: 0a48c14999a5f173fa5ab3ce4b91109e24092c2c
-VALIDATED_TECHNICAL_HEAD: 1fb49075abdfb958e152accf915c37ac86b9a54e
-DATE: 2026-08-06
+START_HEAD: 145461e04ba9affd2b11fedaf56ed4ad49171b5d
+VALIDATED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
+DATE: 2026-08-11
 ```
 
 ## Hypothèse et verdict
 
-**Hypothèse :** les 143 colonnes physiques du cœur fonds peuvent être décrites
-par une source d’authoring machine-readable unique, sans modifier le runtime ni
-inventer le catalogue Openfunds.
+**Hypothèse :** les 420 définitions D00–D17 peuvent être centralisées sans réécrire leurs sources, inventer les champs absents ni transformer des exigences de couverture en historiques chargés.
 
-**Verdict : confirmé.** Le paquet JSON gouverné se développe en 143 contrats de
-36 attributs, réconciliés exactement avec la migration `015`. Les sorties JSON,
-CSV `;` et Markdown sont reproductibles sur Python 3.11 et 3.12.
+**Verdict : confirmé.** Un paquet JSON gouverné unique développe 18 domaines / 420 codes, conserve la provenance legacy, sépare `source_nature` de `canonical_nature`, génère quatre vues déterministes et alimente une migration additive testée sur PostgreSQL 16.
 
 ## Corrections de boucle
 
-- alignement des empreintes du manifeste sur le générateur commité ;
-- correction du test SQL afin de ne lire que les déclarations de colonnes au
-  niveau top-level ;
-- aucune réécriture d’historique et aucune modification SQL.
+- TDD RED/GREEN pour le parseur, le paquet authoring, la classification, les sorties et la migration ;
+- correction de la mutation CI du paquet d’authoring avant gel du manifeste ;
+- correction d’un test funds qui supposait à tort que la migration `015` devait être la dernière migration globale ;
+- aucun force-push ni réécriture d’historique.
 
 ## Limite
 
-Cette itération ne couvre pas D00–D17, les autres schémas, le mapping officiel
-Openfunds, les historiques réels ou la production.
+Cette itération ne charge aucune donnée réelle et ne valide ni disponibilité pays, ni historique complet, ni mapping Openfunds, ni calcul actif, ni production.

@@ -1,58 +1,47 @@
+
 # Openfunds — point d’entrée obligatoire
 
 ```text
 STATUS: ACTIVE
-TASK_ID: OF-DOC-003
-LOOP_ID: OF-LOOP-DOC-003
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
+CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
 DOCUMENTARY_BASELINE_END: 59f6475102b8a0c5b1274060afc412db787f2caf
-OBSERVED_HEAD_AT_INITIALIZATION: 3c54c54733e116f35ff63a0759c921afd58c57a6
-LAST_VERIFIED: 2026-08-05
+LATEST_VERIFIED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
+LAST_VERIFIED: 2026-08-11
 ```
 
 ## Finalité
 
-Ce fichier est le premier document à lire pour toute intervention humaine ou IA.
-Il ne remplace pas les documents historiques : il les ordonne et indique la
-source d’autorité à consulter avant toute écriture.
+Ce fichier est le premier document à lire pour toute intervention humaine ou IA. Il ne remplace pas les documents historiques : il ordonne les autorités à consulter avant toute écriture.
 
 ## Lecture obligatoire
 
-1. `AGENTS.md` — règles communes aux humains et assistants ;
-2. `SOURCE_OF_TRUTH.md` — autorités d’authoring, runtime et recherche ;
-3. `STATUS.md` — état vérifié et limites ;
-4. `NEXT_ACTION.md` — seule prochaine action autorisée ;
-5. `LOOP_STATE.md` et `CURRENT_ITERATION.md` — boucle en cours ;
-6. `TODO.md`, `SUIVI.md`, `DECISIONS.md` — mémoire permanente ;
-7. `docs/00_PROJECT/ARCHITECTURE_GATE_CHAIN_FINAL_AUDIT_20260805.md` ;
-8. `docs/00_PROJECT/MIGRATION_RUNNER_RISK_REVIEW_20260805.md`.
+1. `AGENTS.md` ;
+2. `SOURCE_OF_TRUTH.md` ;
+3. `STATUS.md` ;
+4. `NEXT_ACTION.md` ;
+5. `LOOP_STATE.md` et `CURRENT_ITERATION.md` ;
+6. `TODO.md`, `SUIVI.md`, `DECISIONS.md` ;
+7. le rapport de clôture le plus récent sous `docs/00_PROJECT/` ;
+8. les ADR liés à la tâche candidate.
 
 ## Contrôle Git obligatoire
 
-Avant toute écriture, résoudre dynamiquement le HEAD de `architecture/africafunds-country-indicators-v0.1` et vérifier
-que `59f6475102b8a0c5b1274060afc412db787f2caf` en est toujours un ancêtre. Inventorier chaque commit postérieur.
-Arrêter si la lignée diverge ou si une intervention parallèle touche les mêmes
-fichiers.
+Résoudre dynamiquement le HEAD de la branche de contrôle, vérifier la lignée depuis la baseline documentaire et inventorier tout commit postérieur au dernier HEAD technique validé. Arrêter en cas de divergence non comprise ou d’intervention concurrente sur les mêmes fichiers.
 
-## Statuts techniques à préserver
+## Gates techniques vérifiés
 
 ```text
 OF-ARCH-001   VERIFIED_COMPLETE
 OF-SOURCE-001 VERIFIED_COMPLETE
 OF-ARCH-002   VERIFIED_COMPLETE
 OF-ARCH-003   VERIFIED_COMPLETE
-OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
-OF-DATA-001   NOT_STARTED
+OF-ARCH-004   VERIFIED_COMPLETE
+OF-DATA-001   VERIFIED_COMPLETE
+OF-DATA-002   VERIFIED_COMPLETE
+OF-DATA-003   VERIFIED_COMPLETE
 ```
 
-## Interdictions permanentes de cette boucle
+## Interdictions permanentes
 
-Aucune nouvelle branche, aucun travail sur `main`, aucune nouvelle PR, aucune
-fusion, aucun retargeting, aucun force-push, aucun déploiement et aucune
-modification technique. La migration générée `012` reste inchangée.
-
-## Quand mettre ce document à jour
-
-Uniquement lorsqu’un point d’entrée, une autorité documentaire ou la séquence de
-reprise change. Toute modification doit être reliée à une tâche `OF-*`, une
-preuve et une entrée dans `WORK_LOG.md`.
+Ne pas travailler directement sur `main`, créer une branche/PR, force-push, fusionner ou retargeter une PR, déployer ou charger des données réelles sans une porte explicite. `COLLECTION_TESTED` ne signifie jamais `HISTORY_LOADED` et une définition de catalogue n’est jamais une observation.

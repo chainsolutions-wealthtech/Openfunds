@@ -298,3 +298,17 @@ Le statut de `OF-ARCH-004` reste inférieur à `VERIFIED_COMPLETE` : la migratio
 - **Boucle :** `OF-LOOP-DOC-003`.
 - **Autorité :** `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, `STATUS.md` et `DOCUMENT_INTEGRATION_MATRIX.md` organisent la navigation ; ils ne remplacent pas les ADR, TODO, SUIVI ou rapports datés.
 - **Limites :** documentation seulement, aucune modification de migration 012, aucun démarrage de `OF-DATA-001`, aucune opération de branche, PR, fusion ou déploiement.
+
+## ADR-032 — CATALOGUE D00-D17 MIRROR-FIRST
+
+- **Statut :** ACCEPTE
+- **Date :** 2026-08-11
+- **Tâche :** `OF-DATA-003`
+- **Décision détaillée :** `docs/01_ARCHITECTURE/ADR-032_COUNTRY_INDICATOR_CATALOG_MIRROR_FIRST.md`.
+- **Décision :** les sept Markdown historiques D00–D17 sont des sources de bootstrap et de fidélité ; le paquet JSON `data/indicator_catalog/v1/` est l’unique autorité d’authoring de la v1 du catalogue pays-indicateurs.
+- **Règle d’absence :** aucune valeur manquante n’est inventée ; `null`, `NOT_AUTHORED`, `UNKNOWN`, `NOT_APPLICABLE` et zéro restent distincts.
+- **Nature :** `source_nature` est préservée ; `canonical_nature` est une classification de gouvernance distincte et versionnée selon `OF-DATA-003-A`.
+- **Historique :** `target_history` est un objectif de couverture ; il ne prouve ni collecte ni chargement. Le catalogue ne peut pas attribuer un statut historique chargé.
+- **Runtime :** la migration générée/frozen `016_COUNTRY_INDICATOR_CATALOG` matérialise uniquement les définitions sous `ref.*` ; elle n’importe aucune observation pays.
+- **Effet sur ADR-024 :** ADR-024 est remplacé pour le périmètre D00–D17 par ADR-032. ADR-031 reste l’autorité du dictionnaire `CANONICAL_FUND_CORE`.
+- **Limites :** aucun catalogue officiel Openfunds n’est intégré, aucune donnée réelle n’est chargée et aucun déploiement de production n’est autorisé par cette décision.

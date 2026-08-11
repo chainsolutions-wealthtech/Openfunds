@@ -1,49 +1,34 @@
+
 # État de la boucle
 
 ```text
-LOOP_ID: OF-LOOP-DATA-002
-TASK_ID: OF-DATA-002
-LOOP_TYPE: CANONICAL_FIELD_DICTIONARY
+LOOP_ID: OF-LOOP-DATA-003
+TASK_ID: OF-DATA-003
+LOOP_TYPE: COUNTRY_INDICATOR_CATALOG
 STATUS: VERIFIED_COMPLETE
-START_HEAD: 0a48c14999a5f173fa5ab3ce4b91109e24092c2c
-INITIAL_TECHNICAL_HEAD: 2d4c8c860aedce30a25cfc9ffcda1ab6ec820a43
-MANIFEST_ALIGNMENT_HEAD: ecb2713c6b7ba591bc86b977ca7d35c455465174
-VALIDATED_TECHNICAL_HEAD: 1fb49075abdfb958e152accf915c37ac86b9a54e
+START_HEAD: 145461e04ba9affd2b11fedaf56ed4ad49171b5d
+VALIDATED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
 BRANCH: architecture/africafunds-country-indicators-v0.1
-SCOPE: CANONICAL_FUND_CORE
+SCOPE: D00_D17_DEFINITION_CATALOG
 PRODUCTION_DEPLOYED: NO
-REAL_FUND_DATA_LOADED: NO
+REAL_COUNTRY_DATA_LOADED: NO
+POSTGRESQL_VALIDATION: EPHEMERAL_CI_ONLY
 ```
 
 ## Résultat
 
-Le paquet JSON gouverné `data/dictionary/spec_v1/` inventorie les 143 colonnes
-physiques des dix tables `fund.*` de la migration `015`. Chaque champ expansé
-possède 36 attributs, un `FIELD_ID` stable, une définition bilingue, ses règles
-de type, nullabilité, cardinalité, validation, normalisation, historique et
-provenance.
-
-Les vues JSON, CSV UTF-8 `;` et Markdown sont déterministes et publiées comme
-artefacts de revue. Aucun identifiant Openfunds n’est inventé.
+Le paquet JSON `data/indicator_catalog/v1/` est l’autorité d’authoring v1 des 18 domaines et 420 définitions D00–D17. Les sept Markdown historiques restent des sources de bootstrap/audit. Les sorties JSON, CSV `;`, Markdown et SQL sont déterministes ; la migration `016` matérialise uniquement les définitions sous `ref.*`.
 
 ## Preuves
 
 ```text
-CANONICAL_FIELD_DICTIONARY_RUN
-31113488180 — SUCCESS
-
-COLLECTOR_TESTS_RUN
-31113488273 — SUCCESS
-
-PYTHON
-3.11 — SUCCESS
-3.12 — SUCCESS
-
-ARTIFACT_DIGEST
-sha256:a237c13e85fc486dcab515b3508fd92479596438acdb327679920d442596b67f
+COUNTRY_INDICATOR_CATALOG_RUN: 31484468846 — SUCCESS
+MIGRATION_RUNNER_RUN: 31484586710 — SUCCESS
+PYTHON: 3.11 SUCCESS / 3.12 SUCCESS
+POSTGRESQL_16_DOUBLE_APPLY: SUCCESS
+RUNTIME: 18 DOMAINS / 420 DEFINITIONS
 ```
 
 ## Sortie
 
-Boucle fermée. `OF-DATA-003` n’est pas commencé et requiert une nouvelle
-autorisation explicite.
+Boucle fermée. La prochaine boucle candidate est `OF-SOURCE-002`, à démarrer par un audit en lecture seule. `OF-MAP-001` reste bloqué faute de catalogue Openfunds officiel versionné/licencié.

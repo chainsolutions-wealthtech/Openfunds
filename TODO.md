@@ -1,6 +1,6 @@
 # TODO — REGISTRE DES TACHES OPENFUNDS
 
-Dernière mise à jour : `2026-08-03`.
+Dernière mise à jour : `2026-08-11`.
 
 ## 1. REGLES
 
@@ -25,6 +25,10 @@ TERMINE
 
 Priorités : `P0_CRITIQUE`, `P1_HAUTE`, `P2_MOYENNE`, `P3_BASSE`.
 
+## Synchronisation des statuts — 2026-08-11
+
+Les statuts de `OF-ARCH-001`, `OF-SOURCE-001`, `OF-ARCH-002`, `OF-ARCH-003`, `OF-ARCH-004`, `OF-DATA-001`, `OF-DATA-002` et `OF-DATA-003` sont alignés sur les boucles vérifiées et les preuves CI. Les descriptions historiques restent conservées ; le statut `TERMINE` n’implique ni déploiement de production ni chargement d’historiques réels.
+
 Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acceptation. La création d'un fichier ou d'une table vide ne suffit pas.
 
 ---
@@ -33,7 +37,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-ARCH-001 — Choisir la source de vérité des référentiels
 
-- **Statut :** A_ARBITRER
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Domaine :** Architecture / Gouvernance
 - **Dépendances :** `ADR-021`
@@ -54,7 +58,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-SOURCE-001 — Synchroniser BCEAO/BEAC entre CSV et SQL
 
-- **Statut :** A_CORRIGER
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Domaine :** Sources / Référentiels
 - **Dépendances :** OF-ARCH-001
@@ -74,7 +78,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-ARCH-002 — Unifier le modèle des endpoints
 
-- **Statut :** A_CORRIGER
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** OF-ARCH-001
 - **Problème :** coexistence conceptuelle de `source.endpoint` et `source.source_endpoint`.
@@ -83,7 +87,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-ARCH-003 — Définir les dates métier inconnues
 
-- **Statut :** A_ARBITRER
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** `ADR-022`
 - **Critères d'acceptation :**
@@ -96,7 +100,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-ARCH-004 — Adopter une stratégie de migrations
 
-- **Statut :** PROPOSE
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** OF-ARCH-001/002, `ADR-023`
 - **Critères d'acceptation :** ordre unique, registre des migrations, tests base vide/existante, procédure de réparation, aucune destruction de données.
@@ -104,7 +108,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-DATA-001 — Stabiliser Fund / SubFund / ShareClass
 
-- **Statut :** A_ARBITRER
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** `ADR-009`, exemples Maroc/Tunisie/Nigeria
 - **Critères d'acceptation :**
@@ -118,20 +122,23 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-DATA-002 — Peupler le dictionnaire canonique
 
-- **Statut :** EN_COURS
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** OF-DATA-001, `ADR-024`
-- **Etat actuel :** structure obligatoire documentée dans `DATA_DICTIONARY.md`, catalogue non peuplé.
+- **Etat actuel :** `OF-DATA-002` vérifié complet : paquet JSON gouverné `data/dictionary/spec_v1/`, 10 tables, 143 champs, 36 attributs par champ et CI Python 3.11/3.12 verte.
 - **Critères d'acceptation :** chaque champ possède ID, définition, domaine, entité, type, unité, devise, cardinalité, contraintes, validation, normalisation, historique, provenance, sensibilité, confiance, mapping et version.
 - **Livrables :** format maître machine-readable, vues humaines et tests.
 
 ## OF-DATA-003 — Centraliser les définitions D00-D17
 
-- **Statut :** EN_COURS
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** OF-DATA-002
 - **Critères d'acceptation :** compte vérifié, codes uniques, nature RAW/METADATA/EVENT/CALCULATED, unité, fréquence, source, usages, statut et génération des Markdown.
 - **Livrables :** catalogue structuré, import SQL et tests d'unicité.
+- **Date de fin :** 2026-08-11
+- **Résultat vérifié :** 18 domaines, 420 codes uniques, paquet d’authoring JSON v1, classification gouvernée 298 `RAW` / 85 `METADATA` / 7 `EVENT` / 30 `CALCULATED`, vues JSON/CSV `;`/Markdown/SQL déterministes, migration `016` et double application PostgreSQL 16 en CI.
+- **Preuve :** `docs/00_PROJECT/OF_DATA_003_COMPLETION_20260811.md`.
 
 ---
 
