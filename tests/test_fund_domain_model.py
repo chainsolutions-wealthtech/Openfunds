@@ -12,11 +12,17 @@ MIGRATION = ROOT / "schemas/fund/015_fund_subfund_shareclass_core.sql"
 class FundDomainModelTests(unittest.TestCase):
     def test_manifest_promotes_only_the_canonical_fund_model(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
-        last = manifest["migrations"][-1]
-        self.assertEqual(last["order"], 150)
-        self.assertEqual(last["id"], "015_FUND_SUBFUND_SHARECLASS_CORE")
+        fund_migrations = [
+            item
+            for item in manifest["migrations"]
+            if item["path"].startswith("schemas/fund/")
+        ]
+        self.assertEqual(1, len(fund_migrations))
+        canonical = fund_migrations[0]
+        self.assertEqual(canonical["order"], 150)
+        self.assertEqual(canonical["id"], "015_FUND_SUBFUND_SHARECLASS_CORE")
         self.assertEqual(
-            last["path"],
+            canonical["path"],
             "schemas/fund/015_fund_subfund_shareclass_core.sql",
         )
 
