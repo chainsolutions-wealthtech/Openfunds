@@ -5,9 +5,12 @@ on:
     paths:
       - 'migrations/**'
       - 'schemas/**'
+      - 'data/indicator_catalog/**'
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
+      - 'scripts/generate_country_indicator_catalog.py'
       - 'tests/test_migration_runner.py'
+      - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
@@ -15,9 +18,12 @@ on:
     paths:
       - 'migrations/**'
       - 'schemas/**'
+      - 'data/indicator_catalog/**'
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
+      - 'scripts/generate_country_indicator_catalog.py'
       - 'tests/test_migration_runner.py'
+      - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
@@ -53,6 +59,7 @@ jobs:
         run: >-
           python -m unittest -v
           tests.test_migration_runner
+          tests.test_country_indicator_catalog
           tests.test_fund_domain_model
 
       - name: Validate and display governed plan
@@ -70,11 +77,18 @@ jobs:
           do $$
           declare
               migration_count integer;
+              indicator_domain_count integer;
+              indicator_definition_count integer;
+              raw_count integer;
+              metadata_count integer;
+              event_count integer;
+              calculated_count integer;
+              invalid_history_count integer;
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 15 then
-                  raise exception 'expected 15 governed migrations, got %', migration_count;
+              if migration_count <> 16 then
+                  raise exception 'expected 16 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -101,6 +115,48 @@ jobs:
               if to_regclass('fund.fund') is not null
                  or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
+              end if;
+
+              if to_regclass('ref.indicator_domain') is null
+                 or to_regclass('ref.indicator_definition') is null then
+                  raise exception 'country indicator catalogue runtime tables are missing';
+              end if;
+              select count(*) into indicator_domain_count from ref.indicator_domain;
+              select count(*) into indicator_definition_count from ref.indicator_definition;
+              if indicator_domain_count <> 18 then
+                  raise exception 'expected 18 indicator domains, got %', indicator_domain_count;
+              end if;
+              if indicator_definition_count <> 420 then
+                  raise exception 'expected 420 indicator definitions, got %', indicator_definition_count;
+              end if;
+
+              select count(*) filter (where canonical_nature='RAW'),
+                     count(*) filter (where canonical_nature='METADATA'),
+                     count(*) filter (where canonical_nature='EVENT'),
+                     count(*) filter (where canonical_nature='CALCULATED')
+                into raw_count, metadata_count, event_count, calculated_count
+              from ref.indicator_definition;
+              if raw_count <> 298 or metadata_count <> 85
+                 or event_count <> 7 or calculated_count <> 30 then
+                  raise exception 'canonical nature counts drift: RAW %, METADATA %, EVENT %, CALCULATED %',
+                      raw_count, metadata_count, event_count, calculated_count;
+              end if;
+
+              select count(*) into invalid_history_count
+              from ref.indicator_definition
+              where history_status <> 'NOT_ASSERTED_BY_DEFINITION_CATALOGUE';
+              if invalid_history_count <> 0 then
+                  raise exception 'definition catalogue asserted loaded history for % rows', invalid_history_count;
+              end if;
+
+              if not exists (
+                  select 1 from ref.indicator_definition
+                  where indicator_code='D00.SOURCE_HASH'
+                    and source_nature='Brute'
+                    and canonical_nature='METADATA'
+                    and classification_decision_id='OF-DATA-003-A'
+              ) then
+                  raise exception 'source_nature/canonical_nature separation contract is missing';
               end if;
           end
           $$;
