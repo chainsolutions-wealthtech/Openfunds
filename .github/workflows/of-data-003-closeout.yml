@@ -17,16 +17,19 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 2
+          fetch-depth: 0
 
-      - name: Verify exact technical parent
+      - name: Verify exact technical ancestry and ephemeral diff
         shell: bash
         run: |
           set -euo pipefail
           expected='0777afffad950e779234ef09f3f2b9031ec41ce7'
-          actual="$(git rev-parse HEAD^)"
-          if [ "$actual" != "$expected" ]; then
-            echo "Unexpected closeout parent: expected $expected got $actual" >&2
+          git merge-base --is-ancestor "$expected" HEAD
+          actual="$(git diff --name-only "$expected"..HEAD | sort)"
+          expected_paths="$(printf '%s\n' '.github/workflows/of-data-003-closeout.yml' 'scripts/finalize_of_data_003_documentation.py' | sort)"
+          if [ "$actual" != "$expected_paths" ]; then
+            echo 'Unexpected changes after validated technical HEAD:' >&2
+            printf '%s\n' "$actual" >&2
             exit 1
           fi
 
@@ -44,31 +47,29 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          expected="$(cat <<'EOF'
-.github/workflows/of-data-003-closeout.yml
-00_START_HERE.md
-AGENTS.md
-CHANGELOG.md
-CURRENT_ITERATION.md
-DECISIONS.md
-HANDOFF.md
-LOOP_STATE.md
-NEXT_ACTION.md
-SOURCE_OF_TRUTH.md
-STATUS.md
-SUIVI.md
-TODO.md
-WORK_LOG.md
-docs/00_PROJECT/OF_DATA_003_COMPLETION_20260811.md
-docs/01_ARCHITECTURE/ADR-032_COUNTRY_INDICATOR_CATALOG_MIRROR_FIRST.md
-docs/04_DATA_GOVERNANCE/Africa_Country_Indicator_Framework_v0.1.md
-docs/04_DATA_GOVERNANCE/COUNTRY_INDICATOR_CATALOG_V1.md
-docs/superpowers/plans/2026-08-11-of-data-003-country-indicator-catalog.md
-scripts/finalize_of_data_003_documentation.py
-EOF
-)"
           actual="$(git status --short | sed 's/^...//' | sort)"
-          if [ "$actual" != "$(printf '%s\n' "$expected" | sort)" ]; then
+          expected="$(printf '%s\n' \
+            '.github/workflows/of-data-003-closeout.yml' \
+            '00_START_HERE.md' \
+            'AGENTS.md' \
+            'CHANGELOG.md' \
+            'CURRENT_ITERATION.md' \
+            'DECISIONS.md' \
+            'HANDOFF.md' \
+            'LOOP_STATE.md' \
+            'NEXT_ACTION.md' \
+            'SOURCE_OF_TRUTH.md' \
+            'STATUS.md' \
+            'SUIVI.md' \
+            'TODO.md' \
+            'WORK_LOG.md' \
+            'docs/00_PROJECT/OF_DATA_003_COMPLETION_20260811.md' \
+            'docs/01_ARCHITECTURE/ADR-032_COUNTRY_INDICATOR_CATALOG_MIRROR_FIRST.md' \
+            'docs/04_DATA_GOVERNANCE/Africa_Country_Indicator_Framework_v0.1.md' \
+            'docs/04_DATA_GOVERNANCE/COUNTRY_INDICATOR_CATALOG_V1.md' \
+            'docs/superpowers/plans/2026-08-11-of-data-003-country-indicator-catalog.md' \
+            'scripts/finalize_of_data_003_documentation.py' | sort)"
+          if [ "$actual" != "$expected" ]; then
             echo 'Unexpected closeout diff:' >&2
             git status --short >&2
             exit 1
