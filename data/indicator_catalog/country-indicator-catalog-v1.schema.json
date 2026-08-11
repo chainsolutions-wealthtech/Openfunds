@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chainsolutions-wealthtech.github.io/Openfunds/schemas/country-indicator-catalog-v1.schema.json",
+  "title": "AfricaFunds Country Indicator Catalogue v1",
+  "description": "Governed machine-readable contract for D00-D17 definitions. Source-authored and governance-authored semantics remain separate.",
+  "$defs": {
+    "nullableString": {
+      "type": ["string", "null"]
+    },
+    "classificationProvenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "policy_version", "rule"],
+      "properties": {
+        "decision_id": {"const": "OF-DATA-003-A"},
+        "policy_version": {"type": "string"},
+        "rule": {
+          "enum": [
+            "DOMAIN_METADATA",
+            "EXPLICIT_METADATA_CODE",
+            "EXPLICIT_EVENT_CODE",
+            "DOMAIN_CALCULATED",
+            "DEFAULT_OBSERVED_RAW"
+          ]
+        }
+      }
+    },
+    "indicator": {
+      "type": "object",
+      "required": [
+        "indicator_code",
+        "domain_code",
+        "label_fr",
+        "label_fr_status",
+        "label_en",
+        "label_en_status",
+        "definition_fr",
+        "definition_fr_status",
+        "definition_en",
+        "definition_en_status",
+        "source_nature",
+        "source_nature_status",
+        "canonical_nature",
+        "canonical_nature_status",
+        "canonical_nature_provenance",
+        "frequency_source",
+        "unit_source",
+        "currency_rule",
+        "currency_rule_status",
+        "granularity",
+        "granularity_status",
+        "preferred_source_text",
+        "utility",
+        "benchmark_or_index",
+        "priority",
+        "target_history",
+        "mandatory",
+        "mandatory_status",
+        "calculation_method_id",
+        "calculation_method_status",
+        "definition_status",
+        "source_mapping_status",
+        "collection_spec_status",
+        "collection_test_status",
+        "history_status",
+        "calculation_status",
+        "source_file",
+        "source_sha256",
+        "source_row_key",
+        "schema_version"
+      ],
+      "properties": {
+        "indicator_code": {"type": "string", "pattern": "^D[0-9]{2}\\.[A-Z0-9_]+$"},
+        "domain_code": {"type": "string", "pattern": "^D[0-9]{2}$"},
+        "label_fr": {"type": "string", "minLength": 1},
+        "label_fr_status": {"type": "string"},
+        "label_en": {"$ref": "#/$defs/nullableString"},
+        "label_en_status": {"type": "string"},
+        "definition_fr": {"$ref": "#/$defs/nullableString"},
+        "definition_fr_status": {"type": "string"},
+        "definition_en": {"$ref": "#/$defs/nullableString"},
+        "definition_en_status": {"type": "string"},
+        "source_nature": {"$ref": "#/$defs/nullableString"},
+        "source_nature_status": {"type": "string"},
+        "canonical_nature": {"enum": ["RAW", "METADATA", "EVENT", "CALCULATED"]},
+        "canonical_nature_status": {"const": "GOVERNED_CLASSIFICATION"},
+        "canonical_nature_provenance": {"$ref": "#/$defs/classificationProvenance"},
+        "frequency_source": {"$ref": "#/$defs/nullableString"},
+        "unit_source": {"$ref": "#/$defs/nullableString"},
+        "currency_rule": {"$ref": "#/$defs/nullableString"},
+        "currency_rule_status": {"type": "string"},
+        "granularity": {"$ref": "#/$defs/nullableString"},
+        "granularity_status": {"type": "string"},
+        "preferred_source_text": {"$ref": "#/$defs/nullableString"},
+        "utility": {"$ref": "#/$defs/nullableString"},
+        "benchmark_or_index": {"$ref": "#/$defs/nullableString"},
+        "priority": {"$ref": "#/$defs/nullableString"},
+        "target_history": {"$ref": "#/$defs/nullableString"},
+        "mandatory": {"type": ["boolean", "null"]},
+        "mandatory_status": {"type": "string"},
+        "calculation_method_id": {"$ref": "#/$defs/nullableString"},
+        "calculation_method_status": {"type": "string"},
+        "definition_status": {"type": "string"},
+        "source_mapping_status": {"type": "string"},
+        "collection_spec_status": {"type": "string"},
+        "collection_test_status": {"type": "string"},
+        "history_status": {"const": "NOT_ASSERTED_BY_DEFINITION_CATALOGUE"},
+        "calculation_status": {"type": "string"},
+        "source_file": {"type": "string", "minLength": 1},
+        "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_row_key": {"type": "string"},
+        "schema_version": {"const": "1.0.0"}
+      }
+    }
+  },
+  "type": "object",
+  "required": ["domain", "indicators"],
+  "properties": {
+    "domain": {
+      "type": "object",
+      "required": ["domain_code", "name_fr", "expected_indicator_count"],
+      "properties": {
+        "domain_code": {"type": "string", "pattern": "^D[0-9]{2}$"},
+        "name_fr": {"type": "string"},
+        "expected_indicator_count": {"type": "integer", "minimum": 1}
+      }
+    },
+    "indicators": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/indicator"}
+    }
+  }
+}

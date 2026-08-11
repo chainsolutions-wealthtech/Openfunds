@@ -44,25 +44,39 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Apply governed Option A classification deterministically
         run: python scripts/generate_country_indicator_catalog.py --apply-governed-classification
+      - name: Generate deterministic review and SQL artifacts
+        run: python scripts/generate_country_indicator_catalog.py --generate-derived
       - name: Run country indicator catalogue contract tests
         run: python -m unittest -v tests.test_country_indicator_catalog
-      - name: Commit governed classification package
+      - name: Verify byte-identical regeneration
+        run: python scripts/generate_country_indicator_catalog.py --check-derived
+      - name: Upload generated review artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: country-indicator-catalog-py${{ matrix.python-version }}
+          path: build/indicator_catalog/
+          if-no-files-found: error
+      - name: Commit frozen SQL and checksum manifest
         if: github.event_name == 'push' && matrix.python-version == '3.11'
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "$(git status --porcelain -- data/indicator_catalog/v1)" ]; then
-            echo "Governed authoring package already committed and byte-identical."
+          tracked=(
+            data/indicator_catalog/COUNTRY_INDICATOR_CATALOG_MANIFEST_V1.json
+            schemas/reference/016_country_indicator_catalog.sql
+          )
+          if [ -z "$(git status --porcelain -- "${tracked[@]}")" ]; then
+            echo "Frozen derived outputs already committed and byte-identical."
             exit 0
           fi
           git fetch origin "$GITHUB_REF_NAME"
           remote_sha="$(git rev-parse "origin/$GITHUB_REF_NAME")"
           if [ "$remote_sha" != "$GITHUB_SHA" ]; then
-            echo "Branch advanced during classification: expected $GITHUB_SHA, got $remote_sha" >&2
+            echo "Branch advanced during derived freeze: expected $GITHUB_SHA, got $remote_sha" >&2
             exit 1
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/indicator_catalog/v1
-          git commit -m "data(catalog): classify D00-D17 canonical nature [OF-DATA-003]"
+          git add "${tracked[@]}"
+          git commit -m "data(catalog): freeze deterministic D00-D17 outputs [OF-DATA-003]"
           git push origin "HEAD:$GITHUB_REF_NAME"
