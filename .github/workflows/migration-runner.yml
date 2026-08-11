@@ -55,12 +55,21 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Unit tests
+      - name: Verify migration 016 frozen contract
         run: >-
-          python -m unittest -v
-          tests.test_migration_runner
-          tests.test_country_indicator_catalog
-          tests.test_fund_domain_model
+          python scripts/generate_country_indicator_catalog.py
+          --check
+          --source data/indicator_catalog/v1/00_metadata.json
+          --output schemas/reference/016_country_indicator_catalog.sql
+
+      - name: Migration runner unit tests
+        run: python -m unittest -v tests.test_migration_runner
+
+      - name: Country indicator catalogue unit tests
+        run: python -m unittest -v tests.test_country_indicator_catalog
+
+      - name: Fund domain unit tests
+        run: python -m unittest -v tests.test_fund_domain_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
