@@ -1,0 +1,72 @@
+{
+  "catalog_id": "AFRICAFUNDS_COUNTRY_INDICATOR_CATALOG",
+  "catalog_version": "1.0.0",
+  "authoring_authority": "MACHINE_READABLE_JSON_PACKAGE",
+  "classification_decision_id": "OF-DATA-003-A",
+  "domain_count": 18,
+  "indicator_count": 420,
+  "canonical_nature_counts": {
+    "RAW": 298,
+    "METADATA": 85,
+    "EVENT": 7,
+    "CALCULATED": 30
+  },
+  "legacy_sources": [
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/D00_gouvernance_et_traçabilite.md",
+      "sha256": "3cd936bfeaf97c99613c07da7ecad986299b3308008a8e523b4c2905b4c65023"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
+      "sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D04_D06_Prices_Fiscal_Debt.md",
+      "sha256": "d852f9c8141dc5a1df097adcd3784ec87178802b65f34fbea08d83812f750bff"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
+      "sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
+      "sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D12_D14_Funds_Institutionals_Real_Estate.md",
+      "sha256": "9bb704b0cabf20dea247cfa6cf66f92c861c14529a3642ffb55945a92fb6294e"
+    },
+    {
+      "path": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
+      "sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6"
+    }
+  ],
+  "outputs": {
+    "json": {
+      "path": "build/indicator_catalog/COUNTRY_INDICATOR_CATALOG_V1.json",
+      "sha256": "1d19a2d612b4d34e6d83f96100c6b073acd3791f96418aaca7cf1a097ad58184",
+      "bytes": 862631
+    },
+    "csv": {
+      "path": "build/indicator_catalog/COUNTRY_INDICATOR_CATALOG_V1.csv",
+      "sha256": "7d0f549684bdf91164ad98b7d912510784c8a2f07b4a8d0d86ecdc3e4a34ee94",
+      "bytes": 294002
+    },
+    "markdown": {
+      "path": "build/indicator_catalog/COUNTRY_INDICATOR_CATALOG_V1.md",
+      "sha256": "a2044c0ebff3ba90a839eb7ee30ff388952b53a8380360f7cf7d8d15bb3f4730",
+      "bytes": 90197
+    },
+    "sql": {
+      "path": "build/indicator_catalog/COUNTRY_INDICATOR_CATALOG_V1.sql",
+      "sha256": "fa00298ca8371cf1f95e20d809cc82b97774ea3cf0bf8fa2945cf269d0982432",
+      "bytes": 332708
+    }
+  },
+  "frozen_sql_path": "schemas/reference/016_country_indicator_catalog.sql",
+  "policy": {
+    "generated": true,
+    "hand_edit": "FORBIDDEN",
+    "null_export_token": "<NULL>"
+  }
+}
