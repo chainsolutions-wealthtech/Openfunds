@@ -56,11 +56,22 @@ jobs:
           python-version: '3.12'
 
       - name: Verify migration 016 frozen contract
-        run: >-
-          python scripts/generate_country_indicator_catalog.py
-          --check
-          --source data/indicator_catalog/v1/00_metadata.json
-          --output schemas/reference/016_country_indicator_catalog.sql
+        shell: bash
+        run: |
+          set +e
+          output="$(python scripts/generate_country_indicator_catalog.py \
+            --check \
+            --source data/indicator_catalog/v1/00_metadata.json \
+            --output schemas/reference/016_country_indicator_catalog.sql 2>&1)"
+          status=$?
+          if [ "$status" -ne 0 ]; then
+            escaped="${output//'%'/'%25'}"
+            escaped="${escaped//$'\r'/'%0D'}"
+            escaped="${escaped//$'\n'/'%0A'}"
+            echo "::error title=Migration 016 frozen contract::$escaped"
+            exit "$status"
+          fi
+          printf '%s\n' "$output"
 
       - name: Migration runner unit tests
         run: python -m unittest -v tests.test_migration_runner
