@@ -18,8 +18,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -44,7 +44,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.CAPITAL_CONTROLS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.CLIMATE_RISK",
@@ -59,8 +64,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle / événementielle",
       "unit_source": "Indice / événement",
       "currency_rule": null,
@@ -85,7 +90,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.CLIMATE_RISK",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.DEFAULT_EVENT",
@@ -100,8 +110,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Événement",
       "currency_rule": null,
@@ -126,7 +136,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.DEFAULT_EVENT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D16.DIVIDEND_TAX",
@@ -141,8 +156,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -167,7 +182,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.DIVIDEND_TAX",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.ELECTION",
@@ -182,8 +202,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Événement",
       "currency_rule": null,
@@ -208,7 +228,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.ELECTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D16.FOREIGN_INVESTOR_RULES",
@@ -223,8 +248,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -249,7 +274,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.FOREIGN_INVESTOR_RULES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D16.FUND_REGULATION",
@@ -264,8 +294,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Document",
       "currency_rule": null,
@@ -290,7 +320,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.FUND_REGULATION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D16.GOVERNANCE_SCORE",
@@ -305,8 +340,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -331,7 +366,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.GOVERNANCE_SCORE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.GOVERNMENT_CHANGE",
@@ -346,8 +386,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Événement",
       "currency_rule": null,
@@ -372,7 +412,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.GOVERNMENT_CHANGE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D16.IMF_PROGRAM",
@@ -387,8 +432,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte / montant",
       "currency_rule": null,
@@ -413,7 +458,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.IMF_PROGRAM",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.IMF_REVIEW",
@@ -428,8 +478,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Événement",
       "currency_rule": null,
@@ -454,7 +504,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.IMF_REVIEW",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D16.INTEREST_TAX",
@@ -469,8 +524,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -495,7 +550,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.INTEREST_TAX",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.RATING_AGENCY",
@@ -510,8 +570,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Entité",
       "currency_rule": null,
@@ -536,7 +596,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.RATING_AGENCY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D16.RATING_DATE",
@@ -551,8 +616,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -577,7 +642,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.RATING_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.RATING_LT_FC",
@@ -592,8 +662,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Notation",
       "currency_rule": null,
@@ -618,7 +688,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.RATING_LT_FC",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.RATING_LT_LC",
@@ -633,8 +708,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Notation",
       "currency_rule": null,
@@ -659,7 +734,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.RATING_LT_LC",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D16.RATING_OUTLOOK",
@@ -674,8 +754,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Catégorie",
       "currency_rule": null,
@@ -700,7 +780,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D15_D17_Sectors_Risk_Analytics.md",
       "source_sha256": "3ff2766615bdb1bb1fc5728848f39d6f6721b9a479dc21e76da5867086f37cb6",
       "source_row_key": "D16.RATING_OUTLOOK",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     }
   ]
 }

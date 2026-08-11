@@ -1,7 +1,7 @@
 {
   "catalog_id": "AFRICAFUNDS_COUNTRY_INDICATOR_CATALOG",
   "catalog_version": "1.0.0",
-  "status": "AUTHORING_MIRROR_INITIALIZED",
+  "status": "AUTHORING_GOVERNED_CLASSIFIED",
   "authoring_authority": "MACHINE_READABLE_JSON_PACKAGE",
   "authoritative_path": "data/indicator_catalog/v1/",
   "policy": {
@@ -61,5 +61,24 @@
     "D17.json"
   ],
   "domain_count": 18,
-  "indicator_count": 420
+  "indicator_count": 420,
+  "classification_policy": {
+    "decision_id": "OF-DATA-003-A",
+    "policy_version": "1.0.0",
+    "allowed_values": [
+      "RAW",
+      "METADATA",
+      "EVENT",
+      "CALCULATED"
+    ],
+    "source_semantics": "SEPARATE_FROM_SOURCE_NATURE",
+    "rule_precedence": [
+      "DOMAIN_METADATA",
+      "EXPLICIT_METADATA_CODE",
+      "EXPLICIT_EVENT_CODE",
+      "DOMAIN_CALCULATED",
+      "DEFAULT_OBSERVED_RAW"
+    ],
+    "statement": "Governance classification only; it does not replace source_nature or assert that a provider authored this classification."
+  }
 }

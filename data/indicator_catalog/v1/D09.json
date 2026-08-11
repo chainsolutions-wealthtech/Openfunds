@@ -18,8 +18,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -44,7 +44,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.CAPITAL_ACCOUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.CURRENT_ACCOUNT",
@@ -59,8 +64,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "USD / devise locale",
       "currency_rule": null,
@@ -85,7 +90,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.CURRENT_ACCOUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.EUR_LCU",
@@ -100,8 +110,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -126,7 +136,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.EUR_LCU",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.EXPORTS",
@@ -141,8 +156,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "USD / devise locale",
       "currency_rule": null,
@@ -167,7 +182,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.EXPORTS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.FDI_NET",
@@ -182,8 +202,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -208,7 +228,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.FDI_NET",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.FINANCIAL_ACCOUNT",
@@ -223,8 +248,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -249,7 +274,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.FINANCIAL_ACCOUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.FX_ASK",
@@ -264,8 +294,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -290,7 +320,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.FX_ASK",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.FX_BID",
@@ -305,8 +340,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -331,7 +366,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.FX_BID",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.GOLD_RESERVES",
@@ -346,8 +386,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "USD / tonnes",
       "currency_rule": null,
@@ -372,7 +412,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.GOLD_RESERVES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.GROSS_EXTERNAL_DEBT",
@@ -387,8 +432,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -413,7 +458,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.GROSS_EXTERNAL_DEBT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.GROSS_RESERVES",
@@ -428,8 +478,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -454,7 +504,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.GROSS_RESERVES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.IIP_ASSETS",
@@ -469,8 +524,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -495,7 +550,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.IIP_ASSETS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.IIP_LIABILITIES",
@@ -510,8 +570,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -536,7 +596,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.IIP_LIABILITIES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.IMPORTS",
@@ -551,8 +616,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "USD / devise locale",
       "currency_rule": null,
@@ -577,7 +642,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.IMPORTS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.IMPORT_COVER",
@@ -592,8 +662,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Mois / jours",
       "currency_rule": null,
@@ -618,7 +688,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.IMPORT_COVER",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.NEER",
@@ -633,8 +708,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -659,7 +734,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.NEER",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.NET_RESERVES",
@@ -674,8 +754,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -700,7 +780,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.NET_RESERVES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.OFFICIAL_MID",
@@ -715,8 +800,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -741,7 +826,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.OFFICIAL_MID",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.PARALLEL_RATE",
@@ -756,8 +846,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / hebdomadaire",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -782,7 +872,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.PARALLEL_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.PORTFOLIO_NET",
@@ -797,8 +892,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -823,7 +918,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.PORTFOLIO_NET",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.PRIMARY_INCOME",
@@ -838,8 +938,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -864,7 +964,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.PRIMARY_INCOME",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.REER",
@@ -879,8 +984,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -905,7 +1010,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.REER",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.REMITTANCES",
@@ -920,8 +1030,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle / trimestrielle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -946,7 +1056,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.REMITTANCES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.SECONDARY_INCOME",
@@ -961,8 +1076,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -987,7 +1102,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.SECONDARY_INCOME",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.SERVICES_BALANCE",
@@ -1002,8 +1122,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -1028,7 +1148,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.SERVICES_BALANCE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.TERMS_OF_TRADE",
@@ -1043,8 +1168,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -1069,7 +1194,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.TERMS_OF_TRADE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.TRADE_BALANCE",
@@ -1084,8 +1214,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle / trimestrielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -1110,7 +1240,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.TRADE_BALANCE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.TRADE_COVERAGE",
@@ -1125,8 +1260,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1151,7 +1286,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.TRADE_COVERAGE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D09.USD_LCU",
@@ -1166,8 +1306,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Taux de change",
       "currency_rule": null,
@@ -1192,7 +1332,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D09.USD_LCU",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     }
   ]
 }

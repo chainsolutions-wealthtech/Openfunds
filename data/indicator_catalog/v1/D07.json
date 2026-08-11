@@ -18,8 +18,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -44,7 +44,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.AMOUNT_ALLOTTED",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.BANK_DEMAND",
@@ -59,8 +64,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -85,7 +90,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.BANK_DEMAND",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.DEPOSIT_FACILITY",
@@ -100,8 +110,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -126,7 +136,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.DEPOSIT_FACILITY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.DISCOUNT_RATE",
@@ -141,8 +156,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -167,7 +182,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.DISCOUNT_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.EXCESS_RESERVES",
@@ -182,8 +202,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -208,7 +228,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.EXCESS_RESERVES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.INFLATION_TARGET",
@@ -223,8 +248,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle / annuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -249,7 +274,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.INFLATION_TARGET",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.INTERBANK_VOLUME",
@@ -264,8 +294,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -290,7 +320,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.INTERBANK_VOLUME",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.LENDING_FACILITY",
@@ -305,8 +340,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -331,7 +366,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.LENDING_FACILITY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.LIQUIDITY_ABSORPTION",
@@ -346,8 +386,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / hebdomadaire",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -372,7 +412,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.LIQUIDITY_ABSORPTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.LIQUIDITY_INJECTION",
@@ -387,8 +432,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / hebdomadaire",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -413,7 +458,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.LIQUIDITY_INJECTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.MPC_DECISION",
@@ -428,8 +478,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Document",
       "currency_rule": null,
@@ -454,7 +504,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.MPC_DECISION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D07.MPC_MEETING_DATE",
@@ -469,8 +524,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "EVENT",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -495,7 +550,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.MPC_MEETING_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_EVENT_CODE"
+      }
     },
     {
       "indicator_code": "D07.NET_LIQUIDITY",
@@ -510,8 +570,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -536,7 +596,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.NET_LIQUIDITY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.OVERNIGHT_RATE",
@@ -551,8 +616,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -577,7 +642,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.OVERNIGHT_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.POLICY_RATE",
@@ -592,8 +662,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle / quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -618,7 +688,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.POLICY_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RATE_12M",
@@ -633,8 +708,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire",
       "unit_source": "%",
       "currency_rule": null,
@@ -659,7 +734,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RATE_12M",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RATE_1M",
@@ -674,8 +754,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -700,7 +780,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RATE_1M",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RATE_3M",
@@ -715,8 +800,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -741,7 +826,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RATE_3M",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RATE_6M",
@@ -756,8 +846,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire",
       "unit_source": "%",
       "currency_rule": null,
@@ -782,7 +872,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RATE_6M",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RATE_7D",
@@ -797,8 +892,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / hebdomadaire",
       "unit_source": "%",
       "currency_rule": null,
@@ -823,7 +918,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RATE_7D",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.REPO_RATE",
@@ -838,8 +938,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -864,7 +964,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.REPO_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.RESERVE_REQUIREMENT",
@@ -879,8 +984,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -905,7 +1010,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.RESERVE_REQUIREMENT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D07.REVERSE_REPO_RATE",
@@ -920,8 +1030,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -946,7 +1056,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D07_D09_Monetary_Banking_External.md",
       "source_sha256": "1c7e9ef0ca6fedd718e6f560c302439a071886e86b1827bb4ad716bcdb0cb17b",
       "source_row_key": "D07.REVERSE_REPO_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     }
   ]
 }

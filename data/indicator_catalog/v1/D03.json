@@ -18,8 +18,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle / trimestrielle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -44,7 +44,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.BUSINESS_CONFIDENCE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_AGRICULTURE",
@@ -59,8 +64,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -85,7 +90,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_AGRICULTURE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_CONSTRUCTION",
@@ -100,8 +110,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -126,7 +136,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_CONSTRUCTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_DEFLATOR",
@@ -141,8 +156,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -167,7 +182,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_DEFLATOR",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_EXTRACTIVES",
@@ -182,8 +202,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -208,7 +228,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_EXTRACTIVES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_GROWTH_ANNUAL",
@@ -223,8 +248,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -249,7 +274,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_GROWTH_ANNUAL",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_GROWTH_QOQ",
@@ -264,8 +294,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -290,7 +320,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_GROWTH_QOQ",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_GROWTH_YOY",
@@ -305,8 +340,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -331,7 +366,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_GROWTH_YOY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_MANUFACTURING",
@@ -346,8 +386,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -372,7 +412,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_MANUFACTURING",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_NOMINAL_LCU",
@@ -387,8 +432,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -413,7 +458,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_NOMINAL_LCU",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_NOMINAL_USD",
@@ -428,8 +478,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "USD",
       "currency_rule": null,
@@ -454,7 +504,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_NOMINAL_USD",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_PER_CAPITA",
@@ -469,8 +524,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "Devise / personne",
       "currency_rule": null,
@@ -495,7 +550,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_PER_CAPITA",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_REAL",
@@ -510,8 +570,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Volume / indice",
       "currency_rule": null,
@@ -536,7 +596,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_REAL",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GDP_SERVICES",
@@ -551,8 +616,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -577,7 +642,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GDP_SERVICES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GFCF",
@@ -592,8 +662,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -618,7 +688,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GFCF",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GNI",
@@ -633,8 +708,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -659,7 +734,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GNI",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.GOV_CONSUMPTION",
@@ -674,8 +754,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -700,7 +780,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.GOV_CONSUMPTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.HOUSEHOLD_CONSUMPTION",
@@ -715,8 +800,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -741,7 +826,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.HOUSEHOLD_CONSUMPTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.INDUSTRIAL_PRODUCTION",
@@ -756,8 +846,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -782,7 +872,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.INDUSTRIAL_PRODUCTION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.INVENTORIES",
@@ -797,8 +892,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -823,7 +918,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.INVENTORIES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.NATIONAL_SAVINGS",
@@ -838,8 +938,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Annuelle",
       "unit_source": "Devise locale / % PIB",
       "currency_rule": null,
@@ -864,7 +964,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.NATIONAL_SAVINGS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.NET_EXPORTS",
@@ -879,8 +984,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Trimestrielle / annuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -905,7 +1010,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.NET_EXPORTS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.PMI",
@@ -920,8 +1030,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Indice",
       "currency_rule": null,
@@ -946,7 +1056,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.PMI",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D03.RETAIL_SALES",
@@ -961,8 +1076,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle",
       "unit_source": "Indice / valeur",
       "currency_rule": null,
@@ -987,7 +1102,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D01_D03_Identity_Demography_Economy.md",
       "source_sha256": "1751c50627c3bb9115935c90f7f7c72a97423a1ff17ab7a813e61ef2232b2cee",
       "source_row_key": "D03.RETAIL_SALES",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     }
   ]
 }

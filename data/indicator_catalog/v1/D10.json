@@ -18,8 +18,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Devise",
       "currency_rule": null,
@@ -44,7 +44,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.ACCRUED_INTEREST",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.AMOUNT_ACCEPTED",
@@ -59,8 +64,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -85,7 +90,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.AMOUNT_ACCEPTED",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.AMOUNT_ANNOUNCED",
@@ -100,8 +110,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -126,7 +136,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.AMOUNT_ANNOUNCED",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.AMOUNT_BID",
@@ -141,8 +156,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -167,7 +182,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.AMOUNT_BID",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.ASK_PRICE",
@@ -182,8 +202,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -208,7 +228,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.ASK_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.AUCTION_ANNOUNCEMENT",
@@ -223,8 +248,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -249,7 +274,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.AUCTION_ANNOUNCEMENT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.AUCTION_DATE",
@@ -264,8 +294,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -290,7 +320,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.AUCTION_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.BID_PRICE",
@@ -305,8 +340,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -331,7 +366,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.BID_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.CLEAN_PRICE",
@@ -346,8 +386,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -372,7 +412,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.CLEAN_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.CONVEXITY",
@@ -387,8 +432,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Nombre",
       "currency_rule": null,
@@ -413,7 +458,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.CONVEXITY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.COUPON_FREQUENCY",
@@ -428,8 +478,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Nombre / an",
       "currency_rule": null,
@@ -454,7 +504,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.COUPON_FREQUENCY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.COUPON_RATE",
@@ -469,8 +524,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "%",
       "currency_rule": null,
@@ -495,7 +550,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.COUPON_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.COUPON_TYPE",
@@ -510,8 +570,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Catégorie",
       "currency_rule": null,
@@ -536,7 +596,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.COUPON_TYPE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.COVER_RATIO",
@@ -551,8 +616,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -577,7 +642,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.COVER_RATIO",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.CURVE_METHOD",
@@ -592,8 +662,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -618,7 +688,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.CURVE_METHOD",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.CURVE_POINT_TYPE",
@@ -633,8 +708,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "Catégorie",
       "currency_rule": null,
@@ -659,7 +734,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.CURVE_POINT_TYPE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.CURVE_TENOR_DAYS",
@@ -674,8 +754,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "Jours",
       "currency_rule": null,
@@ -700,7 +780,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.CURVE_TENOR_DAYS",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.DAY_COUNT",
@@ -715,8 +800,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -741,7 +826,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.DAY_COUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.DIRTY_PRICE",
@@ -756,8 +846,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -782,7 +872,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.DIRTY_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.DURATION",
@@ -797,8 +892,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Années",
       "currency_rule": null,
@@ -823,7 +918,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.DURATION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.FORWARD_RATE",
@@ -838,8 +938,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -864,7 +964,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.FORWARD_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.ISSUE_DATE",
@@ -879,8 +984,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -905,7 +1010,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.ISSUE_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.MATURITY_DATE",
@@ -920,8 +1030,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -946,7 +1056,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MATURITY_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.MAX_PRICE",
@@ -961,8 +1076,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -987,7 +1102,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MAX_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.MAX_YIELD",
@@ -1002,8 +1122,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1028,7 +1148,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MAX_YIELD",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.MIN_PRICE",
@@ -1043,8 +1168,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -1069,7 +1194,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MIN_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.MIN_YIELD",
@@ -1084,8 +1214,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1110,7 +1240,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MIN_YIELD",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.MODIFIED_DURATION",
@@ -1125,8 +1260,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Années",
       "currency_rule": null,
@@ -1151,7 +1286,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.MODIFIED_DURATION",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.NOMINAL",
@@ -1166,8 +1306,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -1192,7 +1332,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.NOMINAL",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.ORIGINAL_TENOR",
@@ -1207,8 +1352,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Jours / années",
       "currency_rule": null,
@@ -1233,7 +1378,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.ORIGINAL_TENOR",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.OUTSTANDING_AMOUNT",
@@ -1248,8 +1398,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Mensuelle / événementielle",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -1274,7 +1424,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.OUTSTANDING_AMOUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.PAR_RATE",
@@ -1289,8 +1444,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1315,7 +1470,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.PAR_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.RESIDUAL_TENOR",
@@ -1330,8 +1490,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Jours / années",
       "currency_rule": null,
@@ -1356,7 +1516,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.RESIDUAL_TENOR",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.SECURITY_CURRENCY",
@@ -1371,8 +1536,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Devise",
       "currency_rule": null,
@@ -1397,7 +1562,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SECURITY_CURRENCY",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.SECURITY_ISIN",
@@ -1412,8 +1582,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -1438,7 +1608,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SECURITY_ISIN",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.SECURITY_ISSUER",
@@ -1453,8 +1628,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Entité",
       "currency_rule": null,
@@ -1479,7 +1654,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SECURITY_ISSUER",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.SECURITY_LOCAL_CODE",
@@ -1494,8 +1674,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Texte",
       "currency_rule": null,
@@ -1520,7 +1700,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SECURITY_LOCAL_CODE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.SECURITY_TYPE",
@@ -1535,8 +1720,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Catégorie",
       "currency_rule": null,
@@ -1561,7 +1746,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SECURITY_TYPE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.SETTLEMENT_DATE",
@@ -1576,8 +1766,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "METADATA",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Événementielle",
       "unit_source": "Date",
       "currency_rule": null,
@@ -1602,7 +1792,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.SETTLEMENT_DATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "EXPLICIT_METADATA_CODE"
+      }
     },
     {
       "indicator_code": "D10.TRADED_VOLUME",
@@ -1617,8 +1812,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Devise locale",
       "currency_rule": null,
@@ -1643,7 +1838,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.TRADED_VOLUME",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.TRANSACTION_COUNT",
@@ -1658,8 +1858,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "Nombre",
       "currency_rule": null,
@@ -1684,7 +1884,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.TRANSACTION_COUNT",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.WAVG_PRICE",
@@ -1699,8 +1904,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "Prix",
       "currency_rule": null,
@@ -1725,7 +1930,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.WAVG_PRICE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.WAVG_YIELD",
@@ -1740,8 +1950,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Hebdomadaire / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1766,7 +1976,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.WAVG_YIELD",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.YTM",
@@ -1781,8 +1996,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne",
       "unit_source": "%",
       "currency_rule": null,
@@ -1807,7 +2022,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.YTM",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     },
     {
       "indicator_code": "D10.ZERO_RATE",
@@ -1822,8 +2042,8 @@
       "definition_en_status": "NOT_AUTHORED",
       "source_nature": null,
       "source_nature_status": "NOT_AUTHORED",
-      "canonical_nature": null,
-      "canonical_nature_status": "NOT_AUTHORED",
+      "canonical_nature": "RAW",
+      "canonical_nature_status": "GOVERNED_CLASSIFICATION",
       "frequency_source": "Quotidienne / mensuelle",
       "unit_source": "%",
       "currency_rule": null,
@@ -1848,7 +2068,12 @@
       "source_file": "docs/04_DATA_GOVERNANCE/indicator_catalog/Indicators_D10_D11_Government_Securities_Equities.md",
       "source_sha256": "2d5bdebcd4fb3e34adab176a8c964c6b96ffad229edea22f2a1209cc582b92b3",
       "source_row_key": "D10.ZERO_RATE",
-      "schema_version": "1.0.0-bootstrap"
+      "schema_version": "1.0.0",
+      "canonical_nature_provenance": {
+        "decision_id": "OF-DATA-003-A",
+        "policy_version": "1.0.0",
+        "rule": "DEFAULT_OBSERVED_RAW"
+      }
     }
   ]
 }
