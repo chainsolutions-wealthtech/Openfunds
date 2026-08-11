@@ -1,13 +1,13 @@
-"""Strict mirror-first parser for the legacy D00-D17 indicator catalogue.
+"""Strict mirror-first tooling for the D00-D17 country indicator catalogue.
 
-This module is intentionally conservative. It mirrors what the legacy Markdown
-sources actually state and represents absent semantics explicitly instead of
-inventing translations, classifications, source mappings or loaded-history
-claims.
+The legacy Markdown files are accepted only as frozen bootstrap/fidelity inputs.
+Absent semantics remain null with explicit status. Once materialized, the JSON
+package under data/indicator_catalog/v1 is the governed authoring authority.
 """
 from __future__ import annotations
 
 import hashlib
+import json
 import re
 from collections import Counter
 from pathlib import Path
@@ -44,12 +44,19 @@ EXPECTED_DOMAIN_COUNTS = {
     "D17": 30,
 }
 
+AUTHORING_FILES = ("00_metadata.json",) + tuple(
+    f"{domain}.json" for domain in EXPECTED_DOMAIN_COUNTS
+)
 DOMAIN_HEADING_RE = re.compile(r"^#{1,6}\s+(D\d{2})\s+[—-]\s+(.+?)\s*$")
 INDICATOR_CODE_RE = re.compile(r"^D\d{2}\.[A-Z0-9_]+$")
 
 
 def sha256_bytes(payload: bytes) -> str:
     return hashlib.sha256(payload).hexdigest()
+
+
+def canonical_json(value: Any) -> str:
+    return json.dumps(value, ensure_ascii=False, indent=2, sort_keys=False) + "\n"
 
 
 def _split_markdown_row(line: str) -> list[str]:
@@ -108,7 +115,7 @@ def _build_item(
     benchmark = _nullable_text(row.get("Benchmark / index"))
     mandatory = _parse_yes_no(row.get("Mandatory"))
 
-    item: dict[str, Any] = {
+    return {
         "indicator_code": code,
         "domain_code": domain_code,
         "label_fr": label_fr,
@@ -149,7 +156,6 @@ def _build_item(
         "source_row_key": code,
         "schema_version": "1.0.0-bootstrap",
     }
-    return item
 
 
 def _parse_file(root: Path, relative_path: str) -> tuple[list[dict[str, Any]], dict[str, str]]:
@@ -249,10 +255,7 @@ def parse_legacy_catalog(root: Path) -> dict[str, Any]:
         items, file_names = _parse_file(root, relative_path)
         all_items.extend(items)
         names.update(file_names)
-        if items:
-            source_hashes[relative_path] = items[0]["source_sha256"]
-        else:
-            source_hashes[relative_path] = sha256_bytes((root / relative_path).read_bytes())
+        source_hashes[relative_path] = sha256_bytes((root / relative_path).read_bytes())
 
     domains = [
         {
@@ -280,4 +283,71 @@ def parse_legacy_catalog(root: Path) -> dict[str, Any]:
         "indicators": sorted(all_items, key=lambda item: item["indicator_code"]),
     }
     validate_catalog(catalog)
+    return catalog
+
+
+def build_authoring_package_files(root: Path) -> dict[str, str]:
+    """Render the initial governed JSON package exactly from the pinned legacy mirror."""
+    legacy = parse_legacy_catalog(root)
+    metadata = {
+        "catalog_id": legacy["catalog_id"],
+        "catalog_version": "1.0.0",
+        "status": "AUTHORING_MIRROR_INITIALIZED",
+        "authoring_authority": "MACHINE_READABLE_JSON_PACKAGE",
+        "authoritative_path": "data/indicator_catalog/v1/",
+        "policy": legacy["policy"],
+        "legacy_sources": legacy["legacy_sources"],
+        "domain_files": [f"{code}.json" for code in EXPECTED_DOMAIN_COUNTS],
+        "domain_count": 18,
+        "indicator_count": 420,
+    }
+    files = {"00_metadata.json": canonical_json(metadata)}
+    by_domain = {code: [] for code in EXPECTED_DOMAIN_COUNTS}
+    for item in legacy["indicators"]:
+        by_domain[item["domain_code"]].append(item)
+    domain_by_code = {item["domain_code"]: item for item in legacy["domains"]}
+    for code in EXPECTED_DOMAIN_COUNTS:
+        files[f"{code}.json"] = canonical_json(
+            {
+                "domain": domain_by_code[code],
+                "indicators": by_domain[code],
+            }
+        )
+    return files
+
+
+def load_authoring_package(path: Path) -> dict[str, Any]:
+    actual_files = {item.name for item in path.glob("*.json")}
+    expected_files = set(AUTHORING_FILES)
+    if actual_files != expected_files:
+        raise ValueError(
+            f"authoring package file drift: actual={sorted(actual_files)} expected={sorted(expected_files)}"
+        )
+    metadata = json.loads((path / "00_metadata.json").read_text(encoding="utf-8"))
+    if metadata.get("authoring_authority") != "MACHINE_READABLE_JSON_PACKAGE":
+        raise ValueError("authoring authority must be MACHINE_READABLE_JSON_PACKAGE")
+    if metadata.get("policy", {}).get("strategy") != "MIRROR_FIRST":
+        raise ValueError("authoring package must preserve MIRROR_FIRST policy")
+
+    domains: list[dict[str, Any]] = []
+    indicators: list[dict[str, Any]] = []
+    for code in EXPECTED_DOMAIN_COUNTS:
+        payload = json.loads((path / f"{code}.json").read_text(encoding="utf-8"))
+        domain = payload.get("domain")
+        rows = payload.get("indicators")
+        if not isinstance(domain, dict) or not isinstance(rows, list):
+            raise ValueError(f"{code}.json must contain domain and indicators")
+        if domain.get("domain_code") != code:
+            raise ValueError(f"{code}.json domain code drift")
+        domains.append(domain)
+        indicators.extend(rows)
+
+    catalog = {
+        **metadata,
+        "domains": domains,
+        "indicators": sorted(indicators, key=lambda item: item["indicator_code"]),
+    }
+    validate_catalog(catalog)
+    if metadata.get("domain_count") != len(domains) or metadata.get("indicator_count") != len(indicators):
+        raise ValueError("metadata counts do not match package contents")
     return catalog
