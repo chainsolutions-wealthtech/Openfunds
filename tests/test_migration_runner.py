@@ -112,6 +112,24 @@ class MigrationRunnerTests(unittest.TestCase):
         runner.load_manifest(ROOT / "migrations/manifest.json")
         self.assertEqual(before, target.read_bytes())
 
+    def test_country_indicator_catalog_is_registered_as_migration_016(self):
+        data = json.loads((ROOT / "migrations/manifest.json").read_text(encoding="utf-8"))
+        matches = [item for item in data["migrations"] if item["id"] == "016_COUNTRY_INDICATOR_CATALOG"]
+        self.assertEqual(1, len(matches), "TDD RED: migration 016 is not registered yet")
+        item = matches[0]
+        self.assertEqual(160, item["order"])
+        self.assertEqual("schemas/reference/016_country_indicator_catalog.sql", item["path"])
+        generator = item["generator"]
+        self.assertEqual("CHECK_ONLY_FROZEN_ARTIFACT", generator["mode"])
+        self.assertEqual("scripts/generate_country_indicator_catalog.py", generator["script"])
+        self.assertEqual([
+            "--check",
+            "--source",
+            "data/indicator_catalog/v1/00_metadata.json",
+            "--output",
+            "schemas/reference/016_country_indicator_catalog.sql",
+        ], generator["arguments"])
+
 
 if __name__ == "__main__":
     unittest.main()
