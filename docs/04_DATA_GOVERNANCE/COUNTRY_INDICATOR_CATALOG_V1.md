@@ -45,7 +45,7 @@ python scripts/generate_country_indicator_catalog.py --check-authoring
 python scripts/generate_country_indicator_catalog.py --generate-derived
 python scripts/generate_country_indicator_catalog.py --check-derived
 python -m unittest -v tests.test_country_indicator_catalog
-python scripts/generate_country_indicator_catalog.py --check   --source data/indicator_catalog/v1/00_metadata.json   --output schemas/reference/016_country_indicator_catalog.sql
+python scripts/generate_country_indicator_catalog.py --check --source data/indicator_catalog/v1/00_metadata.json --output schemas/reference/016_country_indicator_catalog.sql
 ```
 
 Les sorties générées sont :
@@ -77,6 +77,10 @@ PYTHON_3_11: SUCCESS
 PYTHON_3_12: SUCCESS
 POSTGRESQL_16_DOUBLE_APPLY: SUCCESS
 ```
+
+## Revalidation de clôture
+
+Toute modification de ce contrat de gouvernance doit redéclencher le workflow `Country Indicator Catalog` sur le HEAD documentaire concerné. La clôture n’est considérée stable qu’après validation de l’authoring package commité, régénération déterministe des quatre sorties et succès des tests contractuels Python 3.11/3.12. Cette règle ne transforme pas une validation CI en autorisation de déploiement ou de chargement de données réelles.
 
 ## Limites
 
