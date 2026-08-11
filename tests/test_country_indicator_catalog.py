@@ -8,6 +8,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 CORE = ROOT / "scripts/country_indicator_catalog.py"
+AUTHORING = ROOT / "data/indicator_catalog/v1"
 
 EXPECTED_DOMAIN_COUNTS = {
     "D00": 15,
@@ -97,6 +98,26 @@ class CountryIndicatorCatalogLegacyContractTests(unittest.TestCase):
             self.assertTrue(item["source_file"].startswith("docs/04_DATA_GOVERNANCE/indicator_catalog/"))
             self.assertRegex(item["source_sha256"], r"^[0-9a-f]{64}$")
             self.assertEqual(item["indicator_code"], item["source_row_key"])
+
+    def test_machine_readable_authoring_package_exists_and_matches_legacy(self):
+        self.assertTrue(
+            hasattr(self.core, "load_authoring_package"),
+            "TDD RED: authoring package loader is not implemented yet",
+        )
+        self.assertTrue(
+            (AUTHORING / "00_metadata.json").is_file(),
+            "TDD RED: governed authoring package has not been materialized yet",
+        )
+        package = self.core.load_authoring_package(AUTHORING)
+        self.assertEqual("MACHINE_READABLE_JSON_PACKAGE", package["authoring_authority"])
+        self.assertEqual("MIRROR_FIRST", package["policy"]["strategy"])
+        self.assertEqual(18, len(package["domains"]))
+        self.assertEqual(420, len(package["indicators"]))
+        self.assertEqual(self.items, package["indicators"])
+
+    def test_authoring_package_is_partitioned_by_domain(self):
+        expected = {"00_metadata.json"} | {f"{code}.json" for code in EXPECTED_DOMAIN_COUNTS}
+        self.assertEqual(expected, {path.name for path in AUTHORING.glob("*.json")})
 
 
 if __name__ == "__main__":
