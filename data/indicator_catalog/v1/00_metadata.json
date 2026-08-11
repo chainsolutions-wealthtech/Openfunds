@@ -79,6 +79,6 @@
       "DOMAIN_CALCULATED",
       "DEFAULT_OBSERVED_RAW"
     ],
-    "statement": "Governance classification only; it does not replace source_nature or assert that a provider authored this classification."
+    "statement": "Governance classification only; it does not replace source_nature or assert provider authorship."
   }
 }

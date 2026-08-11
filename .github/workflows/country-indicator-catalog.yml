@@ -42,8 +42,8 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Apply governed Option A classification deterministically
-        run: python scripts/generate_country_indicator_catalog.py --apply-governed-classification
+      - name: Validate committed governed authoring package
+        run: python scripts/generate_country_indicator_catalog.py --check-authoring
       - name: Generate deterministic review and SQL artifacts
         run: python scripts/generate_country_indicator_catalog.py --generate-derived
       - name: Run country indicator catalogue contract tests
