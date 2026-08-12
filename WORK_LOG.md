@@ -9,10 +9,7 @@ VALIDATED_TECHNICAL_HEAD: 8ab1e75b2fd94566f9c0538ca33460140787c6bf
 STATUS: VERIFIED_COMPLETE
 ```
 
-Le modèle Fund/SubFund/ShareClass, la migration `015`, les fixtures
-Maroc/Tunisie/Nigeria et les contrôles PostgreSQL 16 ont été validés. Le commit
-intermédiaire ayant ajouté `NONEXISTENT` a été corrigé par un descendant sans
-force-push ni réécriture.
+Le modèle Fund/SubFund/ShareClass, la migration `015`, les fixtures Maroc/Tunisie/Nigeria et les contrôles PostgreSQL 16 ont été validés. Le commit intermédiaire ayant ajouté `NONEXISTENT` a été corrigé par un descendant sans force-push ni réécriture.
 
 ---
 
@@ -29,9 +26,7 @@ STATUS: VERIFIED_COMPLETE
 
 ### Audit
 
-Le HEAD, la PR nº 1, `DATA_DICTIONARY.md`, ADR-024, la migration `015`, le
-manifeste de migrations et les conventions de gouvernance ont été lus avant
-écriture. Aucun catalogue officiel Openfunds versionné n’était présent.
+Le HEAD, la PR nº 1, `DATA_DICTIONARY.md`, ADR-024, la migration `015`, le manifeste de migrations et les conventions de gouvernance ont été lus avant écriture. Aucun catalogue officiel Openfunds versionné n’était présent.
 
 ### Implémentation
 
@@ -47,11 +42,7 @@ manifeste de migrations et les conventions de gouvernance ont été lus avant
 
 ### Corrections transparentes
 
-Le run initial a révélé deux empreintes de sortie provenant d’une variante
-locale. Le manifeste a été aligné sur le générateur commité au commit
-`ecb2713c...`. Le run suivant a révélé que le test SQL lisait une ligne
-`references` comme colonne ; l’extracteur a été limité au niveau top-level au
-commit `1fb49075...`. Aucun SQL ou contenu métier n’a changé.
+Le run initial a révélé deux empreintes de sortie provenant d’une variante locale. Le manifeste a été aligné sur le générateur commité au commit `ecb2713c...`. Le run suivant a révélé que le test SQL lisait une ligne `references` comme colonne ; l’extracteur a été limité au niveau top-level au commit `1fb49075...`. Aucun SQL ou contenu métier n’a changé.
 
 ### Validation
 
@@ -60,13 +51,11 @@ commit `1fb49075...`. Aucun SQL ou contenu métier n’a changé.
 31113488273 — Collector Tests — SUCCESS
 ```
 
-Les artefacts Python 3.11 et 3.12 ont le digest identique
-`sha256:a237c13e85fc486dcab515b3508fd92479596438acdb327679920d442596b67f`.
+Les artefacts Python 3.11 et 3.12 ont le digest identique `sha256:a237c13e85fc486dcab515b3508fd92479596438acdb327679920d442596b67f`.
 
 ### Sortie
 
-`OF-DATA-002` est fermé. Aucun historique réel, mapping officiel Openfunds,
-merge, déploiement ou démarrage de `OF-DATA-003` n’a été réalisé.
+`OF-DATA-002` est fermé. Aucun historique réel, mapping officiel Openfunds, merge, déploiement ou démarrage de `OF-DATA-003` n’a été réalisé.
 
 ---
 
@@ -169,3 +158,117 @@ CEMAC: COSUMAF
 Aucun endpoint spécialisé, provider series, collection specification, SQL runtime, historique, base persistante, branche, PR, merge, retargeting ou déploiement n’a été créé par cette vague. Les CSV restent des inventaires de découverte/revue conformément à ADR-021.
 
 `OF-SOURCE-002` reste `EN_COURS`. La vague 02 démarre en lecture seule sur les 44 pays non couverts et les rôles manquants des 10 pays présents.
+
+---
+
+## Boucle OF-LOOP-SOURCE-002 — Vague 02 — 2026-08-12
+
+```text
+TASK_ID: OF-SOURCE-002
+WAVE: 02
+AUDIT_HEAD: 8e38c99d3e8ab224228bf9e1a628afb68878ba42
+WAVE_DATA_HEAD: 2216ff00406e3ee40b0f8ef70ff8710f5c928d34
+STATUS: VERIFIED_COMPLETE_WAVE / GLOBAL_TASK_EN_COURS
+```
+
+### Audit et allowlist
+
+Quatre nouveaux pays ont été audités sur sources officielles primaires : Algérie, Maurice, Rwanda et Tanzanie. Seize organisations et vingt-deux relations de rôle ont été autorisées. Les rôles assurance/pension n'ont pas été ajoutés en Algérie ou Tanzanie faute de preuve correspondant exactement au rôle combiné canonique.
+
+### TDD
+
+```text
+RED_RUN: 31594066287
+RED_HEAD: 39b5f3a04df4c5f69d9ac4300c5a21e4f5728749
+INTERMEDIATE_RUN: 31594256827
+INTERMEDIATE_HEAD: 8a057200682773b09f61e898e55ca2f3537422f2
+GREEN_RUN: 31594503714
+GREEN_HEAD: 2216ff00406e3ee40b0f8ef70ff8710f5c928d34
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+TESTS: 6 / 6 PASS
+```
+
+Le RED initial conservait les quatre tests antérieurs verts et faisait échouer uniquement les deux tests de vague 02. Après ajout des organisations, cinq tests sur six passaient ; après ajout des relations, la suite complète était verte.
+
+### Organisations intégrées
+
+```text
+ALGERIE: BANQUE_ALGERIE, COSOB, SGBV, ONS_ALGERIE
+MAURICE: BOM, FSC_MAURITIUS, SEM, STATISTICS_MAURITIUS
+RWANDA: NBR, CMA_RWANDA, RSE, NISR
+TANZANIE: BOT, CMSA_TANZANIA, DSE, NBS_TANZANIA
+```
+
+### État après vague 02
+
+```text
+71 organisations = 51 VALIDATED + 20 PENDING
+14 / 54 pays avec au moins une organisation country-scoped
+40 pays sans organisation country-scoped
+114 relations organisation-rôle = 70 VALIDATED + 44 PENDING
+43 endpoints inchangés
+```
+
+Le workflow général `Collector Tests` a été déclenché sur le commit volontairement RED du contrat et a échoué pour cette raison ; il n'a pas été présenté comme vert au HEAD de données final. Le workflow `Institutional Registry`, gouvernant directement cette surface, est vert au HEAD final.
+
+---
+
+## Boucle OF-LOOP-SOURCE-002 — Vague 03 — 2026-08-12
+
+```text
+TASK_ID: OF-SOURCE-002
+WAVE: 03
+WAVE_DATA_HEAD: 5024a9767b1b9aecf8a6cd52d315ccfbf8384389
+STATUS: VERIFIED_COMPLETE_WAVE / GLOBAL_TASK_EN_COURS
+```
+
+### Audit et protections
+
+Le lot Ouganda, Zambie, Zimbabwe et Malawi a été audité sur sources officielles primaires. Deux risques ont été explicitement bloqués :
+
+- `SEC_ZAMBIA` n'a pas été intégré car la racine du domaine historique officiel retournait lors de l'audit un contenu de paris non institutionnel ;
+- `RBM/FUND_REGULATOR` n'a pas été intégré car les preuves primaires contrôlées ne démontraient pas assez explicitement la compétence CIS/OPC.
+
+Pour l'Ouganda, les fonctions assurance et retraite étant séparées entre IRA et URBRA, aucune relation combinée `INSURANCE_PENSION_REGULATOR` n'a été inventée.
+
+### TDD
+
+```text
+RED_RUN: 31595214746
+RED_HEAD: c7169584b582760a26c708c701c63e77799ff3d8
+INTERMEDIATE_RUN: 31595412831
+INTERMEDIATE_HEAD: f74a482eb375e819419c77697d89c9d74676da2f
+GREEN_RUN: 31595575537
+GREEN_HEAD: 5024a9767b1b9aecf8a6cd52d315ccfbf8384389
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+TESTS: 8 / 8 PASS
+```
+
+Le RED conservait six tests existants verts et faisait échouer uniquement les deux nouveaux tests. Après ajout des seize organisations, sept tests sur huit passaient. Après ajout des vingt relations, les huit tests passaient. Les tests négatifs protègent également l'absence de `SEC_ZAMBIA` et de `RBM/FUND_REGULATOR`.
+
+### Organisations intégrées
+
+```text
+OUGANDA: BOU, CMA_UGANDA, USE_UGANDA, UBOS
+ZAMBIE: BOZ, LUSE, ZAMSTATS, PIA_ZAMBIA
+ZIMBABWE: RBZ, SEC_ZIMBABWE, ZSE, ZIMSTAT, IPEC
+MALAWI: RBM, MSE_MALAWI, NSO_MALAWI
+```
+
+### État après vague 03
+
+```text
+87 organisations = 67 VALIDATED + 20 PENDING
+18 / 54 pays avec au moins une organisation country-scoped
+36 pays sans organisation country-scoped
+134 relations organisation-rôle = 90 VALIDATED + 44 PENDING
+43 endpoints inchangés
+```
+
+### Sortie
+
+Les vagues 01 à 03 n'ont ajouté aucun endpoint spécialisé, provider series, collection specification, SQL runtime, historique, base persistante, branche, PR, merge, retargeting ou déploiement. Les CSV restent des inventaires de découverte/revue conformément à ADR-021.
+
+`OF-SOURCE-002` reste `EN_COURS`. La vague 04 est ouverte uniquement en audit lecture seule sur un nouveau lot contrôlé parmi les 36 pays restants.
