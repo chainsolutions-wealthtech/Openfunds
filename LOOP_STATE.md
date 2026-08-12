@@ -1,34 +1,49 @@
-
 # État de la boucle
 
 ```text
-LOOP_ID: OF-LOOP-DATA-003
-TASK_ID: OF-DATA-003
-LOOP_TYPE: COUNTRY_INDICATOR_CATALOG
-STATUS: VERIFIED_COMPLETE
-START_HEAD: 145461e04ba9affd2b11fedaf56ed4ad49171b5d
-VALIDATED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
+LOOP_ID: OF-LOOP-SOURCE-002
+TASK_ID: OF-SOURCE-002
+LOOP_TYPE: INSTITUTIONAL_COVERAGE
+STATUS: EN_COURS
 BRANCH: architecture/africafunds-country-indicators-v0.1
-SCOPE: D00_D17_DEFINITION_CATALOG
+WAVE_01_STATUS: VERIFIED_COMPLETE
+WAVE_01_DATA_HEAD: 1f85c0df1878743f4a2ac322c2087b0b1a549641
+WAVE_01_CI_RUN: 31592700354
+CURRENT_WAVE: 02
+CURRENT_WAVE_MODE: READ_ONLY_AUDIT
 PRODUCTION_DEPLOYED: NO
-REAL_COUNTRY_DATA_LOADED: NO
-POSTGRESQL_VALIDATION: EPHEMERAL_CI_ONLY
+REAL_HISTORY_LOADED: NO
+RUNTIME_DATABASE_CHANGED: NO
 ```
 
-## Résultat
-
-Le paquet JSON `data/indicator_catalog/v1/` est l’autorité d’authoring v1 des 18 domaines et 420 définitions D00–D17. Les sept Markdown historiques restent des sources de bootstrap/audit. Les sorties JSON, CSV `;`, Markdown et SQL sont déterministes ; la migration `016` matérialise uniquement les définitions sous `ref.*`.
-
-## Preuves
+## Vague 01 vérifiée
 
 ```text
-COUNTRY_INDICATOR_CATALOG_RUN: 31484468846 — SUCCESS
-MIGRATION_RUNNER_RUN: 31484586710 — SUCCESS
-PYTHON: 3.11 SUCCESS / 3.12 SUCCESS
-POSTGRESQL_16_DOUBLE_APPLY: SUCCESS
-RUNTIME: 18 DOMAINS / 420 DEFINITIONS
+ORGANIZATIONS_ADDED: 15
+VALIDATED_SCOPE_ROLES_ADDED: 22
+COUNTRY_COVERAGE_BEFORE: 7 / 54
+COUNTRY_COVERAGE_AFTER: 10 / 54
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 44
 ```
 
-## Sortie
+Un workflow `Institutional Registry` protège désormais les invariants du registre. Le run `31592700354` est vert sur Python 3.11 et 3.12.
 
-Boucle fermée. La prochaine boucle candidate est `OF-SOURCE-002`, à démarrer par un audit en lecture seule. `OF-MAP-001` reste bloqué faute de catalogue Openfunds officiel versionné/licencié.
+Les grands CSV institutionnels restent des inventaires de découverte/revue conformément à ADR-021 ; aucune persistance runtime n’est revendiquée.
+
+## Vague 02
+
+Objectif immédiat : audit read-only des 44 pays sans organisation nationale et des rôles manquants des 10 pays déjà représentés.
+
+Priorités de couverture :
+
+```text
+CENTRAL_BANK
+STATISTICS_OFFICE
+MINISTRY_OF_FINANCE / TREASURY / DEBT_MANAGEMENT_OFFICE
+STOCK_EXCHANGE ou NOT_APPLICABLE prouvé
+CAPITAL_MARKET_REGULATOR
+FUND_REGULATOR
+INSURANCE_PENSION_REGULATOR
+```
+
+Toute écriture de vague 02 exige une preuve primaire officielle, une revue des collisions de codes et une allowlist explicite. `FMDQ` reste en revue sémantique et aucune donnée issue de la PR nº2 n’est canonisée automatiquement.
