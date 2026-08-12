@@ -103,6 +103,37 @@ WAVE03_SCOPE_ROLES = {
     ("NSO_MALAWI", "STATISTICS_OFFICE", "MALAWI", "COUNTRY"),
 }
 
+WAVE04_ORGANIZATIONS = {
+    "BNA", "CMC_ANGOLA", "BODIVA", "INE_ANGOLA",
+    "BANCO_MOCAMBIQUE", "BVM_MOZAMBIQUE", "INE_MOZAMBIQUE",
+    "BCV", "AGMVM", "BVC", "INE_CABO_VERDE",
+    "CBS", "FSA_SEYCHELLES", "MERJ_EXCHANGE", "NBS_SEYCHELLES",
+}
+
+WAVE04_SCOPE_ROLES = {
+    ("BNA", "CENTRAL_BANK", "ANGOLA", "COUNTRY"),
+    ("CMC_ANGOLA", "CAPITAL_MARKET_REGULATOR", "ANGOLA", "COUNTRY"),
+    ("CMC_ANGOLA", "FUND_REGULATOR", "ANGOLA", "COUNTRY"),
+    ("BODIVA", "STOCK_EXCHANGE", "ANGOLA", "COUNTRY"),
+    ("INE_ANGOLA", "STATISTICS_OFFICE", "ANGOLA", "COUNTRY"),
+    ("BANCO_MOCAMBIQUE", "CENTRAL_BANK", "MOZAMBIQUE", "COUNTRY"),
+    ("BANCO_MOCAMBIQUE", "CAPITAL_MARKET_REGULATOR", "MOZAMBIQUE", "COUNTRY"),
+    ("BANCO_MOCAMBIQUE", "FUND_REGULATOR", "MOZAMBIQUE", "COUNTRY"),
+    ("BVM_MOZAMBIQUE", "STOCK_EXCHANGE", "MOZAMBIQUE", "COUNTRY"),
+    ("INE_MOZAMBIQUE", "STATISTICS_OFFICE", "MOZAMBIQUE", "COUNTRY"),
+    ("BCV", "CENTRAL_BANK", "CABO_VERDE", "COUNTRY"),
+    ("AGMVM", "CAPITAL_MARKET_REGULATOR", "CABO_VERDE", "COUNTRY"),
+    ("AGMVM", "FUND_REGULATOR", "CABO_VERDE", "COUNTRY"),
+    ("BVC", "STOCK_EXCHANGE", "CABO_VERDE", "COUNTRY"),
+    ("INE_CABO_VERDE", "STATISTICS_OFFICE", "CABO_VERDE", "COUNTRY"),
+    ("CBS", "CENTRAL_BANK", "SEYCHELLES", "COUNTRY"),
+    ("FSA_SEYCHELLES", "CAPITAL_MARKET_REGULATOR", "SEYCHELLES", "COUNTRY"),
+    ("FSA_SEYCHELLES", "FUND_REGULATOR", "SEYCHELLES", "COUNTRY"),
+    ("FSA_SEYCHELLES", "INSURANCE_PENSION_REGULATOR", "SEYCHELLES", "COUNTRY"),
+    ("MERJ_EXCHANGE", "STOCK_EXCHANGE", "SEYCHELLES", "COUNTRY"),
+    ("NBS_SEYCHELLES", "STATISTICS_OFFICE", "SEYCHELLES", "COUNTRY"),
+}
+
 
 def read_rows(filename: str):
     with (REFERENCE / filename).open("r", encoding="utf-8", newline="") as handle:
@@ -202,6 +233,18 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
         actual = self._validated_scope_roles()
         self.assertTrue(WAVE03_SCOPE_ROLES.issubset(actual), WAVE03_SCOPE_ROLES - actual)
         self.assertNotIn(("RBM", "FUND_REGULATOR", "MALAWI", "COUNTRY"), actual)
+
+    def test_wave_04_organization_allowlist_is_integrated(self):
+        actual = self._organization_codes()
+        self.assertTrue(WAVE04_ORGANIZATIONS.issubset(actual), WAVE04_ORGANIZATIONS - actual)
+
+    def test_wave_04_scope_roles_are_integrated_and_validated(self):
+        actual = self._validated_scope_roles()
+        self.assertTrue(WAVE04_SCOPE_ROLES.issubset(actual), WAVE04_SCOPE_ROLES - actual)
+        self.assertNotIn(
+            ("BANCO_MOCAMBIQUE", "INSURANCE_PENSION_REGULATOR", "MOZAMBIQUE", "COUNTRY"),
+            actual,
+        )
 
 
 if __name__ == "__main__":
