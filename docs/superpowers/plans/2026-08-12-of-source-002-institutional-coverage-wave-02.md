@@ -17,27 +17,43 @@
 
 ## Task 1 — Contrat RED
 
-- [ ] étendre `tests/test_institutional_registry.py` avec les 16 organisations et 22 relations de rôle de vague 02 ;
-- [ ] pousser uniquement le test ;
-- [ ] vérifier que les invariants existants restent verts et que les assertions vague 02 échouent pour absence des nouvelles lignes.
+- [x] étendre `tests/test_institutional_registry.py` avec les 16 organisations et 22 relations de rôle de vague 02 ;
+- [x] pousser uniquement le test ;
+- [x] vérifier que les invariants existants restent verts et que les assertions vague 02 échouent pour absence des nouvelles lignes.
 
 ## Task 2 — Organisations GREEN
 
-- [ ] ajouter uniquement les 16 organisations de l'allowlist à `data/reference/ORGANIZATIONS.csv` ;
-- [ ] `VALIDATED` seulement avec URL officielle primaire et rôle principal prouvé ;
-- [ ] aucune date artificielle ;
-- [ ] exécuter/observer le workflow.
+- [x] ajouter uniquement les 16 organisations de l'allowlist à `data/reference/ORGANIZATIONS.csv` ;
+- [x] `VALIDATED` seulement avec URL officielle primaire et rôle principal prouvé ;
+- [x] aucune date artificielle ;
+- [x] exécuter/observer le workflow.
 
 ## Task 3 — Relations GREEN
 
-- [ ] ajouter uniquement les 22 relations de `docs/00_PROJECT/OF_SOURCE_002_WAVE_02_AUDIT_20260812.md` ;
-- [ ] ne pas ajouter de rôle assurance/pension pour Algérie/Tanzanie dans cette vague ;
-- [ ] vérifier le workflow Python 3.11/3.12 au HEAD de données.
+- [x] ajouter uniquement les 22 relations de `docs/00_PROJECT/OF_SOURCE_002_WAVE_02_AUDIT_20260812.md` ;
+- [x] ne pas ajouter de rôle assurance/pension pour Algérie/Tanzanie dans cette vague ;
+- [x] vérifier le workflow Python 3.11/3.12 au HEAD de données.
 
 ## Task 4 — Clôture de vague
 
-- [ ] recalculer organisations, validations, pays country-scoped et relations ;
-- [ ] écrire une attestation de clôture datée ;
-- [ ] mettre à jour STATUS, LOOP_STATE, CURRENT_ITERATION, NEXT_ACTION, HANDOFF, WORK_LOG, TODO, SUIVI et CHANGELOG ;
-- [ ] conserver `OF-SOURCE-002` en `EN_COURS` ;
-- [ ] ouvrir la vague 03 en read-only audit sur un nouveau lot contrôlé de pays.
+- [x] recalculer organisations, validations, pays country-scoped et relations ;
+- [x] écrire une attestation de clôture datée ;
+- [x] mettre à jour la mémoire vivante lors de la consolidation cumulative après vague 03 ;
+- [x] conserver `OF-SOURCE-002` en `EN_COURS` ;
+- [x] ouvrir la vague 03 en read-only audit sur un nouveau lot contrôlé de pays.
+
+## Closure evidence
+
+```text
+RED_HEAD: 39b5f3a04df4c5f69d9ac4300c5a21e4f5728749
+RED_RUN: 31594066287
+INTERMEDIATE_HEAD: 8a057200682773b09f61e898e55ca2f3537422f2
+INTERMEDIATE_RUN: 31594256827
+GREEN_HEAD: 2216ff00406e3ee40b0f8ef70ff8710f5c928d34
+GREEN_RUN: 31594503714
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+TESTS: 6 / 6 PASS
+COUNTRY_COVERAGE_AFTER: 14 / 54
+GLOBAL_TASK: OF-SOURCE-002 EN_COURS
+```
