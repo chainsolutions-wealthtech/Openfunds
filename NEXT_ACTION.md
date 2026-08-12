@@ -3,35 +3,49 @@
 ```text
 CURRENT_LOOP: OF-LOOP-SOURCE-002
 CURRENT_TASK: OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 01
-NEXT_WAVE: 02
+LAST_VERIFIED_WAVE: 03
+NEXT_WAVE: 04
 STATUS: READY_FOR_READ_ONLY_AUDIT
-WRITE_GATE: OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + ALLOWLIST
+WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST
 ```
 
 ## Phase immédiate
 
 Poursuivre la couverture institutionnelle des 54 pays sans confondre organisation connue, rôle supposé, endpoint identifié, endpoint vérifié et collecte testée.
 
-La vague 01 est vérifiée par le workflow `Institutional Registry` run `31592700354` sur Python 3.11/3.12. Elle a porté la couverture de 7 à 10 pays ayant au moins une organisation country-scoped. Il reste 44 pays sans organisation nationale dans le registre de découverte/revue.
+Les trois premières vagues sont vérifiées. Le workflow `Institutional Registry` run `31595575537` est vert sur Python 3.11/3.12 avec 8/8 tests au HEAD de données vague 03 `5024a9767b1b9aecf8a6cd52d315ccfbf8384389`.
 
-## Audit vague 02 obligatoire
+État courant :
+
+```text
+COUNTRY_COVERAGE: 18 / 54
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 36
+ORGANIZATIONS: 87 = 67 VALIDATED + 20 PENDING
+ORGANIZATION_SCOPE_ROLES: 134 = 90 VALIDATED + 44 PENDING
+SOURCE_ENDPOINTS: 43 UNCHANGED
+```
+
+## Audit vague 04 obligatoire
 
 1. résoudre dynamiquement le HEAD ;
-2. produire la liste exacte des 44 pays encore sans organisation country-scoped ;
-3. mesurer, pour les 10 pays représentés, les rôles requis encore absents ou `PENDING` ;
-4. rechercher les institutions sur des sources officielles primaires uniquement ;
-5. séparer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
+2. sélectionner un lot contrôlé parmi les 36 pays encore sans organisation country-scoped ;
+3. rechercher les institutions sur des sources officielles primaires actuelles uniquement ;
+4. séparer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
+5. bloquer toute URL compromise, ambiguë ou historiquement détournée ;
 6. vérifier toute collision de code avec `ORGANIZATIONS.csv` ;
-7. garder les organisations de zone UEMOA/CEMAC au niveau zone ;
-8. ne promouvoir aucune URL ou institution sans preuve officielle ;
-9. produire une allowlist datée avant toute écriture de vague 02.
+7. ne pas déduire un rôle `FUND_REGULATOR` d'une simple compétence générale de marché ;
+8. ne pas fusionner deux régulateurs distincts pour satisfaire artificiellement `INSURANCE_PENSION_REGULATOR` ;
+9. produire une allowlist datée et fermée avant tout contrat TDD RED ;
+10. seulement ensuite appliquer RED → organisations → rôles → GREEN.
 
-## Hors allowlist actuel
+## Blockers maintenus
 
-`FMDQ` reste `REQUIRES_ROLE_MODEL_REVIEW` : aucune écriture n’est autorisée avant arbitrage de son rôle canonique exact.
-
-Aucun endpoint spécialisé, provider series, collection specification ou runtime SQL ne doit être ajouté pendant l’audit de vague 02.
+```text
+FMDQ               REQUIRES_ROLE_MODEL_REVIEW
+SEC_ZAMBIA         CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
+IRA_URBRA_UGANDA   COMBINED_ROLE_MODEL_MISMATCH
+RBM_FUND_REGULATOR PRIMARY_CIS_PROOF_NOT_SUFFICIENT
+```
 
 ## Gate externe maintenu
 
