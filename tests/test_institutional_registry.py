@@ -54,6 +54,50 @@ WAVE01_SCOPE_ROLES = {
     ("COSUMAF", "FUND_REGULATOR", "CEMAC", "MONETARY_ZONE"),
 }
 
+WAVE02_ORGANIZATIONS = {
+    "BANQUE_ALGERIE",
+    "COSOB",
+    "SGBV",
+    "ONS_ALGERIE",
+    "BOM",
+    "FSC_MAURITIUS",
+    "SEM",
+    "STATISTICS_MAURITIUS",
+    "NBR",
+    "CMA_RWANDA",
+    "RSE",
+    "NISR",
+    "BOT",
+    "CMSA_TANZANIA",
+    "DSE",
+    "NBS_TANZANIA",
+}
+
+WAVE02_SCOPE_ROLES = {
+    ("BANQUE_ALGERIE", "CENTRAL_BANK", "ALGERIE", "COUNTRY"),
+    ("COSOB", "CAPITAL_MARKET_REGULATOR", "ALGERIE", "COUNTRY"),
+    ("COSOB", "FUND_REGULATOR", "ALGERIE", "COUNTRY"),
+    ("SGBV", "STOCK_EXCHANGE", "ALGERIE", "COUNTRY"),
+    ("ONS_ALGERIE", "STATISTICS_OFFICE", "ALGERIE", "COUNTRY"),
+    ("BOM", "CENTRAL_BANK", "MAURICE", "COUNTRY"),
+    ("FSC_MAURITIUS", "CAPITAL_MARKET_REGULATOR", "MAURICE", "COUNTRY"),
+    ("FSC_MAURITIUS", "FUND_REGULATOR", "MAURICE", "COUNTRY"),
+    ("FSC_MAURITIUS", "INSURANCE_PENSION_REGULATOR", "MAURICE", "COUNTRY"),
+    ("SEM", "STOCK_EXCHANGE", "MAURICE", "COUNTRY"),
+    ("STATISTICS_MAURITIUS", "STATISTICS_OFFICE", "MAURICE", "COUNTRY"),
+    ("NBR", "CENTRAL_BANK", "RWANDA", "COUNTRY"),
+    ("NBR", "INSURANCE_PENSION_REGULATOR", "RWANDA", "COUNTRY"),
+    ("CMA_RWANDA", "CAPITAL_MARKET_REGULATOR", "RWANDA", "COUNTRY"),
+    ("CMA_RWANDA", "FUND_REGULATOR", "RWANDA", "COUNTRY"),
+    ("RSE", "STOCK_EXCHANGE", "RWANDA", "COUNTRY"),
+    ("NISR", "STATISTICS_OFFICE", "RWANDA", "COUNTRY"),
+    ("BOT", "CENTRAL_BANK", "TANZANIE", "COUNTRY"),
+    ("CMSA_TANZANIA", "CAPITAL_MARKET_REGULATOR", "TANZANIE", "COUNTRY"),
+    ("CMSA_TANZANIA", "FUND_REGULATOR", "TANZANIE", "COUNTRY"),
+    ("DSE", "STOCK_EXCHANGE", "TANZANIE", "COUNTRY"),
+    ("NBS_TANZANIA", "STATISTICS_OFFICE", "TANZANIE", "COUNTRY"),
+}
+
 
 def read_rows(filename: str):
     with (REFERENCE / filename).open("r", encoding="utf-8", newline="") as handle:
@@ -113,12 +157,8 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
                     row["ENDPOINT_CODE"],
                 )
 
-    def test_wave_01_organization_allowlist_is_integrated(self):
-        actual = {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
-        self.assertTrue(WAVE01_ORGANIZATIONS.issubset(actual), WAVE01_ORGANIZATIONS - actual)
-
-    def test_wave_01_scope_roles_are_integrated_and_validated(self):
-        actual = {
+    def _validated_scope_roles(self):
+        return {
             (
                 row["ORGANIZATION_CODE"],
                 row["ROLE_CODE"],
@@ -128,7 +168,22 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
             for row in read_rows("ORGANIZATION_SCOPE_ROLES.csv")
             if row["VALIDATION_STATUS"] == "VALIDATED"
         }
+
+    def test_wave_01_organization_allowlist_is_integrated(self):
+        actual = {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
+        self.assertTrue(WAVE01_ORGANIZATIONS.issubset(actual), WAVE01_ORGANIZATIONS - actual)
+
+    def test_wave_01_scope_roles_are_integrated_and_validated(self):
+        actual = self._validated_scope_roles()
         self.assertTrue(WAVE01_SCOPE_ROLES.issubset(actual), WAVE01_SCOPE_ROLES - actual)
+
+    def test_wave_02_organization_allowlist_is_integrated(self):
+        actual = {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
+        self.assertTrue(WAVE02_ORGANIZATIONS.issubset(actual), WAVE02_ORGANIZATIONS - actual)
+
+    def test_wave_02_scope_roles_are_integrated_and_validated(self):
+        actual = self._validated_scope_roles()
+        self.assertTrue(WAVE02_SCOPE_ROLES.issubset(actual), WAVE02_SCOPE_ROLES - actual)
 
 
 if __name__ == "__main__":
