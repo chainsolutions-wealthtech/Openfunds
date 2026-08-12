@@ -1,0 +1,51 @@
+name: Institutional Registry
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "data/reference/AFRICA_COUNTRIES.csv"
+      - "data/reference/ORGANIZATIONS.csv"
+      - "data/reference/ORGANIZATION_ROLES.csv"
+      - "data/reference/ORGANIZATION_SCOPE_ROLES.csv"
+      - "data/reference/SOURCE_ENDPOINTS.csv"
+      - "scripts/validate_institutional_registry.py"
+      - "tests/test_institutional_registry.py"
+      - ".github/workflows/institutional-registry.yml"
+  pull_request:
+    paths:
+      - "data/reference/AFRICA_COUNTRIES.csv"
+      - "data/reference/ORGANIZATIONS.csv"
+      - "data/reference/ORGANIZATION_ROLES.csv"
+      - "data/reference/ORGANIZATION_SCOPE_ROLES.csv"
+      - "data/reference/SOURCE_ENDPOINTS.csv"
+      - "scripts/validate_institutional_registry.py"
+      - "tests/test_institutional_registry.py"
+      - ".github/workflows/institutional-registry.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: validate-institutional-registry (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Run institutional registry contract tests
+        run: python -m unittest -v tests.test_institutional_registry
