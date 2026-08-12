@@ -1,0 +1,154 @@
+name: OF-SOURCE-002 Wave 04 Role Append
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-wave04-append.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: of-source-002-wave04-role-append
+  cancel-in-progress: false
+
+jobs:
+  append-validate-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Append exact governed Wave 04 relations
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path = Path("data/reference/ORGANIZATION_SCOPE_ROLES.csv")
+          expected = [
+              ("BNA", "CENTRAL_BANK", "ANGOLA", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("CMC_ANGOLA", "CAPITAL_MARKET_REGULATOR", "ANGOLA", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("CMC_ANGOLA", "FUND_REGULATOR", "ANGOLA", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("BODIVA", "STOCK_EXCHANGE", "ANGOLA", "COUNTRY", "PRIMARY_STOCK_EXCHANGE"),
+              ("INE_ANGOLA", "STATISTICS_OFFICE", "ANGOLA", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+              ("BANCO_MOCAMBIQUE", "CENTRAL_BANK", "MOZAMBIQUE", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("BANCO_MOCAMBIQUE", "CAPITAL_MARKET_REGULATOR", "MOZAMBIQUE", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("BANCO_MOCAMBIQUE", "FUND_REGULATOR", "MOZAMBIQUE", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("BVM_MOZAMBIQUE", "STOCK_EXCHANGE", "MOZAMBIQUE", "COUNTRY", "PRIMARY_STOCK_EXCHANGE"),
+              ("INE_MOZAMBIQUE", "STATISTICS_OFFICE", "MOZAMBIQUE", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+              ("BCV", "CENTRAL_BANK", "CABO_VERDE", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("AGMVM", "CAPITAL_MARKET_REGULATOR", "CABO_VERDE", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("AGMVM", "FUND_REGULATOR", "CABO_VERDE", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("BVC", "STOCK_EXCHANGE", "CABO_VERDE", "COUNTRY", "PRIMARY_STOCK_EXCHANGE"),
+              ("INE_CABO_VERDE", "STATISTICS_OFFICE", "CABO_VERDE", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+              ("CBS", "CENTRAL_BANK", "SEYCHELLES", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("FSA_SEYCHELLES", "CAPITAL_MARKET_REGULATOR", "SEYCHELLES", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("FSA_SEYCHELLES", "FUND_REGULATOR", "SEYCHELLES", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("FSA_SEYCHELLES", "INSURANCE_PENSION_REGULATOR", "SEYCHELLES", "COUNTRY", "PRIMARY_INSURANCE_PENSION_REGULATOR"),
+              ("MERJ_EXCHANGE", "STOCK_EXCHANGE", "SEYCHELLES", "COUNTRY", "PRIMARY_STOCK_EXCHANGE"),
+              ("NBS_SEYCHELLES", "STATISTICS_OFFICE", "SEYCHELLES", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+          ]
+
+          with path.open("r", encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle, delimiter=";"))
+
+          existing = {
+              (row["ORGANIZATION_CODE"], row["ROLE_CODE"], row["SCOPE_ENTITY_CODE"], row["SCOPE_ENTITY_TYPE"])
+              for row in rows
+          }
+          expected_keys = {(org, role, scope, scope_type) for org, role, scope, scope_type, _ in expected}
+          present = expected_keys & existing
+
+          if present and present != expected_keys:
+              raise SystemExit(f"Partial Wave 04 state detected; refusing append: {sorted(present)}")
+
+          negative = ("BANCO_MOCAMBIQUE", "INSURANCE_PENSION_REGULATOR", "MOZAMBIQUE", "COUNTRY")
+          if negative in existing:
+              raise SystemExit("Forbidden Wave 04 relation already present: BANCO_MOCAMBIQUE INSURANCE_PENSION_REGULATOR")
+
+          if present == expected_keys:
+              print("Wave 04 relations already fully present; no append needed")
+          else:
+              with path.open("a", encoding="utf-8", newline="") as handle:
+                  for org, role, scope, scope_type, relationship_role in expected:
+                      handle.write(
+                          f"{org};{role};{scope};{scope_type};{relationship_role};1;;;VALIDATED;OFFICIAL_ROLE_VERIFIED_2026_08_12\n"
+                      )
+              print(f"Appended {len(expected)} governed Wave 04 relations")
+          PY
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate registry with Python 3.11
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate registry with Python 3.12
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+
+      - name: Assert Wave 04 post-state
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+
+          ref = Path("data/reference")
+          with (ref / "AFRICA_COUNTRIES.csv").open(encoding="utf-8", newline="") as h:
+              countries = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATIONS.csv").open(encoding="utf-8", newline="") as h:
+              organizations = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATION_SCOPE_ROLES.csv").open(encoding="utf-8", newline="") as h:
+              roles = list(csv.DictReader(h, delimiter=";"))
+
+          org_status = Counter(row["VALIDATION_STATUS"] for row in organizations)
+          role_status = Counter(row["VALIDATION_STATUS"] for row in roles)
+          covered = {
+              row["PRIMARY_COUNTRY_CODE"]
+              for row in organizations
+              if row["PRIMARY_COUNTRY_CODE"]
+          }
+
+          assert len(countries) == 54, len(countries)
+          assert len(organizations) == 102, len(organizations)
+          assert org_status == Counter({"VALIDATED": 82, "PENDING": 20}), org_status
+          assert len(covered) == 22, len(covered)
+          assert len(roles) == 155, len(roles)
+          assert role_status == Counter({"VALIDATED": 111, "PENDING": 44}), role_status
+          print("Wave 04 post-state verified: 102 orgs / 22 countries / 155 roles")
+          PY
+
+      - name: Commit only the governed role registry
+        shell: bash
+        run: |
+          if git diff --quiet -- data/reference/ORGANIZATION_SCOPE_ROLES.csv; then
+            echo "No role-registry change to commit"
+            exit 0
+          fi
+          test "$(git status --short | awk '{print $2}' | grep -v '^data/reference/ORGANIZATION_SCOPE_ROLES.csv$' | wc -l)" -eq 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reference/ORGANIZATION_SCOPE_ROLES.csv
+          git commit -m "data(source): add verified wave 04 institutional roles"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
