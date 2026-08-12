@@ -1,8 +1,8 @@
 # SUIVI — JOURNAL DE CONTINUITE DU PROJET OPENFUNDS
 
-Dernière mise à jour : `2026-08-11`  
+Dernière mise à jour : `2026-08-12`  
 Branche : `architecture/africafunds-country-indicators-v0.1`  
-PR principale : `#1` — brouillon, ouverte, fusionnable, non fusionnée.
+PR principale : `#1` — brouillon, ouverte, non fusionnée ; résoudre dynamiquement la fusionnabilité avant toute action.
 
 ## 1. ETAT GENERAL DU PROJET
 
@@ -37,17 +37,17 @@ SOURCES BRUTES
 ### Etat synthétique
 
 ```text
-DOCUMENTATION PERMANENTE                 TERMINEE
+DOCUMENTATION PERMANENTE                 TERMINEE / VIVANTE
 ARCHITECTURE ET PRINCIPES                DOCUMENTES
 REFERENTIELS GEOGRAPHIQUES               STRUCTURELLEMENT PEUPLES
-ORGANISATIONS ET SOURCES                 PARTIELLEMENT PEUPLEES
+ORGANISATIONS ET SOURCES                 OF-SOURCE-002 EN_COURS / 10 PAYS COUNTRY-SCOPED SUR 54
 CATALOGUE D00-D17                        CENTRALISE JSON / TESTE / MIGRATION 016
 BCEAO FX / BEAC FX                       COLLECTION_TESTED
 HISTORIQUE DURABLE MULTI-DATES           NON
 MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE
 DICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES
-MAPPING OPENFUNDS                        ABSENT
-CATEGORIES / BLOCS DE REFERENCE          NON GENERES
+MAPPING OPENFUNDS                        BLOQUE CATALOGUE OFFICIEL
+CATEGORIES / BLOCS DE REFERENCE          STRUCTURE PRESENTE / NON ACTIVE
 WTI / WTI BENCH / METRIQUES              NON CALCULES
 API / FRONTEND                           NON IMPLEMENTES
 PRODUCTION PERSISTANTE                   NON CONFIGUREE
@@ -57,7 +57,7 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 
 - audit initial avant consolidation : 95 fichiers ;
 - état post-consolidation : 104 fichiers dans la comparaison avec `main` ;
-- PR #1 : 104 fichiers modifiés, dont 103 ajouts et le README remplacé.
+- les volumetries anciennes restent historiques ; résoudre le volume courant de PR #1 dynamiquement avant revue finale.
 
 ## 2. REALISATIONS
 
@@ -66,7 +66,7 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 - **Période :** 2026-07-31 au 2026-08-03
 - **Résultat :** PostgreSQL source de vérité, architecture API-first, Atomic Design de présentation, séparation raw/validation/canonique/calcul/API/UI, bitemporalité et provenance.
 - **Fichiers :** `ARCHITECTURE.md`, `DATA_MODEL.md`, ADR historique et modèles SQL.
-- **Limite :** modèle fonds final non stabilisé.
+- **Limite historique :** modèle fonds final non stabilisé à cette date ; voir mises à jour ultérieures pour l'état courant.
 
 ### 2.2 Géographie et devises
 
@@ -76,9 +76,10 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 
 ### 2.3 Organisations et sources
 
-- **Résultat :** 21 rôles, 40 organisations, 70 affectations de rôle, 43 endpoints, 55 mappings, 50 séries et 17 spécifications/templates.
-- **Tests :** modèle d'endpoint testé dans les ordres 003/004 et migration 007 rejouable.
-- **Limite :** couverture pays partielle et divergence CSV/SQL.
+- **Résultat historique initial :** 21 rôles, 40 organisations, 70 affectations de rôle, 43 endpoints, 55 mappings, 50 séries et 17 spécifications/templates.
+- **Mise à jour 2026-08-12 :** 55 organisations, 92 affectations de rôle, 43 endpoints ; détail dans la section OF-SOURCE-002 plus bas.
+- **Tests :** modèle d'endpoint testé dans les ordres 003/004 et migration 007 rejouable ; workflow `Institutional Registry` ajouté le 2026-08-12.
+- **Limite :** couverture pays toujours partielle ; les grands CSV sont des inventaires de découverte/revue et non une persistance runtime automatique.
 
 ### 2.4 BCEAO FX
 
@@ -100,8 +101,8 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 
 ### 2.7 Cadre pays D00-D17
 
-- **Résultat :** 18 domaines et environ 420 définitions documentées ; modèle relationnel évitant une table pays de 420 colonnes.
-- **Limite :** aucun catalogue machine-readable unique ni matrice 54×420 chargée en base.
+- **Résultat historique :** 18 domaines et environ 420 définitions documentées ; modèle relationnel évitant une table pays de 420 colonnes.
+- **Mise à jour 2026-08-11 :** 18 domaines et exactement 420 définitions centralisées dans le paquet gouverné `data/indicator_catalog/v1/`, avec migration 016 et CI vérifiée.
 
 ### 2.8 Consolidation documentaire
 
@@ -123,11 +124,11 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
   - `CHANGELOG.md` ;
   - audit du dépôt ;
   - matrice de 45 écarts.
-- **Contrôles :** description PR corrigée, inventaire recalculé, cinq workflows verts.
+- **Contrôles :** description PR corrigée, inventaire recalculé, cinq workflows verts à la date de consolidation.
 
 ## 3. DECISIONS VALIDEES
 
-Le détail est dans `DECISIONS.md`.
+Le détail est dans `DECISIONS.md`. Les lignes ci-dessous conservent l'état historique initial ; les ADR ultérieurs du document maître font foi pour les décisions plus récentes.
 
 | ID | Décision | Statut |
 |---|---|---|
@@ -139,7 +140,7 @@ Le détail est dans `DECISIONS.md`.
 | ADR-006 | conservation des artefacts bruts | ACCEPTE |
 | ADR-007 | historisation bitemporelle | ACCEPTE |
 | ADR-008 | identité distincte des noms | ACCEPTE |
-| ADR-009 | séparation Fund/SubFund/ShareClass | PRINCIPE ACCEPTE, IMPLEMENTATION A REVOIR |
+| ADR-009 | séparation Fund/SubFund/ShareClass | PRINCIPE ACCEPTE, IMPLEMENTATION HISTORIQUEMENT A REVOIR |
 | ADR-010 | pays comme racine nationale | ACCEPTE |
 | ADR-011 | géographie et zones de marché en parallèle | ACCEPTE |
 | ADR-012 | codes techniques normalisés | ACCEPTE |
@@ -152,9 +153,11 @@ Le détail est dans `DECISIONS.md`.
 | ADR-019 | null différent de zéro | ACCEPTE |
 | ADR-020 | validation progressive | ACCEPTE |
 
-## 4. PROPOSITIONS NON ENCORE VALIDEES
+## 4. PROPOSITIONS HISTORIQUES
 
-| ID | Proposition | Validation attendue |
+Les propositions ci-dessous reflètent un état historique. Le statut courant de chaque ADR doit être lu dans `DECISIONS.md` ; en particulier ADR-021 à ADR-024 ont fait l'objet de décisions ultérieures.
+
+| ID | Proposition historique | Validation attendue à l'époque |
 |---|---|---|
 | ADR-021 | source de vérité unique CSV/SQL | choisir CSV, PostgreSQL ou manifeste maître |
 | ADR-022 | date métier inconnue explicite | approuver nullabilité et statut de connaissance |
@@ -163,8 +166,6 @@ Le détail est dans `DECISIONS.md`.
 | ADR-025 | persistance avant statut historique | configurer DB et stockage immuable |
 | PROP-WTI-FLEX | méthode pour fonds flexibles | allocation/règle à valider |
 | PROP-MONEY-BENCH | benchmark monétaire | hiérarchie des sources et instruments |
-
-Ces propositions ne doivent pas être implémentées comme décisions acquises sans validation.
 
 ## 5. AMELIORATIONS APPORTEES
 
@@ -182,13 +183,13 @@ Ces propositions ne doivent pas être implémentées comme décisions acquises s
 
 ## 6. ECARTS ENTRE CONVERSATION ET DEPOT
 
-| Sujet | Attendu | Etat réel | Action |
+| Sujet | Attendu | Etat réel historique | Action |
 |---|---|---|---|
 | Mapping openfunds | mapping complet | absent | OF-MAP-001/002 |
-| Fund/SubFund/ShareClass | séparation stricte | modèle incomplet | OF-DATA-001 |
-| Dictionnaire | catalogue complet | structure seulement | OF-DATA-002 |
-| 420 définitions | machine-readable | Markdown dispersé | OF-DATA-003 |
-| Institutions 54 pays | couverture complète | quelques pilotes | OF-SOURCE-002 |
+| Fund/SubFund/ShareClass | séparation stricte | modèle historiquement incomplet | OF-DATA-001 |
+| Dictionnaire | catalogue complet | structure historique seulement | OF-DATA-002 |
+| 420 définitions | machine-readable | Markdown historiquement dispersé | OF-DATA-003 |
+| Institutions 54 pays | couverture complète | couverture partielle | OF-SOURCE-002 |
 | Historique | séries durables | snapshots FX | OF-IMPORT/HIST |
 | Tunisie | base canonique intégrée | analyse seulement | OF-IMPORT-003 |
 | Nigeria | archives depuis 2011 | besoin documenté | OF-IMPORT-004 |
@@ -198,20 +199,19 @@ Ces propositions ne doivent pas être implémentées comme décisions acquises s
 | API/UI | ressources et pages | architecture seulement | OF-API/UI |
 | Persistance | quotidien durable | staging temporaire | OF-IMPORT-001/002 |
 
-La matrice exhaustive est dans `docs/00_PROJECT/CONVERSATION_REPOSITORY_GAP_MATRIX.md`.
+La matrice exhaustive est dans `docs/00_PROJECT/CONVERSATION_REPOSITORY_GAP_MATRIX.md`. Les sections datées ultérieures de ce fichier supersèdent les états historiques devenus obsolètes.
 
 ## 7. RISQUES ET BLOCAGES
 
-### Risques critiques
+### Risques critiques historiques et courants
 
-1. double source de vérité entre CSV et seeds SQL ;
-2. modèles parallèles `source.endpoint` / `source.source_endpoint` ;
-3. dates métier artificielles imposées par certaines contraintes ;
-4. mauvaise résolution Fund/SubFund/ShareClass ;
-5. confusion entre 420 définitions et 420 historiques par pays ;
-6. perte de provenance sans stockage brut permanent ;
-7. ordre de migrations manuel ;
-8. PR non fusionnée et branche `main` minimale.
+1. confusion entre inventaires de découverte et vérité runtime ;
+2. mauvaise promotion d'un endpoint ou rôle seulement identifié ;
+3. dates métier artificielles ;
+4. confusion entre définition d'indicateur et historique réellement chargé ;
+5. perte de provenance sans stockage brut permanent ;
+6. PR non fusionnée et branche `main` minimale ;
+7. couverture institutionnelle africaine encore incomplète.
 
 ### Blocages externes
 
@@ -233,7 +233,7 @@ Elle n'a pas été fusionnée et n'a modifié aucun fichier ni branche.
 
 ## 8. CONTROLES DE LA CONSOLIDATION
 
-Etat des workflows sur le commit de contrôle documentaire :
+Etat historique des workflows sur le commit de contrôle documentaire :
 
 ```text
 Collector Tests                  SUCCESS
@@ -243,26 +243,26 @@ BEAC FX Live Smoke               SUCCESS
 Daily Africa FX Staging          SUCCESS
 ```
 
-La PR #1 reste en brouillon, ouverte, fusionnable et non fusionnée. Sa description distingue désormais structure, implémentation testée, limites et décisions ouvertes.
+La PR #1 reste non fusionnée. Son état dynamique doit être résolu au HEAD courant avant toute décision de fusion.
 
-## POINT EXACT DE REPRISE
+## POINT EXACT DE REPRISE HISTORIQUE
 
-### Dernière tâche terminée
+### Dernière tâche terminée à cette époque
 
 ```text
 OF-DOC-001 — CONSOLIDER LA DOCUMENTATION RACINE
 ```
 
-La consolidation est terminée : documents obligatoires et complémentaires présents, PR corrigée, 104 fichiers inventoriés et cinq workflows verts.
+La consolidation était terminée : documents obligatoires et complémentaires présents, PR corrigée, 104 fichiers inventoriés et cinq workflows verts.
 
-### Tâche à commencer
+### Tâche à commencer à cette époque
 
 ```text
 OF-ARCH-001 — CHOISIR LA SOURCE DE VERITE DES REFERENTIELS
 OF-SOURCE-001 — SYNCHRONISER BCEAO/BEAC ENTRE CSV ET SQL
 ```
 
-### Fichiers à ouvrir
+### Fichiers historiques à ouvrir
 
 ```text
 DECISIONS.md
@@ -284,7 +284,7 @@ schemas/reference/010_beac_fx_parser_v0_2.sql
 schemas/reference/011_beac_fx_collection_validation.sql
 ```
 
-### Vérifications à effectuer
+### Vérifications historiques
 
 1. lister les codes BCEAO/BEAC génériques et spécifiques ;
 2. comparer IDs, URLs, rôles, statuts et versions ;
@@ -294,7 +294,7 @@ schemas/reference/011_beac_fx_collection_validation.sql
 6. documenter l'impact avant modification ;
 7. préserver tous les IDs et observations existants.
 
-### Prochaine modification attendue
+### Prochaine modification historique attendue
 
 ```text
 REGISTRE MAITRE CHOISI
@@ -303,7 +303,7 @@ REGISTRE MAITRE CHOISI
 → TEST AUTOMATIQUE DE DIVERGENCE
 ```
 
-### Critères de fin
+### Critères de fin historiques
 
 - une source de vérité déclarée ;
 - aucune double saisie non contrôlée ;
@@ -312,9 +312,6 @@ REGISTRE MAITRE CHOISI
 - migrations additives et idempotentes ;
 - tests Python/PostgreSQL/live verts ;
 - README, TODO, SUIVI, ADR et CHANGELOG mis à jour.
-
-Ne pas commencer la couverture historique persistante avant cette réconciliation.
-
 
 ---
 
@@ -429,7 +426,7 @@ HISTORIQUES FX COMPLETS           NON
 PRODUCTION PERSISTANTE            NON
 ```
 
-Les nombres 95 et 104 restent des états historiques. Le volume courant de la PR nº 1 est 122 fichiers modifiés.
+Les nombres 95 et 104 restent des états historiques. Le volume courant de la PR nº 1 était 122 fichiers modifiés à cette date.
 
 ### PR nº 2
 
@@ -471,7 +468,7 @@ docs/00_PROJECT/HANDOFF_TO_NEXT_AGENT_20260804.md
 
 Lire d'abord le document maître vivant et les huit rapports datés du 4 août 2026.
 
-L'ordre fonctionnel reste :
+L'ordre fonctionnel restait :
 
 ```text
 OF-ARCH-001
@@ -527,7 +524,7 @@ OF-ARCH-003   VERIFIED_COMPLETE
 OF-ARCH-004   IMPLEMENTED_WITH_OPEN_GOVERNANCE_BLOCKER
 ```
 
-Le blocker maintenu est l'immuabilité de la migration générée `012`. La concurrence du runner et les scénarios d'adoption partielle restent également seulement partiellement couverts. `OF-DATA-001` n'est pas commencé.
+Le blocker maintenu était l'immuabilité de la migration générée `012`. La concurrence du runner et les scénarios d'adoption partielle restaient également seulement partiellement couverts. `OF-DATA-001` n'était pas commencé à cette date.
 
 ### Boucle documentaire
 
@@ -544,7 +541,7 @@ Intégrer le standard Loop Engineering complet sans remplacer les sources canoni
 
 Livrables principaux : réconciliation permanente, matrice des 176 fichiers, `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, mémoire de boucle, catalogues, manifestes, politiques, modèles et adaptateurs IA.
 
-### Nouveau point exact de reprise
+### Nouveau point exact de reprise historique
 
 1. lire `00_START_HERE.md` et `AGENTS.md` ;
 2. résoudre le HEAD courant et comparer à la baseline ;
@@ -596,6 +593,119 @@ Le run de migrations valide aussi les fixtures Fund/SubFund/ShareClass et le sc�
 
 La CI a révélé qu’une étape réappliquait la classification dans son workspace avant de figer le manifeste. Le SQL était identique, mais la phrase de métadonnées rendait le hash JSON différent. La cause a été corrigée au commit `d8b3a2d697e9bfdad9a022ba8379494fcaa17608` : le paquet JSON commité est désormais strictement autoritaire et la CI le vérifie sans le réécrire. Un test fonds supposait ensuite à tort que la migration `015` devait rester la dernière migration globale ; le commit `0777afffad950e779234ef09f3f2b9031ec41ce7` a recentré l’invariant sur l’unicité de la migration canonique du domaine `fund`.
 
-### Prochaine porte
+### Prochaine porte à cette date
 
-`OF-MAP-001` reste bloqué tant qu’un catalogue Openfunds officiel, versionné et licencié n’est pas archivé. La prochaine tâche non bloquée de priorité haute est `OF-SOURCE-002` : compléter les institutions des 54 pays. La reprise doit commencer en lecture seule par un audit de couverture et de preuve ; aucune donnée réelle ne doit être inventée ou déclarée complète sans source vérifiée.
+`OF-MAP-001` restait bloqué tant qu’un catalogue Openfunds officiel, versionné et licencié n’était pas archivé. La prochaine tâche non bloquée de priorité haute était `OF-SOURCE-002` : compléter les institutions des 54 pays, en commençant par un audit read-only.
+
+---
+
+## MISE A JOUR DU 12 AOUT 2026 — OF-SOURCE-002 VAGUE 01 VERIFIED COMPLETE
+
+```text
+TASK_ID: OF-SOURCE-002
+LOOP_ID: OF-LOOP-SOURCE-002
+GLOBAL_STATUS: EN_COURS
+WAVE: 01
+WAVE_STATUS: VERIFIED_COMPLETE
+AUDIT_START_HEAD: ddeee85042d37803bd27bc9cda81cc2e67856c57
+WAVE_DATA_HEAD: 1f85c0df1878743f4a2ac322c2087b0b1a549641
+CI_RUN: 31592700354
+PRODUCTION_DEPLOYED: NO
+RUNTIME_DATABASE_CHANGED: NO
+HISTORY_LOADED: NO
+NEW_BRANCH_CREATED: NO
+NEW_PR_CREATED: NO
+```
+
+### Audit initial
+
+La reprise a été faite depuis la branche existante, après lecture de `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, `STATUS.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md`, `WORK_LOG.md`, `NEXT_ACTION.md`, `HANDOFF.md`, ADR-021 et des registres institutionnels.
+
+Baseline mesurée avant écriture :
+
+```text
+AFRICAN_COUNTRIES: 54
+ORGANIZATIONS: 40 = 20 VALIDATED + 20 PENDING
+COUNTRIES_WITH_COUNTRY_SCOPED_ORGANIZATION: 7
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 47
+ORGANIZATION_SCOPE_ROLES: 70 = 26 VALIDATED + 44 PENDING
+SOURCE_ENDPOINTS: 43 = 20 VALIDATED + 23 PENDING
+```
+
+Les actifs de recherche de PR nº2 ont été utilisés uniquement comme file de recherche. Les candidats ont été réconciliés avec les codes de la branche, puis vérifiés sur des sources officielles primaires avant l'allowlist.
+
+### Allowlist intégrée
+
+```text
+BOTSWANA: BOB, NBFIRA, BSE, STATISTICS_BOTSWANA
+NAMIBIE: BON, NAMFISA, NSX, NSA_NAMIBIA
+ETHIOPIE: NBE, ECMA, ESX, ESS_ETHIOPIA
+UEMOA: AMF_UMOA, UMOA_TITRES
+CEMAC: COSUMAF
+```
+
+Quinze organisations ont été ajoutées comme `VALIDATED` au registre de découverte/revue, avec URL officielle et sans date artificielle. Vingt-deux relations de rôle ont été ajoutées comme `VALIDATED` pour les rôles prouvés : central bank, capital-market regulator, fund regulator, insurance/pension regulator, stock exchange, statistics office et government-securities agency.
+
+`FMDQ` n'a pas été intégré : son identité est connue mais son rattachement exact à la taxonomie de rôles reste à arbitrer.
+
+### Contrôle TDD et CI
+
+Un contrôle exécutable a été ajouté :
+
+```text
+scripts/validate_institutional_registry.py
+tests/test_institutional_registry.py
+.github/workflows/institutional-registry.yml
+```
+
+Preuves :
+
+```text
+RED_INITIAL_RUN: 31592435103 — FAILURE attendu
+INTERMEDIATE_RUN: 31592516832 — VALIDATOR PASS / ALLOWLIST FAIL attendu
+GREEN_FINAL_RUN: 31592700354 — SUCCESS
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+TESTS: 4 / 4 PASS
+```
+
+Le validateur contrôle notamment les codes, doublons, références organisation/rôle/scope, statuts et URLs requises pour les objets `VALIDATED`.
+
+### Etat après vague 01
+
+```text
+ORGANIZATIONS: 55 = 35 VALIDATED + 20 PENDING
+COUNTRIES_WITH_COUNTRY_SCOPED_ORGANIZATION: 10
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 44
+ORGANIZATION_SCOPE_ROLES: 92 = 48 VALIDATED + 44 PENDING
+SOURCE_ENDPOINTS: 43 = 20 VALIDATED + 23 PENDING
+```
+
+Les trois nouveaux pays country-scoped sont Botswana, Namibie et Éthiopie. Les entités UEMOA/CEMAC restent au niveau zone et ne sont pas artificiellement comptées comme institutions nationales de leurs États membres.
+
+### Gouvernance conservée
+
+Conformément à ADR-021, les grands CSV `ORGANIZATIONS.csv`, `ORGANIZATION_SCOPE_ROLES.csv` et associés restent des inventaires de découverte/revue. Cette vague n'a créé aucune migration PostgreSQL runtime et ne revendique aucune persistance de ces nouveaux objets en production.
+
+Aucun endpoint spécialisé, provider series, collection specification, historique, base persistante, merge, retargeting, branche ou PR n'a été créé.
+
+## POINT EXACT DE REPRISE — VAGUE 02
+
+```text
+CURRENT_TASK: OF-SOURCE-002
+GLOBAL_STATUS: EN_COURS
+CURRENT_WAVE: 02
+MODE: READ_ONLY_AUDIT
+```
+
+1. résoudre dynamiquement le HEAD ;
+2. lister exactement les 44 pays sans organisation country-scoped ;
+3. mesurer les rôles manquants des 10 pays déjà présents ;
+4. rechercher uniquement des sources officielles primaires ;
+5. distinguer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
+6. vérifier les collisions de codes ;
+7. préserver UEMOA/CEMAC au niveau zone ;
+8. produire une allowlist explicite avant toute écriture ;
+9. laisser `FMDQ` hors allowlist jusqu'à arbitrage du rôle canonique exact.
+
+Les priorités de rôle restent banque centrale, statistiques, finances/dette, bourse ou non-applicabilité prouvée, régulateur marché/fonds et assurance/pension. Aucun objet ne doit être inventé pour compléter artificiellement les 54 pays.
