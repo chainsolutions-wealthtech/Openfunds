@@ -12,21 +12,9 @@ CODE_RE = re.compile(r"^[A-Z0-9_]+$")
 ALLOWED_STATUS = {"PENDING", "VALIDATED", "REJECTED", "SUPERSEDED"}
 
 WAVE01_ORGANIZATIONS = {
-    "BOB",
-    "NBFIRA",
-    "BSE",
-    "STATISTICS_BOTSWANA",
-    "BON",
-    "NAMFISA",
-    "NSX",
-    "NSA_NAMIBIA",
-    "NBE",
-    "ECMA",
-    "ESX",
-    "ESS_ETHIOPIA",
-    "AMF_UMOA",
-    "UMOA_TITRES",
-    "COSUMAF",
+    "BOB", "NBFIRA", "BSE", "STATISTICS_BOTSWANA", "BON", "NAMFISA", "NSX",
+    "NSA_NAMIBIA", "NBE", "ECMA", "ESX", "ESS_ETHIOPIA", "AMF_UMOA",
+    "UMOA_TITRES", "COSUMAF",
 }
 
 WAVE01_SCOPE_ROLES = {
@@ -55,22 +43,9 @@ WAVE01_SCOPE_ROLES = {
 }
 
 WAVE02_ORGANIZATIONS = {
-    "BANQUE_ALGERIE",
-    "COSOB",
-    "SGBV",
-    "ONS_ALGERIE",
-    "BOM",
-    "FSC_MAURITIUS",
-    "SEM",
-    "STATISTICS_MAURITIUS",
-    "NBR",
-    "CMA_RWANDA",
-    "RSE",
-    "NISR",
-    "BOT",
-    "CMSA_TANZANIA",
-    "DSE",
-    "NBS_TANZANIA",
+    "BANQUE_ALGERIE", "COSOB", "SGBV", "ONS_ALGERIE", "BOM", "FSC_MAURITIUS",
+    "SEM", "STATISTICS_MAURITIUS", "NBR", "CMA_RWANDA", "RSE", "NISR", "BOT",
+    "CMSA_TANZANIA", "DSE", "NBS_TANZANIA",
 }
 
 WAVE02_SCOPE_ROLES = {
@@ -96,6 +71,36 @@ WAVE02_SCOPE_ROLES = {
     ("CMSA_TANZANIA", "FUND_REGULATOR", "TANZANIE", "COUNTRY"),
     ("DSE", "STOCK_EXCHANGE", "TANZANIE", "COUNTRY"),
     ("NBS_TANZANIA", "STATISTICS_OFFICE", "TANZANIE", "COUNTRY"),
+}
+
+WAVE03_ORGANIZATIONS = {
+    "BOU", "CMA_UGANDA", "USE_UGANDA", "UBOS",
+    "BOZ", "LUSE", "ZAMSTATS", "PIA_ZAMBIA",
+    "RBZ", "SEC_ZIMBABWE", "ZSE", "ZIMSTAT", "IPEC",
+    "RBM", "MSE_MALAWI", "NSO_MALAWI",
+}
+
+WAVE03_SCOPE_ROLES = {
+    ("BOU", "CENTRAL_BANK", "OUGANDA", "COUNTRY"),
+    ("CMA_UGANDA", "CAPITAL_MARKET_REGULATOR", "OUGANDA", "COUNTRY"),
+    ("CMA_UGANDA", "FUND_REGULATOR", "OUGANDA", "COUNTRY"),
+    ("USE_UGANDA", "STOCK_EXCHANGE", "OUGANDA", "COUNTRY"),
+    ("UBOS", "STATISTICS_OFFICE", "OUGANDA", "COUNTRY"),
+    ("BOZ", "CENTRAL_BANK", "ZAMBIE", "COUNTRY"),
+    ("LUSE", "STOCK_EXCHANGE", "ZAMBIE", "COUNTRY"),
+    ("ZAMSTATS", "STATISTICS_OFFICE", "ZAMBIE", "COUNTRY"),
+    ("PIA_ZAMBIA", "INSURANCE_PENSION_REGULATOR", "ZAMBIE", "COUNTRY"),
+    ("RBZ", "CENTRAL_BANK", "ZIMBABWE", "COUNTRY"),
+    ("SEC_ZIMBABWE", "CAPITAL_MARKET_REGULATOR", "ZIMBABWE", "COUNTRY"),
+    ("SEC_ZIMBABWE", "FUND_REGULATOR", "ZIMBABWE", "COUNTRY"),
+    ("ZSE", "STOCK_EXCHANGE", "ZIMBABWE", "COUNTRY"),
+    ("ZIMSTAT", "STATISTICS_OFFICE", "ZIMBABWE", "COUNTRY"),
+    ("IPEC", "INSURANCE_PENSION_REGULATOR", "ZIMBABWE", "COUNTRY"),
+    ("RBM", "CENTRAL_BANK", "MALAWI", "COUNTRY"),
+    ("RBM", "CAPITAL_MARKET_REGULATOR", "MALAWI", "COUNTRY"),
+    ("RBM", "INSURANCE_PENSION_REGULATOR", "MALAWI", "COUNTRY"),
+    ("MSE_MALAWI", "STOCK_EXCHANGE", "MALAWI", "COUNTRY"),
+    ("NSO_MALAWI", "STATISTICS_OFFICE", "MALAWI", "COUNTRY"),
 }
 
 
@@ -157,6 +162,9 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
                     row["ENDPOINT_CODE"],
                 )
 
+    def _organization_codes(self):
+        return {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
+
     def _validated_scope_roles(self):
         return {
             (
@@ -170,7 +178,7 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
         }
 
     def test_wave_01_organization_allowlist_is_integrated(self):
-        actual = {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
+        actual = self._organization_codes()
         self.assertTrue(WAVE01_ORGANIZATIONS.issubset(actual), WAVE01_ORGANIZATIONS - actual)
 
     def test_wave_01_scope_roles_are_integrated_and_validated(self):
@@ -178,12 +186,22 @@ class InstitutionalRegistryContractTests(unittest.TestCase):
         self.assertTrue(WAVE01_SCOPE_ROLES.issubset(actual), WAVE01_SCOPE_ROLES - actual)
 
     def test_wave_02_organization_allowlist_is_integrated(self):
-        actual = {row["ORGANIZATION_CODE"] for row in read_rows("ORGANIZATIONS.csv")}
+        actual = self._organization_codes()
         self.assertTrue(WAVE02_ORGANIZATIONS.issubset(actual), WAVE02_ORGANIZATIONS - actual)
 
     def test_wave_02_scope_roles_are_integrated_and_validated(self):
         actual = self._validated_scope_roles()
         self.assertTrue(WAVE02_SCOPE_ROLES.issubset(actual), WAVE02_SCOPE_ROLES - actual)
+
+    def test_wave_03_organization_allowlist_is_integrated(self):
+        actual = self._organization_codes()
+        self.assertTrue(WAVE03_ORGANIZATIONS.issubset(actual), WAVE03_ORGANIZATIONS - actual)
+        self.assertNotIn("SEC_ZAMBIA", actual, "SEC_ZAMBIA is blocked by current-domain integrity gate")
+
+    def test_wave_03_scope_roles_are_integrated_and_validated(self):
+        actual = self._validated_scope_roles()
+        self.assertTrue(WAVE03_SCOPE_ROLES.issubset(actual), WAVE03_SCOPE_ROLES - actual)
+        self.assertNotIn(("RBM", "FUND_REGULATOR", "MALAWI", "COUNTRY"), actual)
 
 
 if __name__ == "__main__":
