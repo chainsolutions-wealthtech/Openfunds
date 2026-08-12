@@ -106,3 +106,66 @@ Le runner PostgreSQL 16 applique deux fois les 16 migrations, vérifie 18 domain
 ### Sortie
 
 `OF-DATA-003` est fermé. Aucun historique réel, mapping officiel Openfunds, merge, déploiement, nouvelle branche ou nouvelle PR n’a été réalisé. La prochaine tâche candidate est `OF-SOURCE-002` en audit lecture seule.
+
+---
+
+## Boucle OF-LOOP-SOURCE-002 — Vague 01 — 2026-08-12
+
+```text
+TASK_ID: OF-SOURCE-002
+WAVE: 01
+AUDIT_START_HEAD: ddeee85042d37803bd27bc9cda81cc2e67856c57
+WAVE_DATA_HEAD: 1f85c0df1878743f4a2ac322c2087b0b1a549641
+STATUS: VERIFIED_COMPLETE_WAVE / GLOBAL_TASK_EN_COURS
+```
+
+### Audit read-only
+
+Le dépôt a été relu depuis `00_START_HERE.md`, `AGENTS.md`, `SOURCE_OF_TRUTH.md`, les états de boucle et ADR-021. La lignée du HEAD a été vérifiée avant écriture. La baseline institutionnelle était :
+
+```text
+54 pays
+40 organisations = 20 VALIDATED + 20 PENDING
+7 / 54 pays avec au moins une organisation country-scoped
+70 relations organisation-rôle = 26 VALIDATED + 44 PENDING
+43 endpoints = 20 VALIDATED + 23 PENDING
+```
+
+Les actifs de recherche de la PR nº2 ont été exploités en lecture seule et chaque candidat a été réconcilié avec les codes existants. Une allowlist a ensuite été établie à partir de preuves institutionnelles officielles primaires.
+
+### TDD
+
+- test contractuel écrit avant intégration ;
+- run `31592435103` RED sur Python 3.11/3.12 : validateur, organisations et rôles attendus absents ;
+- validateur `scripts/validate_institutional_registry.py` ajouté ;
+- run `31592516832` : invariants historiques et validateur verts, allowlist toujours rouge comme attendu ;
+- 15 organisations et 22 relations de rôle ajoutées ;
+- run final `31592700354` GREEN sur Python 3.11/3.12, 4/4 tests.
+
+### Organisations intégrées
+
+```text
+BOTSWANA: BOB, NBFIRA, BSE, STATISTICS_BOTSWANA
+NAMIBIE: BON, NAMFISA, NSX, NSA_NAMIBIA
+ETHIOPIE: NBE, ECMA, ESX, ESS_ETHIOPIA
+UEMOA: AMF_UMOA, UMOA_TITRES
+CEMAC: COSUMAF
+```
+
+`FMDQ` est volontairement resté hors allowlist en attente d’un arbitrage sur le rôle canonique exact.
+
+### État après vague 01
+
+```text
+55 organisations = 35 VALIDATED + 20 PENDING
+10 / 54 pays avec au moins une organisation country-scoped
+44 pays sans organisation country-scoped
+92 relations organisation-rôle = 48 VALIDATED + 44 PENDING
+43 endpoints inchangés
+```
+
+### Limites et sortie
+
+Aucun endpoint spécialisé, provider series, collection specification, SQL runtime, historique, base persistante, branche, PR, merge, retargeting ou déploiement n’a été créé par cette vague. Les CSV restent des inventaires de découverte/revue conformément à ADR-021.
+
+`OF-SOURCE-002` reste `EN_COURS`. La vague 02 démarre en lecture seule sur les 44 pays non couverts et les rôles manquants des 10 pays présents.
