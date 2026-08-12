@@ -1,29 +1,36 @@
-
 # Itération courante
 
 ```text
-LOOP_ID: OF-LOOP-DATA-003
-ITERATION: 001
-TASK_ID: OF-DATA-003
-STATUS: VERIFIED_COMPLETE
-START_HEAD: 145461e04ba9affd2b11fedaf56ed4ad49171b5d
-VALIDATED_TECHNICAL_HEAD: 0777afffad950e779234ef09f3f2b9031ec41ce7
-DATE: 2026-08-11
+LOOP_ID: OF-LOOP-SOURCE-002
+ITERATION: 002
+TASK_ID: OF-SOURCE-002
+STATUS: EN_COURS
+DATE: 2026-08-12
+WAVE_01_STATUS: VERIFIED_COMPLETE
+WAVE_01_CI_RUN: 31592700354
+CURRENT_WAVE: 02
+CURRENT_MODE: READ_ONLY_AUDIT
 ```
 
-## Hypothèse et verdict
+## Hypothèse courante
 
-**Hypothèse :** les 420 définitions D00–D17 peuvent être centralisées sans réécrire leurs sources, inventer les champs absents ni transformer des exigences de couverture en historiques chargés.
+Les institutions nécessaires à la couverture des 54 pays peuvent être intégrées progressivement sans inventer de rôles, sans confondre organisation, endpoint, série et collecte, et sans transformer un inventaire de découverte en vérité runtime PostgreSQL.
 
-**Verdict : confirmé.** Un paquet JSON gouverné unique développe 18 domaines / 420 codes, conserve la provenance legacy, sépare `source_nature` de `canonical_nature`, génère quatre vues déterministes et alimente une migration additive testée sur PostgreSQL 16.
+## Résultat de l’itération précédente
 
-## Corrections de boucle
+La vague 01 a ajouté 15 organisations et 22 relations de rôles officiellement prouvées pour Botswana, Namibie, Éthiopie, UEMOA et CEMAC. La couverture en pays possédant au moins une organisation nationale est passée de 7 à 10 sur 54.
 
-- TDD RED/GREEN pour le parseur, le paquet authoring, la classification, les sorties et la migration ;
-- correction de la mutation CI du paquet d’authoring avant gel du manifeste ;
-- correction d’un test funds qui supposait à tort que la migration `015` devait être la dernière migration globale ;
-- aucun force-push ni réécriture d’historique.
+La boucle TDD a été vérifiée : RED avant intégration, validateur exécutable ajouté, puis GREEN final sur Python 3.11/3.12 avec le workflow `Institutional Registry` run `31592700354`.
 
-## Limite
+## Itération 002 — objectif
 
-Cette itération ne charge aucune donnée réelle et ne valide ni disponibilité pays, ni historique complet, ni mapping Openfunds, ni calcul actif, ni production.
+1. dresser la liste exacte des 44 pays sans organisation country-scoped ;
+2. mesurer les rôles manquants des 10 pays déjà représentés ;
+3. rechercher uniquement des sources officielles primaires ;
+4. séparer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
+5. vérifier les collisions de codes ;
+6. produire une allowlist avant toute nouvelle écriture.
+
+## Interdictions
+
+Aucun nouvel endpoint, provider series, historique, migration runtime, branche, PR, merge, retargeting ou déploiement n’est autorisé par cette itération read-only. `FMDQ` reste hors allowlist tant que son rôle canonique exact n’est pas arbitré.
