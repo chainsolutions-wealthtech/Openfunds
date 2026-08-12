@@ -19,8 +19,56 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - stockage brut permanent absent ;
 - historique FX limité à un snapshot validé par zone ;
 - mapping openfunds absent ;
-- API, catégories, WTI et WTI Bench non implémentés.
+- API et produits analytiques actifs non implémentés.
 
+## [2026-08-12] — OF-SOURCE-002 VAGUE 01 — COUVERTURE INSTITUTIONNELLE
+
+### Audité
+
+- les 54 pays canoniques et les registres `ORGANIZATIONS`, `ORGANIZATION_ROLES`, `ORGANIZATION_SCOPE_ROLES` et `SOURCE_ENDPOINTS` ;
+- baseline : 40 organisations, 70 relations organisation-rôle, 43 endpoints et 7/54 pays avec au moins une organisation country-scoped ;
+- les actifs de recherche de la PR nº2 ont été relus sans la modifier ;
+- les candidats ont été réconciliés avec les codes existants puis vérifiés sur des sources institutionnelles officielles primaires.
+
+### Ajouté
+
+- `docs/superpowers/plans/2026-08-12-of-source-002-institutional-coverage-wave-01.md` ;
+- `docs/00_PROJECT/OF_SOURCE_002_BASELINE_AUDIT_20260812.md` ;
+- `docs/00_PROJECT/OF_SOURCE_002_WAVE_01_COMPLETION_20260812.md` ;
+- `scripts/validate_institutional_registry.py` ;
+- `tests/test_institutional_registry.py` ;
+- workflow `.github/workflows/institutional-registry.yml` ;
+- 15 organisations vérifiées : BOB, NBFIRA, BSE, STATISTICS_BOTSWANA, BON, NAMFISA, NSX, NSA_NAMIBIA, NBE, ECMA, ESX, ESS_ETHIOPIA, AMF_UMOA, UMOA_TITRES et COSUMAF ;
+- 22 relations organisation-rôle vérifiées pour banque centrale, régulation marché/fonds, assurance/pension, bourse, statistiques et titres publics.
+
+### TDD et vérification
+
+```text
+RED_INITIAL_RUN: 31592435103 — FAILURE attendu
+INTERMEDIATE_RUN: 31592516832 — VALIDATOR PASS / ALLOWLIST FAIL attendu
+GREEN_FINAL_RUN: 31592700354 — SUCCESS
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+TESTS: 4 / 4 PASS
+```
+
+### État après vague 01
+
+```text
+ORGANIZATIONS: 55 = 35 VALIDATED + 20 PENDING
+COUNTRIES_WITH_COUNTRY_SCOPED_ORGANIZATION: 10 / 54
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 44
+ORGANIZATION_SCOPE_ROLES: 92 = 48 VALIDATED + 44 PENDING
+SOURCE_ENDPOINTS: 43 UNCHANGED
+```
+
+### Gouvernance et limites
+
+- `OF-SOURCE-002` reste `EN_COURS` ;
+- `FMDQ` reste hors allowlist jusqu'à arbitrage de son rôle canonique ;
+- les grands CSV institutionnels restent des inventaires de découverte/revue conformément à ADR-021 ;
+- aucune migration runtime, aucun endpoint spécialisé, provider series, collection specification, historique, base persistante, branche, PR, merge, retargeting ou déploiement n'a été créé ;
+- la vague 02 est ouverte en `READ_ONLY_AUDIT` sur les 44 pays non couverts et les rôles manquants des 10 pays présents.
 
 ## [2026-08-11] — OF-DATA-003 CATALOGUE D00-D17 GOUVERNE
 
@@ -218,7 +266,6 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - WTI distinct du WTI Bench ;
 - niveaux national, régional et Afrique.
 
-
 ## [2026-08-04] — BASELINE GITHUB ET HANDOFF DOCUMENTAIRE
 
 ### Ajouté
@@ -245,7 +292,7 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ### Statuts corrigés
 
-- la PR nº 1 compte actuellement 122 fichiers modifiés ; les chiffres 95 et 104 restent conservés comme états historiques ;
+- la PR nº 1 comptait alors 122 fichiers modifiés ; les chiffres 95 et 104 restent conservés comme états historiques ;
 - la taxonomie, les 486 règles de routage et les 432 catégories/blocs sont `STRUCTURE_PRESENT / TESTED / NOT_ACTIVE` ;
 - WTI, WTI Bench, ratios, classements et historiques complets restent non actifs ;
 - le classeur Excel reste un export dérivé non canonique dont la reproductibilité complète demeure une porte ouverte.
