@@ -1,6 +1,6 @@
 # TODO — REGISTRE DES TACHES OPENFUNDS
 
-Dernière mise à jour : `2026-08-11`.
+Dernière mise à jour : `2026-08-12`.
 
 ## 1. REGLES
 
@@ -171,6 +171,10 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 - **Dépendances :** OF-ARCH-001
 - **Critères d'acceptation :** statut pour banque centrale, statistiques, finances, dette, bourse, régulateurs fonds et assurance/pension ; URL et preuve vérifiées ; non-applicabilité explicite.
 - **Livrables :** organisations, rôles et endpoints complets.
+- **Progression vérifiée au 2026-08-12 :** vague 01 terminée et testée ; 55 organisations dont 35 `VALIDATED`, 92 relations organisation-rôle dont 48 `VALIDATED`, 10/54 pays avec au moins une organisation country-scoped, 44 pays restant sans organisation nationale.
+- **Preuves :** `docs/00_PROJECT/OF_SOURCE_002_BASELINE_AUDIT_20260812.md`, `docs/00_PROJECT/OF_SOURCE_002_WAVE_01_COMPLETION_20260812.md`, workflow `Institutional Registry` run `31592700354` `SUCCESS` sur Python 3.11/3.12.
+- **Prochaine unité :** `WAVE_02` en lecture seule ; rechercher les 44 pays non couverts et compléter les rôles manquants des 10 pays déjà présents avant toute nouvelle allowlist.
+- **Limite :** les CSV restent des inventaires de découverte/revue selon ADR-021 ; aucune persistance runtime n’est revendiquée.
 
 ## OF-SOURCE-003 — Vérifier les 55 mappings initiaux
 
@@ -510,3 +514,31 @@ CLOTURER OF-DOC-003
 ```
 
 Ne pas retargeter ou fusionner la PR nº 1, ne pas modifier la PR nº 2 et ne pas commencer `OF-DATA-001`.
+
+---
+
+# K. OF-SOURCE-002 — VAGUE 01 VERIFIEE / VAGUE 02 OUVERTE — 2026-08-12
+
+```text
+TASK_ID: OF-SOURCE-002
+GLOBAL_STATUS: EN_COURS
+WAVE_01: VERIFIED_COMPLETE
+WAVE_01_CI_RUN: 31592700354
+WAVE_02: READ_ONLY_AUDIT
+```
+
+### Résultat de la vague 01
+
+- baseline lue avant écriture : 40 organisations, 70 relations de rôles, 43 endpoints ;
+- 15 organisations officiellement vérifiées ajoutées ;
+- 22 relations organisation-rôle officiellement vérifiées ajoutées ;
+- couverture country-scoped passée de 7/54 à 10/54 pays ;
+- 44 pays restent sans organisation nationale ;
+- `Institutional Registry` ajouté comme contrôle exécutable ;
+- TDD RED puis GREEN vérifié sur Python 3.11/3.12 ;
+- `FMDQ` exclu de l’allowlist dans l’attente d’une revue sémantique du rôle ;
+- aucun endpoint, SQL runtime, historique, branche, PR ou déploiement ajouté.
+
+### Vague 02 — gate
+
+La prochaine action est un audit read-only des 44 pays non couverts et des rôles manquants des 10 pays déjà représentés. Une nouvelle écriture n’est autorisée qu’après preuve officielle primaire, revue des collisions de code et allowlist explicite.
