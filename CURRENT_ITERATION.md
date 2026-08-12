@@ -2,13 +2,13 @@
 
 ```text
 LOOP_ID: OF-LOOP-SOURCE-002
-ITERATION: 002
+ITERATION: 004
 TASK_ID: OF-SOURCE-002
 STATUS: EN_COURS
 DATE: 2026-08-12
-WAVE_01_STATUS: VERIFIED_COMPLETE
-WAVE_01_CI_RUN: 31592700354
-CURRENT_WAVE: 02
+LAST_VERIFIED_WAVE: 03
+WAVE_03_CI_RUN: 31595575537
+CURRENT_WAVE: 04
 CURRENT_MODE: READ_ONLY_AUDIT
 ```
 
@@ -16,21 +16,39 @@ CURRENT_MODE: READ_ONLY_AUDIT
 
 Les institutions nécessaires à la couverture des 54 pays peuvent être intégrées progressivement sans inventer de rôles, sans confondre organisation, endpoint, série et collecte, et sans transformer un inventaire de découverte en vérité runtime PostgreSQL.
 
-## Résultat de l’itération précédente
+## Résultats cumulés
 
-La vague 01 a ajouté 15 organisations et 22 relations de rôles officiellement prouvées pour Botswana, Namibie, Éthiopie, UEMOA et CEMAC. La couverture en pays possédant au moins une organisation nationale est passée de 7 à 10 sur 54.
+```text
+WAVE_01: +15 organisations / +22 relations / couverture 10 sur 54
+WAVE_02: +16 organisations / +22 relations / couverture 14 sur 54
+WAVE_03: +16 organisations / +20 relations / couverture 18 sur 54
 
-La boucle TDD a été vérifiée : RED avant intégration, validateur exécutable ajouté, puis GREEN final sur Python 3.11/3.12 avec le workflow `Institutional Registry` run `31592700354`.
+CURRENT_ORGANIZATIONS: 87 = 67 VALIDATED + 20 PENDING
+CURRENT_SCOPE_ROLES: 134 = 90 VALIDATED + 44 PENDING
+CURRENT_COUNTRY_COVERAGE: 18 / 54
+REMAINING_COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 36
+```
 
-## Itération 002 — objectif
+La vague 03 a été validée par TDD : RED contrôlé, étape intermédiaire organisations-only, puis GREEN final `Institutional Registry` run `31595575537`, Python 3.11/3.12, 8/8 tests.
 
-1. dresser la liste exacte des 44 pays sans organisation country-scoped ;
-2. mesurer les rôles manquants des 10 pays déjà représentés ;
-3. rechercher uniquement des sources officielles primaires ;
-4. séparer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
-5. vérifier les collisions de codes ;
-6. produire une allowlist avant toute nouvelle écriture.
+## Itération 004 — objectif
+
+1. résoudre le HEAD dynamiquement ;
+2. sélectionner un lot de pays parmi les 36 non couverts ;
+3. rechercher uniquement des sources officielles primaires actuelles ;
+4. séparer identité, rôle, endpoint et collecte ;
+5. bloquer tout domaine compromis, ambigu ou obsolète ;
+6. vérifier les collisions de codes ;
+7. produire une allowlist fermée avant toute nouvelle écriture ;
+8. appliquer ensuite RED → organisations → rôles → GREEN si le gate est satisfait.
+
+## Blockers conservés
+
+- `FMDQ` : rôle canonique à arbitrer ;
+- `SEC_ZAMBIA` : domaine institutionnel courant non fiable lors de l'audit vague 03 ;
+- `IRA/URBRA Uganda` : fonctions assurance/retraite séparées face à un rôle canonique combiné ;
+- `RBM FUND_REGULATOR` : preuve CIS/OPC insuffisante.
 
 ## Interdictions
 
-Aucun nouvel endpoint, provider series, historique, migration runtime, branche, PR, merge, retargeting ou déploiement n’est autorisé par cette itération read-only. `FMDQ` reste hors allowlist tant que son rôle canonique exact n’est pas arbitré.
+Aucun nouvel endpoint, provider series, historique, migration runtime, branche, PR, merge, retargeting ou déploiement n’est autorisé pendant l’audit de vague 04.
