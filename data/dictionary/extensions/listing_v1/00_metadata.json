@@ -1,0 +1,17 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_LISTING_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_LISTING_EXTENSION_SCOPE",
+  "field_count": 34,
+  "extends_dictionary": "OPENFUNDS_CANONICAL_FIELD_DICTIONARY@1.0.0",
+  "physical_schema": "fund",
+  "physical_tables": ["listing", "listing_identifier"],
+  "source_migration": "019_SHARE_CLASS_LISTING_CORE",
+  "provenance_path": "schemas/fund/019_share_class_listing_core.sql",
+  "governance": {
+    "field_id_pattern": "OF_FUND_(LISTING|LISTING_IDENTIFIER)_<FIELD>",
+    "semantic_break_policy": "NEW_FIELD_ID_OR_NEW_EXTENSION_VERSION",
+    "core_dictionary_immutability": "DO_NOT_REWRITE_SPEC_V1_143_FIELD_BASELINE",
+    "mapping_policy": "ONLY_REVIEWED_OPENFUNDS_IDS_MAY_REFERENCE_EXTENSION_FIELDS"
+  }
+}
