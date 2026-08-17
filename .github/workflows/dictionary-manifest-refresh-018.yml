@@ -1,0 +1,102 @@
+name: Refresh Canonical Dictionary Manifest for Migration 018
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/dictionary-manifest-refresh-018.yml"
+
+permissions:
+  contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Recompute deterministic dictionary checksums and evidence
+        run: |
+          python - <<'PY'
+          import importlib.util
+          import json
+          import subprocess
+          from pathlib import Path
+
+          root = Path.cwd()
+          source = root / "data/dictionary/spec_v1"
+          manifest_path = root / "data/dictionary/CANONICAL_FIELD_DICTIONARY_MANIFEST_V1.json"
+          core_path = root / "scripts/canonical_field_dictionary.py"
+
+          spec = importlib.util.spec_from_file_location("canonical_field_dictionary", core_path)
+          assert spec and spec.loader
+          core = importlib.util.module_from_spec(spec)
+          spec.loader.exec_module(core)
+
+          package = core.load_package(source)
+          outputs = core.build(package)
+          checksums = {
+              "authoritative_package_sha256": core.package_sha256(source),
+              "expanded_json_sha256": core.sha256_text(outputs["expanded_json"]),
+              "csv_sha256": core.sha256_text(outputs["csv"]),
+              "markdown_sha256": core.sha256_text(outputs["markdown"]),
+          }
+
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          manifest["manifest_version"] = "1.0.3"
+          manifest["checksums"] = checksums
+          manifest["checksum_basis"] = {
+              "source_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip(),
+              "source_tree": subprocess.check_output(["git", "rev-parse", "HEAD^{tree}"], text=True).strip(),
+              "evidence": "MIGRATION_018_IDENTIFIER_SCHEME_EXTENSION",
+              "policy": "CHECKSUMS_DESCRIBE_OUTPUTS_OF_THE_COMMITTED_GENERATOR_AND_PACKAGE",
+          }
+          implementation = manifest.setdefault("implementation", {})
+          for field, path in {
+              "schema_git_blob_sha1": "data/dictionary/canonical-field-dictionary-v1.schema.json",
+              "core_library_git_blob_sha1": "scripts/canonical_field_dictionary.py",
+              "generator_git_blob_sha1": "scripts/generate_canonical_field_dictionary.py",
+              "tests_git_blob_sha1": "tests/test_canonical_field_dictionary.py",
+              "workflow_git_blob_sha1": ".github/workflows/canonical-field-dictionary.yml",
+          }.items():
+              implementation[field] = subprocess.check_output(["git", "hash-object", path], text=True).strip()
+          manifest["source_contract"] = {
+              "foundation_migration": "schemas/fund/015_fund_subfund_shareclass_core.sql",
+              "additive_runtime_extensions": [
+                  "schemas/fund/018_extended_security_identifier_schemes.sql"
+              ],
+              "expected_physical_columns": 143,
+              "openfunds_mapping_policy": "NO_IDENTIFIER_INVENTED",
+              "runtime_schema_modified": True,
+              "runtime_schema_change": "IDENTIFIER_SCHEME_CHECK_WIDENED_FORWARD_ONLY",
+          }
+          manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+          print(json.dumps(checksums, sort_keys=True))
+          PY
+
+      - name: Verify regenerated manifest with committed generator
+        run: |
+          python scripts/generate_canonical_field_dictionary.py --check-manifest
+          python -m unittest -v tests.test_canonical_field_dictionary
+          python -m unittest -v tests.test_identifier_scheme_extension
+          git diff --check
+          test "$(git diff --name-only)" = "data/dictionary/CANONICAL_FIELD_DICTIONARY_MANIFEST_V1.json"
+
+      - name: Commit exact manifest refresh
+        run: |
+          git config user.name "openfunds-governed-bot"
+          git config user.email "openfunds-governed-bot@users.noreply.github.com"
+          git add data/dictionary/CANONICAL_FIELD_DICTIONARY_MANIFEST_V1.json
+          git commit -m "docs(dictionary): refresh checksums for identifier scheme extension"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
