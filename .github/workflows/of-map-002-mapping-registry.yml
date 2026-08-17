@@ -9,12 +9,14 @@ on:
       - "data/openfunds/mapping/v2.13.0/**"
       - "scripts/validate_openfunds_mapping_registry.py"
       - "tests/test_openfunds_mapping_registry.py"
+      - "tests/test_openfunds_mapping_canonical_extensions.py"
       - "tests/test_openfunds_mapping_batch02.py"
       - "tests/test_openfunds_mapping_batch03.py"
       - "tests/test_openfunds_mapping_batch04.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
+      - "data/dictionary/extensions/**"
       - ".github/workflows/of-map-002-mapping-registry.yml"
 
 permissions:
@@ -39,6 +41,7 @@ jobs:
       - name: Run mapping registry contract
         run: |
           python -m unittest -v tests.test_openfunds_mapping_registry
+          python -m unittest -v tests.test_openfunds_mapping_canonical_extensions
           python -m unittest -v tests.test_openfunds_mapping_batch02
           python -m unittest -v tests.test_openfunds_mapping_batch03
           python -m unittest -v tests.test_openfunds_mapping_batch04
@@ -64,6 +67,7 @@ jobs:
             --manifest data/openfunds/mapping/v2.13.0/mapping_manifest.json \
             --pdf data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf \
             --sha256-file data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256 \
-            --canonical-package data/dictionary/spec_v1
+            --canonical-package data/dictionary/spec_v1 \
+            --canonical-extension data/dictionary/extensions/listing_v1
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
