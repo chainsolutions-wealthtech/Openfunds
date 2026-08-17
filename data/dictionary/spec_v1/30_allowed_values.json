@@ -85,6 +85,9 @@
   "entity_identifier.identifier_scheme": [
     "ISIN",
     "LEI",
+    "WKN",
+    "SEDOL",
+    "VALOR",
     "REGULATOR_ID",
     "LOCAL_CODE",
     "OPENFUNDS_ID",
