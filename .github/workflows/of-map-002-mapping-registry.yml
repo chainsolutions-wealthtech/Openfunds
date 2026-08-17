@@ -1,0 +1,59 @@
+name: OF-MAP-002 Mapping Registry
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "data/openfunds/mapping/v2.13.0/**"
+      - "scripts/validate_openfunds_mapping_registry.py"
+      - "tests/test_openfunds_mapping_registry.py"
+      - "scripts/parse_openfunds_v2_13_0.py"
+      - "scripts/canonical_field_dictionary.py"
+      - "data/dictionary/spec_v1/**"
+      - ".github/workflows/of-map-002-mapping-registry.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: mapping-registry-unit (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run mapping registry contract
+        run: python -m unittest -v tests.test_openfunds_mapping_registry
+
+  integration:
+    name: mapping-registry-official-and-canonical-integration
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install PDF extraction tool
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+      - name: Validate registry against official and canonical inventories
+        run: |
+          python scripts/validate_openfunds_mapping_registry.py \
+            --registry data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv \
+            --manifest data/openfunds/mapping/v2.13.0/mapping_manifest.json \
+            --pdf data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf \
+            --sha256-file data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256 \
+            --canonical-package data/dictionary/spec_v1
+      - name: Assert repository unchanged
+        run: test -z "$(git status --porcelain=v1 -uall)"
