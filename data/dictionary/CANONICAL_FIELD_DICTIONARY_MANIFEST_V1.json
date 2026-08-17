@@ -1,5 +1,5 @@
 {
-  "manifest_version": "1.0.2",
+  "manifest_version": "1.0.3",
   "dictionary_version": "1.0.0",
   "status": "VALIDATED_FUND_CORE_SCOPE",
   "generated_at": "2026-08-06",
@@ -43,15 +43,15 @@
     "exhaustive_field_view_generated": true
   },
   "checksums": {
-    "authoritative_package_sha256": "e07ded9d02a0c334ac8c2e0368d24d903d82f35716585a46d6ddf7c375e18e95",
-    "expanded_json_sha256": "dadc834e31b677bbd4e3e5e4406d985a73724d5f3fd86530518b08b7d086eeb4",
-    "csv_sha256": "374c10b8ac9d92d0f025400933cfcb2e41970f1f4f7bd4f95d9bce08e536f068",
-    "markdown_sha256": "3827b74da9c40f561608b196e047bf8254f8c20e0b58fac33b6ca485b13d2138"
+    "authoritative_package_sha256": "1636647fb9e8e09f41694138170fda25efd60d12894433509660c2953fce68a6",
+    "expanded_json_sha256": "5d4bd21891235e76e10f121bfa17c57ded26d87845da1f4df6ed5a756fa10bcd",
+    "csv_sha256": "f49c5ed79bbbb90133e2c2d9ec79280ee38dfcb8bde1f5d3d606e3059740675b",
+    "markdown_sha256": "6efc1dda627d3706010bddfa3cf67efa6e3d8af8aa712df5ffc43f5ca9c9d348"
   },
   "checksum_basis": {
-    "source_commit": "2d4c8c860aedce30a25cfc9ffcda1ab6ec820a43",
-    "source_tree": "8c1ed4427295b871dad0cc736bc0a210a8d31177",
-    "evidence": "GITHUB_ACTIONS_RUN_31112744651",
+    "source_commit": "07c4b1fe867126353a2fcc059d279ba4324126ec",
+    "source_tree": "5c0ab60f43c8f12dc378ef4ab420ed10af834dec",
+    "evidence": "MIGRATION_018_IDENTIFIER_SCHEME_EXTENSION",
     "policy": "CHECKSUMS_DESCRIBE_OUTPUTS_OF_THE_COMMITTED_GENERATOR_AND_PACKAGE"
   },
   "implementation": {
@@ -64,12 +64,16 @@
     "tests_path": "tests/test_canonical_field_dictionary.py",
     "tests_git_blob_sha1": "1d22f9f57cbbe14e1f641a6d6785517e595f274d",
     "workflow_path": ".github/workflows/canonical-field-dictionary.yml",
-    "workflow_git_blob_sha1": "2ae67916c72774c036201b7cd968b3f61f8e054b"
+    "workflow_git_blob_sha1": "138729361f6343869725b8e190715d6c248b4aa4"
   },
   "source_contract": {
-    "migration": "schemas/fund/015_fund_subfund_shareclass_core.sql",
+    "foundation_migration": "schemas/fund/015_fund_subfund_shareclass_core.sql",
+    "additive_runtime_extensions": [
+      "schemas/fund/018_extended_security_identifier_schemes.sql"
+    ],
     "expected_physical_columns": 143,
     "openfunds_mapping_policy": "NO_IDENTIFIER_INVENTED",
-    "runtime_schema_modified": false
+    "runtime_schema_modified": true,
+    "runtime_schema_change": "IDENTIFIER_SCHEME_CHECK_WIDENED_FORWARD_ONLY"
   }
 }
