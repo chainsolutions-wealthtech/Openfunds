@@ -1,0 +1,167 @@
+name: OF-SOURCE-002 Wave 05 Governed Append
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-wave05-append.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: of-source-002-wave05-governed-append
+  cancel-in-progress: false
+
+jobs:
+  append-validate-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Append exact governed Wave 05 allowlist
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          ref = Path("data/reference")
+          org_path = ref / "ORGANIZATIONS.csv"
+          role_path = ref / "ORGANIZATION_SCOPE_ROLES.csv"
+
+          organizations = [
+              "CBL;CENTRAL_BANK;BANQUE CENTRALE DU LESOTHO;CENTRAL BANK OF LESOTHO;CBL;LESOTHO;LESOTHO;;https://centralbank.org.ls/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "BOS_LESOTHO;STATISTICS_OFFICE;BUREAU DES STATISTIQUES DU LESOTHO;BUREAU OF STATISTICS LESOTHO;BOS;LESOTHO;LESOTHO;;https://www.bos.gov.ls/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "CBE_ESWATINI;CENTRAL_BANK;BANQUE CENTRALE D ESWATINI;CENTRAL BANK OF ESWATINI;CBE;ESWATINI;ESWATINI;;https://www.centralbank.org.sz/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "FSRA_ESWATINI;CAPITAL_MARKET_REGULATOR;AUTORITE DE REGULATION DES SERVICES FINANCIERS D ESWATINI;FINANCIAL SERVICES REGULATORY AUTHORITY ESWATINI;FSRA;ESWATINI;ESWATINI;;https://www.fsra.co.sz/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "ESE;STOCK_EXCHANGE;BOURSE D ESWATINI;ESWATINI STOCK EXCHANGE;ESE;ESWATINI;ESWATINI;;https://ese.co.sz/;;0;1;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "CSO_ESWATINI;STATISTICS_OFFICE;OFFICE CENTRAL DES STATISTIQUES D ESWATINI;CENTRAL STATISTICAL OFFICE ESWATINI;CSO;ESWATINI;ESWATINI;;https://www.gov.sz/index.php?catid=78&id=687%3Acentral-statistics-office&view=article;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+          ]
+
+          roles = [
+              ("CBL", "CENTRAL_BANK", "LESOTHO", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("CBL", "CAPITAL_MARKET_REGULATOR", "LESOTHO", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("CBL", "FUND_REGULATOR", "LESOTHO", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("CBL", "INSURANCE_PENSION_REGULATOR", "LESOTHO", "COUNTRY", "PRIMARY_INSURANCE_PENSION_REGULATOR"),
+              ("BOS_LESOTHO", "STATISTICS_OFFICE", "LESOTHO", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+              ("CBE_ESWATINI", "CENTRAL_BANK", "ESWATINI", "COUNTRY", "PRIMARY_CENTRAL_BANK"),
+              ("FSRA_ESWATINI", "CAPITAL_MARKET_REGULATOR", "ESWATINI", "COUNTRY", "PRIMARY_CAPITAL_MARKET_REGULATOR"),
+              ("FSRA_ESWATINI", "FUND_REGULATOR", "ESWATINI", "COUNTRY", "PRIMARY_FUND_REGULATOR"),
+              ("FSRA_ESWATINI", "INSURANCE_PENSION_REGULATOR", "ESWATINI", "COUNTRY", "PRIMARY_INSURANCE_PENSION_REGULATOR"),
+              ("ESE", "STOCK_EXCHANGE", "ESWATINI", "COUNTRY", "PRIMARY_STOCK_EXCHANGE"),
+              ("CSO_ESWATINI", "STATISTICS_OFFICE", "ESWATINI", "COUNTRY", "PRIMARY_STATISTICS_OFFICE"),
+          ]
+
+          expected_org_codes = {line.split(";", 1)[0] for line in organizations}
+          with org_path.open("r", encoding="utf-8", newline="") as handle:
+              existing_org_rows = list(csv.DictReader(handle, delimiter=";"))
+          existing_org_codes = {row["ORGANIZATION_CODE"] for row in existing_org_rows}
+          present_orgs = expected_org_codes & existing_org_codes
+          if present_orgs and present_orgs != expected_org_codes:
+              raise SystemExit(f"Partial Wave 05 organization state; refusing mutation: {sorted(present_orgs)}")
+
+          with role_path.open("r", encoding="utf-8", newline="") as handle:
+              existing_role_rows = list(csv.DictReader(handle, delimiter=";"))
+          existing_role_keys = {
+              (row["ORGANIZATION_CODE"], row["ROLE_CODE"], row["SCOPE_ENTITY_CODE"], row["SCOPE_ENTITY_TYPE"])
+              for row in existing_role_rows
+          }
+          expected_role_keys = {(org, role, scope, scope_type) for org, role, scope, scope_type, _ in roles}
+          present_roles = expected_role_keys & existing_role_keys
+          if present_roles and present_roles != expected_role_keys:
+              raise SystemExit(f"Partial Wave 05 role state; refusing mutation: {sorted(present_roles)}")
+
+          if present_orgs == expected_org_codes and present_roles == expected_role_keys:
+              print("Wave 05 allowlist already fully present; no append needed")
+          else:
+              if present_orgs or present_roles:
+                  raise SystemExit("Wave 05 state is not atomically absent or complete; refusing mutation")
+              with org_path.open("a", encoding="utf-8", newline="") as handle:
+                  for line in organizations:
+                      handle.write(line + "\n")
+              with role_path.open("a", encoding="utf-8", newline="") as handle:
+                  for org, role, scope, scope_type, relationship_role in roles:
+                      handle.write(
+                          f"{org};{role};{scope};{scope_type};{relationship_role};1;;;VALIDATED;OFFICIAL_ROLE_VERIFIED_2026_08_17\n"
+                      )
+              print(f"Appended {len(organizations)} organizations and {len(roles)} roles")
+          PY
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Validate registry with Python 3.11
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate registry with Python 3.12
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+
+      - name: Assert exact Wave 05 post-state
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+
+          ref = Path("data/reference")
+          with (ref / "AFRICA_COUNTRIES.csv").open(encoding="utf-8", newline="") as h:
+              countries = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATIONS.csv").open(encoding="utf-8", newline="") as h:
+              organizations = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATION_SCOPE_ROLES.csv").open(encoding="utf-8", newline="") as h:
+              roles = list(csv.DictReader(h, delimiter=";"))
+
+          org_status = Counter(row["VALIDATION_STATUS"] for row in organizations)
+          role_status = Counter(row["VALIDATION_STATUS"] for row in roles)
+          covered = {row["PRIMARY_COUNTRY_CODE"] for row in organizations if row["PRIMARY_COUNTRY_CODE"]}
+
+          assert len(countries) == 54, len(countries)
+          assert len(organizations) == 108, len(organizations)
+          assert org_status == Counter({"VALIDATED": 88, "PENDING": 20}), org_status
+          assert len(covered) == 24, len(covered)
+          assert len(roles) == 166, len(roles)
+          assert role_status == Counter({"VALIDATED": 122, "PENDING": 44}), role_status
+          print("Wave 05 post-state verified: 108 orgs / 24 countries / 166 roles")
+          PY
+
+      - name: Commit only the two governed registries
+        shell: bash
+        run: |
+          if git diff --quiet -- data/reference/ORGANIZATIONS.csv data/reference/ORGANIZATION_SCOPE_ROLES.csv; then
+            echo "No Wave 05 registry change to commit"
+            exit 0
+          fi
+          echo "Git status before governed commit:"
+          git status --short
+          unexpected_files="$(git status --short | awk '$2 != "data/reference/ORGANIZATIONS.csv" && $2 != "data/reference/ORGANIZATION_SCOPE_ROLES.csv" {count++} END {print count+0}')"
+          echo "Unexpected file count: $unexpected_files"
+          test "$unexpected_files" -eq 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reference/ORGANIZATIONS.csv data/reference/ORGANIZATION_SCOPE_ROLES.csv
+          git commit -m "data(source): add verified wave 05 institutions"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
