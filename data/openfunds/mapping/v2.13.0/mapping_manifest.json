@@ -1,0 +1,36 @@
+{
+  "mapping_id": "OPENFUNDS_V2_13_0_TO_CANONICAL_V1",
+  "standard": "Openfunds",
+  "standard_version": "2.13.0",
+  "source_sha256": "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4",
+  "official_field_count": 1869,
+  "canonical_dictionary_version": "1.0.0",
+  "canonical_field_count": 143,
+  "registry_path": "data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv",
+  "source_archive_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf",
+  "source_checksum_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256",
+  "canonical_dictionary_path": "data/dictionary/spec_v1",
+  "policy": {
+    "registry_contains_reviewed_mappings_only": true,
+    "unmapped_external_ids_are_computed_not_materialized": true,
+    "official_document_is_never_modified": true,
+    "external_id_must_exist_in_checksum_locked_inventory": true,
+    "canonical_field_id_must_exist_in_governed_dictionary": true,
+    "parameterized_xx_ids_must_remain_unexpanded": true,
+    "uncertain_mappings_use_to_confirm": true,
+    "information_loss_must_be_explicit": true
+  },
+  "allowed_mapping_statuses": [
+    "DIRECT",
+    "TRANSFORMED",
+    "ONE_TO_MANY",
+    "MANY_TO_ONE",
+    "TO_CONFIRM"
+  ],
+  "allowed_validation_statuses": [
+    "PROPOSED",
+    "VALIDATED"
+  ],
+  "status": "BOOTSTRAPPED_EMPTY_REGISTRY_VALIDATOR_PENDING",
+  "created_on": "2026-08-17"
+}
