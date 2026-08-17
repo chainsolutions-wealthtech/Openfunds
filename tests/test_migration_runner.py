@@ -101,10 +101,17 @@ class MigrationRunnerTests(unittest.TestCase):
             arguments = generator.get("arguments", [])
             self.assertEqual(generator.get("mode"), "CHECK_ONLY_FROZEN_ARTIFACT")
             self.assertIn("--check", arguments)
-            self.assertIn("--source", arguments)
             self.assertIn("--output", arguments)
             self.assertTrue((ROOT / item["path"]).is_file())
-            self.assertTrue((ROOT / arguments[arguments.index("--source") + 1]).is_file())
+
+            source_flags = [flag for flag in ("--source", "--source-dir") if flag in arguments]
+            self.assertEqual(1, len(source_flags), (item["id"], arguments))
+            source_flag = source_flags[0]
+            source_path = ROOT / arguments[arguments.index(source_flag) + 1]
+            if source_flag == "--source":
+                self.assertTrue(source_path.is_file(), (item["id"], source_path))
+            else:
+                self.assertTrue(source_path.is_dir(), (item["id"], source_path))
 
     def test_repository_manifest_load_does_not_mutate_frozen_migration(self):
         target = ROOT / "schemas/reference/012_validated_fx_reference_registry.sql"
