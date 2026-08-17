@@ -14,6 +14,7 @@ on:
       - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
       - 'tests/test_identifier_scheme_extension.py'
+      - 'tests/test_listing_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -29,6 +30,7 @@ on:
       - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
       - 'tests/test_identifier_scheme_extension.py'
+      - 'tests/test_listing_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -87,6 +89,7 @@ jobs:
         run: |
           python -m unittest -v tests.test_fund_domain_model
           python -m unittest -v tests.test_identifier_scheme_extension
+          python -m unittest -v tests.test_listing_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
