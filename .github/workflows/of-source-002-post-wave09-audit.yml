@@ -1,0 +1,61 @@
+name: OF-SOURCE-002 Post-Wave09 Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-post-wave09-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run effective country plus zone role coverage audit
+        run: python scripts/audit_institutional_role_coverage.py
+      - name: Print exact pending institutional role inventory
+        shell: python
+        run: |
+          import csv, json
+          from collections import Counter, defaultdict
+          from pathlib import Path
+          path=Path('data/reference/ORGANIZATION_SCOPE_ROLES.csv')
+          with path.open('r',encoding='utf-8',newline='') as f:
+              rows=list(csv.DictReader(f,delimiter=';'))
+          pending=[r for r in rows if r['VALIDATION_STATUS']=='PENDING']
+          print('PENDING_TOTAL',len(pending))
+          print('PENDING_BY_ROLE',json.dumps(Counter(r['ROLE_CODE'] for r in pending),sort_keys=True))
+          print('PENDING_BY_SCOPE_TYPE',json.dumps(Counter(r['SCOPE_ENTITY_TYPE'] for r in pending),sort_keys=True))
+          grouped=defaultdict(list)
+          for r in pending:
+              grouped[f"{r['SCOPE_ENTITY_TYPE']}:{r['SCOPE_ENTITY_CODE']}"].append({
+                  'organization':r['ORGANIZATION_CODE'],
+                  'role':r['ROLE_CODE'],
+                  'relationship_role':r['RELATIONSHIP_ROLE'],
+                  'is_primary':r['IS_PRIMARY'],
+                  'source_note':r['SOURCE_NOTE'],
+              })
+          print('PENDING_DETAIL')
+          print(json.dumps(dict(sorted(grouped.items())),ensure_ascii=False,indent=2,sort_keys=False))
+          assert len(pending)==40, len(pending)
+      - name: Re-run all institutional contracts
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
