@@ -6,7 +6,7 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ### A décider
 
-- archivage exact et parsing déterministe du Field List officiel Openfunds v2.13.0 (version et licence déjà vérifiées) ;
+- mapping champ-par-champ Openfunds v2.13.0 → modèle canonique (`OF-MAP-002`) sur l'inventaire officiel désormais verrouillé ;
 - PostgreSQL persistant et stockage brut immuable ;
 - complétude des institutions et mappings sources des 54 pays ;
 - méthodologies WTI Bench, risque sans risque et MAR encore ouvertes.
@@ -18,7 +18,7 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - PostgreSQL persistant non configuré ;
 - stockage brut permanent absent ;
 - historique FX limité à un snapshot validé par zone ;
-- mapping openfunds absent ;
+- mapping Openfunds champ-par-champ encore incomplet (`OF-MAP-001` terminé, `OF-MAP-002` en cours) ;
 - API et produits analytiques actifs non implémentés.
 
 ## [2026-08-17] — TAXONOMIE POSTGRESQL, OPENFUNDS ET COUVERTURE INSTITUTIONNELLE
@@ -36,16 +36,20 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ### OF-SOURCE-002
 
-- Waves 02 à 09 poursuivies sous TDD ;
-- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle, 159 `VALIDATED` ;
-- BCEAO/BEAC/BRVM/BVMAC promus sur scope zonal sans duplication ;
+- Waves 02 à 12 poursuivies sous TDD ;
+- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING` ;
+- Waves 10–12 : 12 rôles institutionnels, 3 bourses et 4 fournisseurs d'indices promus sans création ni retargeting ;
+- résiduel exact : 9 FX, 5 index providers, 3 monetary unions, 2 supranational authorities, 2 interbank operators ;
 - Érythrée volontairement non peuplée sans preuve primaire officielle actuelle.
 
 ### Openfunds
 
 - v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;
-- manifeste de provenance ajouté ;
-- Field List exact, SHA256 et parser restent le gate OF-MAP-001.
+- Field List officiel FINAL de 745 pages archivé byte-identical (2 957 096 octets) ;
+- SHA256 verrouillé : `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4` ;
+- parser checksum-gated `scripts/parse_openfunds_v2_13_0.py` vérifié Python 3.11/3.12 et sur le document réel ;
+- inventaire exact : 1 869 OF-ID uniques = 1 849 concrets + 20 templates pays `XX` ;
+- `OF-MAP-001` terminé ; `OF-MAP-002` devient le chantier actif.
 
 ### Non activé
 

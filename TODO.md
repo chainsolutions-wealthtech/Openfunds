@@ -146,20 +146,22 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-MAP-001 — Intégrer le catalogue officiel openfunds
 
-- **Statut :** BLOQUE
+- **Statut :** TERMINE
 - **Priorité :** P0_CRITIQUE
-- **Dépendances :** Field List officiel v2.13.0 archivé sans modification, OF-DATA-002
+- **Dépendances :** OF-DATA-002
 - **Critères d'acceptation :** version, source, date, identifiants, descriptions, types et cardinalités sourcés ; aucun contenu officiel inventé.
-- **Livrables :** source archivée et catalogue structuré.
-- **Etat vérifié 2026-08-17 :** version officielle `2.13.0` et licence `CC BY-ND 4.0` vérifiées ; manifeste de provenance créé. Le seul gate primaire restant est l'archivage exact du Field List officiel v2.13.0, son SHA256 et son parsing déterministe.
+- **Livrables :** source officielle archivée sans modification, checksum gouverné, parser déterministe et inventaire structurel vérifié.
+- **Résultat vérifié 2026-08-17 :** Field List officiel `2.13.0` (`FINAL`, `2026-03-23`) archivé byte-identical ; SHA256 `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4` ; parser checksum-gated vérifié sur Python 3.11/3.12 et sur le PDF officiel de 745 pages ; inventaire exact de 1 869 OF-ID uniques = 1 849 IDs concrets + 20 templates pays `XX`.
+- **Preuves :** `docs/00_PROJECT/OF_MAP_001_OPENFUNDS_V2_13_0_OFFICIAL_ARCHIVE_COMPLETION_20260817.md`, `docs/00_PROJECT/OF_MAP_001_DETERMINISTIC_PARSE_COMPLETION_20260817.md`, `scripts/parse_openfunds_v2_13_0.py`, run GREEN `32061806859`.
 
 ## OF-MAP-002 — Construire le mapping openfunds → canonique
 
-- **Statut :** BLOQUE
+- **Statut :** EN_COURS
 - **Priorité :** P0_CRITIQUE
 - **Dépendances :** OF-MAP-001, OF-DATA-001/002
 - **Critères d'acceptation :** statut par champ, cible canonique, transformations, pertes, champs sans équivalent, mapping humain/machine et tests aller-retour.
 - **Livrables :** `OPENFUNDS_MAPPING.md` enrichi, registre structuré et fixtures.
+- **Point de départ vérifié 2026-08-17 :** 1 869 OF-ID officiels sont maintenant checksum-gated et inventoriés. Le mapping doit référencer ces IDs sans recopier ni modifier le document officiel ; chaque cible canonique doit être validée contre `data/dictionary/spec_v1/`.
 
 ---
 
@@ -172,9 +174,9 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 - **Dépendances :** OF-ARCH-001
 - **Critères d'acceptation :** statut pour banque centrale, statistiques, finances, dette, bourse, régulateurs fonds et assurance/pension ; URL et preuve vérifiées ; non-applicabilité explicite.
 - **Livrables :** organisations, rôles et endpoints complets.
-- **Progression vérifiée au 2026-08-17 :** Waves 01 à 09 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle dont 159 `VALIDATED`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée.
-- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audit `scripts/audit_institutional_role_coverage.py` et promotions zonales Wave 09.
-- **Prochaine unité :** réduire les groupes de rôles encore manquants à partir de l’audit effectif pays+zones, en promouvant d’abord les lignes `PENDING` déjà présentes lorsqu’une preuve primaire officielle existe ; conserver les cas non applicables ou insuffisamment prouvés explicites.
+- **Progression vérifiée au 2026-08-17 :** Waves 01 à 12 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Il ne reste aucune ligne `STOCK_EXCHANGE` en attente ; résiduel : 9 FX reference providers, 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.
+- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audits post-Wave 10/11/12 et `scripts/audit_institutional_role_coverage.py`.
+- **Prochaine unité :** auditer les 9 `FX_REFERENCE_RATE_PROVIDER` sur preuve de série officielle, poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et les 7 rôles zonaux sémantiques ; conserver les cas non applicables ou insuffisamment prouvés explicites.
 - **Limite :** couverture 53/54 ne signifie pas complétude de tous les rôles ; les CSV restent des surfaces gouvernées de découverte/revue et la production persistante reste séparée.
 
 ## OF-SOURCE-003 — Vérifier les 55 mappings initiaux
