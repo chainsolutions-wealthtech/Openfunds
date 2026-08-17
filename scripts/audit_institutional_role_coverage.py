@@ -43,6 +43,11 @@ def main() -> int:
             continue
         roles_by_scope[(row["SCOPE_ENTITY_TYPE"], row["SCOPE_ENTITY_CODE"])].add(row["ROLE_CODE"])
 
+    scope_types_by_code: dict[str, set[str]] = defaultdict(set)
+    for scope_type, scope_code in roles_by_scope:
+        if scope_type != "COUNTRY":
+            scope_types_by_code[scope_code].add(scope_type)
+
     related_scopes: dict[str, set[tuple[str, str]]] = defaultdict(set)
     for row in relationships:
         country = row["SOURCE_ENTITY_CODE"]
@@ -50,8 +55,10 @@ def main() -> int:
             continue
         relationship = row["RELATIONSHIP_TYPE"]
         target = row["TARGET_ENTITY_CODE"]
-        if relationship in {"USES_MARKET_SCOPE", "BELONGS_TO_MONETARY_ZONE"} and target != country:
-            related_scopes[country].add(("ZONE", target))
+        if relationship not in {"USES_MARKET_SCOPE", "BELONGS_TO_MONETARY_ZONE"} or target == country:
+            continue
+        for scope_type in sorted(scope_types_by_code.get(target, {"MONETARY_ZONE"})):
+            related_scopes[country].add((scope_type, target))
 
     report = []
     missing_totals = defaultdict(int)
