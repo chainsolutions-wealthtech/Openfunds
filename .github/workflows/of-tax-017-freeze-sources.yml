@@ -1,0 +1,72 @@
+name: OF-TAX Migration 017 Freeze Sources
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-tax-017-freeze-sources.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  freeze:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout governed branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Freeze exact V0.1 authoring inputs
+        run: |
+          set -euo pipefail
+          target=migrations/sources/017_canonical_taxonomy_v0_1
+          test ! -e "$target"
+          mkdir -p "$target"
+          for file in \
+            ASSET_CLASSES_V0_1.csv \
+            ASSET_SUBCLASSES_V0_1.csv \
+            FUND_SCOPE_ROUTING_V0_1.csv \
+            CATEGORY_TEMPLATE_MATRIX_V0_1.csv \
+            SCOPE_REFERENCE_OVERRIDES_V0_1.csv \
+            ANALYTICS_REFERENCE_REQUIREMENTS_V0_1.csv \
+            MATRIX_MANIFEST_V0_1.json
+          do
+            cp "data/canonical/$file" "$target/$file"
+            cmp --silent "data/canonical/$file" "$target/$file"
+          done
+          sha256sum "$target"/* | sort > "$target/SHA256SUMS"
+
+      - name: Verify frozen snapshot regenerates exact migration 017
+        run: |
+          set -euo pipefail
+          python scripts/generate_canonical_taxonomy_sql.py \
+            --check \
+            --source-dir migrations/sources/017_canonical_taxonomy_v0_1 \
+            --output schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+
+      - name: Guard exact changed-file scope
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain=v1 | sed -E 's/^...//')
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 1
+          test "${changed[0]}" = "migrations/sources/017_canonical_taxonomy_v0_1/"
+          test "$(find migrations/sources/017_canonical_taxonomy_v0_1 -maxdepth 1 -type f | wc -l)" -eq 8
+
+      - name: Commit frozen snapshot only
+        run: |
+          set -euo pipefail
+          git config user.name "openfunds-governed-ci"
+          git config user.email "openfunds-governed-ci@users.noreply.github.com"
+          git add migrations/sources/017_canonical_taxonomy_v0_1
+          git diff --cached --quiet && { echo "No frozen snapshot to commit"; exit 1; }
+          git commit -m "chore(taxonomy): freeze migration 017 source snapshot"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
