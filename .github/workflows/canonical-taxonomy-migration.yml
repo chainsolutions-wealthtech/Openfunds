@@ -1,0 +1,46 @@
+name: Canonical Taxonomy Migration
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "data/canonical/**"
+      - "scripts/generate_canonical_taxonomy_sql.py"
+      - "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"
+      - "migrations/manifest.json"
+      - "tests/test_generate_canonical_taxonomy_sql.py"
+      - "tests/test_canonical_taxonomy_postgres.py"
+      - ".github/workflows/canonical-taxonomy-migration.yml"
+  pull_request:
+    paths:
+      - "data/canonical/**"
+      - "scripts/generate_canonical_taxonomy_sql.py"
+      - "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"
+      - "migrations/manifest.json"
+      - "tests/test_generate_canonical_taxonomy_sql.py"
+      - "tests/test_canonical_taxonomy_postgres.py"
+      - ".github/workflows/canonical-taxonomy-migration.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: taxonomy-generator (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run taxonomy SQL generator contract
+        run: python -m unittest -v tests.test_generate_canonical_taxonomy_sql
