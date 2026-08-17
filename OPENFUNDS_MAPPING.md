@@ -1,15 +1,28 @@
 # MAPPING OPENFUNDS VERS LE MODELE CANONIQUE
 
+Dernière mise à jour : `2026-08-17`.
+
 ## 1. STATUT REEL
 
 ```text
-PRINCIPE ARCHITECTURAL : ACCEPTE
-CATALOGUE OFFICIEL OPENFUNDS : NON PRESENT DANS LE DEPOT
-MAPPING CHAMP PAR CHAMP : NON ENCORE CONSTRUIT
-EXPORT OPENFUNDS : NON IMPLEMENTE
+PRINCIPE ARCHITECTURAL                   ACCEPTE
+VERSION OFFICIELLE COURANTE VERIFIEE    2.13.0
+DATE DE RELEASE VERIFIEE                 2026-03-23
+LICENCE OFFICIELLE VERIFIEE             CC BY-ND 4.0 / attribution www.openfunds.org
+MANIFESTE DE PROVENANCE                  PRESENT
+BINAIRE FIELD LIST 2.13.0                A ARCHIVER SANS MODIFICATION
+CATALOGUE PARSE MACHINE-READABLE         NON ENCORE CONSTRUIT
+MAPPING CHAMP PAR CHAMP                  NON ENCORE CONSTRUIT
+EXPORT OPENFUNDS                         NON IMPLEMENTE
 ```
 
-Ce document définit la méthode. Il ne crée aucun identifiant ou libellé officiel openfunds sans source officielle.
+Le manifeste gouverné est :
+
+```text
+data/openfunds/source_manifest_v2.13.0.json
+```
+
+La version et la licence ne constituent donc plus des blocages. Le gate restant de `OF-MAP-001` est l'archivage immuable du Field List officiel v2.13.0, son SHA256 et son parsing déterministe. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.
 
 Tâches : `OF-MAP-001` et `OF-MAP-002`.
 
@@ -29,7 +42,9 @@ OPENFUNDS_FIELD
 
 Pour l'export, la chaîne est inversée avec une règle explicite de formatage et de perte éventuelle.
 
-## 3. STRUCTURE DU FUTUR REGISTRE
+La licence officielle impose que le contenu openfunds redistribué reste non modifié. Les mappings internes constituent donc des métadonnées séparées : ils ne modifient jamais le catalogue officiel archivé.
+
+## 3. STRUCTURE DU REGISTRE DE MAPPING
 
 | Attribut | Description |
 |---|---|
@@ -84,12 +99,16 @@ REPLACED
 7. les extensions internes restent possibles ;
 8. les valeurs brutes d'import sont conservées ;
 9. les exports sont produits depuis le canonique, jamais depuis une source fournisseur brute ;
-10. un changement de version ne remplace pas silencieusement le mapping antérieur.
+10. un changement de version ne remplace pas silencieusement le mapping antérieur ;
+11. le catalogue officiel archivé reste byte-identical à la source conformément à la licence ;
+12. aucun identifiant, nom, type ou cardinalité officiel ne peut être inventé en l'absence du Field List archivé.
 
-## 6. OBJETS CANONIQUES CIBLES ENVISAGES
+## 6. OBJETS CANONIQUES CIBLES
+
+Le modèle Fund/SubFund/ShareClass et le dictionnaire canonique étant désormais stabilisés, les cibles suivantes peuvent être utilisées pour préparer le registre de mapping sans anticiper les champs externes :
 
 - FundGroup ;
-- LegalFund/Umbrella ;
+- Fund ;
 - SubFund ;
 - ShareClass ;
 - Organization et rôles ;
@@ -105,28 +124,39 @@ REPLACED
 - Event ;
 - TimeSeries.
 
-Cette liste doit être alignée sur le modèle Fund/SubFund/ShareClass final.
-
 ## 7. PROCESSUS DE CONSTRUCTION
 
 ```text
-1. OBTENIR UNE VERSION OFFICIELLE
-2. CONSERVER SOURCE, DATE ET LICENCE
-3. IMPORTER LE CATALOGUE EXTERNE
-4. VALIDER TYPES ET CARDINALITES
-5. STABILISER LE DICTIONNAIRE CANONIQUE
-6. PROPOSER LES MAPPINGS
-7. REVOIR PAR DOMAINE
-8. TESTER IMPORT ET EXPORT
-9. VERSIONNER
-10. PUBLIER LES ECARTS DE COUVERTURE
+1. VERSION OFFICIELLE                       FAIT — 2.13.0
+2. SOURCE / DATE / LICENCE                  FAIT — manifeste gouverné
+3. ARCHIVER FIELD LIST ORIGINAL             BLOQUE — binaire officiel à matérialiser
+4. CALCULER SHA256 / MEDIA TYPE             APRES 3
+5. PARSER LE CATALOGUE DETERMINISTEMENT      APRES 3
+6. VALIDER TYPES ET CARDINALITES             APRES 5
+7. GENERER LE REGISTRE DE MAPPING VIDE       AUTORISE
+8. PROPOSER LES MAPPINGS                     APRES 5
+9. REVOIR PAR DOMAINE                        APRES 8
+10. TESTER IMPORT ET EXPORT                  APRES 8
+11. VERSIONNER                               CONTINU
+12. PUBLIER LES ECARTS DE COUVERTURE         APRES 8
 ```
 
 ## 8. CRITERES D'ACCEPTATION
 
-- aucun champ officiel inventé ;
-- chaque champ officiel sourcé ;
+### OF-MAP-001
+
+- version officielle enregistrée ;
+- licence et attribution enregistrées ;
+- fichier officiel v2.13.0 archivé sans modification ;
+- SHA256 et type MIME enregistrés ;
+- parsing déterministe ;
+- nombre de champs et identifiants vérifiés ;
+- aucune donnée officielle inventée.
+
+### OF-MAP-002
+
 - mapping humain et machine-readable ;
+- chaque champ officiel sourcé ;
 - champs sans équivalent clairement identifiés ;
 - transformations testées ;
 - compatibilité par version ;
@@ -134,10 +164,21 @@ Cette liste doit être alignée sur le modèle Fund/SubFund/ShareClass final.
 - fixtures d'import/export ;
 - documentation des pertes d'information.
 
-## 9. BLOCAGES ACTUELS
+## 9. BLOCAGES ACTUELS REELS
 
-- standard officiel non versionné dans le dépôt ;
-- dictionnaire canonique incomplet ;
-- structure Fund/SubFund/ShareClass non stabilisée ;
-- politique de licence à vérifier ;
-- aucun format maître de mapping encore approuvé.
+Les anciens blocages suivants sont levés :
+
+```text
+VERSION OFFICIELLE INCONNUE       LEVE
+LICENCE A VERIFIER                LEVE
+DICTIONNAIRE CANONIQUE INCOMPLET  LEVE
+FUND/SUBFUND/SHARECLASS INSTABLE  LEVE
+```
+
+Le blocage restant est précis :
+
+```text
+OFFICIAL_FIELD_LIST_2_13_0_ARCHIVE = PENDING
+```
+
+Tant que cet artefact n'est pas archivé et hashé, `OF-MAP-001` ne peut pas passer à `TERMINE` et `OF-MAP-002` ne peut pas contenir de mapping champ-par-champ officiel.
