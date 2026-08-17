@@ -3,15 +3,15 @@
 ```text
 CURRENT_LOOP: OF-LOOP-SOURCE-002
 CURRENT_TASK: OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 09
-NEXT_UNIT: POST_WAVE09_ROLE_COVERAGE_AUDIT + PENDING_ROLE_PROMOTION + ERITREA_PRIMARY_SOURCE_WATCH
+LAST_VERIFIED_WAVE: 10
+NEXT_UNIT: WAVE_11_EXCHANGE_ROLE_REVALIDATION + SERIES_ROLE_EVIDENCE_PLAN + ERITREA_PRIMARY_SOURCE_WATCH
 STATUS: READY_FOR_READ_ONLY_AUDIT
 WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST + TDD_RED
 ```
 
 ## État courant vérifié — 17 août 2026
 
-Les Waves 01 à 09 ont été exécutées sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main` et sans déploiement de production.
+Les Waves 01 à 10 ont été exécutées sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main` et sans déploiement de production.
 
 ```text
 AFRICAN_COUNTRIES: 54
@@ -19,28 +19,84 @@ COUNTRY_COVERAGE: 53 / 54
 COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 1
 UNCOVERED_COUNTRY: ERYTHREE
 ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 199 = 159 VALIDATED + 40 PENDING
+ORGANIZATION_SCOPE_ROLES: 199 = 171 VALIDATED + 28 PENDING
 ```
 
-Les Waves 01 à 09 sont protégées par les contrats `tests/test_institutional_registry*.py` et les contrôles Python 3.11/3.12. Wave 09 a promu, sans duplication, les rôles zonaux existants `BCEAO/CENTRAL_BANK/UEMOA`, `BEAC/CENTRAL_BANK/CEMAC`, `BRVM/COMMON_STOCK_EXCHANGE/UEMOA` et `BVMAC/COMMON_STOCK_EXCHANGE/CEMAC`.
+Wave 10 a promu exactement 12 relations country-scoped déjà présentes, sans création ni retargeting, sous contrat TDD RED→GREEN et avec validation Python 3.11/3.12. Le rapport de clôture est `docs/00_PROJECT/OF_SOURCE_002_WAVE_10_COMPLETION_20260817.md`.
 
 L'Érythrée reste volontairement absente : aucune organisation country-scoped ne doit être créée tant qu'une source primaire officielle actuelle n'est pas vérifiée.
 
-## Prochaine phase de OF-SOURCE-002
+## Audit effectif post-Wave10
 
-La couverture `53/54` signifie qu'au moins une institution nationale est identifiée dans 53 pays ; elle ne signifie pas que tous les rôles institutionnels exigés sont complets.
+Le workflow lecture seule `OF-SOURCE-002 Post-Wave10 Audit` a vérifié :
 
-La prochaine unité doit repartir d'un audit post-Wave09 reproductible de la couverture par rôle pour les 54 pays et leurs scopes de marché/monétaires :
+```text
+MONETARY_AUTHORITY              11 pays sans groupe couvert
+STATISTICS                       3 pays sans groupe couvert
+CAPITAL_MARKET_REGULATION       18 pays sans groupe couvert
+FUND_REGULATION                 19 pays sans groupe couvert
+INSURANCE_PENSION_REGULATION    44 pays sans groupe couvert
+EXCHANGE                        20 pays sans groupe couvert
+FISCAL_DEBT                     40 pays sans groupe couvert
+```
 
-1. recalculer exactement les groupes de rôles encore manquants après les promotions Wave 09 ;
-2. inventorier les 40 relations `PENDING` restantes avant de créer toute nouvelle organisation ;
-3. promouvoir d'abord les lignes existantes lorsqu'une source primaire officielle actuelle confirme exactement le rôle et le scope ;
-4. préserver BCEAO, BEAC, AMF-UMOA, COSUMAF, UMOA-Titres, BRVM et BVMAC à leur scope zonal ;
-5. distinguer rôle national absent, rôle zonal compétent, `NOT_APPLICABLE`, `NOT_PUBLISHED` et preuve insuffisante ;
-6. ne jamais déduire `FUND_REGULATOR` d'une compétence générale de marché ;
-7. ne jamais fusionner artificiellement assurance et pensions ;
-8. produire une allowlist fermée et un test RED avant chaque promotion/ajout ;
-9. conserver l'Érythrée en blocker tant que le gate primaire n'est pas satisfait.
+Les chiffres sont calculés à partir des rôles `VALIDATED` country-scoped **et** des rôles zonaux validés hérités ; ils ne doivent pas être lus comme un simple comptage d'organisations nationales.
+
+## Inventaire exact des 28 PENDING
+
+```text
+FX_REFERENCE_RATE_PROVIDER   9
+INDEX_PROVIDER               9
+STOCK_EXCHANGE               3
+MONETARY_UNION               3
+SUPRANATIONAL_AUTHORITY      2
+INTERBANK_MARKET_OPERATOR    2
+TOTAL                       28
+
+COUNTRY        17
+MONETARY_ZONE  11
+```
+
+### Prochaine unité : Wave 11 — bourses encore PENDING
+
+La prochaine unité est limitée aux trois relations institutionnelles simples suivantes :
+
+```text
+EGX / STOCK_EXCHANGE / EGYPTE
+GSE / STOCK_EXCHANGE / GHANA
+NGX / STOCK_EXCHANGE / NIGERIA
+```
+
+Avant toute promotion :
+
+1. résoudre l'identité juridique et le domaine officiel actuel de chaque bourse ;
+2. prouver directement sur une source primaire officielle que l'entité est bien l'opérateur de la bourse ;
+3. vérifier que le code organisation existant désigne la bonne entité et non une société holding/groupe distincte ;
+4. conserver toute ligne ambiguë `PENDING` ;
+5. produire un audit Wave 11, une allowlist fermée et un test RED ;
+6. ne modifier que `VALIDATION_STATUS` et `SOURCE_NOTE` des lignes prouvées ;
+7. vérifier les contrats Waves 01→11 sur Python 3.11/3.12 avant commit.
+
+### Rôles de séries — vagues séparées
+
+Les 18 lignes suivantes ne doivent pas être promues par simple identité institutionnelle :
+
+```text
+FX_REFERENCE_RATE_PROVIDER   9
+INDEX_PROVIDER               9
+```
+
+Pour `FX_REFERENCE_RATE_PROVIDER`, la preuve doit établir la publication/propriété de la série de référence FX pertinente. Pour `INDEX_PROVIDER`, la preuve doit établir la responsabilité de calcul/publication de l'indice, et pas seulement l'existence de la bourse.
+
+### Rôles zonaux — revue sémantique séparée
+
+```text
+MONETARY_UNION            3
+SUPRANATIONAL_AUTHORITY   2
+INTERBANK_MARKET_OPERATOR 2
+```
+
+Ces rôles exigent une revue sémantique dédiée. En particulier, `CMA / MONETARY_UNION` ne doit pas être promu sans vérifier que la terminologie canonique `MONETARY_UNION` est bien adaptée à la Common Monetary Area et non seulement à un arrangement monétaire.
 
 ## Blockers institutionnels maintenus
 
@@ -54,8 +110,6 @@ RBM_FUND_REGULATOR  PRIMARY_CIS_PROOF_NOT_SUFFICIENT
 
 ## Taxonomie — gate structurel fermé
 
-La taxonomie V0.1 est désormais persistée par la migration gouvernée :
-
 ```text
 017_CANONICAL_FUND_TAXONOMY_V0_1
 ORDER: 170
@@ -68,13 +122,11 @@ CANONICAL_STATUS: STRUCTURE_PREFILLED
 PRODUCTION_STATUS: NOT_ACTIVE
 ```
 
-Cette clôture structurelle n'autorise pas l'activation de WTI, WTI Bench, benchmarks, RFR, MAR ou autres calculs sans leurs propres validations de sources, méthodologies et historiques.
+Cette clôture structurelle n'autorise pas l'activation de WTI, WTI Bench, benchmarks, RFR, MAR ou autres calculs sans leurs validations propres.
 
 ## Openfunds — gate réévalué
 
-Le blocage historique « version officielle et licence inconnues » est levé : la version officielle courante vérifiée est `2.13.0`, publiée le `2026-03-23`, et la licence officielle est `CC BY-ND 4.0` avec attribution.
-
-Le manifeste gouverné est :
+La version officielle vérifiée est `2.13.0`, publiée le `2026-03-23`, sous licence officielle `CC BY-ND 4.0` avec attribution. Le manifeste gouverné est :
 
 ```text
 data/openfunds/source_manifest_v2.13.0.json
