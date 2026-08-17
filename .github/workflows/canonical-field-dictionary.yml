@@ -25,6 +25,8 @@ on:
       - '.github/workflows/canonical-field-dictionary.yml'
   workflow_dispatch:
 
+# Revalidation marker: migration 018 manifest refreshed deterministically on 2026-08-17.
+
 jobs:
   validate-dictionary:
     runs-on: ubuntu-latest
