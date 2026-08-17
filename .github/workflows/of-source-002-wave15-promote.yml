@@ -1,0 +1,158 @@
+name: OF-SOURCE-002 Wave15 Promote Zone Semantics
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-wave15-promote.yml"
+
+permissions:
+  contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Promote exact closed allowlist
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path = Path("data/reference/ORGANIZATION_SCOPE_ROLES.csv")
+          keys = {
+              ("UEMOA", "MONETARY_UNION", "UEMOA", "MONETARY_ZONE"),
+              ("UEMOA", "SUPRANATIONAL_AUTHORITY", "UEMOA", "MONETARY_ZONE"),
+              ("CEMAC", "MONETARY_UNION", "CEMAC", "MONETARY_ZONE"),
+              ("CEMAC", "SUPRANATIONAL_AUTHORITY", "CEMAC", "MONETARY_ZONE"),
+              ("BCEAO", "INTERBANK_MARKET_OPERATOR", "UEMOA", "MONETARY_ZONE"),
+              ("BEAC", "INTERBANK_MARKET_OPERATOR", "CEMAC", "MONETARY_ZONE"),
+          }
+          note = "OFFICIAL_ZONE_SEMANTICS_VERIFIED_2026_08_17_WAVE15"
+
+          with path.open("r", encoding="utf-8", newline="") as handle:
+              reader = csv.DictReader(handle, delimiter=";")
+              fieldnames = reader.fieldnames
+              rows = list(reader)
+
+          found = {}
+          for row in rows:
+              key = (
+                  row["ORGANIZATION_CODE"], row["ROLE_CODE"],
+                  row["SCOPE_ENTITY_CODE"], row["SCOPE_ENTITY_TYPE"]
+              )
+              if key in keys:
+                  found.setdefault(key, []).append(row)
+
+          assert set(found) == keys, keys - set(found)
+          immutable = [
+              "ORGANIZATION_CODE", "ROLE_CODE", "SCOPE_ENTITY_CODE",
+              "SCOPE_ENTITY_TYPE", "RELATIONSHIP_ROLE", "IS_PRIMARY",
+              "VALID_FROM", "VALID_TO"
+          ]
+          before = {k: {field: found[k][0][field] for field in immutable} for k in keys}
+
+          for key, matching in found.items():
+              assert len(matching) == 1, (key, len(matching))
+              row = matching[0]
+              assert row["VALIDATION_STATUS"] == "PENDING", (key, row["VALIDATION_STATUS"])
+              row["VALIDATION_STATUS"] = "VALIDATED"
+              row["SOURCE_NOTE"] = note
+
+          for key, matching in found.items():
+              row = matching[0]
+              assert {field: row[field] for field in immutable} == before[key], key
+
+          with path.open("w", encoding="utf-8", newline="") as handle:
+              writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter=";", lineterminator="\n")
+              writer.writeheader()
+              writer.writerows(rows)
+          PY
+
+      - name: Validate all institutional contracts on Python 3.11
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
+          python -m unittest -v tests.test_institutional_registry_wave10
+          python -m unittest -v tests.test_institutional_registry_wave11
+          python -m unittest -v tests.test_institutional_registry_wave12
+          python -m unittest -v tests.test_institutional_registry_wave13
+          python -m unittest -v tests.test_institutional_registry_wave14
+          python -m unittest -v tests.test_institutional_registry_wave15
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate all institutional contracts on Python 3.12
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
+          python -m unittest -v tests.test_institutional_registry_wave10
+          python -m unittest -v tests.test_institutional_registry_wave11
+          python -m unittest -v tests.test_institutional_registry_wave12
+          python -m unittest -v tests.test_institutional_registry_wave13
+          python -m unittest -v tests.test_institutional_registry_wave14
+          python -m unittest -v tests.test_institutional_registry_wave15
+
+      - name: Assert exact one-shot post-state and diff scope
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+
+          path = Path("data/reference/ORGANIZATION_SCOPE_ROLES.csv")
+          with path.open("r", encoding="utf-8", newline="") as handle:
+              rows = list(csv.DictReader(handle, delimiter=";"))
+
+          statuses = Counter(r["VALIDATION_STATUS"] for r in rows)
+          pending_roles = Counter(r["ROLE_CODE"] for r in rows if r["VALIDATION_STATUS"] == "PENDING")
+          pending = {
+              (r["ORGANIZATION_CODE"], r["ROLE_CODE"], r["SCOPE_ENTITY_CODE"], r["SCOPE_ENTITY_TYPE"])
+              for r in rows if r["VALIDATION_STATUS"] == "PENDING"
+          }
+          expected_pending = {
+              ("EGX", "INDEX_PROVIDER", "EGYPTE", "COUNTRY"),
+              ("NSE", "INDEX_PROVIDER", "KENYA", "COUNTRY"),
+              ("NGX", "INDEX_PROVIDER", "NIGERIA", "COUNTRY"),
+              ("CMA", "MONETARY_UNION", "CMA", "MONETARY_ZONE"),
+          }
+          assert len(rows) == 199, len(rows)
+          assert statuses == Counter({"VALIDATED": 195, "PENDING": 4}), statuses
+          assert pending_roles == Counter({"INDEX_PROVIDER": 3, "MONETARY_UNION": 1}), pending_roles
+          assert pending == expected_pending, (pending, expected_pending)
+          PY
+          git diff --check
+          test "$(git status --porcelain=v1 -uall | wc -l)" -eq 1
+          test "$(git status --porcelain=v1 -uall | sed 's/^...//')" = "data/reference/ORGANIZATION_SCOPE_ROLES.csv"
+
+      - name: Commit exact Wave 15 promotion
+        run: |
+          git config user.name "openfunds-governed-bot"
+          git config user.email "openfunds-governed-bot@users.noreply.github.com"
+          git add data/reference/ORGANIZATION_SCOPE_ROLES.csv
+          git commit -m "data(source): validate Wave 15 zone semantics"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
