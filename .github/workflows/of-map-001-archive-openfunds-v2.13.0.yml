@@ -1,0 +1,183 @@
+name: OF-MAP-001 Archive official Openfunds v2.13.0 Field List
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-map-001-archive-openfunds-v2.13.0.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  archive-verify-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      OFFICIAL_URL: https://openfunds.org/wp-content/uploads/2026/03/openfunds_fields_v2.13.0.pdf
+      ARCHIVE_DIR: data/openfunds/official/v2.13.0
+      PDF_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
+      SHA_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
+      ATTRIBUTION_PATH: data/openfunds/official/v2.13.0/SOURCE_AND_LICENSE.md
+      MANIFEST_PATH: data/openfunds/source_manifest_v2.13.0.json
+    steps:
+      - name: Checkout exact governed branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Assert archive target is not already materialized
+        run: |
+          set -euo pipefail
+          test ! -e "$PDF_PATH"
+          test ! -e "$SHA_PATH"
+          test ! -e "$ATTRIBUTION_PATH"
+          grep -q 'OFFICIAL_VERSION_AND_LICENSE_VERIFIED_BINARY_ARCHIVE_PENDING' "$MANIFEST_PATH"
+
+      - name: Download exact official artifact without transformation
+        run: |
+          set -euo pipefail
+          mkdir -p "$ARCHIVE_DIR"
+          curl \
+            --fail \
+            --location \
+            --retry 3 \
+            --retry-all-errors \
+            --connect-timeout 20 \
+            --max-time 180 \
+            --proto '=https' \
+            --tlsv1.2 \
+            --user-agent 'Openfunds-governed-archive/1.0' \
+            --dump-header /tmp/openfunds_headers.txt \
+            --output "$PDF_PATH" \
+            "$OFFICIAL_URL"
+          test "$(head -c 5 "$PDF_PATH")" = '%PDF-'
+          bytes="$(stat -c '%s' "$PDF_PATH")"
+          echo "downloaded_bytes=$bytes"
+          test "$bytes" -gt 100000
+          test "$bytes" -lt 99614720
+          grep -Eiq '^content-type:.*application/pdf' /tmp/openfunds_headers.txt
+
+      - name: Verify official PDF identity and release metadata
+        run: |
+          set -euo pipefail
+          command -v pdfinfo
+          command -v pdftotext
+          pdfinfo "$PDF_PATH" | tee /tmp/openfunds_pdfinfo.txt
+          pages="$(awk -F: '/^Pages:/ {gsub(/[[:space:]]/,"",$2); print $2}' /tmp/openfunds_pdfinfo.txt)"
+          echo "pages=$pages"
+          test "$pages" = '745'
+          pdftotext -f 1 -l 1 -layout "$PDF_PATH" /tmp/openfunds_page1.txt
+          cat /tmp/openfunds_page1.txt
+          grep -Fq 'Status: FINAL' /tmp/openfunds_page1.txt
+          grep -Fq 'Version: Version 2.13.0' /tmp/openfunds_page1.txt
+          grep -Fq 'Date: 2026-03-23' /tmp/openfunds_page1.txt
+
+      - name: Compute immutable checksum and update provenance manifest
+        shell: python
+        run: |
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          pdf_path = Path(os.environ["PDF_PATH"])
+          sha_path = Path(os.environ["SHA_PATH"])
+          attribution_path = Path(os.environ["ATTRIBUTION_PATH"])
+          manifest_path = Path(os.environ["MANIFEST_PATH"])
+          source_url = os.environ["OFFICIAL_URL"]
+
+          data = pdf_path.read_bytes()
+          digest = hashlib.sha256(data).hexdigest()
+          size = len(data)
+          sha_path.write_text(f"{digest}  {pdf_path.name}\n", encoding="utf-8")
+
+          attribution_path.write_text(
+              "# Official Openfunds v2.13.0 Field List archive\n\n"
+              "This directory contains an **unaltered byte-for-byte archive** of the official "
+              "Openfunds Field List v2.13.0 PDF published by openfunds.\n\n"
+              "- Version: `2.13.0`\n"
+              "- Status printed in the official document: `FINAL`\n"
+              "- Release date printed in the official document: `2026-03-23`\n"
+              f"- Exact source URL: `{source_url}`\n"
+              "- Media type: `application/pdf`\n"
+              "- Verified page count: `745`\n"
+              f"- Byte size: `{size}`\n"
+              f"- SHA256: `{digest}`\n"
+              "- Licence: Creative Commons Attribution-NoDerivatives 4.0 International (`CC BY-ND 4.0`)\n"
+              "- Required attribution/source: `www.openfunds.org`\n\n"
+              "The PDF in this directory must not be edited, normalized, re-saved, compressed, "
+              "watermarked or otherwise transformed. Any canonical mapping or parsed catalogue "
+              "must live in separate repository artifacts and must preserve explicit provenance "
+              "back to this checksum-locked official source.\n",
+              encoding="utf-8",
+          )
+
+          manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+          if manifest.get("version") != "2.13.0":
+              raise SystemExit(f"unexpected manifest version: {manifest.get('version')}")
+          if manifest.get("release_date") != "2026-03-23":
+              raise SystemExit(f"unexpected manifest release date: {manifest.get('release_date')}")
+          archive = manifest.get("binary_archive") or {}
+          if archive.get("status") != "PENDING":
+              raise SystemExit(f"unexpected binary archive pre-status: {archive.get('status')}")
+
+          manifest["status"] = "OFFICIAL_V2_13_0_FIELD_LIST_ARCHIVED_CHECKSUM_LOCKED_PARSE_PENDING"
+          manifest["binary_archive"] = {
+              "status": "ARCHIVED_UNALTERED",
+              "artifact_path": str(pdf_path),
+              "exact_source_url": source_url,
+              "media_type": "application/pdf",
+              "sha256": digest,
+              "byte_size": size,
+              "page_count": 745,
+              "document_status": "FINAL",
+              "document_version": "2.13.0",
+              "document_date": "2026-03-23",
+              "retrieved_on": "2026-08-17",
+              "redistribution_mode": "UNALTERED_OFFICIAL_ARTIFACT_WITH_ATTRIBUTION",
+              "next_gate": "deterministically parse the checksum-locked official PDF into a separate structured catalogue without modifying the archived source"
+          }
+          manifest_path.write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+          print(f"sha256={digest}")
+          print(f"byte_size={size}")
+
+      - name: Re-verify archived bytes after provenance generation
+        run: |
+          set -euo pipefail
+          expected="$(cut -d' ' -f1 "$SHA_PATH")"
+          actual="$(sha256sum "$PDF_PATH" | cut -d' ' -f1)"
+          echo "expected=$expected"
+          echo "actual=$actual"
+          test "$expected" = "$actual"
+          grep -Fq "$actual" "$MANIFEST_PATH"
+          grep -Fq "$actual" "$ATTRIBUTION_PATH"
+
+      - name: Guard exact changed-file scope
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain=v1 | sed -E 's/^...//' | sort)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 4
+          expected=(
+            "data/openfunds/official/v2.13.0/SOURCE_AND_LICENSE.md"
+            "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf"
+            "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256"
+            "data/openfunds/source_manifest_v2.13.0.json"
+          )
+          mapfile -t expected_sorted < <(printf '%s\n' "${expected[@]}" | sort)
+          test "$(printf '%s\n' "${changed[@]}")" = "$(printf '%s\n' "${expected_sorted[@]}")"
+
+      - name: Commit only checksum-locked official archive and provenance
+        run: |
+          set -euo pipefail
+          git config user.name "openfunds-governed-ci"
+          git config user.email "openfunds-governed-ci@users.noreply.github.com"
+          git add "$PDF_PATH" "$SHA_PATH" "$ATTRIBUTION_PATH" "$MANIFEST_PATH"
+          git diff --cached --check
+          git commit -m "data(openfunds): archive official v2.13.0 Field List"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
