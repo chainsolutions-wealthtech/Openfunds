@@ -2,214 +2,310 @@
 
 Dernière mise à jour : `2026-08-17`.
 
-## 1. STATUT REEL
+## 1. Statut réel
 
 ```text
-PRINCIPE ARCHITECTURAL                   ACCEPTE
-VERSION OFFICIELLE COURANTE VERIFIEE    2.13.0
-DATE DE RELEASE VERIFIEE                 2026-03-23
-LICENCE OFFICIELLE VERIFIEE             CC BY-ND 4.0 / attribution www.openfunds.org
-MANIFESTE DE PROVENANCE                  PRESENT
-BINAIRE FIELD LIST 2.13.0                ARCHIVE SANS MODIFICATION / CHECKSUM LOCKED
-SHA256 OFFICIEL ARCHIVE                  40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4
-TAILLE BINAIRE                            2,957,096 OCTETS
-NOMBRE DE PAGES                           745
-INVENTAIRE OFFICIEL PARSE                1869 OF-ID / CHECKSUM-GATED
-MAPPING CHAMP PAR CHAMP                  EN COURS — BATCH01 4 ROWS / 2 OF-ID
-EXPORT OPENFUNDS                         NON IMPLEMENTE
+VERSION OFFICIELLE VERIFIEE          2.13.0
+DATE DE RELEASE                      2026-03-23
+DOCUMENT                             FINAL
+LICENCE DOCUMENT OFFICIEL            CC BY-ND 4.0 / attribution openfunds.org
+ARCHIVE OFFICIELLE                   BYTE-IDENTICAL / CHECKSUM-LOCKED
+SHA256                               40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4
+PDF                                  745 PAGES / 2,957,096 OCTETS
+INVENTAIRE OFFICIEL                  1,869 OF-ID
+IDS CONCRETS                         1,849
+TEMPLATES PAYS XX                    20
+CANONICAL CORE                       143 FIELDS
+CANONICAL LISTING EXTENSION          34 FIELDS
+CANONICAL INVENTORY FOR MAPPING      177 FIELDS
+REVIEWED MAPPING ROWS                16
+MAPPED EXTERNAL OF-ID                8
+UNMAPPED EXTERNAL OF-ID              1,861
+MAPPED CANONICAL FIELD_ID            10
+OF-MAP-001                           TERMINE
+OF-MAP-002                           EN_COURS — BATCH 01..05 VALIDES
 ```
 
-Le manifeste gouverné est :
+## 2. Sources gouvernées
 
-```text
-data/openfunds/source_manifest_v2.13.0.json
-```
-
-L'artefact officiel byte-identical est :
+Archive officielle :
 
 ```text
 data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
 ```
 
-avec sa preuve :
+Checksum :
 
 ```text
 data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
-data/openfunds/official/v2.13.0/SOURCE_AND_LICENSE.md
 ```
 
-`OF-MAP-001` est fermé : archive byte-identical, SHA256 et parsing déterministe de 1 869 OF-ID sont vérifiés. `OF-MAP-002` est actif avec un registre séparé et un validator qui reparse l'archive officielle et reconstruit les 143 FIELD_ID canoniques avant d'accepter un mapping. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.
-
-Tâches : `OF-MAP-001` et `OF-MAP-002`.
-
-## 2. PRINCIPE
-
-Le modèle canonique constitue la source interne de vérité. Openfunds est une représentation externe versionnée.
+Parser checksum-gated :
 
 ```text
-OPENFUNDS_FIELD
-→ SOURCE_VERSION
+scripts/parse_openfunds_v2_13_0.py
+```
+
+Registre :
+
+```text
+data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv
+```
+
+Manifeste :
+
+```text
+data/openfunds/mapping/v2.13.0/mapping_manifest.json
+```
+
+Validateur :
+
+```text
+scripts/validate_openfunds_mapping_registry.py
+```
+
+## 3. Architecture canonique disponible
+
+Le dictionnaire migration-015 reste immuable :
+
+```text
+data/dictionary/spec_v1/
+143 champs
+version 1.0.0
+VALIDATED_FUND_CORE_SCOPE
+```
+
+La migration 019 a créé un modèle distinct de cotation :
+
+```text
+fund.listing
+fund.listing_identifier
+```
+
+Son dictionnaire est une extension additive :
+
+```text
+data/dictionary/extensions/listing_v1/
+34 champs
+version 1.0.0
+VALIDATED_LISTING_EXTENSION_SCOPE
+```
+
+Le validateur construit au runtime une union collision-free :
+
+```text
+143 + 34 = 177 FIELD_ID
+```
+
+Les collisions de FIELD_ID, incohérences d'entité ou dérives du `field_count` échouent fermées. Le core 143 n'est pas réécrit par les extensions.
+
+ADR :
+
+```text
+docs/02_ARCHITECTURE/ADR-031_CANONICAL_LISTING_DICTIONARY_EXTENSION.md
+```
+
+## 4. Principes de mapping
+
+Le canonique est la représentation interne ; Openfunds est un standard externe versionné.
+
+```text
+OPENFUNDS FIELD
+→ SOURCE VERSION + SHA256
+→ FIELD LEVEL / TYPE / VALUES / LICENCE
 → PARSING
-→ NORMALIZATION
-→ CANONICAL_ENTITY
-→ CANONICAL_FIELD_OR_RELATION
+→ TRANSFORMATION EXPLICITE
+→ CANONICAL ENTITY
+→ CANONICAL FIELD_ID
 → VALIDATION
+→ IMPORT/EXPORT GATES
 ```
 
-Pour l'export, la chaîne est inversée avec une règle explicite de formatage et de perte éventuelle.
+Règles impératives :
 
-La licence officielle impose que le contenu openfunds redistribué reste non modifié. L'archive officielle reste donc byte-identical. Les mappings internes constituent des métadonnées séparées : ils ne modifient jamais le catalogue officiel archivé.
+1. aucun OF-ID, nom, niveau, type ou valeur autorisée ne peut être inventé ;
+2. l'archive officielle n'est jamais modifiée ;
+3. un champ externe ne devient pas automatiquement une colonne ;
+4. `CANONICAL_ENTITY` doit correspondre à l'entité gouvernée du FIELD_ID ;
+5. une transformation doit être déterministe ;
+6. toute perte d'information est explicite ;
+7. `XX` reste un template et n'est pas développé artificiellement ;
+8. les doublons `(EXTERNAL_FIELD_ID, CANONICAL_FIELD_ID)` sont interdits ;
+9. un mapping sémantiquement valide peut rester non activable si une licence ou une dépendance runtime l'impose ;
+10. le registre contient uniquement des mappings réellement revus — aucun catalogue artificiel de 1 869 lignes `UNMAPPED` ;
+11. les anciens batches doivent rester forward-compatible et ne jamais figer la taille totale future du registre.
 
-## 3. STRUCTURE DU REGISTRE DE MAPPING
+## 5. Batches vérifiés
 
-| Attribut | Description |
-|---|---|
-| `MAPPING_ID` | identifiant stable du mapping |
-| `STANDARD_CODE` | `OPENFUNDS` |
-| `STANDARD_VERSION` | version officielle |
-| `EXTERNAL_FIELD_ID` | identifiant officiel |
-| `EXTERNAL_FIELD_NAME` | nom officiel |
-| `EXTERNAL_DESCRIPTION` | description officielle sourcée |
-| `EXTERNAL_DATA_TYPE` | type attendu |
-| `EXTERNAL_OBJECT` | objet openfunds concerné |
-| `CARDINALITY` | cardinalité externe |
-| `REQUIREMENT_LEVEL` | obligatoire/facultatif/conditionnel |
-| `CANONICAL_ENTITY` | objet canonique cible |
-| `CANONICAL_FIELD_IDS` | un ou plusieurs champs cibles |
-| `MAPPING_STATUS` | statut normalisé |
-| `TRANSFORMATION_RULE` | transformation |
-| `NORMALIZATION_RULE` | normalisation |
-| `VALIDATION_RULE` | contrôle |
-| `INFORMATION_LOSS` | perte éventuelle |
-| `COMPLEMENTARY_DATA` | données complémentaires nécessaires |
-| `IMPORT_SUPPORTED` | oui/non/partiel |
-| `EXPORT_SUPPORTED` | oui/non/partiel |
-| `VALID_FROM` | début de validité du mapping |
-| `VALID_TO` | fin de validité |
-| `VALIDATION_STATUS` | proposition ou validation |
-| `SOURCE_REFERENCE` | provenance du standard |
+### Batch 01 — domicile + ISIN
 
-## 4. STATUTS DE MAPPING
+Run GREEN : `32065216172`.
 
 ```text
-DIRECT
-TRANSFORMED
-ONE_TO_MANY
-MANY_TO_ONE
-UNSUPPORTED_EXTERNAL_FIELD
-CANONICAL_ONLY
-TO_CONFIRM
-VALIDATED
-DEPRECATED
-REPLACED
+OFST010010 Fund Domicile Alpha-2
+→ OF_FUND_FUND_ENTITY_STATE_DOMICILE_COUNTRY_ID
+→ ISO_3166_ALPHA2_TO_REF_GEOGRAPHY_UUID
+
+OFST020000 ISIN
+→ identifier_value
+→ identifier_scheme = ISIN
+→ normalized_value
 ```
 
-## 5. REGLES
+### Batch 02 — devises Fund / Share Class
 
-1. un champ externe ne devient pas automatiquement une colonne ;
-2. un mapping peut viser une relation, un événement ou une série ;
-3. la version du standard est obligatoire ;
-4. une transformation doit être déterministe et testable ;
-5. les listes de valeurs externes sont mappées vers des référentiels versionnés ;
-6. les pertes d'information sont déclarées ;
-7. les extensions internes restent possibles ;
-8. les valeurs brutes d'import sont conservées ;
-9. les exports sont produits depuis le canonique, jamais depuis une source fournisseur brute ;
-10. un changement de version ne remplace pas silencieusement le mapping antérieur ;
-11. le catalogue officiel archivé reste byte-identical à la source conformément à la licence ;
-12. aucun identifiant, nom, type ou cardinalité officiel ne peut être inventé ;
-13. tout parser doit vérifier le SHA256 de l'archive avant extraction ;
-14. tout contenu dérivé reste séparé de l'archive officielle et ne peut être présenté comme document officiel modifié ;
-15. la redistribution publique de contenus transformés doit rester compatible avec la clause `NoDerivatives` ; le mapping canonique privilégie donc les références/provenances séparées plutôt que la réécriture de l'original.
-
-## 6. OBJETS CANONIQUES CIBLES
-
-Le modèle Fund/SubFund/ShareClass et le dictionnaire canonique étant stabilisés, les cibles suivantes peuvent être utilisées pour préparer le registre de mapping sans anticiper les champs externes :
-
-- FundGroup ;
-- Fund ;
-- SubFund ;
-- ShareClass ;
-- Organization et rôles ;
-- Identifier ;
-- Classification ;
-- Benchmark ;
-- Fee ;
-- Eligibility ;
-- Distribution ;
-- Document ;
-- RegulatoryData ;
-- ESGData ;
-- Event ;
-- TimeSeries.
-
-## 7. PROCESSUS DE CONSTRUCTION
+Run GREEN : `32067722365`.
 
 ```text
-1. VERSION OFFICIELLE                       FAIT — 2.13.0
-2. SOURCE / DATE / LICENCE                  FAIT — manifeste gouverné
-3. ARCHIVER FIELD LIST ORIGINAL             FAIT — archive byte-identical
-4. CALCULER SHA256 / MEDIA TYPE             FAIT — SHA256 verrouillé
-5. AUDITER LE LAYOUT PDF                    FAIT
-6. PARSER LE CATALOGUE DETERMINISTEMENT     FAIT — 1869 OF-ID
-7. VALIDER IDS / STRUCTURE                   FAIT — checksum-gated
-8. GENERER LE REGISTRE DE MAPPING           FAIT — registre gouverné
-9. PROPOSER LES MAPPINGS                    EN COURS — Batch01 validé
-10. REVOIR PAR DOMAINE                      APRES 9
-11. TESTER IMPORT ET EXPORT                 APRES 9
-12. VERSIONNER                              CONTINU
-13. PUBLIER LES ECARTS DE COUVERTURE        APRES 9
+OFST010410 Fund Currency
+→ OF_FUND_FUND_PROFILE_BASE_CURRENCY_ID
+→ ISO_4217_TO_REF_CURRENCY_UUID
+
+OFST020540 Share Class Currency
+→ OF_FUND_SHARE_CLASS_PROFILE_CURRENCY_ID
+→ ISO_4217_TO_REF_CURRENCY_UUID
 ```
 
-## 8. CRITERES D'ACCEPTATION
+### Batch 03 — Valor + WKN
 
-### OF-MAP-001
-
-- version officielle enregistrée — **FAIT** ;
-- licence et attribution enregistrées — **FAIT** ;
-- fichier officiel v2.13.0 archivé sans modification — **FAIT** ;
-- SHA256 et type MIME enregistrés — **FAIT** ;
-- parsing déterministe — **FAIT** ;
-- nombre de champs et identifiants vérifiés — **FAIT — 1 869 OF-ID uniques** ;
-- aucune donnée officielle inventée — **INVARIANT**.
-
-`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` avec Batch 01 vérifié : 4 lignes, 2 OF-ID externes et 4 cibles canoniques.
-
-### OF-MAP-002
-
-- mapping humain et machine-readable ;
-- chaque champ officiel référencé/provenancé ;
-- champs sans équivalent clairement identifiés ;
-- transformations testées ;
-- compatibilité par version ;
-- rapport de couverture ;
-- fixtures d'import/export ;
-- documentation des pertes d'information.
-
-## 9. GATES ACTUELS REELS
-
-Les anciens blocages suivants sont levés :
+Run GREEN : `32069647430`.
 
 ```text
-VERSION OFFICIELLE INCONNUE            LEVE
-LICENCE A VERIFIER                     LEVE
-DICTIONNAIRE CANONIQUE INCOMPLET       LEVE
-FUND/SUBFUND/SHARECLASS INSTABLE       LEVE
-OFFICIAL_FIELD_LIST_ARCHIVE            LEVE
-OFFICIAL_FIELD_LIST_SHA256             LEVE
+OFST020010 Valor
+→ value / scheme VALOR / normalized value
+
+OFST020015 WKN
+→ value / scheme WKN / normalized value
 ```
 
-Le gate restant est précis :
+SEDOL a été volontairement différé à ce stade parce que son `Field Level` officiel est `Listing`.
+
+### Batch 04 — distribution policy
+
+Run GREEN : `32070575644`.
 
 ```text
-OPENFUNDS_V2_13_0_DETERMINISTIC_PARSE = PENDING
-OFFICIAL_FIELD_INVENTORY_VALIDATION    = PENDING
+OFST020400 Share Class Distribution Policy
+accumulating                → ACCUMULATING
+accumulating & distributing → MIXED
+distributing                → DISTRIBUTING
 ```
 
-Le rapport permanent du gate d'archive est :
+Aucune perte d'information.
+
+### Batch 05 — SEDOL au bon niveau Listing
+
+Audit officiel checksum-locké : `32071520665`.
+
+Run GREEN mapping : `32071858346`.
+
+Le record officiel établit :
 
 ```text
-docs/00_PROJECT/OF_MAP_001_OPENFUNDS_V2_13_0_OFFICIAL_ARCHIVE_COMPLETION_20260817.md
+OF-ID       OFST020040
+FIELD NAME  SEDOL
+FIELD LEVEL Listing
+DATA TYPE   string
 ```
 
-Aucun mapping champ-par-champ officiel ne doit être déclaré complet avant ces validations.
+Mapping :
+
+```text
+OFST020040
+→ OF_FUND_LISTING_IDENTIFIER_IDENTIFIER_VALUE
+→ OF_FUND_LISTING_IDENTIFIER_IDENTIFIER_SCHEME
+→ OF_FUND_LISTING_IDENTIFIER_NORMALIZED_VALUE
+```
+
+Règles :
+
+```text
+IDENTITY
+CONSTANT_SEDOL
+TRIM_AND_UPPERCASE_SEDOL
+```
+
+Le record officiel contient une alerte de licence pouvant concerner ingestion, stockage ou distribution. Par conséquent :
+
+```text
+SEMANTIC_MAPPING    VALIDATED
+INFORMATION_LOSS    NONE
+IMPORT_SUPPORTED    NO
+EXPORT_SUPPORTED    NO
+ACTIVATION_GATE     EXPLICIT_SEDOL_LICENSING_CLEARANCE
+```
+
+Preuve permanente :
+
+```text
+docs/00_PROJECT/OF_MAP_002_BATCH_05_SEDOL_COMPLETION_20260817.md
+```
+
+## 6. Couverture actuelle
+
+```text
+OFFICIAL_FIELDS                1869
+REVIEWED_MAPPING_ROWS            16
+MAPPED_EXTERNAL_IDS               8
+UNMAPPED_EXTERNAL_IDS          1861
+CANONICAL_FIELDS_AVAILABLE      177
+MAPPED_CANONICAL_IDS             10
+```
+
+Cette faible couverture n'est pas un défaut du registre : elle reflète la règle de ne valider que des équivalences démontrées.
+
+## 7. Validation technique
+
+Le validateur :
+
+- reparse le PDF checksum-locké ;
+- reconstruit les 143 FIELD_ID du core ;
+- charge les extensions canoniques explicitement déclarées ;
+- rejette les collisions ;
+- vérifie les entités ;
+- rejette les OF-ID inconnus ;
+- rejette les FIELD_ID inconnus ;
+- vérifie source SHA/reference ;
+- laisse le checkout inchangé.
+
+Union core+Listing GREEN : `32071385088`.
+
+Batch 05 GREEN complet : `32071858346`.
+
+## 8. Prochaine unité — Batch 06
+
+Auditer dans le PDF officiel les champs de niveau `Listing` qui peuvent exploiter directement migration 019 :
+
+```text
+VENUE / MIC
+LISTING CURRENCY
+TICKER / LOCAL LISTING IDENTIFIER
+PRIMARY LISTING INDICATOR
+```
+
+Pour chaque candidat :
+
+1. rechercher l'OF-ID exact dans l'archive checksum-lockée ;
+2. vérifier `Field Level`, type, description, valeurs et licence ;
+3. confirmer que le champ canonique 019 existe ;
+4. écrire un contrat TDD RED ;
+5. ajouter uniquement les mappings démontrés ;
+6. exiger GREEN Python 3.11/3.12 + intégration PDF officielle.
+
+Les noms Fund/SubFund/Umbrella, documents, frais, benchmarks, eligibility, ESG et autres domaines complexes restent des boucles séparées : ne pas créer de fausses équivalences pour accélérer artificiellement le taux de couverture.
+
+## 9. Gates encore ouverts
+
+```text
+FULL_1869_FIELD_MAPPING       EN_COURS
+SEDOL_RUNTIME                 BLOQUE_PAR_LICENCE
+PERSISTENT_POSTGRESQL         NON_CONFIGURE
+IMMUTABLE_RAW_STORE           NON_CONFIGURE
+COMPLETE_HISTORIES            NON_CHARGES
+BENCHMARK_RFR_MAR             NON_COMPLETEMENT_VALIDES
+WTI_WTI_BENCH                 NOT_ACTIVE
+PRODUCTION_API_UI             NON_IMPLEMENTE
+PRODUCTION_DEPLOYMENT         NON_CONFIGURE
+```
+
+`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` jusqu'à revue explicite du catalogue, sans objectif artificiel de 100 % si certains champs n'ont pas d'équivalent canonique ou sont juridiquement/techniquement non activables.
