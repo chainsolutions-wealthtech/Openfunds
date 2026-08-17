@@ -58,7 +58,8 @@
         "arguments": ["--check", "--source-dir", "migrations/sources/017_canonical_taxonomy_v0_1", "--output", "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"],
         "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
       }
-    }
+    },
+    {"order": 180, "id": "018_EXTENDED_SECURITY_IDENTIFIER_SCHEMES", "path": "schemas/fund/018_extended_security_identifier_schemes.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
