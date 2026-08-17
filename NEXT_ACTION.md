@@ -3,54 +3,64 @@
 ```text
 CURRENT_LOOP: OF-LOOP-SOURCE-002
 CURRENT_TASK: OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 03
-NEXT_WAVE: 04
+LAST_VERIFIED_WAVE: 08
+NEXT_UNIT: ROLE_COVERAGE_AUDIT + ERITREA_PRIMARY_SOURCE_WATCH
 STATUS: READY_FOR_READ_ONLY_AUDIT
-WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST
+WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST + TDD_RED
 ```
 
-## Phase immédiate
+## État courant vérifié — 17 août 2026
 
-Poursuivre la couverture institutionnelle des 54 pays sans confondre organisation connue, rôle supposé, endpoint identifié, endpoint vérifié et collecte testée.
-
-Les trois premières vagues sont vérifiées. Le workflow `Institutional Registry` run `31595575537` est vert sur Python 3.11/3.12 avec 8/8 tests au HEAD de données vague 03 `5024a9767b1b9aecf8a6cd52d315ccfbf8384389`.
-
-État courant :
+Les Waves 04 à 08 ont été exécutées sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main`, sans déploiement et sans persistance runtime.
 
 ```text
-COUNTRY_COVERAGE: 18 / 54
-COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 36
-ORGANIZATIONS: 87 = 67 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 134 = 90 VALIDATED + 44 PENDING
-SOURCE_ENDPOINTS: 43 UNCHANGED
+AFRICAN_COUNTRIES: 54
+COUNTRY_COVERAGE: 53 / 54
+COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 1
+UNCOVERED_COUNTRY: ERYTHREE
+ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
+ORGANIZATION_SCOPE_ROLES: 199 = 155 VALIDATED + 44 PENDING
 ```
 
-## Audit vague 04 obligatoire
+La Wave 08 est protégée par le contrat `tests/test_institutional_registry_wave08.py`. Les Waves 01 à 08 sont vérifiées sur Python 3.11 et 3.12. L'Érythrée reste volontairement absente : aucune organisation ne doit être créée tant qu'une source primaire officielle actuelle n'est pas vérifiée.
 
-1. résoudre dynamiquement le HEAD ;
-2. sélectionner un lot contrôlé parmi les 36 pays encore sans organisation country-scoped ;
-3. rechercher les institutions sur des sources officielles primaires actuelles uniquement ;
-4. séparer `VERIFIED`, `SOURCE_IDENTIFIED`, `PENDING`, `NOT_PUBLISHED` et `NOT_APPLICABLE` ;
-5. bloquer toute URL compromise, ambiguë ou historiquement détournée ;
-6. vérifier toute collision de code avec `ORGANIZATIONS.csv` ;
-7. ne pas déduire un rôle `FUND_REGULATOR` d'une simple compétence générale de marché ;
-8. ne pas fusionner deux régulateurs distincts pour satisfaire artificiellement `INSURANCE_PENSION_REGULATOR` ;
-9. produire une allowlist datée et fermée avant tout contrat TDD RED ;
-10. seulement ensuite appliquer RED → organisations → rôles → GREEN.
+## Prochaine phase de OF-SOURCE-002
 
-## Blockers maintenus
+La couverture `53/54` signifie qu'au moins une institution nationale est identifiée dans 53 pays ; elle ne signifie pas que tous les rôles institutionnels exigés sont complets.
+
+La prochaine unité doit être un audit en lecture seule de la couverture par rôle pour les 54 pays et zones pertinentes :
+
+1. mesurer exactement, par pays, les rôles présents et manquants ;
+2. préserver BCEAO, BEAC, AMF-UMOA, COSUMAF, UMOA-Titres, BRVM et BVMAC à leur scope de zone ;
+3. distinguer rôle national absent, rôle zonal compétent, `NOT_APPLICABLE`, `NOT_PUBLISHED` et preuve insuffisante ;
+4. rechercher uniquement les lacunes prioritaires avec sources officielles primaires ;
+5. ne jamais déduire `FUND_REGULATOR` d'une compétence générale de marché ;
+6. ne jamais fusionner artificiellement assurance et pensions ;
+7. produire une allowlist fermée avant chaque nouvelle écriture ;
+8. conserver l'Érythrée en blocker tant que le gate primaire n'est pas satisfait.
+
+## Blockers institutionnels maintenus
 
 ```text
-FMDQ               REQUIRES_ROLE_MODEL_REVIEW
-SEC_ZAMBIA         CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
-IRA_URBRA_UGANDA   COMBINED_ROLE_MODEL_MISMATCH
-RBM_FUND_REGULATOR PRIMARY_CIS_PROOF_NOT_SUFFICIENT
+ERYTHREE            PRIMARY_OFFICIAL_SOURCE_NOT_VERIFIED
+FMDQ                REQUIRES_ROLE_MODEL_REVIEW
+SEC_ZAMBIA          CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
+IRA_URBRA_UGANDA    COMBINED_ROLE_MODEL_MISMATCH
+RBM_FUND_REGULATOR  PRIMARY_CIS_PROOF_NOT_SUFFICIENT
 ```
 
-## Gate externe maintenu
+## Openfunds — gate réévalué
 
-`OF-MAP-001` reste bloqué tant qu’un catalogue Openfunds officiel, versionné, licencié et archivé n’est pas disponible. Aucun identifiant Openfunds ne doit être inventé.
+Le blocage historique « version officielle et licence inconnues » est levé : la version officielle courante vérifiée est `2.13.0`, publiée le `2026-03-23`, et la licence officielle est `CC BY-ND 4.0` avec attribution.
+
+Le manifeste gouverné est :
+
+```text
+data/openfunds/source_manifest_v2.13.0.json
+```
+
+`OF-MAP-001` reste cependant incomplet tant que le Field List officiel v2.13.0 n'est pas archivé **sans modification**, hashé SHA256 et parsé déterministement. Aucun catalogue reconstruit ou identifiant inventé n'est autorisé.
 
 ## Interdictions maintenues
 
-Ne pas importer d’historique réel, modifier la PR nº2, fusionner/retargeter la PR nº1, travailler sur `main`, créer branche/PR, activer WTI/WTI Bench ou déployer sans porte explicite.
+Ne pas importer d'historique réel sans stockage durable, ne pas modifier ou fermer la PR nº2 sans réconciliation, ne pas fusionner/retargeter la PR nº1, ne pas travailler sur `main`, ne pas créer de branche/PR, ne pas activer WTI/WTI Bench et ne pas déployer sans satisfaction des gates correspondants.
