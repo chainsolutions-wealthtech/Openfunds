@@ -1,0 +1,113 @@
+name: Reconcile living docs after OF-MAP-001 and Wave 12
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/docs-reconcile-map001-wave12-20260817.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Apply only exact verified status reconciliations
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              p = Path(path)
+              text = p.read_text(encoding="utf-8")
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f"{path}: expected exactly one anchor, got {count}: {old[:100]!r}")
+              p.write_text(text.replace(old, new, 1), encoding="utf-8")
+
+          # TODO — close OF-MAP-001 and activate OF-MAP-002.
+          replace_once(
+              "TODO.md",
+              "## OF-MAP-001 — Intégrer le catalogue officiel openfunds\n\n- **Statut :** BLOQUE\n- **Priorité :** P0_CRITIQUE\n- **Dépendances :** Field List officiel v2.13.0 archivé sans modification, OF-DATA-002\n- **Critères d'acceptation :** version, source, date, identifiants, descriptions, types et cardinalités sourcés ; aucun contenu officiel inventé.\n- **Livrables :** source archivée et catalogue structuré.\n- **Etat vérifié 2026-08-17 :** version officielle `2.13.0` et licence `CC BY-ND 4.0` vérifiées ; manifeste de provenance créé. Le seul gate primaire restant est l'archivage exact du Field List officiel v2.13.0, son SHA256 et son parsing déterministe.\n\n## OF-MAP-002 — Construire le mapping openfunds → canonique\n\n- **Statut :** BLOQUE",
+              "## OF-MAP-001 — Intégrer le catalogue officiel openfunds\n\n- **Statut :** TERMINE\n- **Priorité :** P0_CRITIQUE\n- **Dépendances :** OF-DATA-002\n- **Critères d'acceptation :** version, source, date, identifiants, descriptions, types et cardinalités sourcés ; aucun contenu officiel inventé.\n- **Livrables :** source officielle archivée sans modification, checksum gouverné, parser déterministe et inventaire structurel vérifié.\n- **Résultat vérifié 2026-08-17 :** Field List officiel `2.13.0` (`FINAL`, `2026-03-23`) archivé byte-identical ; SHA256 `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4` ; parser checksum-gated vérifié sur Python 3.11/3.12 et sur le PDF officiel de 745 pages ; inventaire exact de 1 869 OF-ID uniques = 1 849 IDs concrets + 20 templates pays `XX`.\n- **Preuves :** `docs/00_PROJECT/OF_MAP_001_OPENFUNDS_V2_13_0_OFFICIAL_ARCHIVE_COMPLETION_20260817.md`, `docs/00_PROJECT/OF_MAP_001_DETERMINISTIC_PARSE_COMPLETION_20260817.md`, `scripts/parse_openfunds_v2_13_0.py`, run GREEN `32061806859`.\n\n## OF-MAP-002 — Construire le mapping openfunds → canonique\n\n- **Statut :** EN_COURS"
+          )
+          replace_once(
+              "TODO.md",
+              "- **Livrables :** `OPENFUNDS_MAPPING.md` enrichi, registre structuré et fixtures.\n",
+              "- **Livrables :** `OPENFUNDS_MAPPING.md` enrichi, registre structuré et fixtures.\n- **Point de départ vérifié 2026-08-17 :** 1 869 OF-ID officiels sont maintenant checksum-gated et inventoriés. Le mapping doit référencer ces IDs sans recopier ni modifier le document officiel ; chaque cible canonique doit être validée contre `data/dictionary/spec_v1/`.\n"
+          )
+
+          # TODO — institutional progress to Wave 12.
+          replace_once(
+              "TODO.md",
+              "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 09 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle dont 159 `VALIDATED`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée.\n- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audit `scripts/audit_institutional_role_coverage.py` et promotions zonales Wave 09.\n- **Prochaine unité :** réduire les groupes de rôles encore manquants à partir de l’audit effectif pays+zones, en promouvant d’abord les lignes `PENDING` déjà présentes lorsqu’une preuve primaire officielle existe ; conserver les cas non applicables ou insuffisamment prouvés explicites.\n",
+              "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 12 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Il ne reste aucune ligne `STOCK_EXCHANGE` en attente ; résiduel : 9 FX reference providers, 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.\n- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audits post-Wave 10/11/12 et `scripts/audit_institutional_role_coverage.py`.\n- **Prochaine unité :** auditer les 9 `FX_REFERENCE_RATE_PROVIDER` sur preuve de série officielle, poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et les 7 rôles zonaux sémantiques ; conserver les cas non applicables ou insuffisamment prouvés explicites.\n"
+          )
+
+          # SUIVI — current status only, preserving historical sections.
+          replace_once(
+              "SUIVI.md",
+              "MAPPING OPENFUNDS                        V2.13.0/LICENCE VERIFIES / FIELD LIST A ARCHIVER",
+              "MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / 1869 OF-ID INVENTORIES / OF-MAP-002 EN_COURS"
+          )
+          replace_once(
+              "SUIVI.md",
+              "COUNTRY_COVERAGE: 53 / 54\nORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING\nORGANIZATION_SCOPE_ROLES: 199 = 159 VALIDATED + 40 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..09",
+              "COUNTRY_COVERAGE: 53 / 54\nORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING\nORGANIZATION_SCOPE_ROLES: 199 = 178 VALIDATED + 21 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..12"
+          )
+          replace_once(
+              "SUIVI.md",
+              "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal et ont été promues sans duplication dans Wave 09.",
+              "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 12 ont réduit le backlog sans création ni retargeting : 12 rôles institutionnels country-scoped, 3 bourses puis 4 fournisseurs d'indices ont été promus sous TDD ; le résiduel est 9 FX, 5 index, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires."
+          )
+          replace_once(
+              "SUIVI.md",
+              "La version `2.13.0` et la licence officielle `CC BY-ND 4.0` sont vérifiées. `OF-MAP-001` reste incomplet uniquement tant que le Field List officiel exact n'est pas archivé sans modification, hashé et parsé.",
+              "`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké (`40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4`) et parsé déterministement. L'inventaire réel contient 1 869 OF-ID uniques (1 849 concrets + 20 templates pays `XX`) et passe sur Python 3.11/3.12 ainsi que sur le PDF officiel. `OF-MAP-002` est désormais le chantier Openfunds actif."
+          )
+
+          # CHANGELOG — current unreleased status and 2026-08-17 summary.
+          replace_once(
+              "CHANGELOG.md",
+              "- archivage exact et parsing déterministe du Field List officiel Openfunds v2.13.0 (version et licence déjà vérifiées) ;",
+              "- mapping champ-par-champ Openfunds v2.13.0 → modèle canonique (`OF-MAP-002`) sur l'inventaire officiel désormais verrouillé ;"
+          )
+          replace_once(
+              "CHANGELOG.md",
+              "- mapping openfunds absent ;",
+              "- mapping Openfunds champ-par-champ encore incomplet (`OF-MAP-001` terminé, `OF-MAP-002` en cours) ;"
+          )
+          replace_once(
+              "CHANGELOG.md",
+              "- Waves 02 à 09 poursuivies sous TDD ;\n- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle, 159 `VALIDATED` ;\n- BCEAO/BEAC/BRVM/BVMAC promus sur scope zonal sans duplication ;\n- Érythrée volontairement non peuplée sans preuve primaire officielle actuelle.\n\n### Openfunds\n\n- v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;\n- manifeste de provenance ajouté ;\n- Field List exact, SHA256 et parser restent le gate OF-MAP-001.",
+              "- Waves 02 à 12 poursuivies sous TDD ;\n- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING` ;\n- Waves 10–12 : 12 rôles institutionnels, 3 bourses et 4 fournisseurs d'indices promus sans création ni retargeting ;\n- résiduel exact : 9 FX, 5 index providers, 3 monetary unions, 2 supranational authorities, 2 interbank operators ;\n- Érythrée volontairement non peuplée sans preuve primaire officielle actuelle.\n\n### Openfunds\n\n- v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;\n- Field List officiel FINAL de 745 pages archivé byte-identical (2 957 096 octets) ;\n- SHA256 verrouillé : `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4` ;\n- parser checksum-gated `scripts/parse_openfunds_v2_13_0.py` vérifié Python 3.11/3.12 et sur le document réel ;\n- inventaire exact : 1 869 OF-ID uniques = 1 849 concrets + 20 templates pays `XX` ;\n- `OF-MAP-001` terminé ; `OF-MAP-002` devient le chantier actif."
+          )
+
+      - name: Guard exact document scope and whitespace
+        run: |
+          set -euo pipefail
+          git diff --check
+          mapfile -t changed < <(git diff --name-only | sort)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 3
+          expected=(CHANGELOG.md SUIVI.md TODO.md)
+          test "$(printf '%s\n' "${changed[@]}")" = "$(printf '%s\n' "${expected[@]}")"
+
+      - name: Commit reconciled living documentation
+        run: |
+          set -euo pipefail
+          git config user.name "openfunds-governed-ci"
+          git config user.email "openfunds-governed-ci@users.noreply.github.com"
+          git add TODO.md SUIVI.md CHANGELOG.md
+          git diff --cached --check
+          git commit -m "docs: reconcile OF-MAP-001 closure and Wave 12 state"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
