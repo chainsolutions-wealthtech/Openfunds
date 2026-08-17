@@ -1,6 +1,9 @@
 import csv
 import io
+import subprocess
+import sys
 import unittest
+from pathlib import Path
 
 EXPECTED_HEADER = [
     "MAPPING_ID",
@@ -27,6 +30,17 @@ class OpenfundsMappingRegistryContractTests(unittest.TestCase):
 
     def make_rows(self, text):
         return list(csv.DictReader(io.StringIO(text), delimiter=";"))
+
+    def test_cli_entrypoint_can_execute_from_repository_root(self):
+        completed = subprocess.run(
+            [sys.executable, "scripts/validate_openfunds_mapping_registry.py", "--help"],
+            cwd=Path(__file__).resolve().parents[1],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(0, completed.returncode, completed.stderr)
+        self.assertIn("Validate the governed Openfunds mapping registry", completed.stdout)
 
     def test_empty_reviewed_registry_is_valid(self):
         self.assertEqual([], self.validate_rows([], {"OFST001000"}, {"OF_FUND_ENTITY_CANONICAL_CODE"}))
