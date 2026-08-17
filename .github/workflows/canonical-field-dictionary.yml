@@ -9,8 +9,10 @@ on:
       - 'scripts/generate_canonical_field_dictionary.py'
       - 'tests/test_canonical_field_dictionary.py'
       - 'tests/test_identifier_scheme_extension.py'
+      - 'tests/test_listing_dictionary_extension.py'
       - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
       - 'schemas/fund/018_extended_security_identifier_schemes.sql'
+      - 'schemas/fund/019_share_class_listing_core.sql'
       - '.github/workflows/canonical-field-dictionary.yml'
   push:
     paths:
@@ -20,12 +22,15 @@ on:
       - 'scripts/generate_canonical_field_dictionary.py'
       - 'tests/test_canonical_field_dictionary.py'
       - 'tests/test_identifier_scheme_extension.py'
+      - 'tests/test_listing_dictionary_extension.py'
       - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
       - 'schemas/fund/018_extended_security_identifier_schemes.sql'
+      - 'schemas/fund/019_share_class_listing_core.sql'
       - '.github/workflows/canonical-field-dictionary.yml'
   workflow_dispatch:
 
-# Revalidation marker: migration 018 manifest refreshed deterministically on 2026-08-17.
+# Core spec_v1 remains the validated 143-column migration-015 baseline.
+# Forward-only runtime extensions are validated by dedicated extension contracts.
 
 jobs:
   validate-dictionary:
@@ -39,12 +44,13 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Generate and verify governed dictionary artifacts
+      - name: Generate and verify governed core dictionary artifacts
         run: python scripts/generate_canonical_field_dictionary.py --check-manifest
       - name: Run dictionary contract tests
         run: |
           python -m unittest -v tests.test_canonical_field_dictionary
           python -m unittest -v tests.test_identifier_scheme_extension
+          python -m unittest -v tests.test_listing_dictionary_extension
       - name: Upload generated review artifacts
         uses: actions/upload-artifact@v4
         with:
