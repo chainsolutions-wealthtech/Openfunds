@@ -9,6 +9,7 @@ on:
       - "data/openfunds/mapping/v2.13.0/**"
       - "scripts/validate_openfunds_mapping_registry.py"
       - "tests/test_openfunds_mapping_registry.py"
+      - "tests/test_openfunds_mapping_batch02.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
@@ -34,7 +35,9 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Run mapping registry contract
-        run: python -m unittest -v tests.test_openfunds_mapping_registry
+        run: |
+          python -m unittest -v tests.test_openfunds_mapping_registry
+          python -m unittest -v tests.test_openfunds_mapping_batch02
 
   integration:
     name: mapping-registry-official-and-canonical-integration
