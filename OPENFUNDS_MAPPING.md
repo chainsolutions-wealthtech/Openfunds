@@ -14,8 +14,8 @@ BINAIRE FIELD LIST 2.13.0                ARCHIVE SANS MODIFICATION / CHECKSUM LO
 SHA256 OFFICIEL ARCHIVE                  40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4
 TAILLE BINAIRE                            2,957,096 OCTETS
 NOMBRE DE PAGES                           745
-CATALOGUE PARSE MACHINE-READABLE         NON ENCORE CONSTRUIT
-MAPPING CHAMP PAR CHAMP                  NON ENCORE CONSTRUIT
+INVENTAIRE OFFICIEL PARSE                1869 OF-ID / CHECKSUM-GATED
+MAPPING CHAMP PAR CHAMP                  EN COURS — BATCH01 4 ROWS / 2 OF-ID
 EXPORT OPENFUNDS                         NON IMPLEMENTE
 ```
 
@@ -38,7 +38,7 @@ data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
 data/openfunds/official/v2.13.0/SOURCE_AND_LICENSE.md
 ```
 
-Le gate d'archivage binaire de `OF-MAP-001` est donc fermé. Le gate restant est désormais **le parsing déterministe du PDF checksum-locké et la validation de l'inventaire réel des champs**. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.
+`OF-MAP-001` est fermé : archive byte-identical, SHA256 et parsing déterministe de 1 869 OF-ID sont vérifiés. `OF-MAP-002` est actif avec un registre séparé et un validator qui reparse l'archive officielle et reconstruit les 143 FIELD_ID canoniques avant d'accepter un mapping. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.
 
 Tâches : `OF-MAP-001` et `OF-MAP-002`.
 
@@ -150,11 +150,11 @@ Le modèle Fund/SubFund/ShareClass et le dictionnaire canonique étant stabilis�
 2. SOURCE / DATE / LICENCE                  FAIT — manifeste gouverné
 3. ARCHIVER FIELD LIST ORIGINAL             FAIT — archive byte-identical
 4. CALCULER SHA256 / MEDIA TYPE             FAIT — SHA256 verrouillé
-5. AUDITER LE LAYOUT PDF                    PROCHAINE UNITE
-6. PARSER LE CATALOGUE DETERMINISTEMENT     APRES 5
-7. VALIDER IDS / TYPES / CARDINALITES       APRES 6
-8. GENERER LE REGISTRE DE MAPPING           APRES 6
-9. PROPOSER LES MAPPINGS                    APRES 6
+5. AUDITER LE LAYOUT PDF                    FAIT
+6. PARSER LE CATALOGUE DETERMINISTEMENT     FAIT — 1869 OF-ID
+7. VALIDER IDS / STRUCTURE                   FAIT — checksum-gated
+8. GENERER LE REGISTRE DE MAPPING           FAIT — registre gouverné
+9. PROPOSER LES MAPPINGS                    EN COURS — Batch01 validé
 10. REVOIR PAR DOMAINE                      APRES 9
 11. TESTER IMPORT ET EXPORT                 APRES 9
 12. VERSIONNER                              CONTINU
@@ -169,11 +169,11 @@ Le modèle Fund/SubFund/ShareClass et le dictionnaire canonique étant stabilis�
 - licence et attribution enregistrées — **FAIT** ;
 - fichier officiel v2.13.0 archivé sans modification — **FAIT** ;
 - SHA256 et type MIME enregistrés — **FAIT** ;
-- parsing déterministe — **OUVERT** ;
-- nombre de champs et identifiants vérifiés — **OUVERT** ;
+- parsing déterministe — **FAIT** ;
+- nombre de champs et identifiants vérifiés — **FAIT — 1 869 OF-ID uniques** ;
 - aucune donnée officielle inventée — **INVARIANT**.
 
-`OF-MAP-001` reste `EN_COURS` jusqu'à clôture des deux points ouverts.
+`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` avec Batch 01 vérifié : 4 lignes, 2 OF-ID externes et 4 cibles canoniques.
 
 ### OF-MAP-002
 

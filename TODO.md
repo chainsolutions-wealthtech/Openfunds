@@ -161,7 +161,7 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 - **Dépendances :** OF-MAP-001, OF-DATA-001/002
 - **Critères d'acceptation :** statut par champ, cible canonique, transformations, pertes, champs sans équivalent, mapping humain/machine et tests aller-retour.
 - **Livrables :** `OPENFUNDS_MAPPING.md` enrichi, registre structuré et fixtures.
-- **Point de départ vérifié 2026-08-17 :** 1 869 OF-ID officiels sont maintenant checksum-gated et inventoriés. Le mapping doit référencer ces IDs sans recopier ni modifier le document officiel ; chaque cible canonique doit être validée contre `data/dictionary/spec_v1/`.
+- **Progression vérifiée 2026-08-17 :** registre gouverné `data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv`, manifeste et validator checksum-gated opérationnels. Baseline vide GREEN (`32064814922`), validator durci contre doublons `(OF-ID, FIELD_ID)` et incohérences d'entité GREEN (`32065124602`). Batch 01 GREEN (`32065216172`) : 4 lignes validées couvrant 2 OF-ID (`OFST010010`, `OFST020000`) vers 4 cibles canoniques ; 1 867 OF-ID restent non revus et sont calculés, jamais matérialisés artificiellement.
 
 ---
 
@@ -174,9 +174,9 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 - **Dépendances :** OF-ARCH-001
 - **Critères d'acceptation :** statut pour banque centrale, statistiques, finances, dette, bourse, régulateurs fonds et assurance/pension ; URL et preuve vérifiées ; non-applicabilité explicite.
 - **Livrables :** organisations, rôles et endpoints complets.
-- **Progression vérifiée au 2026-08-17 :** Waves 01 à 12 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Il ne reste aucune ligne `STOCK_EXCHANGE` en attente ; résiduel : 9 FX reference providers, 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.
+- **Progression vérifiée au 2026-08-17 :** Waves 01 à 13 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 187 `VALIDATED` + 12 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Wave 13 a fermé les 9 `FX_REFERENCE_RATE_PROVIDER` sous preuves primaires officielles ; résiduel exact : 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.
 - **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audits post-Wave 10/11/12 et `scripts/audit_institutional_role_coverage.py`.
-- **Prochaine unité :** auditer les 9 `FX_REFERENCE_RATE_PROVIDER` sur preuve de série officielle, poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et les 7 rôles zonaux sémantiques ; conserver les cas non applicables ou insuffisamment prouvés explicites.
+- **Prochaine unité :** poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et la revue sémantique des 7 rôles zonaux ; ne pas confondre validation institutionnelle avec validation endpoint/série `OF-SOURCE-003`, et conserver les cas non applicables ou insuffisamment prouvés explicites.
 - **Limite :** couverture 53/54 ne signifie pas complétude de tous les rôles ; les CSV restent des surfaces gouvernées de découverte/revue et la production persistante reste séparée.
 
 ## OF-SOURCE-003 — Vérifier les 55 mappings initiaux

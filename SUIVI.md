@@ -46,7 +46,7 @@ BCEAO FX / BEAC FX                       COLLECTION_TESTED
 HISTORIQUE DURABLE MULTI-DATES           NON
 MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE
 DICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES
-MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / 1869 OF-ID INVENTORIES / OF-MAP-002 EN_COURS
+MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / OF-MAP-002 BATCH01 4 ROWS / 2 OF-IDS
 TAXONOMIE POSTGRESQL                     MIGRATION 017 VERIFIED_COMPLETE / NOT_ACTIVE
 CATEGORIES / BLOCS DE REFERENCE          486 ROUTAGES / 432 BLOCS / NON ACTIFS
 WTI / WTI BENCH / METRIQUES              NON CALCULES
@@ -67,12 +67,12 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 ```text
 COUNTRY_COVERAGE: 53 / 54
 ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 199 = 178 VALIDATED + 21 PENDING
+ORGANIZATION_SCOPE_ROLES: 199 = 187 VALIDATED + 12 PENDING
 UNCOVERED_COUNTRY: ERYTHREE
-WAVES_VERIFIED: 01..12
+WAVES_VERIFIED: 01..13
 ```
 
-L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 12 ont réduit le backlog sans création ni retargeting : 12 rôles institutionnels country-scoped, 3 bourses puis 4 fournisseurs d'indices ont été promus sous TDD ; le résiduel est 9 FX, 5 index, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires.
+L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 13 ont réduit le backlog sans création ni retargeting ; Wave 13 a validé les 9 fournisseurs de référence FX sous preuves primaires officielles. Le résiduel exact est 5 index providers, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires.
 
 ### Taxonomie canonique et PostgreSQL
 
@@ -95,7 +95,7 @@ Preuve : `docs/00_PROJECT/ADR-029_CANONICAL_TAXONOMY_AUTHORING_AND_RUNTIME.md` e
 
 ### Openfunds
 
-`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké (`40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4`) et parsé déterministement. L'inventaire réel contient 1 869 OF-ID uniques (1 849 concrets + 20 templates pays `XX`) et passe sur Python 3.11/3.12 ainsi que sur le PDF officiel. `OF-MAP-002` est désormais le chantier Openfunds actif.
+`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké et son inventaire de 1 869 OF-ID est vérifié. `OF-MAP-002` est actif avec validator GREEN contre le PDF officiel et les 143 FIELD_ID canoniques. Batch 01 est validé : 4 lignes / 2 OF-ID / 4 cibles canoniques ; 1 867 OF-ID restent à revoir sans matérialisation artificielle.
 
 ## 2. REALISATIONS
 
