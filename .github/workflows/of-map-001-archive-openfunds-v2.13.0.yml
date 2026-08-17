@@ -78,9 +78,9 @@ jobs:
           test "$pages" = '745'
           pdftotext -f 1 -l 1 -layout "$PDF_PATH" /tmp/openfunds_page1.txt
           cat /tmp/openfunds_page1.txt
-          grep -Fq 'Status: FINAL' /tmp/openfunds_page1.txt
-          grep -Fq 'Version: Version 2.13.0' /tmp/openfunds_page1.txt
-          grep -Fq 'Date: 2026-03-23' /tmp/openfunds_page1.txt
+          grep -Eq 'Status:[[:space:]]+FINAL' /tmp/openfunds_page1.txt
+          grep -Eq 'Version:[[:space:]]+Version 2\.13\.0' /tmp/openfunds_page1.txt
+          grep -Eq 'Date:[[:space:]]+2026-03-23' /tmp/openfunds_page1.txt
 
       - name: Compute immutable checksum and update provenance manifest
         shell: python
