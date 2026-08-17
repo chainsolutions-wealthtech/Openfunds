@@ -19,6 +19,8 @@ jobs:
   append-validate-push:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
     steps:
       - name: Checkout exact branch
         uses: actions/checkout@v4
