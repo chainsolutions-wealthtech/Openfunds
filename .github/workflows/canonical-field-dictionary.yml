@@ -8,7 +8,9 @@ on:
       - 'scripts/canonical_field_dictionary.py'
       - 'scripts/generate_canonical_field_dictionary.py'
       - 'tests/test_canonical_field_dictionary.py'
+      - 'tests/test_identifier_scheme_extension.py'
       - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
+      - 'schemas/fund/018_extended_security_identifier_schemes.sql'
       - '.github/workflows/canonical-field-dictionary.yml'
   push:
     paths:
@@ -17,7 +19,9 @@ on:
       - 'scripts/canonical_field_dictionary.py'
       - 'scripts/generate_canonical_field_dictionary.py'
       - 'tests/test_canonical_field_dictionary.py'
+      - 'tests/test_identifier_scheme_extension.py'
       - 'schemas/fund/015_fund_subfund_shareclass_core.sql'
+      - 'schemas/fund/018_extended_security_identifier_schemes.sql'
       - '.github/workflows/canonical-field-dictionary.yml'
   workflow_dispatch:
 
@@ -36,7 +40,9 @@ jobs:
       - name: Generate and verify governed dictionary artifacts
         run: python scripts/generate_canonical_field_dictionary.py --check-manifest
       - name: Run dictionary contract tests
-        run: python -m unittest -v tests.test_canonical_field_dictionary
+        run: |
+          python -m unittest -v tests.test_canonical_field_dictionary
+          python -m unittest -v tests.test_identifier_scheme_extension
       - name: Upload generated review artifacts
         uses: actions/upload-artifact@v4
         with:
