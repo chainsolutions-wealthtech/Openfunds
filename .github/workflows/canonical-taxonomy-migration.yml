@@ -59,10 +59,10 @@ jobs:
           python scripts/run_migrations.py --plan | tee /tmp/migration-plan.txt
           grep -F "170 PENDING 017_CANONICAL_FUND_TAXONOMY_V0_1" /tmp/migration-plan.txt
 
-  postgres-red:
-    name: taxonomy-postgres-red-contract
+  postgres:
+    name: taxonomy-postgres-16
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
     env:
       PYTHONDONTWRITEBYTECODE: "1"
       DATABASE_URL: postgresql://openfunds:openfunds@localhost:5432/openfunds
@@ -85,5 +85,27 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
-      - name: Run PostgreSQL taxonomy contract before migration application
+
+      - name: Apply governed migrations 001 through 017
+        run: python scripts/run_migrations.py --apply --database-url "$DATABASE_URL"
+
+      - name: Verify governed migration ledger
+        run: python scripts/run_migrations.py --verify --database-url "$DATABASE_URL"
+
+      - name: Run PostgreSQL taxonomy contract after first apply
+        run: python -m unittest -v tests.test_canonical_taxonomy_postgres
+
+      - name: Apply governed migrations a second time
+        run: python scripts/run_migrations.py --apply --database-url "$DATABASE_URL" | tee /tmp/second-apply.txt
+
+      - name: Assert second apply is idempotent
+        run: |
+          grep -F "SKIP 170 017_CANONICAL_FUND_TAXONOMY_V0_1" /tmp/second-apply.txt
+          test "$(grep -c '^SKIP ' /tmp/second-apply.txt)" -eq 17
+          ! grep -q '^APPLY ' /tmp/second-apply.txt
+
+      - name: Verify governed ledger after second apply
+        run: python scripts/run_migrations.py --verify --database-url "$DATABASE_URL"
+
+      - name: Re-run PostgreSQL taxonomy contract after second apply
         run: python -m unittest -v tests.test_canonical_taxonomy_postgres
