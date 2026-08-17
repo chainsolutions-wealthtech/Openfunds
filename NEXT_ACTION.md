@@ -3,10 +3,10 @@
 ```text
 CURRENT_LOOP: OF-MAP-002 + OF-LOOP-SOURCE-002
 CURRENT_TASK: OF-MAP-002_EN_COURS / OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 12
-NEXT_UNIT: OPENFUNDS_MAPPING_REGISTRY_BOOTSTRAP + FX_REFERENCE_SERIES_AUDIT + ERITREA_PRIMARY_SOURCE_WATCH
-STATUS: READY_FOR_TDD_MAPPING_BOOTSTRAP_AND_READ_ONLY_FX_AUDIT
-WRITE_GATE: VERIFIED_OF_ID + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_MAPPING_STATUS + CLOSED_ALLOWLIST + TDD_RED
+LAST_VERIFIED_WAVE: 13
+NEXT_UNIT: OPENFUNDS_MAPPING_BATCH_02 + RESIDUAL_INDEX_PROVIDER_AUDIT + ZONE_ROLE_SEMANTIC_REVIEW + ERITREA_PRIMARY_SOURCE_WATCH
+STATUS: READY_FOR_INCREMENTAL_MAPPING_AND_READ_ONLY_RESIDUAL_SEMANTIC_AUDITS
+WRITE_GATE: VERIFIED_OF_ID + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_TRANSFORMATION + CLOSED_ALLOWLIST + TDD_RED
 ```
 
 ## État courant vérifié — 17 août 2026
@@ -21,47 +21,38 @@ COUNTRY_COVERAGE: 53 / 54
 COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 1
 UNCOVERED_COUNTRY: ERYTHREE
 ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 199 = 178 VALIDATED + 21 PENDING
-WAVES_VERIFIED: 01..12
+ORGANIZATION_SCOPE_ROLES: 199 = 187 VALIDATED + 12 PENDING
+WAVES_VERIFIED: 01..13
+PENDING_FX_REFERENCE_RATE_PROVIDER: 0
 PENDING_STOCK_EXCHANGE: 0
 ```
 
 Inventaire résiduel exact :
 
 ```text
-FX_REFERENCE_RATE_PROVIDER   9
 INDEX_PROVIDER               5
 MONETARY_UNION               3
 SUPRANATIONAL_AUTHORITY      2
 INTERBANK_MARKET_OPERATOR    2
-TOTAL                       21
-
-COUNTRY        12
-MONETARY_ZONE   9
+TOTAL                       12
 ```
 
-Wave 12 a promu seulement quatre `INDEX_PROVIDER` dont la responsabilité de calcul/gestion/publication d'indices était suffisamment prouvée : `GSE`, `CASABLANCA_BOURSE`, `BRVM` et `BVMAC`. `JSE`, `EGX`, `NSE`, `NGX` et `BVMT` restent volontairement `PENDING` tant que les responsabilités de provider/administrator ne sont pas suffisamment séparées.
+Wave 13 a promu exactement les neuf relations `FX_REFERENCE_RATE_PROVIDER` préexistantes après preuve primaire officielle de publication de taux/cours FX. Cette promotion ne valide pas automatiquement endpoints, séries, fréquences, unités ou historiques ; ceux-ci restent sous `OF-SOURCE-003`.
 
 Preuves :
 
 ```text
-docs/00_PROJECT/OF_SOURCE_002_WAVE_12_INDEX_PROVIDER_AUDIT_20260817.md
-docs/00_PROJECT/OF_SOURCE_002_WAVE_12_COMPLETION_20260817.md
+docs/00_PROJECT/OF_SOURCE_002_WAVE_13_FX_REFERENCE_PROVIDER_AUDIT_20260817.md
+docs/00_PROJECT/OF_SOURCE_002_WAVE_13_COMPLETION_20260817.md
+RED_RUN: 32065421538
+GREEN_RUN: 32065501479
 ```
 
 L'Érythrée reste volontairement sans organisation country-scoped tant qu'une source primaire officielle actuelle n'est pas vérifiée.
 
 ## OF-MAP-001 — gate fermé
 
-`OF-MAP-001` est maintenant `TERMINE`.
-
-Source officielle archivée :
-
-```text
-data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
-```
-
-Invariants vérifiés :
+`OF-MAP-001` est `TERMINE`.
 
 ```text
 OPENFUNDS_VERSION: 2.13.0
@@ -74,89 +65,83 @@ FIELD_RECORDS: 1869
 UNIQUE_OF_IDS: 1869
 CONCRETE_IDS: 1849
 PARAMETERIZED_COUNTRY_TEMPLATES_XX: 20
-PYTHON_3_11: SUCCESS
-PYTHON_3_12: SUCCESS
-OFFICIAL_INVENTORY_RUN: 32061806859 SUCCESS
 ```
 
-Le parser gouverné est :
+Source et parser :
 
 ```text
+data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
 scripts/parse_openfunds_v2_13_0.py
-```
-
-Il vérifie obligatoirement le checksum avant extraction et n'écrit aucun catalogue officiel transformé dans le dépôt. Les templates `OFxx####XX` sont conservés exactement tels qu'ils existent dans le standard.
-
-Preuves :
-
-```text
-docs/00_PROJECT/OF_MAP_001_OPENFUNDS_V2_13_0_OFFICIAL_ARCHIVE_COMPLETION_20260817.md
-docs/00_PROJECT/OF_MAP_001_DETERMINISTIC_PARSE_COMPLETION_20260817.md
-data/openfunds/source_manifest_v2.13.0.json
 ```
 
 ## OF-MAP-002 — unité active
 
-Le prochain chantier Openfunds est le mapping versionné vers le modèle canonique.
-
-### Architecture autorisée
-
-Le registre de mapping doit rester **séparé du PDF officiel** et ne doit pas publier une réécriture du Field List sous forme de faux document officiel.
-
-Chaque ligne mappée doit au minimum porter :
+Le registre gouverné existe et son validator est GREEN contre le vrai PDF officiel et les 143 FIELD_ID canoniques.
 
 ```text
-MAPPING_ID
-STANDARD_VERSION
-EXTERNAL_FIELD_ID
-CANONICAL_FIELD_ID
-CANONICAL_ENTITY
-MAPPING_STATUS
-TRANSFORMATION_RULE
-INFORMATION_LOSS
-IMPORT_SUPPORTED
-EXPORT_SUPPORTED
-VALIDATION_STATUS
-SOURCE_SHA256
-SOURCE_REFERENCE
-NOTES
+REGISTRY: data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv
+MANIFEST: data/openfunds/mapping/v2.13.0/mapping_manifest.json
+VALIDATOR: scripts/validate_openfunds_mapping_registry.py
+PYTHON_3_11: SUCCESS
+PYTHON_3_12: SUCCESS
+EMPTY_BASELINE_GREEN_RUN: 32064814922
+HARDENED_VALIDATOR_GREEN_RUN: 32065124602
 ```
 
-### Invariants obligatoires
+Invariants supplémentaires désormais imposés :
 
-1. `STANDARD_VERSION` doit être `2.13.0` ;
-2. tout `EXTERNAL_FIELD_ID` doit appartenir aux 1 869 OF-ID parsés depuis le PDF checksum-locké ;
-3. aucun `OFxx####XX` ne peut être matérialisé en faux pays dans le registre source ;
-4. toute cible `CANONICAL_FIELD_ID` doit exister dans `data/dictionary/spec_v1/` ;
-5. une ligne peut rester `TO_CONFIRM` plutôt que forcer un mapping douteux ;
-6. un mapping one-to-many/many-to-one doit être explicite ;
-7. les pertes d'information et transformations doivent être déclarées ;
-8. les mappings internes sont des métadonnées du projet, distinctes du document Openfunds officiel ;
-9. aucun identifiant, type, définition ou cardinalité officiel ne doit être inventé ;
-10. une CI doit reparser l'archive officielle et revalider toutes les références avant acceptation.
+- doublon `(EXTERNAL_FIELD_ID, CANONICAL_FIELD_ID)` interdit ;
+- `CANONICAL_ENTITY` doit correspondre à l'`ENTITY_CODE` réel du FIELD_ID ;
+- les templates `XX` restent non développés ;
+- le validator ne modifie pas le checkout.
 
-La première écriture autorisée est donc **le schéma/registre de mapping + son validateur + ses contrats**, pas une génération spéculative de 1 869 mappings.
+### Batch 01 — fermé
+
+Le premier lot réel est validé :
+
+```text
+REVIEWED_MAPPING_ROWS: 4
+MAPPED_EXTERNAL_IDS: 2
+UNMAPPED_EXTERNAL_IDS: 1867
+MAPPED_CANONICAL_IDS: 4
+GREEN_RUN: 32065216172
+```
+
+OF-ID traités :
+
+```text
+OFST010010  Fund Domicile Alpha-2
+OFST020000  ISIN
+```
+
+Le domicile est transformé `ISO_3166_ALPHA2_TO_REF_GEOGRAPHY_UUID`. L'ISIN est décomposé one-to-many vers valeur, schéma `ISIN` et valeur normalisée de l'entité canonique d'identifiants.
+
+Preuves :
+
+```text
+docs/00_PROJECT/OF_MAP_002_BATCH_01_DOMICILE_ISIN_AUDIT_20260817.md
+docs/00_PROJECT/OF_MAP_002_BATCH_01_COMPLETION_20260817.md
+```
+
+### Prochaine unité OF-MAP-002
+
+Construire Batch 02 uniquement sur des champs dont le niveau, le type et la transformation sont démontrables. Les noms Fund/SubFund/Umbrella ne doivent pas être mappés naïvement : ils nécessitent une boucle dédiée sur `name_role`, langue, normalisation et structure umbrella/subfund.
 
 ## OF-SOURCE-002 — prochaine unité
 
-### Wave 13 potentielle : FX_REFERENCE_RATE_PROVIDER
-
-Les neuf lignes FX restantes doivent être vérifiées sur la publication/propriété de la série de change concernée, et non sur le simple statut de banque centrale.
-
-Aucune promotion ne doit précéder :
+### INDEX_PROVIDER résiduel
 
 ```text
-SOURCE PRIMAIRE OFFICIELLE ACTUELLE
-+ SERIE FX IDENTIFIEE
-+ ROLE/SCOPE EXACT
-+ COLLISION REVIEW
-+ CLOSED ALLOWLIST
-+ TDD RED
+JSE
+EGX
+NSE
+NGX
+BVMT
 ```
 
-Les cas seront traités par sous-vagues si la preuve n'est pas homogène.
+Ces cinq relations restent `PENDING`. Une bourse validée comme `STOCK_EXCHANGE` ne devient pas automatiquement provider/administrator d'indice. Exiger une preuve officielle spécifique de calcul, administration, propriété ou publication de l'indice avant toute promotion.
 
-### Rôles zonaux
+### Rôles zonaux — revue sémantique distincte
 
 ```text
 MONETARY_UNION             3
@@ -164,7 +149,22 @@ SUPRANATIONAL_AUTHORITY    2
 INTERBANK_MARKET_OPERATOR  2
 ```
 
-Ils restent dans une revue sémantique distincte. `CMA / MONETARY_UNION` ne doit pas être promu tant que le terme canonique n'est pas démontré comme adéquat à la Common Monetary Area.
+Ne pas promouvoir automatiquement BCEAO/BEAC comme `INTERBANK_MARKET_OPERATOR` à partir des seules preuves FX de Wave 13. `CMA / MONETARY_UNION` reste particulièrement à arbitrer : si le rôle canonique est trop fort, faire évoluer le modèle au lieu de forcer la donnée.
+
+## OF-SOURCE-003 — toujours actif
+
+La validation institutionnelle ne clôt pas la validation des 55 mappings/séries initiaux. Continuer à vérifier séparément :
+
+```text
+ENDPOINT
+SERIE EXACTE
+FREQUENCE
+UNITE
+CONVENTION DE COTATION
+HISTORIQUE
+METHODE
+STATUT DE COLLECTE
+```
 
 ## Taxonomie — gate structurel fermé
 
@@ -180,8 +180,6 @@ CANONICAL_STATUS: STRUCTURE_PREFILLED
 PRODUCTION_STATUS: NOT_ACTIVE
 ```
 
-Cette clôture structurelle n'autorise pas l'activation de WTI, WTI Bench, benchmarks, RFR, MAR ou autres calculs sans leurs validations propres.
-
 ## Blockers maintenus
 
 ```text
@@ -190,6 +188,8 @@ FMDQ                REQUIRES_ROLE_MODEL_REVIEW
 SEC_ZAMBIA          CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
 IRA_URBRA_UGANDA    COMBINED_ROLE_MODEL_MISMATCH
 RBM_FUND_REGULATOR  PRIMARY_CIS_PROOF_NOT_SUFFICIENT
+PERSISTENT_DB       OPENFUNDS_DATABASE_URL / DURABLE_RUNTIME_NOT_CONFIGURED
+IMMUTABLE_RAW_STORE NOT_CONFIGURED
 ```
 
 ## Interdictions maintenues
