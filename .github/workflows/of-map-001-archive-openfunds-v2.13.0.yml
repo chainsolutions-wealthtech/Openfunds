@@ -61,6 +61,12 @@ jobs:
           test "$bytes" -lt 99614720
           grep -Eiq '^content-type:.*application/pdf' /tmp/openfunds_headers.txt
 
+      - name: Install PDF verification tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+
       - name: Verify official PDF identity and release metadata
         run: |
           set -euo pipefail
