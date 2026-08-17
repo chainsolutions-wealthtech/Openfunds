@@ -1,0 +1,44 @@
+name: OF-MAP-002 Batch05 SEDOL Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - '.github/workflows/of-map-002-batch05-sedol-audit.yml'
+
+permissions:
+  contents: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify official source checksum
+        run: sha256sum -c data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
+      - name: Install PDF extraction tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+      - name: Print exact OFST020040 record context
+        run: |
+          set -euo pipefail
+          pdftotext -layout data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf /tmp/openfunds.txt
+          python - <<'PY'
+          from pathlib import Path
+          text=Path('/tmp/openfunds.txt').read_text(encoding='utf-8', errors='replace').splitlines()
+          starts=[i for i,line in enumerate(text) if 'OF-ID' in line and 'OFST020040' in line and 'Field Name' in line]
+          if len(starts) != 1:
+              raise SystemExit(f'expected exactly one OFST020040 record header, got {len(starts)}')
+          start=starts[0]
+          end=next((i for i in range(start+1,len(text)) if 'OF-ID' in text[i] and 'Field Name' in text[i]), min(start+120,len(text)))
+          block=text[start:end]
+          print('\n'.join(block))
+          PY
+      - name: Assert repository unchanged
+        run: test -z "$(git status --porcelain=v1 -uall)"
