@@ -166,7 +166,7 @@ jobs:
       - name: Guard exact changed-file scope
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git status --porcelain=v1 | sed -E 's/^...//' | sort)
+          mapfile -t changed < <(git status --porcelain=v1 -uall | sed -E 's/^...//' | sort)
           printf '%s\n' "${changed[@]}"
           test "${#changed[@]}" -eq 4
           expected=(
