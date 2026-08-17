@@ -13,6 +13,7 @@ on:
       - "data/reference/SOURCE_ENDPOINTS.csv"
       - "scripts/validate_institutional_registry.py"
       - "tests/test_institutional_registry.py"
+      - "tests/test_institutional_registry_wave05.py"
       - ".github/workflows/institutional-registry.yml"
   pull_request:
     paths:
@@ -23,6 +24,7 @@ on:
       - "data/reference/SOURCE_ENDPOINTS.csv"
       - "scripts/validate_institutional_registry.py"
       - "tests/test_institutional_registry.py"
+      - "tests/test_institutional_registry_wave05.py"
       - ".github/workflows/institutional-registry.yml"
 
 permissions:
@@ -33,6 +35,8 @@ jobs:
     name: validate-institutional-registry (${{ matrix.python-version }})
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
     strategy:
       fail-fast: false
       matrix:
@@ -48,4 +52,6 @@ jobs:
           python-version: ${{ matrix.python-version }}
 
       - name: Run institutional registry contract tests
-        run: python -m unittest -v tests.test_institutional_registry
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
