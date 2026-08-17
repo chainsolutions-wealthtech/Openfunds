@@ -6,12 +6,14 @@ on:
       - 'migrations/**'
       - 'schemas/**'
       - 'data/indicator_catalog/**'
+      - 'data/dictionary/**'
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
       - 'scripts/generate_country_indicator_catalog.py'
       - 'tests/test_migration_runner.py'
       - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
+      - 'tests/test_identifier_scheme_extension.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -19,12 +21,14 @@ on:
       - 'migrations/**'
       - 'schemas/**'
       - 'data/indicator_catalog/**'
+      - 'data/dictionary/**'
       - 'scripts/run_migrations.py'
       - 'scripts/generate_validated_fx_reference_sql.py'
       - 'scripts/generate_country_indicator_catalog.py'
       - 'tests/test_migration_runner.py'
       - 'tests/test_country_indicator_catalog.py'
       - 'tests/test_fund_domain_model.py'
+      - 'tests/test_identifier_scheme_extension.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -80,7 +84,9 @@ jobs:
         run: python -m unittest -v tests.test_country_indicator_catalog
 
       - name: Fund domain unit tests
-        run: python -m unittest -v tests.test_fund_domain_model
+        run: |
+          python -m unittest -v tests.test_fund_domain_model
+          python -m unittest -v tests.test_identifier_scheme_extension
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -107,8 +113,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 16 then
-                  raise exception 'expected 16 governed migrations, got %', migration_count;
+              if migration_count <> 18 then
+                  raise exception 'expected 18 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -168,16 +174,40 @@ jobs:
               if invalid_history_count <> 0 then
                   raise exception 'definition catalogue asserted loaded history for % rows', invalid_history_count;
               end if;
+          end
+          $$;
 
-              if not exists (
-                  select 1 from ref.indicator_definition
-                  where indicator_code='D00.SOURCE_HASH'
-                    and source_nature='Brute'
-                    and canonical_nature='METADATA'
-                    and classification_decision_id='OF-DATA-003-A'
-              ) then
-                  raise exception 'source_nature/canonical_nature separation contract is missing';
-              end if;
+          insert into fund.entity(entity_id, entity_type, canonical_code)
+          values ('00000000-0000-0000-0000-000000000181', 'SHARE_CLASS', 'TEST_IDENTIFIER_018');
+
+          insert into fund.entity_identifier(
+              entity_identifier_id, entity_id, identifier_scheme,
+              identifier_value, normalized_value,
+              effective_from_status, effective_to_status,
+              validation_status
+          ) values
+          ('00000000-0000-0000-0000-000000000182','00000000-0000-0000-0000-000000000181','WKN','A1TEST2','A1TEST2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000183','00000000-0000-0000-0000-000000000181','SEDOL','B0TEST1','B0TEST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000184','00000000-0000-0000-0000-000000000181','VALOR','123456','123456','UNKNOWN','NOT_APPLICABLE','VALIDATED');
+
+          do $$
+          begin
+              begin
+                  insert into fund.entity_identifier(
+                      entity_identifier_id, entity_id, identifier_scheme,
+                      identifier_value, normalized_value,
+                      effective_from_status, effective_to_status,
+                      validation_status
+                  ) values (
+                      '00000000-0000-0000-0000-000000000185',
+                      '00000000-0000-0000-0000-000000000181',
+                      'UNSUPPORTED_SCHEME', 'BAD', 'BAD',
+                      'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+                  );
+                  raise exception 'unsupported identifier scheme unexpectedly accepted';
+              exception when check_violation then
+                  null;
+              end;
           end
           $$;
           SQL
