@@ -16,12 +16,22 @@ from collections import Counter
 from pathlib import Path
 from typing import Iterable
 
-from scripts.canonical_field_dictionary import expand, load_package
-from scripts.parse_openfunds_v2_13_0 import (
-    extract_layout_text,
-    parse_records_from_layout_text,
-    verify_source_sha256,
-)
+try:
+    from scripts.canonical_field_dictionary import expand, load_package
+    from scripts.parse_openfunds_v2_13_0 import (
+        extract_layout_text,
+        parse_records_from_layout_text,
+        verify_source_sha256,
+    )
+except ModuleNotFoundError as exc:
+    if exc.name != "scripts":
+        raise
+    from canonical_field_dictionary import expand, load_package
+    from parse_openfunds_v2_13_0 import (
+        extract_layout_text,
+        parse_records_from_layout_text,
+        verify_source_sha256,
+    )
 
 STANDARD_VERSION = "2.13.0"
 SOURCE_SHA256 = "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4"
