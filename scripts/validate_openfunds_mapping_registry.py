@@ -62,16 +62,26 @@ def validate_rows(
     rows: Iterable[dict[str, str]],
     official_ids: set[str],
     canonical_ids: set[str],
+    canonical_entities: dict[str, str] | None = None,
 ) -> list[str]:
     """Return all validation errors without mutating the supplied rows."""
 
     materialized = list(rows)
     errors: list[str] = []
-    counts = Counter(row.get("MAPPING_ID", "") for row in materialized)
+    mapping_id_counts = Counter(row.get("MAPPING_ID", "") for row in materialized)
+    pair_counts = Counter(
+        (row.get("EXTERNAL_FIELD_ID", "").strip(), row.get("CANONICAL_FIELD_ID", "").strip())
+        for row in materialized
+    )
 
-    for mapping_id, count in counts.items():
+    for mapping_id, count in mapping_id_counts.items():
         if mapping_id and count > 1:
             errors.append(f"duplicate MAPPING_ID: {mapping_id}")
+    for (external_id, canonical_id), count in pair_counts.items():
+        if external_id and canonical_id and count > 1:
+            errors.append(
+                f"duplicate external/canonical mapping pair: {external_id} -> {canonical_id}"
+            )
 
     for index, row in enumerate(materialized, start=2):
         prefix = f"row {index}"
@@ -83,6 +93,7 @@ def validate_rows(
         mapping_id = row["MAPPING_ID"].strip()
         external_id = row["EXTERNAL_FIELD_ID"].strip()
         canonical_id = row["CANONICAL_FIELD_ID"].strip()
+        canonical_entity = row["CANONICAL_ENTITY"].strip()
         standard_version = row["STANDARD_VERSION"].strip()
         mapping_status = row["MAPPING_STATUS"].strip()
         validation_status = row["VALIDATION_STATUS"].strip()
@@ -97,6 +108,13 @@ def validate_rows(
             errors.append(f"{prefix}: unknown external OF-ID: {external_id}")
         if canonical_id not in canonical_ids:
             errors.append(f"{prefix}: unknown canonical FIELD_ID: {canonical_id}")
+        if canonical_entities is not None and canonical_id in canonical_entities:
+            expected_entity = canonical_entities[canonical_id]
+            if canonical_entity != expected_entity:
+                errors.append(
+                    f"{prefix}: CANONICAL_ENTITY mismatch for {canonical_id}: "
+                    f"declared={canonical_entity!r} expected={expected_entity!r}"
+                )
         if mapping_status not in ALLOWED_MAPPING_STATUSES:
             errors.append(f"{prefix}: invalid MAPPING_STATUS: {mapping_status!r}")
         if validation_status not in ALLOWED_VALIDATION_STATUSES:
@@ -113,7 +131,7 @@ def validate_rows(
             errors.append(f"{prefix}: SOURCE_REFERENCE must identify the exact external OF-ID")
         if external_id.endswith("XX") and "PARAMETERIZED_COUNTRY_TEMPLATE_PRESERVED" not in row["TRANSFORMATION_RULE"]:
             errors.append(f"{prefix}: parameterized XX OF-ID must remain unexpanded")
-        if not row["CANONICAL_ENTITY"].strip():
+        if not canonical_entity:
             errors.append(f"{prefix}: CANONICAL_ENTITY is required")
         if not row["TRANSFORMATION_RULE"].strip():
             errors.append(f"{prefix}: TRANSFORMATION_RULE is required")
@@ -159,13 +177,16 @@ def main() -> int:
     canonical_spec = load_package(args.canonical_package)
     canonical_fields = expand(canonical_spec)
     canonical_ids = {str(field["FIELD_ID"]) for field in canonical_fields}
+    canonical_entities = {
+        str(field["FIELD_ID"]): str(field["ENTITY_CODE"]) for field in canonical_fields
+    }
     if len(canonical_ids) != manifest.get("canonical_field_count"):
         raise ValueError(
             f"canonical field count mismatch: expanded={len(canonical_ids)} manifest={manifest.get('canonical_field_count')}"
         )
 
     rows = read_registry(args.registry)
-    errors = validate_rows(rows, official_ids, canonical_ids)
+    errors = validate_rows(rows, official_ids, canonical_ids, canonical_entities)
     if errors:
         raise ValueError("mapping registry validation failed:\n" + "\n".join(errors))
 
