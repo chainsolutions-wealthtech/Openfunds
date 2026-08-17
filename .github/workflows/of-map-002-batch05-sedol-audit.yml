@@ -19,8 +19,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Verify official source checksum
-        run: sha256sum -c data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify official source checksum with governed parser
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.parse_openfunds_v2_13_0 import verify_source_sha256
+          actual=verify_source_sha256(
+              Path('data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf'),
+              Path('data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256'),
+          )
+          print('SOURCE_SHA256', actual)
+          PY
       - name: Install PDF extraction tool
         run: |
           sudo apt-get update
@@ -37,8 +49,7 @@ jobs:
               raise SystemExit(f'expected exactly one OFST020040 record header, got {len(starts)}')
           start=starts[0]
           end=next((i for i in range(start+1,len(text)) if 'OF-ID' in text[i] and 'Field Name' in text[i]), min(start+120,len(text)))
-          block=text[start:end]
-          print('\n'.join(block))
+          print('\n'.join(text[start:end]))
           PY
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
