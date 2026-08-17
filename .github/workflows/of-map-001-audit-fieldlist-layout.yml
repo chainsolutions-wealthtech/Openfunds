@@ -48,59 +48,92 @@ jobs:
           echo "TEXT_BYTES=$(stat -c '%s' /tmp/openfunds_v2_13_0.txt)"
           echo "TEXT_LINES=$(wc -l < /tmp/openfunds_v2_13_0.txt)"
 
-      - name: Audit candidate OF-ID token grammar and counts
+      - name: Audit actual field-record headers
         shell: python
         run: |
           import re
           from collections import Counter
           from pathlib import Path
 
-          text = Path('/tmp/openfunds_v2_13_0.txt').read_text(encoding='utf-8', errors='strict')
-          tokens = re.findall(r'\bOF[A-Z0-9_-]{4,20}\b', text)
-          unique = sorted(set(tokens))
-          print('CANDIDATE_TOKEN_OCCURRENCES', len(tokens))
-          print('CANDIDATE_TOKEN_UNIQUE', len(unique))
-          print('LENGTH_DISTRIBUTION', dict(sorted(Counter(map(len, unique)).items())))
-          print('PREFIX4_DISTRIBUTION', dict(Counter(token[:4] for token in unique).most_common()))
-          print('FIRST_80_UNIQUE')
-          for token in unique[:80]:
-              print(token)
-          print('LAST_40_UNIQUE')
-          for token in unique[-40:]:
-              print(token)
+          lines = Path('/tmp/openfunds_v2_13_0.txt').read_text(encoding='utf-8').splitlines()
+          header_marker = re.compile(r'^\s*OF-ID\s+')
+          strict_header = re.compile(r'^\s*OF-ID\s+(OF[A-Z]{2}\d{6})\s+Field Name\s+(.+?)\s*$')
+          broad_header = re.compile(r'^\s*OF-ID\s+(\S+)\s+Field Name\s+(.+?)\s*$')
 
-          grammars = {
-              'OF_2LETTERS_6DIGITS': r'\bOF[A-Z]{2}\d{6}\b',
-              'OF_2LETTERS_5DIGITS': r'\bOF[A-Z]{2}\d{5}\b',
-              'OF_2LETTERS_4DIGITS': r'\bOF[A-Z]{2}\d{4}\b',
-              'OF_3LETTERS_6DIGITS': r'\bOF[A-Z]{3}\d{6}\b',
-              'OF_3LETTERS_5DIGITS': r'\bOF[A-Z]{3}\d{5}\b',
-          }
-          for name, pattern in grammars.items():
-              found = re.findall(pattern, text)
-              print(name, 'OCCURRENCES', len(found), 'UNIQUE', len(set(found)))
+          marker_lines = []
+          strict_records = []
+          broad_records = []
+          nonmatching = []
+          for lineno, line in enumerate(lines, start=1):
+              if not header_marker.match(line):
+                  continue
+              marker_lines.append((lineno, line))
+              broad = broad_header.match(line)
+              strict = strict_header.match(line)
+              if broad:
+                  broad_records.append((lineno, broad.group(1), broad.group(2)))
+              if strict:
+                  strict_records.append((lineno, strict.group(1), strict.group(2)))
+              else:
+                  nonmatching.append((lineno, line))
 
-      - name: Print bounded structural samples
+          ids = [record[1] for record in strict_records]
+          counts = Counter(ids)
+          duplicates = {key: value for key, value in counts.items() if value != 1}
+          prefixes = Counter(value[:4] for value in ids)
+
+          print('HEADER_MARKER_LINES', len(marker_lines))
+          print('BROAD_HEADER_RECORDS', len(broad_records))
+          print('STRICT_2LETTER_6DIGIT_RECORDS', len(strict_records))
+          print('STRICT_UNIQUE_IDS', len(set(ids)))
+          print('STRICT_DUPLICATES', duplicates)
+          print('STRICT_PREFIX_COUNTS', dict(sorted(prefixes.items())))
+          print('NONMATCHING_HEADER_LINES', len(nonmatching))
+          for lineno, line in nonmatching[:100]:
+              print(f'NONMATCHING {lineno}: {line}')
+          print('FIRST_20_STRICT_RECORDS')
+          for item in strict_records[:20]:
+              print(item)
+          print('LAST_20_STRICT_RECORDS')
+          for item in strict_records[-20:]:
+              print(item)
+
+          if broad_records:
+              broad_ids = Counter(record[1] for record in broad_records)
+              print('BROAD_ID_LENGTHS', dict(sorted(Counter(map(len, broad_ids)).items())))
+              print('BROAD_NON_STRICT_IDS')
+              strict_id_set = set(ids)
+              for value in sorted(broad_ids):
+                  if value not in strict_id_set:
+                      print(value, broad_ids[value])
+
+      - name: Audit field-record section labels around strict headers
         shell: python
         run: |
           import re
+          from collections import Counter
           from pathlib import Path
+
           lines = Path('/tmp/openfunds_v2_13_0.txt').read_text(encoding='utf-8').splitlines()
-          candidate = re.compile(r'\bOF[A-Z0-9_-]{4,20}\b')
-          hit_lines = [i for i, line in enumerate(lines) if candidate.search(line)]
-          print('LINES_WITH_CANDIDATE_ID', len(hit_lines))
-          for index in hit_lines[:12]:
-              start=max(0,index-4); end=min(len(lines),index+12)
-              print(f'--- CONTEXT {start+1}:{end} ---')
-              for n in range(start,end):
-                  print(f'{n+1:06d}: {lines[n]}')
-          if len(hit_lines) > 12:
-              print('--- LAST_ID_CONTEXTS ---')
-              for index in hit_lines[-4:]:
-                  start=max(0,index-3); end=min(len(lines),index+8)
-                  print(f'--- CONTEXT {start+1}:{end} ---')
-                  for n in range(start,end):
-                      print(f'{n+1:06d}: {lines[n]}')
+          strict_header = re.compile(r'^\s*OF-ID\s+(OF[A-Z]{2}\d{6})\s+Field Name\s+(.+?)\s*$')
+          indexes = [i for i, line in enumerate(lines) if strict_header.match(line)]
+          labels = Counter()
+          samples = []
+          for pos, start in enumerate(indexes):
+              end = indexes[pos + 1] if pos + 1 < len(indexes) else len(lines)
+              block = lines[start:end]
+              for line in block[1:]:
+                  match = re.match(r'^\s*(Field Tags|Field Level|Data Type|Description|Values|Example|Introduced / Revoked)\b', line)
+                  if match:
+                      labels[match.group(1)] += 1
+              if len(samples) < 5:
+                  samples.append(block[:16])
+          print('STRICT_RECORD_COUNT', len(indexes))
+          print('SECTION_LABEL_OCCURRENCES', dict(sorted(labels.items())))
+          for number, block in enumerate(samples, start=1):
+              print(f'--- RECORD_SAMPLE_{number} ---')
+              for line in block:
+                  print(line)
 
       - name: Assert archive was not modified
         run: |
