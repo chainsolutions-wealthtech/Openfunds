@@ -17,6 +17,7 @@ on:
       - "tests/test_institutional_registry_wave06.py"
       - "tests/test_institutional_registry_wave07.py"
       - "tests/test_institutional_registry_wave08.py"
+      - "tests/test_institutional_registry_wave09.py"
       - ".github/workflows/institutional-registry.yml"
   pull_request:
     paths:
@@ -31,6 +32,7 @@ on:
       - "tests/test_institutional_registry_wave06.py"
       - "tests/test_institutional_registry_wave07.py"
       - "tests/test_institutional_registry_wave08.py"
+      - "tests/test_institutional_registry_wave09.py"
       - ".github/workflows/institutional-registry.yml"
 
 permissions:
@@ -64,3 +66,4 @@ jobs:
           python -m unittest -v tests.test_institutional_registry_wave06
           python -m unittest -v tests.test_institutional_registry_wave07
           python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
