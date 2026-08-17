@@ -1,0 +1,68 @@
+name: OF-MAP-002 Batch06 Listing Candidate Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - '.github/workflows/of-map-002-batch06-listing-candidate-audit.yml'
+
+permissions:
+  contents: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify checksum with governed parser
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          from scripts.parse_openfunds_v2_13_0 import verify_source_sha256
+          print(verify_source_sha256(
+              Path('data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf'),
+              Path('data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256'),
+          ))
+          PY
+      - name: Install PDF extraction tool
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+      - name: Audit Listing-level candidate field records
+        run: |
+          set -euo pipefail
+          pdftotext -layout data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf /tmp/openfunds.txt
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          lines=Path('/tmp/openfunds.txt').read_text(encoding='utf-8', errors='replace').splitlines()
+          headers=[]
+          for i,line in enumerate(lines):
+              m=re.search(r'OF-ID\s+(OF[A-Z]{2}(?:\d{6}|\d{4}XX))\s+Field Name\s+(.+?)\s*$', line)
+              if m:
+                  headers.append((i,m.group(1),m.group(2).strip()))
+          keywords=re.compile(r'(MIC|market|exchange|listing|ticker|currency|primary|trading|venue|stock code|symbol)', re.I)
+          matches=[]
+          for idx,(start,ofid,name) in enumerate(headers):
+              end=headers[idx+1][0] if idx+1 < len(headers) else min(start+140,len(lines))
+              block='\n'.join(lines[start:end])
+              if re.search(r'Field Level\s+Listing\b', block) and keywords.search(name):
+                  matches.append((ofid,name,block))
+          print('LISTING_CANDIDATE_COUNT', len(matches))
+          for ofid,name,block in matches:
+              print('\n===== CANDIDATE',ofid,'|',name,'=====')
+              print(block)
+          if not matches:
+              raise SystemExit('no Listing-level candidate matched the governed keyword audit')
+          PY
+      - name: Assert repository unchanged
+        run: test -z "$(git status --porcelain=v1 -uall)"
