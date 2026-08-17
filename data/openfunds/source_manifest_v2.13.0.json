@@ -1,0 +1,35 @@
+{
+  "standard": "openfunds",
+  "version": "2.13.0",
+  "release_date": "2026-03-23",
+  "status": "OFFICIAL_VERSION_AND_LICENSE_VERIFIED_BINARY_ARCHIVE_PENDING",
+  "official_current_version_page": "https://openfunds.org/fieldmenu/fields/",
+  "official_license_page": "https://openfunds.org/about/licence/",
+  "license": {
+    "name": "Creative Commons Attribution-NoDerivatives 4.0 International",
+    "spdx_like_label": "CC-BY-ND-4.0",
+    "commercial_use_allowed": true,
+    "redistribution_unaltered_allowed": true,
+    "attribution_required": "www.openfunds.org",
+    "altered_redistribution_allowed": false
+  },
+  "repository_policy": {
+    "official_content_must_remain_unaltered_if_archived": true,
+    "canonical_mapping_is_separate_derivative_metadata": true,
+    "no_official_field_may_be_invented": true,
+    "mapping_may_not_claim_completeness_until_full_official_field_list_is_archived_and_parsed": true
+  },
+  "observed_release_features": [
+    "corporate action model extensions aligned with ISO 20022 concepts",
+    "new OFIN investor-level range for investor concentration",
+    "revised home-country legal-structure concept",
+    "private-market and alternative-fund classification updates",
+    "FinDatEx EMT 4.3 changes incorporated"
+  ],
+  "binary_archive": {
+    "status": "PENDING",
+    "reason": "The official current-version page exposes a downloadable Field List, but this conversation runtime cannot directly materialize the binary from openfunds.org. Do not substitute a reconstructed or inferred catalogue.",
+    "required_next_gate": "archive the official v2.13.0 Field List unaltered, compute SHA256, record media type and exact source URL, then parse deterministically"
+  },
+  "verified_on": "2026-08-17"
+}
