@@ -10,6 +10,9 @@
   "source_archive_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf",
   "source_checksum_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256",
   "canonical_dictionary_path": "data/dictionary/spec_v1",
+  "validator_path": "scripts/validate_openfunds_mapping_registry.py",
+  "test_path": "tests/test_openfunds_mapping_registry.py",
+  "workflow_path": ".github/workflows/of-map-002-mapping-registry.yml",
   "policy": {
     "registry_contains_reviewed_mappings_only": true,
     "unmapped_external_ids_are_computed_not_materialized": true,
@@ -31,6 +34,23 @@
     "PROPOSED",
     "VALIDATED"
   ],
-  "status": "BOOTSTRAPPED_EMPTY_REGISTRY_VALIDATOR_PENDING",
-  "created_on": "2026-08-17"
+  "verified_empty_baseline": {
+    "reviewed_mapping_rows": 0,
+    "mapped_external_ids": 0,
+    "unmapped_external_ids": 1869,
+    "mapped_canonical_ids": 0,
+    "python_3_11": "SUCCESS",
+    "python_3_12": "SUCCESS",
+    "official_inventory_integration": "SUCCESS",
+    "repository_unchanged_guard": "SUCCESS",
+    "green_workflow_run": 32064814922
+  },
+  "tdd_history": {
+    "initial_red_run": 32062460096,
+    "cli_regression_red_run": 32064692636,
+    "final_green_run": 32064814922
+  },
+  "status": "VALIDATOR_VERIFIED_EMPTY_BASELINE_READY_FOR_REVIEWED_MAPPINGS",
+  "created_on": "2026-08-17",
+  "verified_on": "2026-08-17"
 }
