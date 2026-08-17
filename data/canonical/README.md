@@ -6,7 +6,7 @@
 VERSION : 0.1.0
 CANONICAL_STATUS : STRUCTURE_PREFILLED
 PRODUCTION_STATUS : NOT_ACTIVE
-SOURCE SQL MAITRE : NON DECIDEE
+PERSISTANCE RUNTIME : MIGRATION 017 GOUVERNEE / POSTGRESQL 16 VERIFIE
 ```
 
 Ce répertoire contient la première matrice canonique normalisée permettant de router automatiquement un fonds à partir de son pays juridique, de sa classe d’actifs et de sa sous-classe éventuelle.
@@ -19,6 +19,8 @@ La matrice maîtresse reste compacte et révisable. Le générateur produit ensu
 ```
 
 Les objets sont préremplis sur le plan structurel. Cela ne signifie pas que toutes les séries de marché, tous les taux sans risque ou toutes les méthodologies de benchmark sont déjà validés.
+
+Depuis le 2026-08-17, cette structure est persistée de manière gouvernée par `017_CANONICAL_FUND_TAXONOMY_V0_1`. Les fichiers de ce répertoire restent la surface d'authoring/revue ; un snapshot immuable alimente le générateur SQL et PostgreSQL devient la vérité runtime après application. Cette persistance **n'active pas** les templates : `CANONICAL_STATUS=STRUCTURE_PREFILLED` et `PRODUCTION_STATUS=NOT_ACTIVE` restent obligatoires.
 
 ## Hiérarchie
 

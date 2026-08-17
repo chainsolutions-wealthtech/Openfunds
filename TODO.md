@@ -1,6 +1,6 @@
 # TODO — REGISTRE DES TACHES OPENFUNDS
 
-Dernière mise à jour : `2026-08-12`.
+Dernière mise à jour : `2026-08-17`.
 
 ## 1. REGLES
 
@@ -148,9 +148,10 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 - **Statut :** BLOQUE
 - **Priorité :** P0_CRITIQUE
-- **Dépendances :** version officielle exploitable, licence, OF-DATA-002
+- **Dépendances :** Field List officiel v2.13.0 archivé sans modification, OF-DATA-002
 - **Critères d'acceptation :** version, source, date, identifiants, descriptions, types et cardinalités sourcés ; aucun contenu officiel inventé.
 - **Livrables :** source archivée et catalogue structuré.
+- **Etat vérifié 2026-08-17 :** version officielle `2.13.0` et licence `CC BY-ND 4.0` vérifiées ; manifeste de provenance créé. Le seul gate primaire restant est l'archivage exact du Field List officiel v2.13.0, son SHA256 et son parsing déterministe.
 
 ## OF-MAP-002 — Construire le mapping openfunds → canonique
 
@@ -171,10 +172,10 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 - **Dépendances :** OF-ARCH-001
 - **Critères d'acceptation :** statut pour banque centrale, statistiques, finances, dette, bourse, régulateurs fonds et assurance/pension ; URL et preuve vérifiées ; non-applicabilité explicite.
 - **Livrables :** organisations, rôles et endpoints complets.
-- **Progression vérifiée au 2026-08-12 :** vague 01 terminée et testée ; 55 organisations dont 35 `VALIDATED`, 92 relations organisation-rôle dont 48 `VALIDATED`, 10/54 pays avec au moins une organisation country-scoped, 44 pays restant sans organisation nationale.
-- **Preuves :** `docs/00_PROJECT/OF_SOURCE_002_BASELINE_AUDIT_20260812.md`, `docs/00_PROJECT/OF_SOURCE_002_WAVE_01_COMPLETION_20260812.md`, workflow `Institutional Registry` run `31592700354` `SUCCESS` sur Python 3.11/3.12.
-- **Prochaine unité :** `WAVE_02` en lecture seule ; rechercher les 44 pays non couverts et compléter les rôles manquants des 10 pays déjà présents avant toute nouvelle allowlist.
-- **Limite :** les CSV restent des inventaires de découverte/revue selon ADR-021 ; aucune persistance runtime n’est revendiquée.
+- **Progression vérifiée au 2026-08-17 :** Waves 01 à 09 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle dont 159 `VALIDATED`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée.
+- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audit `scripts/audit_institutional_role_coverage.py` et promotions zonales Wave 09.
+- **Prochaine unité :** réduire les groupes de rôles encore manquants à partir de l’audit effectif pays+zones, en promouvant d’abord les lignes `PENDING` déjà présentes lorsqu’une preuve primaire officielle existe ; conserver les cas non applicables ou insuffisamment prouvés explicites.
+- **Limite :** couverture 53/54 ne signifie pas complétude de tous les rôles ; les CSV restent des surfaces gouvernées de découverte/revue et la production persistante reste séparée.
 
 ## OF-SOURCE-003 — Vérifier les 55 mappings initiaux
 
@@ -230,17 +231,20 @@ Une tâche ne passe à `TERMINE` qu'après vérification de ses critères d'acce
 
 ## OF-TAX-001 — Peupler les classes et sous-classes
 
-- **Statut :** DECIDE_NON_IMPLEMENTE
+- **Statut :** TERMINE
 - **Priorité :** P1_HAUTE
 - **Dépendances :** OF-ARCH-004
 - **Critères d'acceptation :** Actions, Obligations CT/MT/LT, Diversifié Prudent/Equilibré/Dynamique/Flexible, Monétaire, seeds idempotents et tests.
+- **Résultat vérifié 2026-08-17 :** 4 classes, 7 sous-classes, snapshot source figé, générateur SQL déterministe, migration gouvernée `017_CANONICAL_FUND_TAXONOMY_V0_1` ordre 170, PostgreSQL 16 GREEN et seconde application 100 % idempotente.
+- **Preuve :** `docs/00_PROJECT/OF_TAX_001_002_RUNTIME_PERSISTENCE_COMPLETION_20260817.md`.
 
 ## OF-TAX-002 — Générer catégories et sous-catégories
 
-- **Statut :** PROPOSE
+- **Statut :** TERMINE
 - **Priorité :** P2_MOYENNE
 - **Dépendances :** OF-TAX-001 et géographie validée
 - **Critères d'acceptation :** national/régional/Afrique, codes déterministes, parentés, historisation et absence de doublon.
+- **Résultat vérifié 2026-08-17 :** structure V0.1 déterministe déjà testée à 486 routages et 432 catégories/blocs de référence ; persistance PostgreSQL gouvernée par migration 017. Les objets restent `STRUCTURE_PREFILLED` / `NOT_ACTIVE` : activation, séries et méthodologies demeurent hors de cette clôture.
 
 ## OF-BENCH-001 — Générer les blocs de quatre références
 

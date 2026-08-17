@@ -312,3 +312,13 @@ Le statut de `OF-ARCH-004` reste inférieur à `VERIFIED_COMPLETE` : la migratio
 - **Runtime :** la migration générée/frozen `016_COUNTRY_INDICATOR_CATALOG` matérialise uniquement les définitions sous `ref.*` ; elle n’importe aucune observation pays.
 - **Effet sur ADR-024 :** ADR-024 est remplacé pour le périmètre D00–D17 par ADR-032. ADR-031 reste l’autorité du dictionnaire `CANONICAL_FUND_CORE`.
 - **Limites :** aucun catalogue officiel Openfunds n’est intégré, aucune donnée réelle n’est chargée et aucun déploiement de production n’est autorisé par cette décision.
+
+## ADR-029 — AUTHORING ET PERSISTANCE RUNTIME DE LA TAXONOMIE CANONIQUE
+
+- **Statut :** ACCEPTE
+- **Date :** 2026-08-17
+- **Décision :** `data/canonical/` reste la surface d'authoring/revue ; une release de migration fige un snapshot immuable ; le SQL est généré déterministement ; PostgreSQL devient la source de vérité runtime après application gouvernée.
+- **Migration :** `017_CANONICAL_FUND_TAXONOMY_V0_1`, ordre 170.
+- **Statut conservé :** `STRUCTURE_PREFILLED` / `NOT_ACTIVE`.
+- **Preuve :** `docs/00_PROJECT/ADR-029_CANONICAL_TAXONOMY_AUTHORING_AND_RUNTIME.md`.
+- **Règle :** 017 n'est jamais réécrite après application ; toute évolution est une nouvelle version + forward migration.

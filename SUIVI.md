@@ -1,6 +1,6 @@
 # SUIVI — JOURNAL DE CONTINUITE DU PROJET OPENFUNDS
 
-Dernière mise à jour : `2026-08-12`  
+Dernière mise à jour : `2026-08-17`
 Branche : `architecture/africafunds-country-indicators-v0.1`  
 PR principale : `#1` — brouillon, ouverte, non fusionnée ; résoudre dynamiquement la fusionnabilité avant toute action.
 
@@ -40,14 +40,15 @@ SOURCES BRUTES
 DOCUMENTATION PERMANENTE                 TERMINEE / VIVANTE
 ARCHITECTURE ET PRINCIPES                DOCUMENTES
 REFERENTIELS GEOGRAPHIQUES               STRUCTURELLEMENT PEUPLES
-ORGANISATIONS ET SOURCES                 OF-SOURCE-002 EN_COURS / 10 PAYS COUNTRY-SCOPED SUR 54
+ORGANISATIONS ET SOURCES                 OF-SOURCE-002 EN_COURS / 53 PAYS COUNTRY-SCOPED SUR 54
 CATALOGUE D00-D17                        CENTRALISE JSON / TESTE / MIGRATION 016
 BCEAO FX / BEAC FX                       COLLECTION_TESTED
 HISTORIQUE DURABLE MULTI-DATES           NON
 MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE
 DICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES
-MAPPING OPENFUNDS                        BLOQUE CATALOGUE OFFICIEL
-CATEGORIES / BLOCS DE REFERENCE          STRUCTURE PRESENTE / NON ACTIVE
+MAPPING OPENFUNDS                        V2.13.0/LICENCE VERIFIES / FIELD LIST A ARCHIVER
+TAXONOMIE POSTGRESQL                     MIGRATION 017 VERIFIED_COMPLETE / NOT_ACTIVE
+CATEGORIES / BLOCS DE REFERENCE          486 ROUTAGES / 432 BLOCS / NON ACTIFS
 WTI / WTI BENCH / METRIQUES              NON CALCULES
 API / FRONTEND                           NON IMPLEMENTES
 PRODUCTION PERSISTANTE                   NON CONFIGUREE
@@ -58,6 +59,43 @@ PRODUCTION PERSISTANTE                   NON CONFIGUREE
 - audit initial avant consolidation : 95 fichiers ;
 - état post-consolidation : 104 fichiers dans la comparaison avec `main` ;
 - les volumetries anciennes restent historiques ; résoudre le volume courant de PR #1 dynamiquement avant revue finale.
+
+## 1.1 MISE A JOUR VERIFIEE — 2026-08-17
+
+### Couverture institutionnelle
+
+```text
+COUNTRY_COVERAGE: 53 / 54
+ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
+ORGANIZATION_SCOPE_ROLES: 199 = 159 VALIDATED + 40 PENDING
+UNCOVERED_COUNTRY: ERYTHREE
+WAVES_VERIFIED: 01..09
+```
+
+L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal et ont été promues sans duplication dans Wave 09.
+
+### Taxonomie canonique et PostgreSQL
+
+`OF-TAX-001` et la génération structurelle `OF-TAX-002` V0.1 sont désormais persistées par `017_CANONICAL_FUND_TAXONOMY_V0_1`, ordre 170. La migration est générée depuis un snapshot V0.1 figé ; Python 3.11/3.12, PostgreSQL 16, la chaîne 001→017, le ledger et la seconde application idempotente sont vérifiés.
+
+```text
+ASSET_CLASSES: 4
+ASSET_SUBCLASSES: 7
+COUNTRY_ROUTING_ROWS: 54
+CATEGORY_TEMPLATES: 9
+REFERENCE_OVERRIDES: 11
+ANALYTICS_REQUIREMENTS: 25
+EXPANDED_ROUTING_RULES: 486
+CATEGORY_REFERENCE_BLOCKS: 432
+CANONICAL_STATUS: STRUCTURE_PREFILLED
+PRODUCTION_STATUS: NOT_ACTIVE
+```
+
+Preuve : `docs/00_PROJECT/ADR-029_CANONICAL_TAXONOMY_AUTHORING_AND_RUNTIME.md` et `docs/00_PROJECT/OF_TAX_001_002_RUNTIME_PERSISTENCE_COMPLETION_20260817.md`.
+
+### Openfunds
+
+La version `2.13.0` et la licence officielle `CC BY-ND 4.0` sont vérifiées. `OF-MAP-001` reste incomplet uniquement tant que le Field List officiel exact n'est pas archivé sans modification, hashé et parsé.
 
 ## 2. REALISATIONS
 

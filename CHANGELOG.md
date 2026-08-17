@@ -6,7 +6,7 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ### A décider
 
-- version officielle Openfunds à intégrer et sa licence ;
+- archivage exact et parsing déterministe du Field List officiel Openfunds v2.13.0 (version et licence déjà vérifiées) ;
 - PostgreSQL persistant et stockage brut immuable ;
 - complétude des institutions et mappings sources des 54 pays ;
 - méthodologies WTI Bench, risque sans risque et MAR encore ouvertes.
@@ -20,6 +20,36 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 - historique FX limité à un snapshot validé par zone ;
 - mapping openfunds absent ;
 - API et produits analytiques actifs non implémentés.
+
+## [2026-08-17] — TAXONOMIE POSTGRESQL, OPENFUNDS ET COUVERTURE INSTITUTIONNELLE
+
+### Taxonomie
+
+- générateur SQL déterministe et migration `017_CANONICAL_FUND_TAXONOMY_V0_1` ordre 170 ;
+- snapshot source V0.1 immuable avec SHA-256 ;
+- 4 classes, 7 sous-classes, 54 routages, 9 templates, 11 overrides, 25 exigences analytiques ;
+- Python 3.11/3.12 GREEN ;
+- PostgreSQL 16 : chaîne 001→017, ledger, contrat runtime et seconde application idempotente GREEN ;
+- run `Canonical Taxonomy Migration` `32058160324` SUCCESS ;
+- ADR-029 et rapport de clôture ajoutés ;
+- statuts fonctionnels conservés : `STRUCTURE_PREFILLED` / `NOT_ACTIVE`.
+
+### OF-SOURCE-002
+
+- Waves 02 à 09 poursuivies sous TDD ;
+- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle, 159 `VALIDATED` ;
+- BCEAO/BEAC/BRVM/BVMAC promus sur scope zonal sans duplication ;
+- Érythrée volontairement non peuplée sans preuve primaire officielle actuelle.
+
+### Openfunds
+
+- v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;
+- manifeste de provenance ajouté ;
+- Field List exact, SHA256 et parser restent le gate OF-MAP-001.
+
+### Non activé
+
+- aucun WTI/WTI Bench live, aucun benchmark/RFR/MAR promu, aucune production persistante, aucun merge/retargeting/déploiement/main mutation.
 
 ## [2026-08-12] — OF-SOURCE-002 VAGUE 01 — COUVERTURE INSTITUTIONNELLE
 
