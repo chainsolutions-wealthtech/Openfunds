@@ -1,0 +1,181 @@
+name: OF-SOURCE-002 Wave 08 Governed Append
+
+on:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-wave08-append.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: of-source-002-wave08-governed-append
+  cancel-in-progress: false
+
+jobs:
+  append-validate-push:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout exact branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Append exact governed Wave 08 allowlist
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          ref = Path("data/reference")
+          org_path = ref / "ORGANIZATIONS.csv"
+          role_path = ref / "ORGANIZATION_SCOPE_ROLES.csv"
+
+          organizations = [
+              "INSBU;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DU BURUNDI;NATIONAL INSTITUTE OF STATISTICS BURUNDI;INSBU;BURUNDI;BURUNDI;;https://www.insbu.bi/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "ICASEES;STATISTICS_OFFICE;INSTITUT CENTRAFRICAIN DES STATISTIQUES ET DES ETUDES ECONOMIQUES ET SOCIALES;CENTRAL AFRICAN INSTITUTE OF STATISTICS ECONOMIC AND SOCIAL STUDIES;ICASEES;REPUBLIQUE_CENTRAFRICAINE;REPUBLIQUE_CENTRAFRICAINE;;https://www.icasees.org/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INS_CAMEROUN;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DU CAMEROUN;NATIONAL INSTITUTE OF STATISTICS CAMEROON;INS;CAMEROUN;CAMEROUN;;https://ins-cameroun.cm/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INS_RDC;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DE LA REPUBLIQUE DEMOCRATIQUE DU CONGO;NATIONAL INSTITUTE OF STATISTICS DEMOCRATIC REPUBLIC OF THE CONGO;INS;REPUBLIQUE_DEMOCRATIQUE_DU_CONGO;REPUBLIQUE_DEMOCRATIQUE_DU_CONGO;;https://insrdc.cd/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INS_CONGO;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DU CONGO;NATIONAL INSTITUTE OF STATISTICS REPUBLIC OF THE CONGO;INS;REPUBLIQUE_DU_CONGO;REPUBLIQUE_DU_CONGO;;https://ins-congo.cg/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INSEED_COMORES;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE ET DES ETUDES ECONOMIQUES ET DEMOGRAPHIQUES DES COMORES;NATIONAL INSTITUTE OF STATISTICS ECONOMIC AND DEMOGRAPHIC STUDIES COMOROS;INSEED;COMORES;COMORES;;https://www.inseed-comores.org/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INSTAD_DJIBOUTI;STATISTICS_OFFICE;INSTITUT DE LA STATISTIQUE DE DJIBOUTI;DJIBOUTI INSTITUTE OF STATISTICS;INSTAD;DJIBOUTI;DJIBOUTI;;https://instad.dj/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "DGS_GABON;STATISTICS_OFFICE;DIRECTION GENERALE DE LA STATISTIQUE DU GABON;GENERAL DIRECTORATE OF STATISTICS GABON;DGS;GABON;GABON;;https://instatgabon.org/fr;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INEGE;STATISTICS_OFFICE;INSTITUT NATIONAL DE STATISTIQUE DE GUINEE EQUATORIALE;INSTITUTO NACIONAL DE ESTADISTICA DE GUINEA ECUATORIAL;INEGE;GUINEE_EQUATORIALE;GUINEE_EQUATORIALE;;https://inege.org/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "BSC_LIBYA;STATISTICS_OFFICE;BUREAU DES STATISTIQUES ET DU RECENSEMENT DE LIBYE;BUREAU OF STATISTICS AND CENSUS LIBYA;BSC;LIBYE;LIBYE;;https://bsc.ly/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INSTAT_MADAGASCAR;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DE MADAGASCAR;NATIONAL INSTITUTE OF STATISTICS MADAGASCAR;INSTAT;MADAGASCAR;MADAGASCAR;;https://instat.mg/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "ANSADE;STATISTICS_OFFICE;AGENCE NATIONALE DE LA STATISTIQUE ET DE L ANALYSE DEMOGRAPHIQUE ET ECONOMIQUE DE MAURITANIE;NATIONAL AGENCY FOR STATISTICS DEMOGRAPHIC AND ECONOMIC ANALYSIS MAURITANIA;ANSADE;MAURITANIE;MAURITANIE;;https://ansade.mr/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "CBOS;CENTRAL_BANK;BANQUE CENTRALE DU SOUDAN;CENTRAL BANK OF SUDAN;CBOS;SOUDAN;SOUDAN;;https://cbos.gov.sd/en;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "SNBS;STATISTICS_OFFICE;BUREAU NATIONAL DES STATISTIQUES DE SOMALIE;SOMALIA NATIONAL BUREAU OF STATISTICS;SNBS;SOMALIE;SOMALIE;;https://nbs.gov.so/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "NBS_SOUTH_SUDAN;STATISTICS_OFFICE;BUREAU NATIONAL DES STATISTIQUES DU SOUDAN DU SUD;NATIONAL BUREAU OF STATISTICS SOUTH SUDAN;NBS;SOUDAN_DU_SUD;SOUDAN_DU_SUD;;https://nbs.gov.ss/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INE_STP;STATISTICS_OFFICE;INSTITUT NATIONAL DE STATISTIQUE DE SAO TOME ET PRINCIPE;INSTITUTO NACIONAL DE ESTATISTICA SAO TOME E PRINCIPE;INE;SAO_TOME_ET_PRINCIPE;SAO_TOME_ET_PRINCIPE;;https://www.ine.st/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+              "INSEED_TCHAD;STATISTICS_OFFICE;INSTITUT NATIONAL DE LA STATISTIQUE DES ETUDES ECONOMIQUES ET DEMOGRAPHIQUES DU TCHAD;NATIONAL INSTITUTE OF STATISTICS ECONOMIC AND DEMOGRAPHIC STUDIES CHAD;INSEED;TCHAD;TCHAD;;https://www.inseed.td/;;1;0;1;;;VALIDATED;OFFICIAL_IDENTITY_AND_ROLE_VERIFIED_2026_08_17",
+          ]
+
+          role_specs = [
+              ("INSBU", "STATISTICS_OFFICE", "BURUNDI", "PRIMARY_STATISTICS_OFFICE"),
+              ("ICASEES", "STATISTICS_OFFICE", "REPUBLIQUE_CENTRAFRICAINE", "PRIMARY_STATISTICS_OFFICE"),
+              ("INS_CAMEROUN", "STATISTICS_OFFICE", "CAMEROUN", "PRIMARY_STATISTICS_OFFICE"),
+              ("INS_RDC", "STATISTICS_OFFICE", "REPUBLIQUE_DEMOCRATIQUE_DU_CONGO", "PRIMARY_STATISTICS_OFFICE"),
+              ("INS_CONGO", "STATISTICS_OFFICE", "REPUBLIQUE_DU_CONGO", "PRIMARY_STATISTICS_OFFICE"),
+              ("INSEED_COMORES", "STATISTICS_OFFICE", "COMORES", "PRIMARY_STATISTICS_OFFICE"),
+              ("INSTAD_DJIBOUTI", "STATISTICS_OFFICE", "DJIBOUTI", "PRIMARY_STATISTICS_OFFICE"),
+              ("DGS_GABON", "STATISTICS_OFFICE", "GABON", "PRIMARY_STATISTICS_OFFICE"),
+              ("INEGE", "STATISTICS_OFFICE", "GUINEE_EQUATORIALE", "PRIMARY_STATISTICS_OFFICE"),
+              ("BSC_LIBYA", "STATISTICS_OFFICE", "LIBYE", "PRIMARY_STATISTICS_OFFICE"),
+              ("INSTAT_MADAGASCAR", "STATISTICS_OFFICE", "MADAGASCAR", "PRIMARY_STATISTICS_OFFICE"),
+              ("ANSADE", "STATISTICS_OFFICE", "MAURITANIE", "PRIMARY_STATISTICS_OFFICE"),
+              ("CBOS", "CENTRAL_BANK", "SOUDAN", "PRIMARY_CENTRAL_BANK"),
+              ("SNBS", "STATISTICS_OFFICE", "SOMALIE", "PRIMARY_STATISTICS_OFFICE"),
+              ("NBS_SOUTH_SUDAN", "STATISTICS_OFFICE", "SOUDAN_DU_SUD", "PRIMARY_STATISTICS_OFFICE"),
+              ("INE_STP", "STATISTICS_OFFICE", "SAO_TOME_ET_PRINCIPE", "PRIMARY_STATISTICS_OFFICE"),
+              ("INSEED_TCHAD", "STATISTICS_OFFICE", "TCHAD", "PRIMARY_STATISTICS_OFFICE"),
+          ]
+
+          expected_org_codes = {line.split(";", 1)[0] for line in organizations}
+          with org_path.open("r", encoding="utf-8", newline="") as handle:
+              existing_org_rows = list(csv.DictReader(handle, delimiter=";"))
+          existing_org_codes = {row["ORGANIZATION_CODE"] for row in existing_org_rows}
+          present_orgs = expected_org_codes & existing_org_codes
+          if present_orgs and present_orgs != expected_org_codes:
+              raise SystemExit(f"Partial Wave 08 organization state; refusing mutation: {sorted(present_orgs)}")
+
+          with role_path.open("r", encoding="utf-8", newline="") as handle:
+              existing_role_rows = list(csv.DictReader(handle, delimiter=";"))
+          existing_role_keys = {
+              (row["ORGANIZATION_CODE"], row["ROLE_CODE"], row["SCOPE_ENTITY_CODE"], row["SCOPE_ENTITY_TYPE"])
+              for row in existing_role_rows
+          }
+          expected_role_keys = {(org, role, country, "COUNTRY") for org, role, country, _ in role_specs}
+          present_roles = expected_role_keys & existing_role_keys
+          if present_roles and present_roles != expected_role_keys:
+              raise SystemExit(f"Partial Wave 08 role state; refusing mutation: {sorted(present_roles)}")
+
+          if present_orgs == expected_org_codes and present_roles == expected_role_keys:
+              print("Wave 08 allowlist already fully present; no append needed")
+          else:
+              if present_orgs or present_roles:
+                  raise SystemExit("Wave 08 state is not atomically absent or complete; refusing mutation")
+              with org_path.open("a", encoding="utf-8", newline="") as handle:
+                  for line in organizations:
+                      handle.write(line + "\n")
+              with role_path.open("a", encoding="utf-8", newline="") as handle:
+                  for org, role, country, relationship_role in role_specs:
+                      handle.write(f"{org};{role};{country};COUNTRY;{relationship_role};1;;;VALIDATED;OFFICIAL_ROLE_VERIFIED_2026_08_17\n")
+              print(f"Appended {len(organizations)} organizations and {len(role_specs)} roles")
+          PY
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Validate registry with Python 3.11
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate registry with Python 3.12
+        run: |
+          python scripts/validate_institutional_registry.py --check
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+
+      - name: Assert exact Wave 08 post-state
+        shell: bash
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+          ref = Path("data/reference")
+          with (ref / "AFRICA_COUNTRIES.csv").open(encoding="utf-8", newline="") as h:
+              countries = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATIONS.csv").open(encoding="utf-8", newline="") as h:
+              organizations = list(csv.DictReader(h, delimiter=";"))
+          with (ref / "ORGANIZATION_SCOPE_ROLES.csv").open(encoding="utf-8", newline="") as h:
+              roles = list(csv.DictReader(h, delimiter=";"))
+          org_status = Counter(row["VALIDATION_STATUS"] for row in organizations)
+          role_status = Counter(row["VALIDATION_STATUS"] for row in roles)
+          covered = {row["PRIMARY_COUNTRY_CODE"] for row in organizations if row["PRIMARY_COUNTRY_CODE"]}
+          assert len(countries) == 54, len(countries)
+          assert len(organizations) == 141, len(organizations)
+          assert org_status == Counter({"VALIDATED": 121, "PENDING": 20}), org_status
+          assert len(covered) == 53, len(covered)
+          assert "ERYTHREE" not in covered
+          assert len(roles) == 199, len(roles)
+          assert role_status == Counter({"VALIDATED": 155, "PENDING": 44}), role_status
+          print("Wave 08 post-state verified: 141 orgs / 53 countries / 199 roles / Eritrea uncovered")
+          PY
+
+      - name: Commit only the two governed registries
+        shell: bash
+        run: |
+          if git diff --quiet -- data/reference/ORGANIZATIONS.csv data/reference/ORGANIZATION_SCOPE_ROLES.csv; then
+            echo "No Wave 08 registry change to commit"
+            exit 0
+          fi
+          git status --short
+          unexpected_files="$(git status --short | awk '$2 != "data/reference/ORGANIZATIONS.csv" && $2 != "data/reference/ORGANIZATION_SCOPE_ROLES.csv" {count++} END {print count+0}')"
+          test "$unexpected_files" -eq 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/reference/ORGANIZATIONS.csv data/reference/ORGANIZATION_SCOPE_ROLES.csv
+          git commit -m "data(source): add verified wave 08 institutions"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
