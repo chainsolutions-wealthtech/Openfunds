@@ -67,15 +67,33 @@
       ],
       "audit_path": "docs/00_PROJECT/OF_MAP_002_BATCH_01_DOMICILE_ISIN_AUDIT_20260817.md",
       "green_workflow_run": 32065216172
+    },
+    {
+      "batch_id": "BATCH_02_FUND_SHARE_CLASS_CURRENCIES",
+      "status": "VALIDATED",
+      "reviewed_mapping_rows": 2,
+      "cumulative_reviewed_mapping_rows": 6,
+      "mapped_external_ids": 2,
+      "cumulative_mapped_external_ids": 4,
+      "unmapped_external_ids": 1865,
+      "mapped_canonical_ids": 2,
+      "cumulative_mapped_canonical_ids": 6,
+      "external_ids": [
+        "OFST010410",
+        "OFST020540"
+      ],
+      "audit_path": "docs/00_PROJECT/OF_MAP_002_BATCH_02_CURRENCY_AUDIT_20260817.md",
+      "red_workflow_run": 32067675732,
+      "green_workflow_run": 32067722365
     }
   ],
   "current_coverage": {
-    "reviewed_mapping_rows": 4,
-    "mapped_external_ids": 2,
-    "unmapped_external_ids": 1867,
-    "mapped_canonical_ids": 4,
-    "external_field_coverage_ratio": 0.0010700909588014982,
-    "canonical_field_coverage_ratio": 0.027972027972027972
+    "reviewed_mapping_rows": 6,
+    "mapped_external_ids": 4,
+    "unmapped_external_ids": 1865,
+    "mapped_canonical_ids": 6,
+    "external_field_coverage_ratio": 0.0021401819,
+    "canonical_field_coverage_ratio": 0.041958042
   },
   "tdd_history": {
     "initial_red_run": 32062460096,
@@ -83,9 +101,11 @@
     "empty_baseline_green_run": 32064814922,
     "validator_hardening_red_run": 32065061674,
     "validator_hardening_green_run": 32065124602,
-    "batch_01_green_run": 32065216172
+    "batch_01_green_run": 32065216172,
+    "batch_02_red_run": 32067675732,
+    "batch_02_green_run": 32067722365
   },
-  "status": "BATCH_01_VALIDATED_INCREMENTAL_MAPPING_IN_PROGRESS",
+  "status": "BATCH_02_VALIDATED_INCREMENTAL_MAPPING_IN_PROGRESS",
   "created_on": "2026-08-17",
   "verified_on": "2026-08-17"
 }
