@@ -1,58 +1,74 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-MAP-002 + OF-LOOP-SOURCE-002
-CURRENT_TASK: OF-MAP-002_EN_COURS / OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 13
-NEXT_UNIT: OPENFUNDS_MAPPING_BATCH_02 + RESIDUAL_INDEX_PROVIDER_AUDIT + ZONE_ROLE_SEMANTIC_REVIEW + ERITREA_PRIMARY_SOURCE_WATCH
-STATUS: READY_FOR_INCREMENTAL_MAPPING_AND_READ_ONLY_RESIDUAL_SEMANTIC_AUDITS
-WRITE_GATE: VERIFIED_OF_ID + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_TRANSFORMATION + CLOSED_ALLOWLIST + TDD_RED
+CURRENT_LOOP: OF-MAP-002 + OF-LOOP-SOURCE-002 + OF-SOURCE-003
+CURRENT_TASK: OF-MAP-002_EN_COURS / OF-SOURCE-002_EN_COURS / OF-SOURCE-003_EN_COURS
+LAST_VERIFIED_WAVE: 15
+MIGRATION_CHAIN: 001..019_GREEN
+CANONICAL_MAPPING_INVENTORY: 177_FIELDS = 143_CORE + 34_LISTING_EXTENSION
+OPENFUNDS_MAPPING: BATCH_01..05_VALIDATED
+NEXT_UNIT: BATCH_06_LISTING_FIELDS_AUDIT + FUNCTIONAL_INSTITUTIONAL_GAP_WAVES + SOURCE_SERIES_VERIFICATION + ERITREA_PRIMARY_SOURCE_WATCH
+STATUS: READY_FOR_NEXT_INCREMENTAL_MAPPING_AND_FUNCTIONAL_SOURCE_COVERAGE
+WRITE_GATE: VERIFIED_OF_ID + VERIFIED_OBJECT_LEVEL + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_TRANSFORMATION + LICENCE_GATE + TDD_RED
 ```
 
 ## État courant vérifié — 17 août 2026
 
-Le travail reste sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main`, sans fusion/retargeting de la PR #1 et sans déploiement de production.
+Le travail reste sur `architecture/africafunds-country-indicators-v0.1` et la PR #1 reste draft, ouverte et non fusionnée. Ne pas travailler sur `main`, ne pas retargeter/fusionner la PR et ne pas déployer la production tant que les gates correspondants ne sont pas satisfaits.
 
-### Couverture institutionnelle
+## Modèle canonique et migrations
 
-```text
-AFRICAN_COUNTRIES: 54
-COUNTRY_COVERAGE: 53 / 54
-COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 1
-UNCOVERED_COUNTRY: ERYTHREE
-ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 199 = 187 VALIDATED + 12 PENDING
-WAVES_VERIFIED: 01..13
-PENDING_FX_REFERENCE_RATE_PROVIDER: 0
-PENDING_STOCK_EXCHANGE: 0
-```
-
-Inventaire résiduel exact :
+La chaîne gouvernée est désormais vérifiée jusqu'à :
 
 ```text
-INDEX_PROVIDER               5
-MONETARY_UNION               3
-SUPRANATIONAL_AUTHORITY      2
-INTERBANK_MARKET_OPERATOR    2
-TOTAL                       12
+019_SHARE_CLASS_LISTING_CORE
+ORDER: 190
+FULL_CHAIN_001_TO_019: SUCCESS
+POSTGRESQL_16: SUCCESS
+SECOND_APPLY_IDEMPOTENCE: SUCCESS
+GREEN_RUN: 32070768364
 ```
 
-Wave 13 a promu exactement les neuf relations `FX_REFERENCE_RATE_PROVIDER` préexistantes après preuve primaire officielle de publication de taux/cours FX. Cette promotion ne valide pas automatiquement endpoints, séries, fréquences, unités ou historiques ; ceux-ci restent sous `OF-SOURCE-003`.
+Migration 018 a élargi additivement les schemes d'identifiants avec `WKN`, `SEDOL` et `VALOR`. Migration 019 ajoute un vrai modèle de cotation :
+
+```text
+fund.listing
+fund.listing_identifier
+```
+
+Un Listing appartient à une `SHARE_CLASS`, conserve un localisateur de marché (`exchange_organization_id` ou `venue_mic`), une éventuelle devise de négociation, son historique et sa provenance. Les identifiants propres à la cotation (`SEDOL`, `TICKER`, `LOCAL_CODE`, `OTHER`) sont séparés de l'identité stable de la Share Class.
 
 Preuves :
 
 ```text
-docs/00_PROJECT/OF_SOURCE_002_WAVE_13_FX_REFERENCE_PROVIDER_AUDIT_20260817.md
-docs/00_PROJECT/OF_SOURCE_002_WAVE_13_COMPLETION_20260817.md
-RED_RUN: 32065421538
-GREEN_RUN: 32065501479
+docs/00_PROJECT/OF_DATA_001_LISTING_MIGRATION_019_COMPLETION_20260817.md
+docs/02_ARCHITECTURE/ADR-031_CANONICAL_LISTING_DICTIONARY_EXTENSION.md
 ```
 
-L'Érythrée reste volontairement sans organisation country-scoped tant qu'une source primaire officielle actuelle n'est pas vérifiée.
+## Dictionnaire canonique disponible au mapping
 
-## OF-MAP-001 — gate fermé
+Le package historique `data/dictionary/spec_v1/` reste la baseline immuable des 143 champs de migration 015.
 
-`OF-MAP-001` est `TERMINE`.
+L'extension additive :
+
+```text
+data/dictionary/extensions/listing_v1/
+```
+
+porte les 34 champs physiques de migration 019.
+
+Le validateur Openfunds utilise désormais une union collision-free :
+
+```text
+CORE_FIELDS:       143
+LISTING_EXTENSION:  34
+TOTAL:             177
+UNION_GREEN_RUN: 32071385088
+```
+
+Toute collision de FIELD_ID ou dérive du `field_count` d'une extension échoue fermée.
+
+## OF-MAP-001 — fermé
 
 ```text
 OPENFUNDS_VERSION: 2.13.0
@@ -67,93 +83,115 @@ CONCRETE_IDS: 1849
 PARAMETERIZED_COUNTRY_TEMPLATES_XX: 20
 ```
 
-Source et parser :
+L'archive reste byte-identical et le parser checksum-gated reste la seule base autorisée pour établir les OF-ID et leurs métadonnées officielles.
+
+## OF-MAP-002 — état après Batch 05
 
 ```text
-data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
-scripts/parse_openfunds_v2_13_0.py
+REVIEWED_MAPPING_ROWS:      16
+MAPPED_EXTERNAL_IDS:         8
+UNMAPPED_EXTERNAL_IDS:    1861
+CANONICAL_FIELDS_AVAILABLE: 177
+MAPPED_CANONICAL_IDS:       10
+BATCH05_GREEN_RUN: 32071858346
 ```
 
-## OF-MAP-002 — unité active
-
-Le registre gouverné existe et son validator est GREEN contre le vrai PDF officiel et les 143 FIELD_ID canoniques.
-
-```text
-REGISTRY: data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv
-MANIFEST: data/openfunds/mapping/v2.13.0/mapping_manifest.json
-VALIDATOR: scripts/validate_openfunds_mapping_registry.py
-PYTHON_3_11: SUCCESS
-PYTHON_3_12: SUCCESS
-EMPTY_BASELINE_GREEN_RUN: 32064814922
-HARDENED_VALIDATOR_GREEN_RUN: 32065124602
-```
-
-Invariants supplémentaires désormais imposés :
-
-- doublon `(EXTERNAL_FIELD_ID, CANONICAL_FIELD_ID)` interdit ;
-- `CANONICAL_ENTITY` doit correspondre à l'`ENTITY_CODE` réel du FIELD_ID ;
-- les templates `XX` restent non développés ;
-- le validator ne modifie pas le checkout.
-
-### Batch 01 — fermé
-
-Le premier lot réel est validé :
-
-```text
-REVIEWED_MAPPING_ROWS: 4
-MAPPED_EXTERNAL_IDS: 2
-UNMAPPED_EXTERNAL_IDS: 1867
-MAPPED_CANONICAL_IDS: 4
-GREEN_RUN: 32065216172
-```
-
-OF-ID traités :
+OF-ID revus :
 
 ```text
 OFST010010  Fund Domicile Alpha-2
 OFST020000  ISIN
+OFST010410  Fund Currency
+OFST020540  Share Class Currency
+OFST020010  Valor
+OFST020015  WKN
+OFST020400  Share Class Distribution Policy
+OFST020040  SEDOL
 ```
 
-Le domicile est transformé `ISO_3166_ALPHA2_TO_REF_GEOGRAPHY_UUID`. L'ISIN est décomposé one-to-many vers valeur, schéma `ISIN` et valeur normalisée de l'entité canonique d'identifiants.
+### SEDOL — règle spéciale
 
-Preuves :
+Le record officiel checksum-locké de `OFST020040` établit :
 
 ```text
-docs/00_PROJECT/OF_MAP_002_BATCH_01_DOMICILE_ISIN_AUDIT_20260817.md
-docs/00_PROJECT/OF_MAP_002_BATCH_01_COMPLETION_20260817.md
+FIELD_LEVEL: Listing
+DATA_TYPE: string
 ```
 
-### Prochaine unité OF-MAP-002
+et contient une alerte selon laquelle l'ingestion, le stockage ou la distribution peuvent être soumis à licence.
 
-Construire Batch 02 uniquement sur des champs dont le niveau, le type et la transformation sont démontrables. Les noms Fund/SubFund/Umbrella ne doivent pas être mappés naïvement : ils nécessitent une boucle dédiée sur `name_role`, langue, normalisation et structure umbrella/subfund.
-
-## OF-SOURCE-002 — prochaine unité
-
-### INDEX_PROVIDER résiduel
+Les trois mappings SEDOL sont donc sémantiquement `VALIDATED`, sans perte d'information, mais :
 
 ```text
-JSE
-EGX
-NSE
-NGX
-BVMT
+IMPORT_SUPPORTED: NO
+EXPORT_SUPPORTED: NO
+ACTIVATION_GATE: EXPLICIT_SEDOL_LICENSING_CLEARANCE
+AUDIT_RUN: 32071520665
 ```
 
-Ces cinq relations restent `PENDING`. Une bourse validée comme `STOCK_EXCHANGE` ne devient pas automatiquement provider/administrator d'indice. Exiger une preuve officielle spécifique de calcul, administration, propriété ou publication de l'indice avant toute promotion.
+Ne jamais convertir ce gate de licence en simple détail technique.
 
-### Rôles zonaux — revue sémantique distincte
+Preuve :
 
 ```text
-MONETARY_UNION             3
-SUPRANATIONAL_AUTHORITY    2
-INTERBANK_MARKET_OPERATOR  2
+docs/00_PROJECT/OF_MAP_002_BATCH_05_SEDOL_COMPLETION_20260817.md
 ```
 
-Ne pas promouvoir automatiquement BCEAO/BEAC comme `INTERBANK_MARKET_OPERATOR` à partir des seules preuves FX de Wave 13. `CMA / MONETARY_UNION` reste particulièrement à arbitrer : si le rôle canonique est trop fort, faire évoluer le modèle au lieu de forcer la donnée.
+## Prochaine unité OF-MAP-002
 
-## OF-SOURCE-003 — toujours actif
+Auditer depuis le PDF officiel les champs de niveau `Listing` susceptibles d'alimenter directement migration 019, en priorité :
 
-La validation institutionnelle ne clôt pas la validation des 55 mappings/séries initiaux. Continuer à vérifier séparément :
+```text
+VENUE / MIC
+LISTING CURRENCY
+TICKER / LOCAL LISTING IDENTIFIER
+PRIMARY LISTING INDICATOR
+```
+
+Ne mapper qu'après vérification exacte de l'OF-ID, du Field Level, du type, des valeurs, des éventuelles licences et de la réversibilité.
+
+## Couverture institutionnelle — Waves 01..15
+
+```text
+AFRICAN_COUNTRIES: 54
+COUNTRY_COVERAGE_WITH_AT_LEAST_ONE_COUNTRY_ORG: 53 / 54
+UNCOVERED_COUNTRY: ERYTHREE
+ORGANIZATION_SCOPE_ROLES: 199 = 195 VALIDATED + 4 PENDING
+```
+
+Résiduel explicite :
+
+```text
+EGX  INDEX_PROVIDER   EGYPTE
+NSE  INDEX_PROVIDER   KENYA
+NGX  INDEX_PROVIDER   NIGERIA
+CMA  MONETARY_UNION   CMA
+```
+
+Les Waves 14 et 15 ont fermé JSE/BVMT puis les rôles UEMOA/CEMAC/BCEAO/BEAC suffisamment prouvés. Ne pas forcer les quatre cas restants.
+
+## Couverture fonctionnelle institutionnelle — vraie baseline
+
+`195/199` ne signifie pas que 54 pays sont fonctionnellement complets. L'audit post-Wave15 montre :
+
+```text
+COUNTRIES_COMPLETE_FOR_7_REQUIRED_GROUPS: 0 / 54
+CAPITAL_MARKET_REGULATION_MISSING:       18
+EXCHANGE_MISSING:                        17
+FISCAL_DEBT_MISSING:                     40
+FUND_REGULATION_MISSING:                 19
+INSURANCE_PENSION_REGULATION_MISSING:    44
+MONETARY_AUTHORITY_MISSING:              11
+STATISTICS_MISSING:                       3
+```
+
+La prochaine boucle institutionnelle doit combler ces fonctions avec preuves primaires officielles, et non simplement réduire les quatre `PENDING` existants.
+
+Priorité de volume : assurance/pension puis fiscal/dette, tout en privilégiant les pays où quelques preuves supplémentaires peuvent fermer un ensemble fonctionnel complet.
+
+## OF-SOURCE-003 — reste actif
+
+La validation institutionnelle ne valide pas automatiquement :
 
 ```text
 ENDPOINT
@@ -166,32 +204,22 @@ METHODE
 STATUT DE COLLECTE
 ```
 
-## Taxonomie — gate structurel fermé
+Continuer indépendamment l'audit des mappings/séries initiaux.
 
-```text
-017_CANONICAL_FUND_TAXONOMY_V0_1
-ORDER: 170
-PYTHON_3_11: SUCCESS
-PYTHON_3_12: SUCCESS
-POSTGRESQL_16: SUCCESS
-FULL_CHAIN_001_TO_017: SUCCESS
-SECOND_APPLY_IDEMPOTENCE: SUCCESS
-CANONICAL_STATUS: STRUCTURE_PREFILLED
-PRODUCTION_STATUS: NOT_ACTIVE
-```
-
-## Blockers maintenus
+## Blockers externes maintenus
 
 ```text
 ERYTHREE            PRIMARY_OFFICIAL_SOURCE_NOT_VERIFIED
-FMDQ                REQUIRES_ROLE_MODEL_REVIEW
-SEC_ZAMBIA          CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
-IRA_URBRA_UGANDA    COMBINED_ROLE_MODEL_MISMATCH
-RBM_FUND_REGULATOR  PRIMARY_CIS_PROOF_NOT_SUFFICIENT
 PERSISTENT_DB       OPENFUNDS_DATABASE_URL / DURABLE_RUNTIME_NOT_CONFIGURED
 IMMUTABLE_RAW_STORE NOT_CONFIGURED
+SEDOL_RUNTIME       EXPLICIT_LICENSING_CLEARANCE_REQUIRED
+COMPLETE_HISTORIES  NOT_LOADED
+BENCHMARK_RFR_MAR   NOT_FULLY_VALIDATED
+WTI_WTI_BENCH       NOT_ACTIVE
+PRODUCTION_API_UI   NOT_IMPLEMENTED
+PRODUCTION_DEPLOY   NOT_CONFIGURED
 ```
 
 ## Interdictions maintenues
 
-Ne pas importer d'historique réel sans stockage durable, ne pas modifier ou fermer la PR nº2 sans réconciliation, ne pas fusionner/retargeter la PR nº1, ne pas travailler sur `main`, ne pas créer de branche/PR, ne pas activer WTI/WTI Bench et ne pas déployer sans satisfaction des gates correspondants.
+Ne pas inventer de données ou d'équivalences, ne pas générer 1 869 faux `UNMAPPED`, ne pas importer des historiques réels sans stockage durable, ne pas activer SEDOL sans licence, ne pas activer WTI/WTI Bench, ne pas fusionner/retargeter la PR #1, ne pas modifier `main` et ne pas créer de branche supplémentaire.
