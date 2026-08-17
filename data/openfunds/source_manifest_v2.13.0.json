@@ -2,7 +2,7 @@
   "standard": "openfunds",
   "version": "2.13.0",
   "release_date": "2026-03-23",
-  "status": "OFFICIAL_V2_13_0_FIELD_LIST_ARCHIVED_CHECKSUM_LOCKED_PARSE_PENDING",
+  "status": "OFFICIAL_V2_13_0_FIELD_LIST_ARCHIVED_AND_DETERMINISTICALLY_INVENTORIED",
   "official_current_version_page": "https://openfunds.org/fieldmenu/fields/",
   "official_license_page": "https://openfunds.org/about/licence/",
   "license": {
@@ -17,7 +17,8 @@
     "official_content_must_remain_unaltered_if_archived": true,
     "canonical_mapping_is_separate_derivative_metadata": true,
     "no_official_field_may_be_invented": true,
-    "mapping_may_not_claim_completeness_until_full_official_field_list_is_archived_and_parsed": true
+    "mapping_may_not_claim_completeness_until_full_official_field_list_is_archived_and_parsed": true,
+    "public_ci_emits_structural_summary_only": true
   },
   "observed_release_features": [
     "corporate action model extensions aligned with ISO 20022 concepts",
@@ -38,8 +39,46 @@
     "document_version": "2.13.0",
     "document_date": "2026-03-23",
     "retrieved_on": "2026-08-17",
-    "redistribution_mode": "UNALTERED_OFFICIAL_ARTIFACT_WITH_ATTRIBUTION",
-    "next_gate": "deterministically parse the checksum-locked official PDF into a separate structured catalogue without modifying the archived source"
+    "redistribution_mode": "UNALTERED_OFFICIAL_ARTIFACT_WITH_ATTRIBUTION"
+  },
+  "deterministic_inventory": {
+    "status": "VERIFIED",
+    "parser_path": "scripts/parse_openfunds_v2_13_0.py",
+    "contract_path": "tests/test_parse_openfunds_v2_13_0.py",
+    "workflow_path": ".github/workflows/of-map-001-parser.yml",
+    "red_run_id": 32061734854,
+    "green_run_id": 32061806859,
+    "python_versions_verified": [
+      "3.11",
+      "3.12"
+    ],
+    "source_sha256_required": "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4",
+    "extraction_mode": "pdftotext -layout",
+    "field_id_grammar": "OF[A-Z]{2}(?:\\d{6}|\\d{4}XX)",
+    "field_records": 1869,
+    "unique_ids": 1869,
+    "concrete_ids": 1849,
+    "parameterized_country_templates": 20,
+    "first_id": "OFST001000",
+    "last_id": "OFIN000410",
+    "prefix_counts": {
+      "OFCA": 44,
+      "OFDC": 21,
+      "OFDY": 67,
+      "OFEE": 617,
+      "OFEF": 29,
+      "OFEM": 122,
+      "OFEP": 143,
+      "OFFV": 7,
+      "OFIN": 11,
+      "OFNW": 14,
+      "OFPH": 92,
+      "OFPM": 8,
+      "OFRE": 42,
+      "OFST": 652
+    },
+    "full_transformed_catalogue_committed": false,
+    "next_gate": "OF-MAP-002 build versioned canonical mapping metadata against verified OF-IDs without modifying the official archived source"
   },
   "verified_on": "2026-08-17"
 }
