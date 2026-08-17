@@ -1,0 +1,152 @@
+name: Documentation Continuity Reconciliation 2026-08-17
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/document-continuity-20260817.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Reconcile permanent project documents with verified state
+        shell: python
+        run: |
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text(encoding="utf-8")
+              if old not in text:
+                  raise SystemExit(f"expected marker missing in {path}: {old[:100]!r}")
+              if text.count(old) != 1:
+                  raise SystemExit(f"expected exactly one marker in {path}")
+              p.write_text(text.replace(old, new, 1), encoding="utf-8", newline="\n")
+
+          # TODO — preserve historical descriptions but reconcile live task status.
+          replace_once("TODO.md", "Dernière mise à jour : `2026-08-12`.", "Dernière mise à jour : `2026-08-17`.")
+          replace_once(
+              "TODO.md",
+              "- **Progression vérifiée au 2026-08-12 :** vague 01 terminée et testée ; 55 organisations dont 35 `VALIDATED`, 92 relations organisation-rôle dont 48 `VALIDATED`, 10/54 pays avec au moins une organisation country-scoped, 44 pays restant sans organisation nationale.\n- **Preuves :** `docs/00_PROJECT/OF_SOURCE_002_BASELINE_AUDIT_20260812.md`, `docs/00_PROJECT/OF_SOURCE_002_WAVE_01_COMPLETION_20260812.md`, workflow `Institutional Registry` run `31592700354` `SUCCESS` sur Python 3.11/3.12.\n- **Prochaine unité :** `WAVE_02` en lecture seule ; rechercher les 44 pays non couverts et compléter les rôles manquants des 10 pays déjà présents avant toute nouvelle allowlist.\n- **Limite :** les CSV restent des inventaires de découverte/revue selon ADR-021 ; aucune persistance runtime n’est revendiquée.",
+              "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 09 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle dont 159 `VALIDATED`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée.\n- **Preuves :** rapports `OF_SOURCE_002_*`, tests `tests/test_institutional_registry*.py`, workflow `Institutional Registry`, audit `scripts/audit_institutional_role_coverage.py` et promotions zonales Wave 09.\n- **Prochaine unité :** réduire les groupes de rôles encore manquants à partir de l’audit effectif pays+zones, en promouvant d’abord les lignes `PENDING` déjà présentes lorsqu’une preuve primaire officielle existe ; conserver les cas non applicables ou insuffisamment prouvés explicites.\n- **Limite :** couverture 53/54 ne signifie pas complétude de tous les rôles ; les CSV restent des surfaces gouvernées de découverte/revue et la production persistante reste séparée."
+          )
+          replace_once(
+              "TODO.md",
+              "## OF-TAX-001 — Peupler les classes et sous-classes\n\n- **Statut :** DECIDE_NON_IMPLEMENTE",
+              "## OF-TAX-001 — Peupler les classes et sous-classes\n\n- **Statut :** TERMINE"
+          )
+          replace_once(
+              "TODO.md",
+              "- **Critères d'acceptation :** Actions, Obligations CT/MT/LT, Diversifié Prudent/Equilibré/Dynamique/Flexible, Monétaire, seeds idempotents et tests.\n\n## OF-TAX-002 — Générer catégories et sous-catégories\n\n- **Statut :** PROPOSE",
+              "- **Critères d'acceptation :** Actions, Obligations CT/MT/LT, Diversifié Prudent/Equilibré/Dynamique/Flexible, Monétaire, seeds idempotents et tests.\n- **Résultat vérifié 2026-08-17 :** 4 classes, 7 sous-classes, snapshot source figé, générateur SQL déterministe, migration gouvernée `017_CANONICAL_FUND_TAXONOMY_V0_1` ordre 170, PostgreSQL 16 GREEN et seconde application 100 % idempotente.\n- **Preuve :** `docs/00_PROJECT/OF_TAX_001_002_RUNTIME_PERSISTENCE_COMPLETION_20260817.md`.\n\n## OF-TAX-002 — Générer catégories et sous-catégories\n\n- **Statut :** TERMINE"
+          )
+          replace_once(
+              "TODO.md",
+              "- **Critères d'acceptation :** national/régional/Afrique, codes déterministes, parentés, historisation et absence de doublon.\n\n## OF-BENCH-001",
+              "- **Critères d'acceptation :** national/régional/Afrique, codes déterministes, parentés, historisation et absence de doublon.\n- **Résultat vérifié 2026-08-17 :** structure V0.1 déterministe déjà testée à 486 routages et 432 catégories/blocs de référence ; persistance PostgreSQL gouvernée par migration 017. Les objets restent `STRUCTURE_PREFILLED` / `NOT_ACTIVE` : activation, séries et méthodologies demeurent hors de cette clôture.\n\n## OF-BENCH-001"
+          )
+          replace_once(
+              "TODO.md",
+              "- **Dépendances :** version officielle exploitable, licence, OF-DATA-002",
+              "- **Dépendances :** Field List officiel v2.13.0 archivé sans modification, OF-DATA-002"
+          )
+          replace_once(
+              "TODO.md",
+              "- **Livrables :** source archivée et catalogue structuré.\n\n## OF-MAP-002",
+              "- **Livrables :** source archivée et catalogue structuré.\n- **Etat vérifié 2026-08-17 :** version officielle `2.13.0` et licence `CC BY-ND 4.0` vérifiées ; manifeste de provenance créé. Le seul gate primaire restant est l'archivage exact du Field List officiel v2.13.0, son SHA256 et son parsing déterministe.\n\n## OF-MAP-002"
+          )
+
+          # SUIVI — update live header/synthesis and prepend a dated verified block.
+          replace_once("SUIVI.md", "Dernière mise à jour : `2026-08-12`", "Dernière mise à jour : `2026-08-17`")
+          replace_once(
+              "SUIVI.md",
+              "ORGANISATIONS ET SOURCES                 OF-SOURCE-002 EN_COURS / 10 PAYS COUNTRY-SCOPED SUR 54",
+              "ORGANISATIONS ET SOURCES                 OF-SOURCE-002 EN_COURS / 53 PAYS COUNTRY-SCOPED SUR 54"
+          )
+          replace_once(
+              "SUIVI.md",
+              "MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE\nDICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES\nMAPPING OPENFUNDS                        BLOQUE CATALOGUE OFFICIEL\nCATEGORIES / BLOCS DE REFERENCE          STRUCTURE PRESENTE / NON ACTIVE",
+              "MODELE FUND/SUBFUND/SHARECLASS           VERIFIED_COMPLETE\nDICTIONNAIRE MACHINE-READABLE            FUND CORE + D00-D17 GOUVERNES\nMAPPING OPENFUNDS                        V2.13.0/LICENCE VERIFIES / FIELD LIST A ARCHIVER\nTAXONOMIE POSTGRESQL                     MIGRATION 017 VERIFIED_COMPLETE / NOT_ACTIVE\nCATEGORIES / BLOCS DE REFERENCE          486 ROUTAGES / 432 BLOCS / NON ACTIFS"
+          )
+          suivi = Path("SUIVI.md")
+          st = suivi.read_text(encoding="utf-8")
+          marker = "## 2. REALISATIONS\n"
+          block = """## 1.1 MISE A JOUR VERIFIEE — 2026-08-17\n\n### Couverture institutionnelle\n\n```text\nCOUNTRY_COVERAGE: 53 / 54\nORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING\nORGANIZATION_SCOPE_ROLES: 199 = 159 VALIDATED + 40 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..09\n```\n\nL'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. Les compétences zonales BCEAO, BEAC, BRVM et BVMAC ont été promues sans duplication dans Wave 09.\n\n### Taxonomie canonique et PostgreSQL\n\n`OF-TAX-001` et la génération structurelle `OF-TAX-002` V0.1 sont désormais persistées par la migration gouvernée `017_CANONICAL_FUND_TAXONOMY_V0_1`, ordre 170. La migration est générée déterministement depuis un snapshot source V0.1 figé, passe le contrat Python 3.11/3.12 et la chaîne complète 001→017 a été appliquée deux fois sur PostgreSQL 16 avec ledger et idempotence vérifiés.\n\n```text\nASSET_CLASSES: 4\nASSET_SUBCLASSES: 7\nCOUNTRY_ROUTING_ROWS: 54\nCATEGORY_TEMPLATES: 9\nREFERENCE_OVERRIDES: 11\nANALYTICS_REQUIREMENTS: 25\nEXPANDED_ROUTING_RULES: 486\nCATEGORY_REFERENCE_BLOCKS: 432\nCANONICAL_STATUS: STRUCTURE_PREFILLED\nPRODUCTION_STATUS: NOT_ACTIVE\n```\n\nPreuve : `docs/00_PROJECT/ADR-029_CANONICAL_TAXONOMY_AUTHORING_AND_RUNTIME.md` et `docs/00_PROJECT/OF_TAX_001_002_RUNTIME_PERSISTENCE_COMPLETION_20260817.md`.\n\n### Openfunds\n\nLa version `2.13.0` et la licence officielle `CC BY-ND 4.0` sont vérifiées. `OF-MAP-001` reste incomplet uniquement tant que le Field List officiel exact n'est pas archivé sans modification, hashé et parsé. Aucun champ officiel n'est reconstruit artificiellement.\n\n"""
+          if block.strip() not in st:
+              if marker not in st:
+                  raise SystemExit("SUIVI section marker missing")
+              st = st.replace(marker, block + marker, 1)
+              suivi.write_text(st, encoding="utf-8", newline="\n")
+
+          # CHANGELOG — reconcile stale current bullets and insert a current release block.
+          replace_once(
+              "CHANGELOG.md",
+              "- version officielle Openfunds à intégrer et sa licence ;",
+              "- archivage exact et parsing déterministe du Field List officiel Openfunds v2.13.0 (version et licence déjà vérifiées) ;"
+          )
+          changelog = Path("CHANGELOG.md")
+          ct = changelog.read_text(encoding="utf-8")
+          release_marker = "## [2026-08-12] — OF-SOURCE-002 VAGUE 01 — COUVERTURE INSTITUTIONNELLE\n"
+          release_block = """## [2026-08-17] — TAXONOMIE POSTGRESQL, OPENFUNDS ET COUVERTURE INSTITUTIONNELLE\n\n### Taxonomie — ajouté\n\n- design et plan d'implémentation de la persistance canonique ;\n- `scripts/generate_canonical_taxonomy_sql.py` ;\n- migration générée `schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql` ;\n- snapshot immuable `migrations/sources/017_canonical_taxonomy_v0_1/` avec SHA-256 ;\n- entrée migration `017_CANONICAL_FUND_TAXONOMY_V0_1` ordre 170 ;\n- tests unitaires générateur et contrat PostgreSQL runtime ;\n- CI Python 3.11/3.12 + PostgreSQL 16 ;\n- ADR-029 et rapport de clôture OF-TAX-001/002.\n\n### Taxonomie — vérifié\n\n- 4 classes, 7 sous-classes, 54 routages, 9 templates, 11 overrides et 25 exigences analytiques ;\n- génération byte-déterministe depuis le snapshot figé ;\n- chaîne gouvernée 001→017 appliquée sur PostgreSQL 16 ;\n- ledger vérifié ;\n- seconde application : 17 `SKIP`, aucun `APPLY` ;\n- routages UEMOA/CEMAC/standalone et statuts `STRUCTURE_PREFILLED` / `NOT_ACTIVE` vérifiés après chaque application ;\n- run `Canonical Taxonomy Migration` `32058160324` : SUCCESS.\n\n### OF-SOURCE-002 — progressé\n\n- Waves 02 à 09 poursuivies avec TDD et allowlists fermées ;\n- couverture country-scoped portée à 53/54 ;\n- 141 organisations, 199 relations organisation-rôle ;\n- 159 relations désormais `VALIDATED` ;\n- BCEAO/BEAC/BRVM/BVMAC promus sur leur scope zonal existant sans duplication ;\n- Érythrée maintenue volontairement non peuplée faute de preuve primaire officielle actuelle.\n\n### Openfunds — clarifié\n\n- version officielle courante vérifiée : `2.13.0`, publiée le 2026-03-23 ;\n- licence officielle vérifiée : `CC BY-ND 4.0` avec attribution ;\n- manifeste de provenance v2.13.0 ajouté ;\n- gate restant : Field List officiel exact à archiver, hasher et parser ; aucun catalogue reconstruit artificiellement.\n\n### Non activé\n\n- aucun WTI/WTI Bench live ;\n- aucune méthodologie benchmark/RFR/MAR promue par la seule persistance ;\n- aucune base de production persistante configurée ;\n- aucun déploiement, merge, retargeting ou mutation de `main`.\n\n"""
+          if release_block.strip() not in ct:
+              if release_marker not in ct:
+                  raise SystemExit("CHANGELOG insertion marker missing")
+              ct = ct.replace(release_marker, release_block + release_marker, 1)
+              changelog.write_text(ct, encoding="utf-8", newline="\n")
+
+          # DECISIONS — append a compact index entry without rewriting historical ADR prose.
+          decisions = Path("DECISIONS.md")
+          dt = decisions.read_text(encoding="utf-8")
+          decision_block = """\n\n## ADR-029 — AUTHORING ET PERSISTANCE RUNTIME DE LA TAXONOMIE CANONIQUE\n\n- **Statut :** ACCEPTE\n- **Date :** 2026-08-17\n- **Décision :** les CSV/JSON `data/canonical/` restent les surfaces d'authoring/revue ; chaque release de migration fige un snapshot immuable ; le SQL est généré déterministement ; PostgreSQL devient la source de vérité runtime après application gouvernée.\n- **Migration initiale :** `017_CANONICAL_FUND_TAXONOMY_V0_1`, ordre 170.\n- **Statut fonctionnel conservé :** `STRUCTURE_PREFILLED` / `NOT_ACTIVE`.\n- **Preuve détaillée :** `docs/00_PROJECT/ADR-029_CANONICAL_TAXONOMY_AUTHORING_AND_RUNTIME.md`.\n- **Interdiction :** ne pas réécrire 017 après application ; toute évolution passe par une nouvelle version et une migration forward.\n"""
+          if "## ADR-029 — AUTHORING ET PERSISTANCE RUNTIME DE LA TAXONOMIE CANONIQUE" not in dt:
+              decisions.write_text(dt.rstrip() + decision_block + "\n", encoding="utf-8", newline="\n")
+
+          # Canonical README — replace obsolete SQL-master status and add persistence paragraph.
+          replace_once(
+              "data/canonical/README.md",
+              "SOURCE SQL MAITRE : NON DECIDEE",
+              "PERSISTANCE RUNTIME : MIGRATION 017 GOUVERNEE / POSTGRESQL 16 VERIFIE"
+          )
+          canonical = Path("data/canonical/README.md")
+          rt = canonical.read_text(encoding="utf-8")
+          anchor = "Ces objets sont préremplis sur le plan structurel. Cela ne signifie pas que toutes les séries de marché, tous les taux sans risque ou toutes les méthodologies de benchmark sont déjà validés.\n"
+          addition = """\nDepuis le 2026-08-17, cette structure est également persistée de manière gouvernée par `017_CANONICAL_FUND_TAXONOMY_V0_1`. Les fichiers de ce répertoire restent la surface d'authoring/revue ; un snapshot immuable alimente le générateur SQL et PostgreSQL devient la vérité runtime après application. Cette persistance **n'active pas** les templates : `CANONICAL_STATUS=STRUCTURE_PREFILLED` et `PRODUCTION_STATUS=NOT_ACTIVE` restent obligatoires.\n"""
+          if addition.strip() not in rt:
+              if anchor not in rt:
+                  raise SystemExit("canonical README anchor missing")
+              canonical.write_text(rt.replace(anchor, anchor + addition, 1), encoding="utf-8", newline="\n")
+
+      - name: Guard documentation-only scope
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain=v1 | sed -E 's/^...//')
+          printf '%s\n' "${changed[@]}"
+          expected=(CHANGELOG.md DECISIONS.md SUIVI.md TODO.md data/canonical/README.md)
+          test "${#changed[@]}" -eq "${#expected[@]}"
+          for file in "${expected[@]}"; do
+            printf '%s\n' "${changed[@]}" | grep -Fx "$file"
+          done
+
+      - name: Commit reconciled permanent documentation
+        run: |
+          set -euo pipefail
+          git config user.name "openfunds-governed-ci"
+          git config user.email "openfunds-governed-ci@users.noreply.github.com"
+          git add CHANGELOG.md DECISIONS.md SUIVI.md TODO.md data/canonical/README.md
+          git diff --cached --check
+          git commit -m "docs(project): reconcile verified 2026-08-17 state"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
