@@ -6,25 +6,33 @@ import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST = ROOT / "migrations/manifest.json"
-MIGRATION = ROOT / "schemas/fund/015_fund_subfund_shareclass_core.sql"
+CORE_MIGRATION = ROOT / "schemas/fund/015_fund_subfund_shareclass_core.sql"
+EXTENSION_MIGRATION = ROOT / "schemas/fund/018_extended_security_identifier_schemes.sql"
 
 
 class FundDomainModelTests(unittest.TestCase):
-    def test_manifest_promotes_only_the_canonical_fund_model(self) -> None:
+    def test_manifest_keeps_015_as_foundation_and_allows_forward_extensions(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
         fund_migrations = [
             item
             for item in manifest["migrations"]
             if item["path"].startswith("schemas/fund/")
         ]
-        self.assertEqual(1, len(fund_migrations))
-        canonical = fund_migrations[0]
+        by_id = {item["id"]: item for item in fund_migrations}
+        self.assertIn("015_FUND_SUBFUND_SHARECLASS_CORE", by_id)
+        canonical = by_id["015_FUND_SUBFUND_SHARECLASS_CORE"]
         self.assertEqual(canonical["order"], 150)
-        self.assertEqual(canonical["id"], "015_FUND_SUBFUND_SHARECLASS_CORE")
         self.assertEqual(
             canonical["path"],
             "schemas/fund/015_fund_subfund_shareclass_core.sql",
         )
+        if "018_EXTENDED_SECURITY_IDENTIFIER_SCHEMES" in by_id:
+            extension = by_id["018_EXTENDED_SECURITY_IDENTIFIER_SCHEMES"]
+            self.assertGreater(extension["order"], canonical["order"])
+            self.assertEqual(
+                extension["path"],
+                "schemas/fund/018_extended_security_identifier_schemes.sql",
+            )
 
         excluded = {
             entry["path"]: entry["reason"]
@@ -36,7 +44,7 @@ class FundDomainModelTests(unittest.TestCase):
         self.assertIn("015", excluded[proposal])
 
     def test_migration_contains_the_required_canonical_contract(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8")
+        sql = CORE_MIGRATION.read_text(encoding="utf-8")
         required = (
             "create table if not exists fund.entity (",
             "create table if not exists fund.entity_state (",
@@ -56,8 +64,8 @@ class FundDomainModelTests(unittest.TestCase):
             with self.subTest(fragment=fragment):
                 self.assertIn(fragment, sql)
 
-    def test_migration_does_not_activate_legacy_draft_tables(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8").lower()
+    def test_foundational_migration_does_not_activate_legacy_draft_tables(self) -> None:
+        sql = CORE_MIGRATION.read_text(encoding="utf-8").lower()
         self.assertNotIn("create table if not exists fund.fund (", sql)
         self.assertNotIn("create table if not exists fund.share_class (", sql)
         self.assertNotIn("drop table", sql)
@@ -65,7 +73,7 @@ class FundDomainModelTests(unittest.TestCase):
         self.assertNotIn("truncate", sql)
 
     def test_standalone_and_umbrella_paths_are_explicit(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8")
+        sql = CORE_MIGRATION.read_text(encoding="utf-8")
         self.assertIn("'STANDALONE','UMBRELLA'", sql)
         self.assertIn("'FUND_HAS_SUBFUND'", sql)
         self.assertIn("'FUND_HAS_SHARE_CLASS'", sql)
@@ -73,7 +81,7 @@ class FundDomainModelTests(unittest.TestCase):
         self.assertIn("No synthetic subfund is required", sql)
 
     def test_identity_names_identifiers_and_events_are_separate(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8")
+        sql = CORE_MIGRATION.read_text(encoding="utf-8")
         self.assertIn("name_role text not null", sql)
         self.assertIn("identifier_scheme text not null", sql)
         self.assertIn("event_type text not null", sql)
