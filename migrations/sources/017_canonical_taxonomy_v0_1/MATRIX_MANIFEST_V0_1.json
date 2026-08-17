@@ -1,0 +1,51 @@
+{
+  "canonical_status": "STRUCTURE_PREFILLED",
+  "counts": {
+    "analytics_metrics": 25,
+    "asset_classes": 4,
+    "asset_subclasses": 7,
+    "category_templates": 9,
+    "continental_scopes": 1,
+    "countries": 54,
+    "expanded_category_reference_blocks": 432,
+    "expanded_routing_rules": 486,
+    "local_market_scopes": 42,
+    "regions": 5
+  },
+  "generator": "scripts/generate_fund_category_matrices.py",
+  "master_inputs": [
+    "data/canonical/ASSET_CLASSES_V0_1.csv",
+    "data/canonical/ASSET_SUBCLASSES_V0_1.csv",
+    "data/canonical/FUND_SCOPE_ROUTING_V0_1.csv",
+    "data/canonical/CATEGORY_TEMPLATE_MATRIX_V0_1.csv",
+    "data/canonical/SCOPE_REFERENCE_OVERRIDES_V0_1.csv",
+    "data/canonical/ANALYTICS_REFERENCE_REQUIREMENTS_V0_1.csv"
+  ],
+  "production_status": "NOT_ACTIVE",
+  "rules": {
+    "common_exchange_zones": [
+      "CEMAC",
+      "UEMOA"
+    ],
+    "continental_scope": "AFRICA",
+    "local_scope": "COMMON_STOCK_MARKET_ZONE_ELSE_COUNTRY",
+    "regional_scope": "AFRICA_GEOGRAPHIC_REGION",
+    "subclass_rules": {
+      "ACTIONS": [],
+      "DIVERSIFIE": [
+        "PRUDENT",
+        "EQUILIBRE",
+        "DYNAMIQUE",
+        "FLEXIBLE"
+      ],
+      "MONETAIRE": [],
+      "OBLIGATIONS": [
+        "COURT_TERME",
+        "MOYEN_TERME",
+        "LONG_TERME"
+      ]
+    }
+  },
+  "schema_version": "0.1.0",
+  "tests": "tests/test_fund_category_matrices.py"
+}
