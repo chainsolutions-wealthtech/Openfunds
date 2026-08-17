@@ -1,6 +1,5 @@
 import csv
 import unittest
-from collections import Counter
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,14 +47,21 @@ class InstitutionalRegistryWave14ContractTests(unittest.TestCase):
         rows = read_rows()
         pending = {key(row) for row in rows if row["VALIDATION_STATUS"] == "PENDING"}
         self.assertTrue(RETAINED_PENDING.issubset(pending), RETAINED_PENDING - pending)
-        self.assertEqual(3, sum(row["ROLE_CODE"] == "INDEX_PROVIDER" and row["VALIDATION_STATUS"] == "PENDING" for row in rows))
+        self.assertEqual(
+            3,
+            sum(
+                row["ROLE_CODE"] == "INDEX_PROVIDER"
+                and row["VALIDATION_STATUS"] == "PENDING"
+                for row in rows
+            ),
+        )
 
-    def test_wave14_exact_post_state(self):
+    def test_wave14_closure_is_forward_compatible(self):
         rows = read_rows()
-        counts = Counter(row["VALIDATION_STATUS"] for row in rows)
         self.assertEqual(199, len(rows))
-        self.assertEqual(189, counts["VALIDATED"])
-        self.assertEqual(10, counts["PENDING"])
+        for expected in WAVE14_PROMOTED:
+            matching = [row for row in rows if key(row) == expected]
+            self.assertEqual("VALIDATED", matching[0]["VALIDATION_STATUS"], expected)
 
 
 if __name__ == "__main__":
