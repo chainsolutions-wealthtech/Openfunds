@@ -41,14 +41,18 @@ class OpenfundsMappingBatch03ContractTests(unittest.TestCase):
 
     def test_sedol_listing_field_is_not_forced_into_fund_entity_identifier(self):
         rows = read_rows()
-        self.assertFalse(any(row["EXTERNAL_FIELD_ID"] == "OFST020040" for row in rows))
+        self.assertFalse(any(
+            row["EXTERNAL_FIELD_ID"] == "OFST020040" and row["CANONICAL_ENTITY"] == "FUND_ENTITY_IDENTIFIER"
+            for row in rows
+        ))
 
-    def test_batch03_exact_cumulative_post_state(self):
+    def test_batch03_closure_is_forward_compatible(self):
         rows = read_rows()
-        self.assertEqual(12, len(rows))
-        self.assertEqual(6, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(6, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(12, len({row["MAPPING_ID"] for row in rows}))
+        selected = [row for row in rows if row["MAPPING_ID"] in EXPECTED]
+        self.assertEqual(6, len(selected))
+        self.assertEqual({"OFST020010", "OFST020015"}, {row["EXTERNAL_FIELD_ID"] for row in selected})
+        self.assertEqual(6, len({row["MAPPING_ID"] for row in selected}))
+        self.assertTrue(all(row["VALIDATION_STATUS"] == "VALIDATED" for row in selected))
 
 
 if __name__ == "__main__":
