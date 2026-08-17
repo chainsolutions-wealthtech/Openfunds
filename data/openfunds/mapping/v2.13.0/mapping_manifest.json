@@ -19,6 +19,8 @@
     "official_document_is_never_modified": true,
     "external_id_must_exist_in_checksum_locked_inventory": true,
     "canonical_field_id_must_exist_in_governed_dictionary": true,
+    "canonical_entity_must_match_governed_field_entity": true,
+    "duplicate_external_canonical_pairs_are_forbidden": true,
     "parameterized_xx_ids_must_remain_unexpanded": true,
     "uncertain_mappings_use_to_confirm": true,
     "information_loss_must_be_explicit": true
@@ -45,12 +47,45 @@
     "repository_unchanged_guard": "SUCCESS",
     "green_workflow_run": 32064814922
   },
+  "validator_hardening": {
+    "duplicate_external_canonical_pair_guard": "SUCCESS",
+    "canonical_entity_consistency_guard": "SUCCESS",
+    "red_workflow_run": 32065061674,
+    "green_workflow_run": 32065124602
+  },
+  "reviewed_batches": [
+    {
+      "batch_id": "BATCH_01_DOMICILE_ISIN",
+      "status": "VALIDATED",
+      "reviewed_mapping_rows": 4,
+      "mapped_external_ids": 2,
+      "unmapped_external_ids": 1867,
+      "mapped_canonical_ids": 4,
+      "external_ids": [
+        "OFST010010",
+        "OFST020000"
+      ],
+      "audit_path": "docs/00_PROJECT/OF_MAP_002_BATCH_01_DOMICILE_ISIN_AUDIT_20260817.md",
+      "green_workflow_run": 32065216172
+    }
+  ],
+  "current_coverage": {
+    "reviewed_mapping_rows": 4,
+    "mapped_external_ids": 2,
+    "unmapped_external_ids": 1867,
+    "mapped_canonical_ids": 4,
+    "external_field_coverage_ratio": 0.0010700909588014982,
+    "canonical_field_coverage_ratio": 0.027972027972027972
+  },
   "tdd_history": {
     "initial_red_run": 32062460096,
     "cli_regression_red_run": 32064692636,
-    "final_green_run": 32064814922
+    "empty_baseline_green_run": 32064814922,
+    "validator_hardening_red_run": 32065061674,
+    "validator_hardening_green_run": 32065124602,
+    "batch_01_green_run": 32065216172
   },
-  "status": "VALIDATOR_VERIFIED_EMPTY_BASELINE_READY_FOR_REVIEWED_MAPPINGS",
+  "status": "BATCH_01_VALIDATED_INCREMENTAL_MAPPING_IN_PROGRESS",
   "created_on": "2026-08-17",
   "verified_on": "2026-08-17"
 }
