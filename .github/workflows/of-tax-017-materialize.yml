@@ -1,0 +1,61 @@
+name: OF-TAX Migration 017 Materialize
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-tax-017-materialize.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - name: Checkout governed branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+          fetch-depth: 0
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate migration 017 from canonical authoring inputs
+        run: |
+          set -euo pipefail
+          test ! -e schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+          python scripts/generate_canonical_taxonomy_sql.py \
+            --source-dir data/canonical \
+            --output schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+          python scripts/generate_canonical_taxonomy_sql.py \
+            --check \
+            --source-dir data/canonical \
+            --output schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+
+      - name: Guard exact changed-file scope
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git status --porcelain=v1 | sed -E 's/^...//')
+          printf 'Changed files:\n'
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 1
+          test "${changed[0]}" = "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"
+
+      - name: Commit generated migration only
+        run: |
+          set -euo pipefail
+          git config user.name "openfunds-governed-ci"
+          git config user.email "openfunds-governed-ci@users.noreply.github.com"
+          git add schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+          git diff --cached --quiet && { echo "No generated migration to commit"; exit 1; }
+          git commit -m "feat(taxonomy): materialize governed migration 017"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
