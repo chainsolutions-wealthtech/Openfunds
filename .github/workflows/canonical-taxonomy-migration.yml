@@ -7,7 +7,9 @@ on:
       - architecture/africafunds-country-indicators-v0.1
     paths:
       - "data/canonical/**"
+      - "migrations/sources/017_canonical_taxonomy_v0_1/**"
       - "scripts/generate_canonical_taxonomy_sql.py"
+      - "scripts/run_migrations.py"
       - "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"
       - "migrations/manifest.json"
       - "tests/test_generate_canonical_taxonomy_sql.py"
@@ -16,7 +18,9 @@ on:
   pull_request:
     paths:
       - "data/canonical/**"
+      - "migrations/sources/017_canonical_taxonomy_v0_1/**"
       - "scripts/generate_canonical_taxonomy_sql.py"
+      - "scripts/run_migrations.py"
       - "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"
       - "migrations/manifest.json"
       - "tests/test_generate_canonical_taxonomy_sql.py"
@@ -44,3 +48,13 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Run taxonomy SQL generator contract
         run: python -m unittest -v tests.test_generate_canonical_taxonomy_sql
+      - name: Verify frozen migration 017 from frozen source snapshot
+        run: |
+          python scripts/generate_canonical_taxonomy_sql.py \
+            --check \
+            --source-dir migrations/sources/017_canonical_taxonomy_v0_1 \
+            --output schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql
+      - name: Verify governed migration plan includes 017
+        run: |
+          python scripts/run_migrations.py --plan | tee /tmp/migration-plan.txt
+          grep -F "170 PENDING 017_CANONICAL_FUND_TAXONOMY_V0_1" /tmp/migration-plan.txt
