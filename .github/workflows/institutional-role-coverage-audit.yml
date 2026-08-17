@@ -1,0 +1,30 @@
+name: Institutional Role Coverage Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "scripts/audit_institutional_role_coverage.py"
+      - "data/reference/AFRICA_COUNTRIES.csv"
+      - "data/reference/COUNTRY_RELATIONSHIPS.csv"
+      - "data/reference/ORGANIZATION_SCOPE_ROLES.csv"
+      - ".github/workflows/institutional-role-coverage-audit.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run read-only role coverage audit
+        run: python scripts/audit_institutional_role_coverage.py
