@@ -48,6 +48,16 @@
         "arguments": ["--check", "--source", "data/indicator_catalog/v1/00_metadata.json", "--output", "schemas/reference/016_country_indicator_catalog.sql"],
         "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
       }
+    },
+    {
+      "order": 170,
+      "id": "017_CANONICAL_FUND_TAXONOMY_V0_1",
+      "path": "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql",
+      "generator": {
+        "script": "scripts/generate_canonical_taxonomy_sql.py",
+        "arguments": ["--check", "--source-dir", "migrations/sources/017_canonical_taxonomy_v0_1", "--output", "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"],
+        "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
+      }
     }
   ],
   "excluded_sql": [
