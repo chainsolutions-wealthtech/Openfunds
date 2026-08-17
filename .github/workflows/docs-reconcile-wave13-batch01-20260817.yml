@@ -23,100 +23,96 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Reconcile exact current-state markers
+      - name: Reconcile exact observed stale markers
         run: |
           python - <<'PY'
           from pathlib import Path
 
           def replace_exact(path, old, new):
-              p = Path(path)
-              text = p.read_text(encoding="utf-8")
-              count = text.count(old)
-              assert count == 1, f"{path}: expected one exact anchor, found {count}: {old[:100]!r}"
-              p.write_text(text.replace(old, new), encoding="utf-8")
+              p=Path(path); text=p.read_text(encoding="utf-8")
+              count=text.count(old)
+              assert count == 1, f"{path}: expected one anchor, found {count}: {old[:120]!r}"
+              p.write_text(text.replace(old,new),encoding="utf-8")
 
-          replace_exact(
-              "TODO.md",
-              "- **Point de départ vérifié 2026-08-17 :** 1 869 OF-ID officiels sont maintenant checksum-gated et inventoriés. Le mapping doit référencer ces IDs sans recopier ni modifier le document officiel ; chaque cible canonique doit être validée contre `data/dictionary/spec_v1/`.",
-              "- **Progression vérifiée 2026-08-17 :** registre gouverné `data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv`, manifeste et validator checksum-gated opérationnels. Baseline vide GREEN (`32064814922`), validator durci contre doublons `(OF-ID, FIELD_ID)` et incohérences d'entité GREEN (`32065124602`). Batch 01 GREEN (`32065216172`) : 4 lignes validées couvrant 2 OF-ID (`OFST010010`, `OFST020000`) vers 4 cibles canoniques ; 1 867 OF-ID restent non revus et sont calculés, jamais matérialisés artificiellement."
+          # TODO — only current task/progression paragraphs.
+          replace_exact("TODO.md",
+            "- **Point de départ vérifié 2026-08-17 :** 1 869 OF-ID officiels sont maintenant checksum-gated et inventoriés. Le mapping doit référencer ces IDs sans recopier ni modifier le document officiel ; chaque cible canonique doit être validée contre `data/dictionary/spec_v1/`.",
+            "- **Progression vérifiée 2026-08-17 :** registre gouverné `data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv`, manifeste et validator checksum-gated opérationnels. Baseline vide GREEN (`32064814922`), validator durci contre doublons `(OF-ID, FIELD_ID)` et incohérences d'entité GREEN (`32065124602`). Batch 01 GREEN (`32065216172`) : 4 lignes validées couvrant 2 OF-ID (`OFST010010`, `OFST020000`) vers 4 cibles canoniques ; 1 867 OF-ID restent non revus et sont calculés, jamais matérialisés artificiellement."
           )
-          replace_exact(
-              "TODO.md",
-              "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 12 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Il ne reste aucune ligne `STOCK_EXCHANGE` en attente ; résiduel : 9 FX reference providers, 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.",
-              "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 13 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 187 `VALIDATED` + 12 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Wave 13 a fermé les 9 `FX_REFERENCE_RATE_PROVIDER` sous preuves primaires officielles ; résiduel exact : 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators."
+          replace_exact("TODO.md",
+            "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 12 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Il ne reste aucune ligne `STOCK_EXCHANGE` en attente ; résiduel : 9 FX reference providers, 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators.",
+            "- **Progression vérifiée au 2026-08-17 :** Waves 01 à 13 exécutées sous contrats TDD ; 141 organisations dont 121 `VALIDATED`, 199 relations organisation-rôle = 187 `VALIDATED` + 12 `PENDING`, 53/54 pays avec au moins une organisation country-scoped ; `ERYTHREE` reste volontairement non peuplée faute de source primaire officielle actuelle vérifiée. Wave 13 a fermé les 9 `FX_REFERENCE_RATE_PROVIDER` sous preuves primaires officielles ; résiduel exact : 5 index providers, 3 monetary unions, 2 supranational authorities et 2 interbank market operators."
           )
-          replace_exact(
-              "TODO.md",
-              "- **Prochaine unité :** auditer les 9 `FX_REFERENCE_RATE_PROVIDER` sur preuve de série officielle, poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et les 7 rôles zonaux sémantiques ; conserver les cas non applicables ou insuffisamment prouvés explicites.",
-              "- **Prochaine unité :** poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et la revue sémantique des 7 rôles zonaux ; ne pas confondre validation institutionnelle avec validation endpoint/série `OF-SOURCE-003`, et conserver les cas non applicables ou insuffisamment prouvés explicites."
+          replace_exact("TODO.md",
+            "- **Prochaine unité :** auditer les 9 `FX_REFERENCE_RATE_PROVIDER` sur preuve de série officielle, poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et les 7 rôles zonaux sémantiques ; conserver les cas non applicables ou insuffisamment prouvés explicites.",
+            "- **Prochaine unité :** poursuivre séparément les 5 `INDEX_PROVIDER` ambigus et la revue sémantique des 7 rôles zonaux ; ne pas confondre validation institutionnelle avec validation endpoint/série `OF-SOURCE-003`, et conserver les cas non applicables ou insuffisamment prouvés explicites."
           )
 
-          replace_exact(
-              "SUIVI.md",
-              "ORGANIZATION_SCOPE_ROLES: 199 = 178 VALIDATED + 21 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..12",
-              "ORGANIZATION_SCOPE_ROLES: 199 = 187 VALIDATED + 12 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..13"
+          # SUIVI — observed current markers.
+          replace_exact("SUIVI.md",
+            "MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / 1869 OF-ID INVENTORIES / OF-MAP-002 EN_COURS",
+            "MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / OF-MAP-002 BATCH01 4 ROWS / 2 OF-IDS"
           )
-          replace_exact(
-              "SUIVI.md",
-              "MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / 1869 OF-ID INVENTORIES / OF-MAP-002 EN_COURS",
-              "MAPPING OPENFUNDS                        OF-MAP-001 TERMINE / OF-MAP-002 BATCH01 4 ROWS / 2 OF-IDS"
+          replace_exact("SUIVI.md",
+            "ORGANIZATION_SCOPE_ROLES: 199 = 178 VALIDATED + 21 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..12",
+            "ORGANIZATION_SCOPE_ROLES: 199 = 187 VALIDATED + 12 PENDING\nUNCOVERED_COUNTRY: ERYTHREE\nWAVES_VERIFIED: 01..13"
           )
-          replace_exact(
-              "SUIVI.md",
-              "`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké (`40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4`) et parsé déterministement. L'inventaire réel contient 1 869 OF-ID uniques (1 849 concrets + 20 templates pays `XX`) et passe sur Python 3.11/3.12 ainsi que sur le PDF officiel. `OF-MAP-002` est désormais le chantier Openfunds actif.",
-              "`OF-MAP-001` est vérifié complet : Field List officiel `2.13.0` archivé sans modification, checksum-locké et inventaire de 1 869 OF-ID vérifié. `OF-MAP-002` est actif avec validator GREEN contre le PDF officiel et les 143 FIELD_ID canoniques. Batch 01 est validé : 4 lignes / 2 OF-ID / 4 cibles canoniques ; 1 867 OF-ID restent à revoir sans matérialisation artificielle."
+          replace_exact("SUIVI.md",
+            "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 12 ont réduit le backlog sans création ni retargeting : 12 rôles institutionnels country-scoped, 3 bourses puis 4 fournisseurs d'indices ont été promus sous TDD ; le résiduel est 9 FX, 5 index, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires.",
+            "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 13 ont réduit le backlog sans création ni retargeting ; Wave 13 a validé les 9 fournisseurs de référence FX sous preuves primaires officielles. Le résiduel exact est 5 index providers, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires."
           )
-          replace_exact(
-              "SUIVI.md",
-              "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 12 ont réduit le backlog sans création ni retargeting : 12 rôles institutionnels country-scoped, 3 bourses puis 4 fournisseurs d'indices ont été promus sous TDD ; le résiduel est 9 FX, 5 index, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires.",
-              "L'Érythrée reste volontairement sans organisation country-scoped tant qu'aucune source primaire officielle actuelle n'est vérifiée. BCEAO, BEAC, BRVM et BVMAC restent modélisées à leur scope zonal. Waves 10 à 13 ont réduit le backlog sans création ni retargeting ; Wave 13 a validé les 9 fournisseurs de référence FX sous preuves primaires officielles. Le résiduel exact est 5 index providers, 3 unions monétaires, 2 autorités supranationales et 2 opérateurs interbancaires."
+          replace_exact("SUIVI.md",
+            "`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké (`40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4`) et parsé déterministement. L'inventaire réel contient 1 869 OF-ID uniques (1 849 concrets + 20 templates pays `XX`) et passe sur Python 3.11/3.12 ainsi que sur le PDF officiel. `OF-MAP-002` est désormais le chantier Openfunds actif.",
+            "`OF-MAP-001` est vérifié complet : le Field List officiel `2.13.0` est archivé sans modification, checksum-locké et son inventaire de 1 869 OF-ID est vérifié. `OF-MAP-002` est actif avec validator GREEN contre le PDF officiel et les 143 FIELD_ID canoniques. Batch 01 est validé : 4 lignes / 2 OF-ID / 4 cibles canoniques ; 1 867 OF-ID restent à revoir sans matérialisation artificielle."
           )
 
-          replace_exact(
-              "CHANGELOG.md",
-              "- archivage exact et parsing déterministe du Field List officiel Openfunds v2.13.0 (version et licence déjà vérifiées) ;",
-              "- poursuite incrémentale du mapping Openfunds v2.13.0 après OF-MAP-001 terminé et Batch 01 OF-MAP-002 validé ;"
+          # CHANGELOG — observed current markers.
+          replace_exact("CHANGELOG.md",
+            "- mapping champ-par-champ Openfunds v2.13.0 → modèle canonique (`OF-MAP-002`) sur l'inventaire officiel désormais verrouillé ;",
+            "- poursuite incrémentale du mapping Openfunds v2.13.0 après bootstrap validé et Batch 01 vérifié ;"
           )
-          replace_exact(
-              "CHANGELOG.md",
-              "- mapping openfunds absent ;",
-              "- mapping Openfunds encore partiel : 4 lignes validées / 2 OF-ID officiels couverts sur 1 869 ;"
+          replace_exact("CHANGELOG.md",
+            "- mapping Openfunds champ-par-champ encore incomplet (`OF-MAP-001` terminé, `OF-MAP-002` en cours) ;",
+            "- mapping Openfunds encore partiel : 4 lignes validées / 2 OF-ID officiels sur 1 869 (`OF-MAP-002` en cours) ;"
           )
-          replace_exact(
-              "CHANGELOG.md",
-              "- Waves 02 à 09 poursuivies sous TDD ;\n- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle, 159 `VALIDATED` ;",
-              "- Waves 02 à 13 poursuivies sous TDD ;\n- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle, 187 `VALIDATED` / 12 `PENDING` ;\n- Wave 13 : neuf `FX_REFERENCE_RATE_PROVIDER` validés après preuve primaire officielle ; résiduel institutionnel ramené à 12 rôles ;"
+          replace_exact("CHANGELOG.md","- Waves 02 à 12 poursuivies sous TDD ;","- Waves 02 à 13 poursuivies sous TDD ;")
+          replace_exact("CHANGELOG.md",
+            "- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle = 178 `VALIDATED` + 21 `PENDING` ;",
+            "- 53/54 pays country-scoped, 141 organisations, 199 relations organisation-rôle = 187 `VALIDATED` + 12 `PENDING` ;"
           )
-          replace_exact(
-              "CHANGELOG.md",
-              "- v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;\n- manifeste de provenance ajouté ;\n- Field List exact, SHA256 et parser restent le gate OF-MAP-001.",
-              "- v2.13.0 et licence `CC BY-ND 4.0` vérifiées ;\n- Field List officiel archivé byte-identical, SHA256 verrouillé et parser déterministe validé : `OF-MAP-001` terminé ;\n- `OF-MAP-002` bootstrap GREEN, validator durci et Batch 01 validé : 4 mappings / 2 OF-ID / 4 cibles canoniques."
+          replace_exact("CHANGELOG.md",
+            "- Waves 10–12 : 12 rôles institutionnels, 3 bourses et 4 fournisseurs d'indices promus sans création ni retargeting ;",
+            "- Waves 10–13 : 12 rôles institutionnels, 3 bourses, 4 fournisseurs d'indices et 9 fournisseurs de référence FX promus sans création ni retargeting ;"
+          )
+          replace_exact("CHANGELOG.md",
+            "- résiduel exact : 9 FX, 5 index providers, 3 monetary unions, 2 supranational authorities, 2 interbank operators ;",
+            "- résiduel exact : 5 index providers, 3 monetary unions, 2 supranational authorities, 2 interbank operators ;"
+          )
+          replace_exact("CHANGELOG.md",
+            "- `OF-MAP-001` terminé ; `OF-MAP-002` devient le chantier actif.",
+            "- `OF-MAP-001` terminé ; `OF-MAP-002` bootstrap GREEN, validator durci et Batch 01 validé : 4 mappings / 2 OF-ID / 4 cibles canoniques."
           )
 
-          replace_exact(
-              "OPENFUNDS_MAPPING.md",
-              "CATALOGUE PARSE MACHINE-READABLE         NON ENCORE CONSTRUIT\nMAPPING CHAMP PAR CHAMP                  NON ENCORE CONSTRUIT",
-              "INVENTAIRE OFFICIEL PARSE                1869 OF-ID / CHECKSUM-GATED\nMAPPING CHAMP PAR CHAMP                  EN COURS — BATCH01 4 ROWS / 2 OF-ID"
+          # OPENFUNDS_MAPPING — still stale from pre-parser phase.
+          replace_exact("OPENFUNDS_MAPPING.md",
+            "CATALOGUE PARSE MACHINE-READABLE         NON ENCORE CONSTRUIT\nMAPPING CHAMP PAR CHAMP                  NON ENCORE CONSTRUIT",
+            "INVENTAIRE OFFICIEL PARSE                1869 OF-ID / CHECKSUM-GATED\nMAPPING CHAMP PAR CHAMP                  EN COURS — BATCH01 4 ROWS / 2 OF-ID"
           )
-          replace_exact(
-              "OPENFUNDS_MAPPING.md",
-              "Le gate d'archivage binaire de `OF-MAP-001` est donc fermé. Le gate restant est désormais **le parsing déterministe du PDF checksum-locké et la validation de l'inventaire réel des champs**. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.",
-              "`OF-MAP-001` est fermé : archive byte-identical, SHA256 et parsing déterministe de 1 869 OF-ID sont vérifiés. `OF-MAP-002` est actif avec un registre séparé, un validator qui reparse l'archive officielle et reconstruit les 143 FIELD_ID canoniques avant d'accepter un mapping. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé."
+          replace_exact("OPENFUNDS_MAPPING.md",
+            "Le gate d'archivage binaire de `OF-MAP-001` est donc fermé. Le gate restant est désormais **le parsing déterministe du PDF checksum-locké et la validation de l'inventaire réel des champs**. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé.",
+            "`OF-MAP-001` est fermé : archive byte-identical, SHA256 et parsing déterministe de 1 869 OF-ID sont vérifiés. `OF-MAP-002` est actif avec un registre séparé et un validator qui reparse l'archive officielle et reconstruit les 143 FIELD_ID canoniques avant d'accepter un mapping. Aucun contenu du catalogue ne doit être reconstitué depuis une source secondaire ou inventé."
           )
-          replace_exact(
-              "OPENFUNDS_MAPPING.md",
-              "5. AUDITER LE LAYOUT PDF                    PROCHAINE UNITE\n6. PARSER LE CATALOGUE DETERMINISTEMENT     APRES 5\n7. VALIDER IDS / TYPES / CARDINALITES       APRES 6\n8. GENERER LE REGISTRE DE MAPPING           APRES 6\n9. PROPOSER LES MAPPINGS                    APRES 6",
-              "5. AUDITER LE LAYOUT PDF                    FAIT\n6. PARSER LE CATALOGUE DETERMINISTEMENT     FAIT — 1869 OF-ID\n7. VALIDER IDS / STRUCTURE                   FAIT — checksum-gated\n8. GENERER LE REGISTRE DE MAPPING           FAIT — registre gouverné\n9. PROPOSER LES MAPPINGS                    EN COURS — Batch01 validé"
+          replace_exact("OPENFUNDS_MAPPING.md",
+            "5. AUDITER LE LAYOUT PDF                    PROCHAINE UNITE\n6. PARSER LE CATALOGUE DETERMINISTEMENT     APRES 5\n7. VALIDER IDS / TYPES / CARDINALITES       APRES 6\n8. GENERER LE REGISTRE DE MAPPING           APRES 6\n9. PROPOSER LES MAPPINGS                    APRES 6",
+            "5. AUDITER LE LAYOUT PDF                    FAIT\n6. PARSER LE CATALOGUE DETERMINISTEMENT     FAIT — 1869 OF-ID\n7. VALIDER IDS / STRUCTURE                   FAIT — checksum-gated\n8. GENERER LE REGISTRE DE MAPPING           FAIT — registre gouverné\n9. PROPOSER LES MAPPINGS                    EN COURS — Batch01 validé"
           )
-          replace_exact(
-              "OPENFUNDS_MAPPING.md",
-              "- parsing déterministe — **OUVERT** ;\n- nombre de champs et identifiants vérifiés — **OUVERT** ;",
-              "- parsing déterministe — **FAIT** ;\n- nombre de champs et identifiants vérifiés — **FAIT — 1 869 OF-ID uniques** ;"
+          replace_exact("OPENFUNDS_MAPPING.md",
+            "- parsing déterministe — **OUVERT** ;\n- nombre de champs et identifiants vérifiés — **OUVERT** ;",
+            "- parsing déterministe — **FAIT** ;\n- nombre de champs et identifiants vérifiés — **FAIT — 1 869 OF-ID uniques** ;"
           )
-          replace_exact(
-              "OPENFUNDS_MAPPING.md",
-              "`OF-MAP-001` reste `EN_COURS` jusqu'à clôture des deux points ouverts.",
-              "`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` avec Batch 01 vérifié : 4 lignes, 2 OF-ID externes et 4 cibles canoniques."
+          replace_exact("OPENFUNDS_MAPPING.md",
+            "`OF-MAP-001` reste `EN_COURS` jusqu'à clôture des deux points ouverts.",
+            "`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` avec Batch 01 vérifié : 4 lignes, 2 OF-ID externes et 4 cibles canoniques."
           )
           PY
 
