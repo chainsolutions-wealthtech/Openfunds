@@ -1,0 +1,134 @@
+name: OF-SOURCE-002 Wave14 Promote Index Providers
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-wave14-promote.yml"
+
+permissions:
+  contents: write
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Promote exact closed allowlist
+        run: |
+          python - <<'PY'
+          import csv
+          from pathlib import Path
+
+          path = Path("data/reference/ORGANIZATION_SCOPE_ROLES.csv")
+          keys = {
+              ("JSE", "INDEX_PROVIDER", "AFRIQUE_DU_SUD", "COUNTRY"),
+              ("BVMT", "INDEX_PROVIDER", "TUNISIE", "COUNTRY"),
+          }
+          note = "OFFICIAL_INDEX_PROVIDER_VERIFIED_2026_08_17_WAVE14"
+
+          with path.open("r", encoding="utf-8", newline="") as handle:
+              reader = csv.DictReader(handle, delimiter=";")
+              fieldnames = reader.fieldnames
+              rows = list(reader)
+
+          found = {}
+          for row in rows:
+              key = (row["ORGANIZATION_CODE"], row["ROLE_CODE"], row["SCOPE_ENTITY_CODE"], row["SCOPE_ENTITY_TYPE"])
+              if key in keys:
+                  found.setdefault(key, []).append(row)
+
+          assert set(found) == keys, keys - set(found)
+          for key, matching in found.items():
+              assert len(matching) == 1, (key, len(matching))
+              row = matching[0]
+              assert row["VALIDATION_STATUS"] == "PENDING", (key, row["VALIDATION_STATUS"])
+              row["VALIDATION_STATUS"] = "VALIDATED"
+              row["SOURCE_NOTE"] = note
+
+          with path.open("w", encoding="utf-8", newline="") as handle:
+              writer = csv.DictWriter(handle, fieldnames=fieldnames, delimiter=";", lineterminator="\n")
+              writer.writeheader()
+              writer.writerows(rows)
+          PY
+
+      - name: Validate all institutional contracts on Python 3.11
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
+          python -m unittest -v tests.test_institutional_registry_wave10
+          python -m unittest -v tests.test_institutional_registry_wave11
+          python -m unittest -v tests.test_institutional_registry_wave12
+          python -m unittest -v tests.test_institutional_registry_wave13
+          python -m unittest -v tests.test_institutional_registry_wave14
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Validate all institutional contracts on Python 3.12
+        run: |
+          python -m unittest -v tests.test_institutional_registry
+          python -m unittest -v tests.test_institutional_registry_wave05
+          python -m unittest -v tests.test_institutional_registry_wave06
+          python -m unittest -v tests.test_institutional_registry_wave07
+          python -m unittest -v tests.test_institutional_registry_wave08
+          python -m unittest -v tests.test_institutional_registry_wave09
+          python -m unittest -v tests.test_institutional_registry_wave10
+          python -m unittest -v tests.test_institutional_registry_wave11
+          python -m unittest -v tests.test_institutional_registry_wave12
+          python -m unittest -v tests.test_institutional_registry_wave13
+          python -m unittest -v tests.test_institutional_registry_wave14
+
+      - name: Assert exact post-state and diff scope
+        run: |
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+          path=Path("data/reference/ORGANIZATION_SCOPE_ROLES.csv")
+          with path.open("r", encoding="utf-8", newline="") as handle:
+              rows=list(csv.DictReader(handle, delimiter=";"))
+          statuses=Counter(r["VALIDATION_STATUS"] for r in rows)
+          pending_roles=Counter(r["ROLE_CODE"] for r in rows if r["VALIDATION_STATUS"]=="PENDING")
+          pending_index={
+              (r["ORGANIZATION_CODE"],r["SCOPE_ENTITY_CODE"],r["SCOPE_ENTITY_TYPE"])
+              for r in rows if r["ROLE_CODE"]=="INDEX_PROVIDER" and r["VALIDATION_STATUS"]=="PENDING"
+          }
+          assert len(rows)==199, len(rows)
+          assert statuses==Counter({"VALIDATED":189,"PENDING":10}), statuses
+          assert pending_roles==Counter({"MONETARY_UNION":3,"INDEX_PROVIDER":3,"SUPRANATIONAL_AUTHORITY":2,"INTERBANK_MARKET_OPERATOR":2}), pending_roles
+          assert pending_index=={
+              ("EGX","EGYPTE","COUNTRY"),
+              ("NSE","KENYA","COUNTRY"),
+              ("NGX","NIGERIA","COUNTRY"),
+          }, pending_index
+          PY
+          git diff --check
+          test "$(git status --porcelain=v1 -uall | wc -l)" -eq 1
+          test "$(git status --porcelain=v1 -uall | sed 's/^...//')" = "data/reference/ORGANIZATION_SCOPE_ROLES.csv"
+
+      - name: Commit exact Wave 14 promotion
+        run: |
+          git config user.name "openfunds-governed-bot"
+          git config user.email "openfunds-governed-bot@users.noreply.github.com"
+          git add data/reference/ORGANIZATION_SCOPE_ROLES.csv
+          git commit -m "data(source): validate Wave 14 index providers"
+          git push origin HEAD:architecture/africafunds-country-indicators-v0.1
