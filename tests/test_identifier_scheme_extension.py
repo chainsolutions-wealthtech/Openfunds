@@ -13,6 +13,8 @@ REQUIRED_SCHEMES = {"WKN", "SEDOL", "VALOR"}
 
 
 class IdentifierSchemeExtensionTests(unittest.TestCase):
+    """Contract for the forward-only 018 identifier vocabulary extension."""
+
     def test_dictionary_exposes_required_security_identifier_schemes(self) -> None:
         values = json.loads(DICTIONARY_VALUES.read_text(encoding="utf-8"))
         schemes = set(values["entity_identifier.identifier_scheme"])
