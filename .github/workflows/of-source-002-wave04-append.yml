@@ -146,7 +146,10 @@ jobs:
             echo "No role-registry change to commit"
             exit 0
           fi
+          echo "Git status before governed commit:"
+          git status --short
           unexpected_files="$(git status --short | awk '$2 != "data/reference/ORGANIZATION_SCOPE_ROLES.csv" {count++} END {print count+0}')"
+          echo "Unexpected file count: $unexpected_files"
           test "$unexpected_files" -eq 0
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
