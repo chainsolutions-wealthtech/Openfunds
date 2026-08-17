@@ -1,17 +1,17 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-LOOP-SOURCE-002
-CURRENT_TASK: OF-SOURCE-002_EN_COURS
-LAST_VERIFIED_WAVE: 10
-NEXT_UNIT: WAVE_11_EXCHANGE_ROLE_REVALIDATION + SERIES_ROLE_EVIDENCE_PLAN + ERITREA_PRIMARY_SOURCE_WATCH
-STATUS: READY_FOR_READ_ONLY_AUDIT
-WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST + TDD_RED
+CURRENT_LOOP: OF-LOOP-SOURCE-002 + OF-MAP-001_ARCHIVE_GATE
+CURRENT_TASK: OF-SOURCE-002_EN_COURS / OF-MAP-001_EN_COURS
+LAST_VERIFIED_WAVE: 11
+NEXT_UNIT: OPENFUNDS_V2_13_0_OFFICIAL_FIELD_LIST_ARCHIVE + SERIES_ROLE_EVIDENCE_AUDIT + ERITREA_PRIMARY_SOURCE_WATCH
+STATUS: READY_FOR_GOVERNED_ARCHIVE_AND_READ_ONLY_SERIES_AUDIT
+WRITE_GATE: EXACT_OFFICIAL_ARTIFACT + SHA256 + UNALTERED_ARCHIVE + CLOSED_ALLOWLIST + TDD_RED
 ```
 
 ## État courant vérifié — 17 août 2026
 
-Les Waves 01 à 10 ont été exécutées sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main` et sans déploiement de production.
+Les Waves 01 à 11 ont été exécutées sur la branche gouvernée existante, sans nouvelle branche, sans modification de `main` et sans déploiement de production.
 
 ```text
 AFRICAN_COUNTRIES: 54
@@ -19,16 +19,21 @@ COUNTRY_COVERAGE: 53 / 54
 COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 1
 UNCOVERED_COUNTRY: ERYTHREE
 ORGANIZATIONS: 141 = 121 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 199 = 171 VALIDATED + 28 PENDING
+ORGANIZATION_SCOPE_ROLES: 199 = 174 VALIDATED + 25 PENDING
+PENDING_STOCK_EXCHANGE: 0
 ```
 
-Wave 10 a promu exactement 12 relations country-scoped déjà présentes, sans création ni retargeting, sous contrat TDD RED→GREEN et avec validation Python 3.11/3.12. Le rapport de clôture est `docs/00_PROJECT/OF_SOURCE_002_WAVE_10_COMPLETION_20260817.md`.
+Wave 11 a promu exactement trois relations `STOCK_EXCHANGE` déjà présentes (`EGX`, `GSE`, `NGX`), sans création ni retargeting, sous contrat TDD RED→GREEN et avec validation Python 3.11/3.12. Le rapport de clôture est :
+
+```text
+docs/00_PROJECT/OF_SOURCE_002_WAVE_11_COMPLETION_20260817.md
+```
 
 L'Érythrée reste volontairement absente : aucune organisation country-scoped ne doit être créée tant qu'une source primaire officielle actuelle n'est pas vérifiée.
 
-## Audit effectif post-Wave10
+## Audit effectif post-Wave11
 
-Le workflow lecture seule `OF-SOURCE-002 Post-Wave10 Audit` a vérifié :
+Le workflow lecture seule `OF-SOURCE-002 Post-Wave11 Audit` a vérifié :
 
 ```text
 MONETARY_AUTHORITY              11 pays sans groupe couvert
@@ -36,67 +41,78 @@ STATISTICS                       3 pays sans groupe couvert
 CAPITAL_MARKET_REGULATION       18 pays sans groupe couvert
 FUND_REGULATION                 19 pays sans groupe couvert
 INSURANCE_PENSION_REGULATION    44 pays sans groupe couvert
-EXCHANGE                        20 pays sans groupe couvert
+EXCHANGE                        17 pays sans groupe couvert
 FISCAL_DEBT                     40 pays sans groupe couvert
 ```
 
-Les chiffres sont calculés à partir des rôles `VALIDATED` country-scoped **et** des rôles zonaux validés hérités ; ils ne doivent pas être lus comme un simple comptage d'organisations nationales.
+Ces chiffres combinent rôles country-scoped validés et compétences zonales validées héritées. Ils ne sont pas des instructions de créer artificiellement une organisation dans chaque pays.
 
-## Inventaire exact des 28 PENDING
+## Inventaire exact des 25 PENDING
 
 ```text
 FX_REFERENCE_RATE_PROVIDER   9
 INDEX_PROVIDER               9
-STOCK_EXCHANGE               3
 MONETARY_UNION               3
 SUPRANATIONAL_AUTHORITY      2
 INTERBANK_MARKET_OPERATOR    2
-TOTAL                       28
+TOTAL                       25
 
-COUNTRY        17
+COUNTRY        14
 MONETARY_ZONE  11
 ```
 
-### Prochaine unité : Wave 11 — bourses encore PENDING
+Il ne reste aucune relation `STOCK_EXCHANGE` en attente.
 
-La prochaine unité est limitée aux trois relations institutionnelles simples suivantes :
+## Unité prioritaire indépendante — OF-MAP-001
+
+La source officielle exacte du Field List Openfunds v2.13.0 est désormais identifiée sur le domaine officiel Openfunds. Le document officiel est un PDF final v2.13.0 daté du 2026-03-23.
+
+La prochaine écriture autorisée pour `OF-MAP-001` doit être strictement un archivage gouverné de l'artefact officiel **sans modification** :
+
+1. télécharger le PDF depuis son URL officielle exacte ;
+2. vérifier le magic `%PDF-` ;
+3. vérifier que le document annonce `FINAL`, `Version 2.13.0` et `2026-03-23` ;
+4. calculer SHA256 et taille binaire ;
+5. conserver l'artefact byte-for-byte sans réécriture ;
+6. enregistrer URL source, date/version, licence `CC BY-ND 4.0`, attribution et checksum ;
+7. refuser toute substitution, conversion ou catalogue reconstruit ;
+8. limiter le commit aux artefacts d'archive/provenance explicitement autorisés ;
+9. seulement après ce gate, créer un parser déterministe et un catalogue structuré séparé de l'original sous licence.
+
+Le manifeste existant reste :
 
 ```text
-EGX / STOCK_EXCHANGE / EGYPTE
-GSE / STOCK_EXCHANGE / GHANA
-NGX / STOCK_EXCHANGE / NIGERIA
+data/openfunds/source_manifest_v2.13.0.json
 ```
 
-Avant toute promotion :
+Il doit être mis à jour uniquement après archivage réussi avec le SHA256 réellement observé.
 
-1. résoudre l'identité juridique et le domaine officiel actuel de chaque bourse ;
-2. prouver directement sur une source primaire officielle que l'entité est bien l'opérateur de la bourse ;
-3. vérifier que le code organisation existant désigne la bonne entité et non une société holding/groupe distincte ;
-4. conserver toute ligne ambiguë `PENDING` ;
-5. produire un audit Wave 11, une allowlist fermée et un test RED ;
-6. ne modifier que `VALIDATION_STATUS` et `SOURCE_NOTE` des lignes prouvées ;
-7. vérifier les contrats Waves 01→11 sur Python 3.11/3.12 avant commit.
+## OF-SOURCE-002 — prochaine phase
 
-### Rôles de séries — vagues séparées
+### Rôles de séries — audits dédiés
 
-Les 18 lignes suivantes ne doivent pas être promues par simple identité institutionnelle :
+Les 18 lignes suivantes ne doivent jamais être promues sur la seule identité de l'institution :
 
 ```text
 FX_REFERENCE_RATE_PROVIDER   9
 INDEX_PROVIDER               9
 ```
 
-Pour `FX_REFERENCE_RATE_PROVIDER`, la preuve doit établir la publication/propriété de la série de référence FX pertinente. Pour `INDEX_PROVIDER`, la preuve doit établir la responsabilité de calcul/publication de l'indice, et pas seulement l'existence de la bourse.
+Pour `FX_REFERENCE_RATE_PROVIDER`, la preuve doit établir la publication/propriété de la série FX de référence pertinente.
+
+Pour `INDEX_PROVIDER`, la preuve doit établir la responsabilité de calcul, propriété ou publication de l'indice pertinent. Une bourse validée comme `STOCK_EXCHANGE` ne devient pas automatiquement `INDEX_PROVIDER`.
+
+Les audits peuvent préparer des allowlists, mais aucune promotion ne doit précéder : source primaire officielle actuelle, définition exacte de la série, collision review, TDD RED et validation croisée des scopes.
 
 ### Rôles zonaux — revue sémantique séparée
 
 ```text
-MONETARY_UNION            3
-SUPRANATIONAL_AUTHORITY   2
-INTERBANK_MARKET_OPERATOR 2
+MONETARY_UNION             3
+SUPRANATIONAL_AUTHORITY    2
+INTERBANK_MARKET_OPERATOR  2
 ```
 
-Ces rôles exigent une revue sémantique dédiée. En particulier, `CMA / MONETARY_UNION` ne doit pas être promu sans vérifier que la terminologie canonique `MONETARY_UNION` est bien adaptée à la Common Monetary Area et non seulement à un arrangement monétaire.
+Ces rôles nécessitent une revue du modèle avant promotion. En particulier, `CMA / MONETARY_UNION` reste bloqué tant que le terme canonique `MONETARY_UNION` n'est pas démontré comme sémantiquement approprié à la Common Monetary Area.
 
 ## Blockers institutionnels maintenus
 
@@ -123,16 +139,6 @@ PRODUCTION_STATUS: NOT_ACTIVE
 ```
 
 Cette clôture structurelle n'autorise pas l'activation de WTI, WTI Bench, benchmarks, RFR, MAR ou autres calculs sans leurs validations propres.
-
-## Openfunds — gate réévalué
-
-La version officielle vérifiée est `2.13.0`, publiée le `2026-03-23`, sous licence officielle `CC BY-ND 4.0` avec attribution. Le manifeste gouverné est :
-
-```text
-data/openfunds/source_manifest_v2.13.0.json
-```
-
-`OF-MAP-001` reste incomplet tant que le Field List officiel v2.13.0 n'est pas archivé **sans modification**, hashé SHA256 et parsé déterministement. Aucun catalogue reconstruit ou identifiant inventé n'est autorisé.
 
 ## Interdictions maintenues
 
