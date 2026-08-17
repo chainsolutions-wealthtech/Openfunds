@@ -1,0 +1,47 @@
+name: OF-SOURCE-002 Post Wave15 Coverage Audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-source-002-post-wave15-audit.yml"
+
+permissions:
+  contents: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: "1"
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Print exact post-Wave15 functional coverage
+        run: |
+          python scripts/audit_institutional_role_coverage.py
+          python - <<'PY'
+          import csv
+          from collections import Counter
+          from pathlib import Path
+
+          path=Path('data/reference/ORGANIZATION_SCOPE_ROLES.csv')
+          with path.open(encoding='utf-8', newline='') as handle:
+              rows=list(csv.DictReader(handle, delimiter=';'))
+          statuses=Counter(r['VALIDATION_STATUS'] for r in rows)
+          pending=Counter(r['ROLE_CODE'] for r in rows if r['VALIDATION_STATUS']=='PENDING')
+          print('SCOPE_ROLE_TOTAL',len(rows))
+          print('VALIDATION_STATUS',dict(sorted(statuses.items())))
+          print('PENDING_BY_ROLE',dict(sorted(pending.items())))
+          for r in rows:
+              if r['VALIDATION_STATUS']=='PENDING':
+                  print('PENDING',r['ORGANIZATION_CODE'],r['ROLE_CODE'],r['SCOPE_ENTITY_CODE'],r['SCOPE_ENTITY_TYPE'])
+          PY
+      - name: Assert audit is read-only
+        run: test -z "$(git status --porcelain=v1 -uall)"
