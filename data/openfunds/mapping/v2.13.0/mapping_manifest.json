@@ -12,9 +12,7 @@
   "source_archive_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf",
   "source_checksum_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256",
   "canonical_dictionary_path": "data/dictionary/spec_v1",
-  "canonical_extension_paths": [
-    "data/dictionary/extensions/listing_v1"
-  ],
+  "canonical_extension_paths": ["data/dictionary/extensions/listing_v1"],
   "validator_path": "scripts/validate_openfunds_mapping_registry.py",
   "test_path": "tests/test_openfunds_mapping_registry.py",
   "workflow_path": ".github/workflows/of-map-002-mapping-registry.yml",
@@ -30,19 +28,11 @@
     "duplicate_external_canonical_pairs_are_forbidden": true,
     "parameterized_xx_ids_must_remain_unexpanded": true,
     "uncertain_mappings_use_to_confirm": true,
-    "information_loss_must_be_explicit": true
+    "information_loss_must_be_explicit": true,
+    "licence_sensitive_fields_may_be_semantically_validated_while_import_export_remain_disabled": true
   },
-  "allowed_mapping_statuses": [
-    "DIRECT",
-    "TRANSFORMED",
-    "ONE_TO_MANY",
-    "MANY_TO_ONE",
-    "TO_CONFIRM"
-  ],
-  "allowed_validation_statuses": [
-    "PROPOSED",
-    "VALIDATED"
-  ],
+  "allowed_mapping_statuses": ["DIRECT", "TRANSFORMED", "ONE_TO_MANY", "MANY_TO_ONE", "TO_CONFIRM"],
+  "allowed_validation_statuses": ["PROPOSED", "VALIDATED"],
   "verified_empty_baseline": {
     "reviewed_mapping_rows": 0,
     "mapped_external_ids": 0,
@@ -85,7 +75,7 @@
       "cumulative_reviewed_mapping_rows": 12,
       "cumulative_mapped_external_ids": 6,
       "external_ids": ["OFST020010", "OFST020015"],
-      "sedol_listing_field_deferred": "OFST020040",
+      "sedol_listing_field_deferred_at_batch_close": "OFST020040",
       "green_workflow_run": 32069647430
     },
     {
@@ -96,6 +86,19 @@
       "cumulative_mapped_external_ids": 7,
       "external_ids": ["OFST020400"],
       "green_workflow_run": 32070575644
+    },
+    {
+      "batch_id": "BATCH_05_SEDOL_LISTING_IDENTIFIER",
+      "status": "VALIDATED_SEMANTICS_LICENSE_GATED",
+      "reviewed_mapping_rows": 3,
+      "cumulative_reviewed_mapping_rows": 16,
+      "cumulative_mapped_external_ids": 8,
+      "external_ids": ["OFST020040"],
+      "official_record_audit_run": 32071520665,
+      "import_supported": false,
+      "export_supported": false,
+      "activation_gate": "EXPLICIT_SEDOL_LICENSING_CLEARANCE",
+      "green_workflow_run": 32071858346
     }
   ],
   "canonical_inventory": {
@@ -111,15 +114,16 @@
         "scope": "migration 019 Share Class Listing core"
       }
     ],
-    "total_field_count": 177
+    "total_field_count": 177,
+    "union_green_workflow_run": 32071385088
   },
   "current_coverage": {
-    "reviewed_mapping_rows": 13,
-    "mapped_external_ids": 7,
-    "unmapped_external_ids": 1862,
-    "mapped_canonical_ids": 7,
-    "external_field_coverage_ratio": 0.0037453184,
-    "canonical_field_coverage_ratio": 0.0395480226
+    "reviewed_mapping_rows": 16,
+    "mapped_external_ids": 8,
+    "unmapped_external_ids": 1861,
+    "mapped_canonical_ids": 10,
+    "external_field_coverage_ratio": 0.0042803638,
+    "canonical_field_coverage_ratio": 0.0564971751
   },
   "tdd_history": {
     "initial_red_run": 32062460096,
@@ -129,9 +133,12 @@
     "batch_02_green_run": 32067722365,
     "batch_03_green_run": 32069647430,
     "batch_04_green_run": 32070575644,
-    "canonical_extension_union_red_run": 32071204078
+    "canonical_extension_union_red_run": 32071204078,
+    "canonical_extension_union_green_run": 32071385088,
+    "batch_05_red_run": 32071737609,
+    "batch_05_green_run": 32071858346
   },
-  "status": "BATCH_04_VALIDATED_LISTING_EXTENSION_UNION_IN_PROGRESS",
+  "status": "BATCH_05_VALIDATED_SEMANTICS_LICENSE_GATED_READY_FOR_BATCH_06",
   "created_on": "2026-08-17",
   "verified_on": "2026-08-17"
 }
