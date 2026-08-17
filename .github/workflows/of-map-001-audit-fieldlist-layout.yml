@@ -1,0 +1,108 @@
+name: OF-MAP-001 Audit archived Field List layout
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - ".github/workflows/of-map-001-audit-fieldlist-layout.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  audit-layout:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PDF_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
+      SHA_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
+    steps:
+      - name: Checkout governed branch
+        uses: actions/checkout@v4
+        with:
+          ref: architecture/africafunds-country-indicators-v0.1
+
+      - name: Verify checksum before any parse audit
+        run: |
+          set -euo pipefail
+          expected="$(cut -d' ' -f1 "$SHA_PATH")"
+          actual="$(sha256sum "$PDF_PATH" | cut -d' ' -f1)"
+          echo "expected=$expected"
+          echo "actual=$actual"
+          test "$expected" = "$actual"
+          test "$actual" = "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4"
+
+      - name: Install deterministic PDF text tooling
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+
+      - name: Extract layout text to ephemeral workspace
+        run: |
+          set -euo pipefail
+          pdftotext -layout "$PDF_PATH" /tmp/openfunds_v2_13_0.txt
+          test -s /tmp/openfunds_v2_13_0.txt
+          echo "TEXT_BYTES=$(stat -c '%s' /tmp/openfunds_v2_13_0.txt)"
+          echo "TEXT_LINES=$(wc -l < /tmp/openfunds_v2_13_0.txt)"
+
+      - name: Audit candidate OF-ID token grammar and counts
+        shell: python
+        run: |
+          import re
+          from collections import Counter
+          from pathlib import Path
+
+          text = Path('/tmp/openfunds_v2_13_0.txt').read_text(encoding='utf-8', errors='strict')
+          tokens = re.findall(r'\bOF[A-Z0-9_-]{4,20}\b', text)
+          unique = sorted(set(tokens))
+          print('CANDIDATE_TOKEN_OCCURRENCES', len(tokens))
+          print('CANDIDATE_TOKEN_UNIQUE', len(unique))
+          print('LENGTH_DISTRIBUTION', dict(sorted(Counter(map(len, unique)).items())))
+          print('PREFIX4_DISTRIBUTION', dict(Counter(token[:4] for token in unique).most_common()))
+          print('FIRST_80_UNIQUE')
+          for token in unique[:80]:
+              print(token)
+          print('LAST_40_UNIQUE')
+          for token in unique[-40:]:
+              print(token)
+
+          grammars = {
+              'OF_2LETTERS_6DIGITS': r'\bOF[A-Z]{2}\d{6}\b',
+              'OF_2LETTERS_5DIGITS': r'\bOF[A-Z]{2}\d{5}\b',
+              'OF_2LETTERS_4DIGITS': r'\bOF[A-Z]{2}\d{4}\b',
+              'OF_3LETTERS_6DIGITS': r'\bOF[A-Z]{3}\d{6}\b',
+              'OF_3LETTERS_5DIGITS': r'\bOF[A-Z]{3}\d{5}\b',
+          }
+          for name, pattern in grammars.items():
+              found = re.findall(pattern, text)
+              print(name, 'OCCURRENCES', len(found), 'UNIQUE', len(set(found)))
+
+      - name: Print bounded structural samples
+        shell: python
+        run: |
+          import re
+          from pathlib import Path
+          lines = Path('/tmp/openfunds_v2_13_0.txt').read_text(encoding='utf-8').splitlines()
+          candidate = re.compile(r'\bOF[A-Z0-9_-]{4,20}\b')
+          hit_lines = [i for i, line in enumerate(lines) if candidate.search(line)]
+          print('LINES_WITH_CANDIDATE_ID', len(hit_lines))
+          for index in hit_lines[:12]:
+              start=max(0,index-4); end=min(len(lines),index+12)
+              print(f'--- CONTEXT {start+1}:{end} ---')
+              for n in range(start,end):
+                  print(f'{n+1:06d}: {lines[n]}')
+          if len(hit_lines) > 12:
+              print('--- LAST_ID_CONTEXTS ---')
+              for index in hit_lines[-4:]:
+                  start=max(0,index-3); end=min(len(lines),index+8)
+                  print(f'--- CONTEXT {start+1}:{end} ---')
+                  for n in range(start,end):
+                      print(f'{n+1:06d}: {lines[n]}')
+
+      - name: Assert archive was not modified
+        run: |
+          set -euo pipefail
+          test -z "$(git status --porcelain=v1 -uall)"
