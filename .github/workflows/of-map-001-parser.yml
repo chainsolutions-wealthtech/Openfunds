@@ -1,0 +1,86 @@
+name: OF-MAP-001 Deterministic v2.13.0 parser
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - architecture/africafunds-country-indicators-v0.1
+    paths:
+      - "scripts/parse_openfunds_v2_13_0.py"
+      - "tests/test_parse_openfunds_v2_13_0.py"
+      - "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf"
+      - "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256"
+      - ".github/workflows/of-map-001-parser.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  unit:
+    name: parser-unit (${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Run parser contract
+        run: python -m unittest -v tests.test_parse_openfunds_v2_13_0
+
+  integration:
+    name: checksum-locked official inventory
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PDF_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
+      SHA_PATH: data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Verify immutable source checksum
+        run: |
+          set -euo pipefail
+          expected="$(cut -d' ' -f1 "$SHA_PATH")"
+          actual="$(sha256sum "$PDF_PATH" | cut -d' ' -f1)"
+          test "$expected" = "$actual"
+          test "$actual" = "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4"
+      - name: Install deterministic PDF extraction tool
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends poppler-utils
+      - name: Parse checksum-locked official source to summary only
+        run: |
+          set -euo pipefail
+          python scripts/parse_openfunds_v2_13_0.py \
+            --pdf "$PDF_PATH" \
+            --sha256-file "$SHA_PATH" \
+            --summary-json /tmp/openfunds_summary.json
+          cat /tmp/openfunds_summary.json
+      - name: Assert exact verified v2.13.0 inventory
+        shell: python
+        run: |
+          import json
+          from pathlib import Path
+          summary=json.loads(Path('/tmp/openfunds_summary.json').read_text(encoding='utf-8'))
+          assert summary['standard_version']=='2.13.0', summary
+          assert summary['source_sha256']=='40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4', summary
+          assert summary['field_records']==1869, summary
+          assert summary['concrete_ids']==1849, summary
+          assert summary['parameterized_country_templates']==20, summary
+          assert summary['unique_ids']==1869, summary
+          assert summary['first_id']=='OFST001000', summary
+          assert summary['last_id']=='OFIN000410', summary
+          assert summary['prefix_counts']=={
+              'OFCA':44,'OFDC':21,'OFDY':67,'OFEE':617,'OFEF':29,'OFEM':122,'OFEP':143,
+              'OFFV':7,'OFIN':11,'OFNW':14,'OFPH':92,'OFPM':8,'OFRE':42,'OFST':652,
+          }, summary
+      - name: Assert parser did not modify repository
+        run: test -z "$(git status --porcelain=v1 -uall)"
