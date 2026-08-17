@@ -2,7 +2,7 @@
   "standard": "openfunds",
   "version": "2.13.0",
   "release_date": "2026-03-23",
-  "status": "OFFICIAL_VERSION_AND_LICENSE_VERIFIED_BINARY_ARCHIVE_PENDING",
+  "status": "OFFICIAL_V2_13_0_FIELD_LIST_ARCHIVED_CHECKSUM_LOCKED_PARSE_PENDING",
   "official_current_version_page": "https://openfunds.org/fieldmenu/fields/",
   "official_license_page": "https://openfunds.org/about/licence/",
   "license": {
@@ -27,9 +27,19 @@
     "FinDatEx EMT 4.3 changes incorporated"
   ],
   "binary_archive": {
-    "status": "PENDING",
-    "reason": "The official current-version page exposes a downloadable Field List, but this conversation runtime cannot directly materialize the binary from openfunds.org. Do not substitute a reconstructed or inferred catalogue.",
-    "required_next_gate": "archive the official v2.13.0 Field List unaltered, compute SHA256, record media type and exact source URL, then parse deterministically"
+    "status": "ARCHIVED_UNALTERED",
+    "artifact_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf",
+    "exact_source_url": "https://openfunds.org/wp-content/uploads/2026/03/openfunds_fields_v2.13.0.pdf",
+    "media_type": "application/pdf",
+    "sha256": "40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4",
+    "byte_size": 2957096,
+    "page_count": 745,
+    "document_status": "FINAL",
+    "document_version": "2.13.0",
+    "document_date": "2026-03-23",
+    "retrieved_on": "2026-08-17",
+    "redistribution_mode": "UNALTERED_OFFICIAL_ARTIFACT_WITH_ATTRIBUTION",
+    "next_gate": "deterministically parse the checksum-locked official PDF into a separate structured catalogue without modifying the archived source"
   },
   "verified_on": "2026-08-17"
 }
