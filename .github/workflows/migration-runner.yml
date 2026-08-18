@@ -119,8 +119,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 19 then
-                  raise exception 'expected 19 governed migrations, got %', migration_count;
+              if migration_count <> 20 then
+                  raise exception 'expected 20 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -147,6 +147,19 @@ jobs:
               if to_regclass('fund.listing') is null
                  or to_regclass('fund.listing_identifier') is null then
                   raise exception 'canonical listing domain objects are missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='listing'
+                    and column_name='trading_quote_unit_code'
+              ) or not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='listing'
+                    and column_name='trading_quote_unit_factor'
+              ) then
+                  raise exception 'listing quote-unit migration 020 columns are missing';
               end if;
               if to_regclass('fund.fund') is not null
                  or to_regclass('fund.share_class') is not null then
@@ -202,11 +215,13 @@ jobs:
 
           insert into fund.listing(
               listing_id, share_class_id, venue_mic, is_primary,
+              trading_quote_unit_code, trading_quote_unit_factor,
               valid_from_status, valid_to_status, validation_status
           ) values (
               '00000000-0000-0000-0000-000000000190',
               '00000000-0000-0000-0000-000000000181',
-              'XNAS', true, 'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+              'XNAS', true, 'GBX', 0.01,
+              'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
           );
 
           insert into fund.listing_identifier(
@@ -249,6 +264,38 @@ jobs:
                       'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
                   );
                   raise exception 'listing without exchange or MIC unexpectedly accepted';
+              exception when check_violation then
+                  null;
+              end;
+
+              begin
+                  insert into fund.listing(
+                      listing_id, share_class_id, venue_mic, is_primary,
+                      trading_quote_unit_factor,
+                      valid_from_status, valid_to_status, validation_status
+                  ) values (
+                      '00000000-0000-0000-0000-000000000193',
+                      '00000000-0000-0000-0000-000000000181', 'XNYS', false,
+                      0.01,
+                      'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+                  );
+                  raise exception 'quote-unit factor without code unexpectedly accepted';
+              exception when check_violation then
+                  null;
+              end;
+
+              begin
+                  insert into fund.listing(
+                      listing_id, share_class_id, venue_mic, is_primary,
+                      trading_quote_unit_code,
+                      valid_from_status, valid_to_status, validation_status
+                  ) values (
+                      '00000000-0000-0000-0000-000000000194',
+                      '00000000-0000-0000-0000-000000000181', 'XLON', false,
+                      'gbx',
+                      'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+                  );
+                  raise exception 'lowercase quote-unit code unexpectedly accepted';
               exception when check_violation then
                   null;
               end;
