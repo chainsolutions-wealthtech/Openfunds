@@ -1,0 +1,9 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_LISTING_IDENTIFIER_SUBJECT_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_LISTING_IDENTIFIER_SUBJECT_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/023_listing_identifier_subject.sql",
+  "scope": "Additive canonical dictionary extension distinguishing listed-instrument identifiers from iNAV identifiers attached to a Listing.",
+  "compatibility": "FORWARD_ONLY_ADDITIVE"
+}
