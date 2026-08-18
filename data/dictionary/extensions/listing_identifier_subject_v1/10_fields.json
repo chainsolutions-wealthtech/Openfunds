@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_LISTING_IDENTIFIER_IDENTIFIER_SUBJECT",
+      "technical_name": "fund.listing_identifier.identifier_subject",
+      "entity_code": "LISTING_IDENTIFIER",
+      "physical_schema": "fund",
+      "physical_table": "listing_identifier",
+      "physical_column": "identifier_subject",
+      "data_type": "TEXT",
+      "nullable": false,
+      "definition_fr": "Sujet identifié par le code rattaché à une cotation : instrument coté ou iNAV.",
+      "definition_en": "Subject identified by the code attached to a listing: listed instrument or iNAV.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_EXCHANGE_OR_FUND_DOCUMENT",
+      "validation_rule": "ONE_OF_LISTING_INAV",
+      "normalization_rule": "CANONICAL_ENUM_ONLY",
+      "provenance_path": "schemas/fund/023_listing_identifier_subject.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
