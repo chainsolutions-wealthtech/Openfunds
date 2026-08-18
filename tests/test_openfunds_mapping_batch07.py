@@ -41,12 +41,11 @@ class OpenfundsMappingBatch07ContractTests(unittest.TestCase):
         self.assertNotIn("OF_FUND_LISTING_TRADING_CURRENCY_ID", targets)
         self.assertNotIn("OF_FUND_LISTING_TRADING_QUOTE_UNIT_FACTOR", targets)
 
-    def test_batch07_cumulative_post_state(self):
+    def test_batch07_contract_survives_future_batches(self):
         rows = read_rows()
-        self.assertEqual(21, len(rows))
-        self.assertEqual(12, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(15, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(21, len({row["MAPPING_ID"] for row in rows}))
+        mapping_ids = [row["MAPPING_ID"] for row in rows]
+        self.assertEqual(len(mapping_ids), len(set(mapping_ids)))
+        self.assertIn(MAPPING_ID, set(mapping_ids))
 
 
 if __name__ == "__main__":
