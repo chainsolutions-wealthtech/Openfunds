@@ -6,15 +6,16 @@
   "official_field_count": 1869,
   "canonical_dictionary_version": "1.0.0",
   "canonical_core_field_count": 143,
-  "canonical_extension_field_count": 36,
-  "canonical_field_count": 179,
+  "canonical_extension_field_count": 37,
+  "canonical_field_count": 180,
   "registry_path": "data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv",
   "source_archive_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf",
   "source_checksum_path": "data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256",
   "canonical_dictionary_path": "data/dictionary/spec_v1",
   "canonical_extension_paths": [
     "data/dictionary/extensions/listing_v1",
-    "data/dictionary/extensions/listing_quote_unit_v1"
+    "data/dictionary/extensions/listing_quote_unit_v1",
+    "data/dictionary/extensions/listing_status_v1"
   ],
   "validator_path": "scripts/validate_openfunds_mapping_registry.py",
   "test_path": "tests/test_openfunds_mapping_registry.py",
@@ -34,7 +35,9 @@
     "information_loss_must_be_explicit": true,
     "licence_sensitive_fields_may_be_semantically_validated_while_import_export_remain_disabled": true,
     "quote_unit_codes_are_not_silently_injected_into_iso4217_currency_registry": true,
-    "quote_unit_factor_is_never_inferred_without_explicit_semantics": true
+    "quote_unit_factor_is_never_inferred_without_explicit_semantics": true,
+    "listing_business_status_is_distinct_from_bitemporal_is_current": true,
+    "absent_listing_status_is_not_defaulted_to_active": true
   },
   "allowed_mapping_statuses": ["DIRECT", "TRANSFORMED", "ONE_TO_MANY", "MANY_TO_ONE", "TO_CONFIRM"],
   "allowed_validation_statuses": ["PROPOSED", "VALIDATED"],
@@ -112,7 +115,32 @@
       "cumulative_reviewed_mapping_rows": 20,
       "cumulative_mapped_external_ids": 11,
       "external_ids": ["OFST062030", "OFST062050", "OFST062000"],
-      "deferred_external_ids": ["OFST062010", "OFST062040", "OFST062045"],
+      "deferred_external_ids": ["OFST062040"],
+      "remote_ci_attestation": null
+    },
+    {
+      "batch_id": "BATCH_07_LISTING_CURRENCY_QUOTE_UNIT",
+      "status": "IMPLEMENTED_PENDING_REMOTE_CI_ATTESTATION",
+      "reviewed_mapping_rows": 1,
+      "cumulative_reviewed_mapping_rows": 21,
+      "cumulative_mapped_external_ids": 12,
+      "external_ids": ["OFST062010"],
+      "canonical_targets": ["OF_FUND_LISTING_TRADING_QUOTE_UNIT_CODE"],
+      "parent_currency_inference": false,
+      "factor_inference": false,
+      "remote_ci_attestation": null
+    },
+    {
+      "batch_id": "BATCH_08_LISTING_BUSINESS_STATUS",
+      "status": "IMPLEMENTED_PENDING_REMOTE_CI_ATTESTATION",
+      "reviewed_mapping_rows": 1,
+      "cumulative_reviewed_mapping_rows": 22,
+      "cumulative_mapped_external_ids": 13,
+      "external_ids": ["OFST062045"],
+      "canonical_targets": ["OF_FUND_LISTING_LISTING_STATUS"],
+      "source_values": ["planned", "active", "suspended", "delisted"],
+      "canonical_values": ["PLANNED", "ACTIVE", "SUSPENDED", "DELISTED"],
+      "default_active_on_absence": false,
       "remote_ci_attestation": null
     }
   ],
@@ -133,20 +161,26 @@
         "field_count": 2,
         "scope": "migration 020 Listing quote-unit semantics",
         "remote_ci_attestation": null
+      },
+      {
+        "path": "data/dictionary/extensions/listing_status_v1",
+        "field_count": 1,
+        "scope": "migration 021 Listing business status",
+        "remote_ci_attestation": null
       }
     ],
-    "total_field_count": 179,
+    "total_field_count": 180,
     "latest_verified_union_green_workflow_run": 32071385088,
     "latest_verified_union_scope": "143_CORE_PLUS_34_LISTING_V1",
     "current_union_remote_ci_attestation": null
   },
   "current_coverage": {
-    "reviewed_mapping_rows": 20,
-    "mapped_external_ids": 11,
-    "unmapped_external_ids": 1858,
-    "mapped_canonical_ids": 14,
-    "external_field_coverage_ratio": 0.0058855003,
-    "canonical_field_coverage_ratio": 0.0782122905
+    "reviewed_mapping_rows": 22,
+    "mapped_external_ids": 13,
+    "unmapped_external_ids": 1856,
+    "mapped_canonical_ids": 16,
+    "external_field_coverage_ratio": 0.0069555912,
+    "canonical_field_coverage_ratio": 0.0888888889
   },
   "tdd_history": {
     "initial_red_run": 32062460096,
@@ -161,9 +195,12 @@
     "batch_05_red_run": 32071737609,
     "batch_05_green_run": 32071858346,
     "batch_06_remote_ci_attestation": null,
-    "listing_quote_unit_extension_remote_ci_attestation": null
+    "listing_quote_unit_extension_remote_ci_attestation": null,
+    "batch_07_remote_ci_attestation": null,
+    "listing_status_extension_remote_ci_attestation": null,
+    "batch_08_remote_ci_attestation": null
   },
-  "status": "BATCH_06_IMPLEMENTED_LISTING_QUOTE_UNIT_EXTENSION_INTEGRATED_PENDING_REMOTE_CI_ATTESTATION",
+  "status": "BATCH_08_IMPLEMENTED_CANONICAL_180_PENDING_REMOTE_CI_ATTESTATION",
   "created_on": "2026-08-17",
   "verified_on": "2026-08-18"
 }
