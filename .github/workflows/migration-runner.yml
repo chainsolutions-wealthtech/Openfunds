@@ -18,6 +18,7 @@ on:
       - 'tests/test_listing_quote_unit_model.py'
       - 'tests/test_listing_status_model.py'
       - 'tests/test_listing_identifier_vendor_schemes.py'
+      - 'tests/test_listing_identifier_subject_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -37,6 +38,7 @@ on:
       - 'tests/test_listing_quote_unit_model.py'
       - 'tests/test_listing_status_model.py'
       - 'tests/test_listing_identifier_vendor_schemes.py'
+      - 'tests/test_listing_identifier_subject_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -99,6 +101,7 @@ jobs:
           python -m unittest -v tests.test_listing_quote_unit_model
           python -m unittest -v tests.test_listing_status_model
           python -m unittest -v tests.test_listing_identifier_vendor_schemes
+          python -m unittest -v tests.test_listing_identifier_subject_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -125,8 +128,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 22 then
-                  raise exception 'expected 22 governed migrations, got %', migration_count;
+              if migration_count <> 23 then
+                  raise exception 'expected 23 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -153,6 +156,14 @@ jobs:
               if to_regclass('fund.listing') is null
                  or to_regclass('fund.listing_identifier') is null then
                   raise exception 'canonical listing domain objects are missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='listing_identifier'
+                    and column_name='identifier_subject'
+              ) then
+                  raise exception 'listing identifier subject migration 023 column is missing';
               end if;
               if not exists (
                   select 1 from information_schema.columns
@@ -257,13 +268,14 @@ jobs:
           $$;
 
           insert into fund.listing_identifier(
-              listing_identifier_id, listing_id, identifier_scheme,
+              listing_identifier_id, listing_id, identifier_subject, identifier_scheme,
               identifier_value, normalized_value,
               effective_from_status, effective_to_status, validation_status
           ) values
-          ('00000000-0000-0000-0000-000000000191','00000000-0000-0000-0000-000000000190','SEDOL','B0LIST1','B0LIST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
-          ('00000000-0000-0000-0000-000000000196','00000000-0000-0000-0000-000000000190','BLOOMBERG','TREOT2','TREOT2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
-          ('00000000-0000-0000-0000-000000000197','00000000-0000-0000-0000-000000000190','RIC','TEST.PA','TEST.PA','UNKNOWN','NOT_APPLICABLE','VALIDATED');
+          ('00000000-0000-0000-0000-000000000191','00000000-0000-0000-0000-000000000190','LISTING','SEDOL','B0LIST1','B0LIST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000196','00000000-0000-0000-0000-000000000190','LISTING','BLOOMBERG','TREOT2','TREOT2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000197','00000000-0000-0000-0000-000000000190','LISTING','RIC','TEST.PA','TEST.PA','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000198','00000000-0000-0000-0000-000000000190','INAV','BLOOMBERG','TREOT2','TREOT2','UNKNOWN','NOT_APPLICABLE','VALIDATED');
 
           do $$
           begin
@@ -342,6 +354,22 @@ jobs:
                       'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
                   );
                   raise exception 'unknown listing business status unexpectedly accepted';
+              exception when check_violation then
+                  null;
+              end;
+
+              begin
+                  insert into fund.listing_identifier(
+                      listing_identifier_id, listing_id, identifier_subject, identifier_scheme,
+                      identifier_value, normalized_value,
+                      effective_from_status, effective_to_status, validation_status
+                  ) values (
+                      '00000000-0000-0000-0000-000000000199',
+                      '00000000-0000-0000-0000-000000000190',
+                      'UNKNOWN_SUBJECT', 'RIC', 'BAD.PA', 'BAD.PA',
+                      'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+                  );
+                  raise exception 'unknown listing identifier subject unexpectedly accepted';
               exception when check_violation then
                   null;
               end;
