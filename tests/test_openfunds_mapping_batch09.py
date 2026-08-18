@@ -47,12 +47,11 @@ class OpenfundsMappingBatch09ContractTests(unittest.TestCase):
         self.assertNotIn("CONSTANT_OTHER", scheme_rules)
         self.assertNotIn("CONSTANT_TICKER", scheme_rules)
 
-    def test_batch09_cumulative_post_state(self):
+    def test_batch09_contract_survives_future_batches(self):
         rows = read_rows()
-        self.assertEqual(28, len(rows))
-        self.assertEqual(15, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(16, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(28, len({row["MAPPING_ID"] for row in rows}))
+        mapping_ids = [row["MAPPING_ID"] for row in rows]
+        self.assertEqual(len(mapping_ids), len(set(mapping_ids)))
+        self.assertTrue(set(EXPECTED).issubset(set(mapping_ids)))
 
 
 if __name__ == "__main__":
