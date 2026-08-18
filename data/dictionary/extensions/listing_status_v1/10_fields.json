@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_LISTING_LISTING_STATUS",
+      "technical_name": "fund.listing.listing_status",
+      "entity_code": "LISTING",
+      "physical_schema": "fund",
+      "physical_table": "listing",
+      "physical_column": "listing_status",
+      "data_type": "TEXT",
+      "nullable": true,
+      "definition_fr": "Statut métier de la cotation, distinct de l'état bitemporel de la version courante.",
+      "definition_en": "Business status of the listing, distinct from the bitemporal current-version state.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_EXCHANGE_OR_FUND_DOCUMENT",
+      "validation_rule": "NULL_OR_ONE_OF_PLANNED_ACTIVE_SUSPENDED_DELISTED",
+      "normalization_rule": "TRIM;UPPERCASE;DO_NOT_DEFAULT_ABSENT_SOURCE_TO_ACTIVE",
+      "provenance_path": "schemas/fund/021_listing_business_status.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
