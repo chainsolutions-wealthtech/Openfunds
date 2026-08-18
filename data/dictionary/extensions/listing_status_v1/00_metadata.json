@@ -1,0 +1,9 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_LISTING_STATUS_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_LISTING_STATUS_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/021_listing_business_status.sql",
+  "scope": "Additive canonical dictionary extension for the Listing business-status column introduced by migration 021.",
+  "compatibility": "FORWARD_ONLY_ADDITIVE"
+}
