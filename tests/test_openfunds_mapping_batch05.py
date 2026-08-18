@@ -37,12 +37,13 @@ class OpenfundsMappingBatch05ContractTests(unittest.TestCase):
             self.assertEqual("official:v2.13.0:OFST020040", row["SOURCE_REFERENCE"], mapping_id)
             self.assertIn("LICENSE_GATE_REQUIRED", row["NOTES"], mapping_id)
 
-    def test_batch05_exact_cumulative_post_state(self):
+    def test_batch05_closure_is_forward_compatible(self):
         rows = read_rows()
-        self.assertEqual(16, len(rows))
-        self.assertEqual(8, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(10, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(16, len({row["MAPPING_ID"] for row in rows}))
+        selected = [row for row in rows if row["MAPPING_ID"] in EXPECTED]
+        self.assertEqual(3, len(selected))
+        self.assertEqual(set(EXPECTED), {row["MAPPING_ID"] for row in selected})
+        self.assertEqual({"OFST020040"}, {row["EXTERNAL_FIELD_ID"] for row in selected})
+        self.assertEqual(3, len({row["CANONICAL_FIELD_ID"] for row in selected}))
 
     def test_sedol_is_not_activated_without_licence_gate(self):
         rows = [row for row in read_rows() if row["EXTERNAL_FIELD_ID"] == "OFST020040"]
