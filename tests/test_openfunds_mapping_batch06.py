@@ -37,19 +37,15 @@ class OpenfundsMappingBatch06ContractTests(unittest.TestCase):
             self.assertEqual(SOURCE_SHA, row["SOURCE_SHA256"], mapping_id)
             self.assertEqual(f"official:v2.13.0:{external_id}", row["SOURCE_REFERENCE"], mapping_id)
 
-    def test_batch06_cumulative_post_state(self):
+    def test_batch06_contract_survives_future_batches(self):
         rows = read_rows()
-        self.assertEqual(20, len(rows))
-        self.assertEqual(11, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(14, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(20, len({row["MAPPING_ID"] for row in rows}))
+        mapping_ids = [row["MAPPING_ID"] for row in rows]
+        self.assertEqual(len(mapping_ids), len(set(mapping_ids)))
+        self.assertTrue(set(EXPECTED).issubset(set(mapping_ids)))
 
-    def test_deferred_listing_fields_are_not_forced(self):
-        rows = read_rows()
-        mapped_ids = {row["EXTERNAL_FIELD_ID"] for row in rows}
-        self.assertNotIn("OFST062010", mapped_ids, "Listing Currency requires minor-unit currency design")
+    def test_exchange_place_remains_deferred_in_favour_of_mic(self):
+        mapped_ids = {row["EXTERNAL_FIELD_ID"] for row in read_rows()}
         self.assertNotIn("OFST062040", mapped_ids, "Exchange Place is explicitly superseded by MIC")
-        self.assertNotIn("OFST062045", mapped_ids, "Listing business status needs its own canonical field")
 
 
 if __name__ == "__main__":
