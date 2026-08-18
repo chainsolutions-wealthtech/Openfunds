@@ -1,0 +1,40 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_LISTING_TRADING_QUOTE_UNIT_CODE",
+      "technical_name": "fund.listing.trading_quote_unit_code",
+      "entity_code": "LISTING",
+      "physical_schema": "fund",
+      "physical_table": "listing",
+      "physical_column": "trading_quote_unit_code",
+      "data_type": "TEXT",
+      "nullable": true,
+      "definition_fr": "Code exact de l'unité de cotation publiée par la place ou la source, distinct de la devise économique parentale.",
+      "definition_en": "Exact quote-unit code published by the venue or source, distinct from the parent economic currency.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_EXCHANGE_OR_FUND_DOCUMENT",
+      "validation_rule": "THREE_UPPERCASE_ASCII_LETTERS_OR_NULL",
+      "normalization_rule": "TRIM;UPPERCASE;DO_NOT_COERCE_TO_ISO4217_CURRENCY",
+      "provenance_path": "schemas/fund/020_listing_quote_unit_semantics.sql",
+      "status": "VALIDATED"
+    },
+    {
+      "field_id": "OF_FUND_LISTING_TRADING_QUOTE_UNIT_FACTOR",
+      "technical_name": "fund.listing.trading_quote_unit_factor",
+      "entity_code": "LISTING",
+      "physical_schema": "fund",
+      "physical_table": "listing",
+      "physical_column": "trading_quote_unit_factor",
+      "data_type": "NUMERIC",
+      "nullable": true,
+      "definition_fr": "Facteur positif reliant l'unité de cotation à la devise économique parentale lorsqu'il est explicitement connu.",
+      "definition_en": "Positive factor linking the quote unit to the parent economic currency when explicitly known.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_EXCHANGE_OR_FUND_DOCUMENT",
+      "validation_rule": "POSITIVE_NUMERIC_AND_QUOTE_UNIT_CODE_REQUIRED",
+      "normalization_rule": "NO_INFERRED_FACTOR;PRESERVE_EXPLICIT_SOURCE_SEMANTICS",
+      "provenance_path": "schemas/fund/020_listing_quote_unit_semantics.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
