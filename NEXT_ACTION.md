@@ -1,24 +1,24 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-MAP-002 + OF-LOOP-SOURCE-002 + OF-SOURCE-003
-CURRENT_TASK: OF-MAP-002_EN_COURS / OF-SOURCE-002_EN_COURS / OF-SOURCE-003_EN_COURS
+CURRENT_LOOP: OF-MAP-002 + OF-DATA-001_LISTING_EXTENSIONS + OF-LOOP-SOURCE-002 + OF-SOURCE-003
+CURRENT_TASK: OF-MAP-002_BATCH_06_CLOSURE_PENDING / MIGRATION_020_QUOTE_UNIT_RED / OF-SOURCE-002_EN_COURS / OF-SOURCE-003_EN_COURS
 LAST_VERIFIED_WAVE: 15
 MIGRATION_CHAIN: 001..019_GREEN
 CANONICAL_MAPPING_INVENTORY: 177_FIELDS = 143_CORE + 34_LISTING_EXTENSION
-OPENFUNDS_MAPPING: BATCH_01..05_VALIDATED
-NEXT_UNIT: BATCH_06_LISTING_FIELDS_AUDIT + FUNCTIONAL_INSTITUTIONAL_GAP_WAVES + SOURCE_SERIES_VERIFICATION + ERITREA_PRIMARY_SOURCE_WATCH
-STATUS: READY_FOR_NEXT_INCREMENTAL_MAPPING_AND_FUNCTIONAL_SOURCE_COVERAGE
+OPENFUNDS_MAPPING: BATCH_01..05_VALIDATED / BATCH_06_ROWS_PRESENT_CI_CLOSURE_NOT_YET_ATTESTED
+NEXT_UNIT: MIGRATION_020_QUOTE_UNIT_RED_TO_GREEN + BATCH_06_FINAL_CI_ATTESTATION + LISTING_CURRENCY_MAPPING + FUNCTIONAL_INSTITUTIONAL_GAP_WAVES
+STATUS: FORWARD_ONLY_WORK_IN_PROGRESS_WITH_FAIL_CLOSED_CI_GATES
 WRITE_GATE: VERIFIED_OF_ID + VERIFIED_OBJECT_LEVEL + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_TRANSFORMATION + LICENCE_GATE + TDD_RED
 ```
 
-## État courant vérifié — 17 août 2026
+## État courant vérifié — 18 août 2026
 
 Le travail reste sur `architecture/africafunds-country-indicators-v0.1` et la PR #1 reste draft, ouverte et non fusionnée. Ne pas travailler sur `main`, ne pas retargeter/fusionner la PR et ne pas déployer la production tant que les gates correspondants ne sont pas satisfaits.
 
 ## Modèle canonique et migrations
 
-La chaîne gouvernée est désormais vérifiée jusqu'à :
+La chaîne gouvernée reste vérifiée jusqu'à :
 
 ```text
 019_SHARE_CLASS_LISTING_CORE
@@ -36,7 +36,7 @@ fund.listing
 fund.listing_identifier
 ```
 
-Un Listing appartient à une `SHARE_CLASS`, conserve un localisateur de marché (`exchange_organization_id` ou `venue_mic`), une éventuelle devise de négociation, son historique et sa provenance. Les identifiants propres à la cotation (`SEDOL`, `TICKER`, `LOCAL_CODE`, `OTHER`) sont séparés de l'identité stable de la Share Class.
+Un Listing appartient à une `SHARE_CLASS`, conserve un localisateur de marché (`exchange_organization_id` ou `venue_mic`), une éventuelle devise économique de négociation, son historique et sa provenance. Les identifiants propres à la cotation (`SEDOL`, `TICKER`, `LOCAL_CODE`, `OTHER`) sont séparés de l'identité stable de la Share Class.
 
 Preuves :
 
@@ -44,6 +44,28 @@ Preuves :
 docs/00_PROJECT/OF_DATA_001_LISTING_MIGRATION_019_COMPLETION_20260817.md
 docs/02_ARCHITECTURE/ADR-031_CANONICAL_LISTING_DICTIONARY_EXTENSION.md
 ```
+
+### Migration 020 — RED contract uniquement
+
+Un nouveau contrat TDD a été posé pour traiter les unités de cotation sans polluer `ref.currency` :
+
+```text
+EXPECTED_ID:   020_LISTING_QUOTE_UNIT_SEMANTICS
+EXPECTED_ORDER: 200
+EXPECTED_PATH: schemas/fund/020_listing_quote_unit_semantics.sql
+TEST: tests/test_listing_quote_unit_model.py
+RED_CONTRACT_COMMIT: 6b09abdb57d0e3072403fee8100944adb580fe61
+```
+
+Le modèle attendu sépare :
+
+```text
+trading_currency_id          devise économique parentale
+trading_quote_unit_code      code exact de cotation si unité distincte
+trading_quote_unit_factor    facteur vers la devise parentale, seulement s'il est explicitement connu
+```
+
+`GBX`, `EUX` et `USX` ne doivent pas être injectés dans `ref.currency` comme de fausses devises canoniques. Aucun SQL de migration 020 n'est encore considéré validé tant que le RED n'est pas observé puis le GREEN PostgreSQL 16 vérifié.
 
 ## Dictionnaire canonique disponible au mapping
 
@@ -66,7 +88,7 @@ TOTAL:             177
 UNION_GREEN_RUN: 32071385088
 ```
 
-Toute collision de FIELD_ID ou dérive du `field_count` d'une extension échoue fermée.
+Toute collision de FIELD_ID ou dérive du `field_count` d'une extension échoue fermée. Une extension issue de migration 020 devra être versionnée additivement ; ne pas réécrire silencieusement `listing_v1` comme si les colonnes de 020 avaient toujours appartenu à 019.
 
 ## OF-MAP-001 — fermé
 
@@ -85,31 +107,50 @@ PARAMETERIZED_COUNTRY_TEMPLATES_XX: 20
 
 L'archive reste byte-identical et le parser checksum-gated reste la seule base autorisée pour établir les OF-ID et leurs métadonnées officielles.
 
-## OF-MAP-002 — état après Batch 05
+## OF-MAP-002 — Batches 01..05 fermés / Batch 06 présent mais non encore clos
+
+Batch 05 reste le dernier lot pleinement attesté :
 
 ```text
-REVIEWED_MAPPING_ROWS:      16
-MAPPED_EXTERNAL_IDS:         8
-UNMAPPED_EXTERNAL_IDS:    1861
-CANONICAL_FIELDS_AVAILABLE: 177
-MAPPED_CANONICAL_IDS:       10
 BATCH05_GREEN_RUN: 32071858346
 ```
 
-OF-ID revus :
+Le registre contient désormais physiquement les quatre lignes de Batch 06 :
 
 ```text
-OFST010010  Fund Domicile Alpha-2
-OFST020000  ISIN
-OFST010410  Fund Currency
-OFST020540  Share Class Currency
-OFST020010  Valor
-OFST020015  WKN
-OFST020400  Share Class Distribution Policy
-OFST020040  SEDOL
+MAP-000017  OFST062030 Market Identifier Code -> OF_FUND_LISTING_VENUE_MIC
+MAP-000018  OFST062050 Is Primary Listing     -> OF_FUND_LISTING_IS_PRIMARY
+MAP-000019  OFST062000 Listing Date           -> OF_FUND_LISTING_VALID_FROM
+MAP-000020  OFST062000 Listing Date           -> OF_FUND_LISTING_VALID_FROM_STATUS = KNOWN
 ```
 
-### SEDOL — règle spéciale
+État matériel après ces lignes :
+
+```text
+REVIEWED_MAPPING_ROWS:      20
+MAPPED_EXTERNAL_IDS:        11
+UNMAPPED_EXTERNAL_IDS:    1858
+CANONICAL_FIELDS_AVAILABLE: 177
+MAPPED_CANONICAL_IDS:       14
+```
+
+Audit officiel Listing :
+
+```text
+AUDIT_RUN: 32072168754
+BATCH06_RED_RUN: 32072345238
+BATCH06_ATTEMPTED_GREEN_RUN: 32072421794
+```
+
+`32072421794` a validé l'intégration officielle mais a échoué sur les deux jobs unitaires à cause d'un ancien test Batch 05 qui figeait encore la taille globale du registre à `16`. Ce défaut de forward-compatibility a été corrigé sans toucher aux mappings ni au gate SEDOL :
+
+```text
+FIX_COMMIT: 0c7faac110cf5ea626df40c01f74d03a31b4f886
+```
+
+Tant qu'un run complet post-correctif n'est pas effectivement observable et attesté, ne pas écrire `BATCH_06_VALIDATED` dans les surfaces de vérité.
+
+### SEDOL — règle spéciale inchangée
 
 Le record officiel checksum-locké de `OFST020040` établit :
 
@@ -137,18 +178,40 @@ Preuve :
 docs/00_PROJECT/OF_MAP_002_BATCH_05_SEDOL_COMPLETION_20260817.md
 ```
 
-## Prochaine unité OF-MAP-002
+## Prochaine unité OF-MAP-002 / Listing Currency
 
-Auditer depuis le PDF officiel les champs de niveau `Listing` susceptibles d'alimenter directement migration 019, en priorité :
+Le PDF officiel a montré :
 
 ```text
-VENUE / MIC
-LISTING CURRENCY
-TICKER / LOCAL LISTING IDENTIFIER
-PRIMARY LISTING INDICATOR
+OFST062010  Listing Currency
+FIELD_LEVEL: Listing
 ```
 
-Ne mapper qu'après vérification exacte de l'OF-ID, du Field Level, du type, des valeurs, des éventuelles licences et de la réversibilité.
+avec possibilité d'utiliser des codes d'unité mineure tels que `GBX`, `EUX`, `USX` en plus des devises ISO 4217 usuelles. Le référentiel canonique `data/reference/CURRENCIES.csv` ne contient pas ces codes et ne doit pas être détourné pour les stocker comme devises.
+
+Ordre obligatoire :
+
+```text
+1. observer le RED migration 020 ;
+2. implémenter migration 020 forward-only ;
+3. passer PostgreSQL 16 / double apply / adoption ;
+4. créer une extension de dictionnaire dédiée à 020 ;
+5. unir cette extension au validator sans collision ;
+6. seulement alors proposer le mapping OFST062010.
+```
+
+Ne pas forcer le facteur 0,01 à partir du suffixe `X` sans preuve explicite de la convention du code concerné. Une valeur connue mais un facteur non prouvé doit rester partiellement modélisée plutôt qu'inventée.
+
+### Autres Listing candidates différés
+
+```text
+OFST062040 Exchange Place      DEFERRED: official record recommends MIC OFST062030
+OFST062045 Status Of Listing   DEFERRED: requires real business status, never map to is_current
+OFST060000 Bloomberg Code      DEFERRED: identifier-scheme semantics to review
+OFST060010 Reuters Code / RIC  DEFERRED: identifier-scheme semantics to review
+OFST060050 iNAV Bloomberg      DEFERRED: iNAV identity/role semantics to review
+OFST060060 iNAV Reuters        DEFERRED: iNAV identity/role semantics to review
+```
 
 ## Couverture institutionnelle — Waves 01..15
 
