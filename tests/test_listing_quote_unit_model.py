@@ -11,6 +11,10 @@ CURRENCIES = ROOT / "data" / "reference" / "CURRENCIES.csv"
 
 
 class ListingQuoteUnitModelContractTests(unittest.TestCase):
+    def migration_sql(self) -> str:
+        self.assertTrue(MIGRATION.is_file(), "migration 020 SQL must exist")
+        return MIGRATION.read_text(encoding="utf-8").lower()
+
     def test_migration_020_is_registered_forward_only(self) -> None:
         manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
         entries = [
@@ -26,27 +30,26 @@ class ListingQuoteUnitModelContractTests(unittest.TestCase):
         )
 
     def test_quote_unit_is_separate_from_economic_currency(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8").lower()
+        sql = self.migration_sql()
         self.assertIn("alter table fund.listing", sql)
         self.assertIn("trading_quote_unit_code", sql)
         self.assertIn("trading_quote_unit_factor", sql)
         self.assertIn("trading_currency_id", sql)
         self.assertIn("check", sql)
         self.assertIn("trading_quote_unit_factor > 0", sql)
-        self.assertIn("trading_quote_unit_code", sql)
         self.assertNotIn("insert into ref.currency", sql)
         self.assertNotIn("delete from", sql)
         self.assertNotIn("truncate", sql)
         self.assertNotIn("drop table", sql)
 
     def test_quote_unit_code_is_exact_three_uppercase_characters_when_present(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8").lower()
+        sql = self.migration_sql()
         self.assertIn("char_length(trading_quote_unit_code) = 3", sql)
         self.assertIn("trading_quote_unit_code = upper(trading_quote_unit_code)", sql)
         self.assertIn("trading_quote_unit_code ~ '^[a-z]{3}$'", sql)
 
     def test_factor_cannot_exist_without_quote_unit_code(self) -> None:
-        sql = MIGRATION.read_text(encoding="utf-8").lower()
+        sql = self.migration_sql()
         self.assertIn(
             "trading_quote_unit_factor is null or trading_quote_unit_code is not null",
             sql,
