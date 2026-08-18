@@ -16,6 +16,7 @@ on:
       - 'tests/test_identifier_scheme_extension.py'
       - 'tests/test_listing_model.py'
       - 'tests/test_listing_quote_unit_model.py'
+      - 'tests/test_listing_status_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -33,6 +34,7 @@ on:
       - 'tests/test_identifier_scheme_extension.py'
       - 'tests/test_listing_model.py'
       - 'tests/test_listing_quote_unit_model.py'
+      - 'tests/test_listing_status_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -93,6 +95,7 @@ jobs:
           python -m unittest -v tests.test_identifier_scheme_extension
           python -m unittest -v tests.test_listing_model
           python -m unittest -v tests.test_listing_quote_unit_model
+          python -m unittest -v tests.test_listing_status_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -119,8 +122,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 20 then
-                  raise exception 'expected 20 governed migrations, got %', migration_count;
+              if migration_count <> 21 then
+                  raise exception 'expected 21 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -160,6 +163,14 @@ jobs:
                     and column_name='trading_quote_unit_factor'
               ) then
                   raise exception 'listing quote-unit migration 020 columns are missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='listing'
+                    and column_name='listing_status'
+              ) then
+                  raise exception 'listing business status migration 021 column is missing';
               end if;
               if to_regclass('fund.fund') is not null
                  or to_regclass('fund.share_class') is not null then
@@ -215,14 +226,32 @@ jobs:
 
           insert into fund.listing(
               listing_id, share_class_id, venue_mic, is_primary,
-              trading_quote_unit_code, trading_quote_unit_factor,
+              trading_quote_unit_code, trading_quote_unit_factor, listing_status,
               valid_from_status, valid_to_status, validation_status
           ) values (
               '00000000-0000-0000-0000-000000000190',
               '00000000-0000-0000-0000-000000000181',
-              'XNAS', true, 'GBX', 0.01,
+              'XNAS', true, 'GBX', 0.01, 'SUSPENDED',
               'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
           );
+
+          do $$
+          declare
+              persisted_status text;
+              persisted_is_current boolean;
+          begin
+              select listing_status, is_current
+                into persisted_status, persisted_is_current
+              from fund.listing
+              where listing_id='00000000-0000-0000-0000-000000000190';
+              if persisted_status <> 'SUSPENDED' then
+                  raise exception 'listing business status was not preserved';
+              end if;
+              if persisted_is_current is not true then
+                  raise exception 'listing business status incorrectly changed bitemporal is_current';
+              end if;
+          end
+          $$;
 
           insert into fund.listing_identifier(
               listing_identifier_id, listing_id, identifier_scheme,
@@ -296,6 +325,22 @@ jobs:
                       'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
                   );
                   raise exception 'lowercase quote-unit code unexpectedly accepted';
+              exception when check_violation then
+                  null;
+              end;
+
+              begin
+                  insert into fund.listing(
+                      listing_id, share_class_id, venue_mic, is_primary,
+                      listing_status,
+                      valid_from_status, valid_to_status, validation_status
+                  ) values (
+                      '00000000-0000-0000-0000-000000000195',
+                      '00000000-0000-0000-0000-000000000181', 'XPAR', false,
+                      'UNKNOWN_STATUS',
+                      'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+                  );
+                  raise exception 'unknown listing business status unexpectedly accepted';
               exception when check_violation then
                   null;
               end;
