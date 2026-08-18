@@ -40,12 +40,11 @@ class OpenfundsMappingBatch08ContractTests(unittest.TestCase):
         self.assertEqual({TARGET}, targets)
         self.assertNotIn("OF_FUND_LISTING_IS_CURRENT", targets)
 
-    def test_batch08_cumulative_post_state(self):
+    def test_batch08_contract_survives_future_batches(self):
         rows = read_rows()
-        self.assertEqual(22, len(rows))
-        self.assertEqual(13, len({row["EXTERNAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(16, len({row["CANONICAL_FIELD_ID"] for row in rows}))
-        self.assertEqual(22, len({row["MAPPING_ID"] for row in rows}))
+        mapping_ids = [row["MAPPING_ID"] for row in rows]
+        self.assertEqual(len(mapping_ids), len(set(mapping_ids)))
+        self.assertIn(MAPPING_ID, set(mapping_ids))
 
 
 if __name__ == "__main__":
