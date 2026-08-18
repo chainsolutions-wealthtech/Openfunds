@@ -17,6 +17,7 @@ on:
       - 'tests/test_listing_model.py'
       - 'tests/test_listing_quote_unit_model.py'
       - 'tests/test_listing_status_model.py'
+      - 'tests/test_listing_identifier_vendor_schemes.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -35,6 +36,7 @@ on:
       - 'tests/test_listing_model.py'
       - 'tests/test_listing_quote_unit_model.py'
       - 'tests/test_listing_status_model.py'
+      - 'tests/test_listing_identifier_vendor_schemes.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -96,6 +98,7 @@ jobs:
           python -m unittest -v tests.test_listing_model
           python -m unittest -v tests.test_listing_quote_unit_model
           python -m unittest -v tests.test_listing_status_model
+          python -m unittest -v tests.test_listing_identifier_vendor_schemes
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -122,8 +125,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 21 then
-                  raise exception 'expected 21 governed migrations, got %', migration_count;
+              if migration_count <> 22 then
+                  raise exception 'expected 22 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -257,12 +260,10 @@ jobs:
               listing_identifier_id, listing_id, identifier_scheme,
               identifier_value, normalized_value,
               effective_from_status, effective_to_status, validation_status
-          ) values (
-              '00000000-0000-0000-0000-000000000191',
-              '00000000-0000-0000-0000-000000000190',
-              'SEDOL', 'B0LIST1', 'B0LIST1',
-              'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
-          );
+          ) values
+          ('00000000-0000-0000-0000-000000000191','00000000-0000-0000-0000-000000000190','SEDOL','B0LIST1','B0LIST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000196','00000000-0000-0000-0000-000000000190','BLOOMBERG','TREOT2','TREOT2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
+          ('00000000-0000-0000-0000-000000000197','00000000-0000-0000-0000-000000000190','RIC','TEST.PA','TEST.PA','UNKNOWN','NOT_APPLICABLE','VALIDATED');
 
           do $$
           begin
