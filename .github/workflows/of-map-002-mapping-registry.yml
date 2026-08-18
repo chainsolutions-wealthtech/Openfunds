@@ -19,6 +19,7 @@ on:
       - "tests/test_openfunds_mapping_batch06.py"
       - "tests/test_openfunds_mapping_batch07.py"
       - "tests/test_openfunds_mapping_batch08.py"
+      - "tests/test_openfunds_mapping_batch09.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
@@ -57,6 +58,7 @@ jobs:
           python -m unittest -v tests.test_openfunds_mapping_batch06
           python -m unittest -v tests.test_openfunds_mapping_batch07
           python -m unittest -v tests.test_openfunds_mapping_batch08
+          python -m unittest -v tests.test_openfunds_mapping_batch09
 
   integration:
     name: mapping-registry-official-and-canonical-integration
