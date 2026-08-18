@@ -1,0 +1,9 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_LISTING_QUOTE_UNIT_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_LISTING_QUOTE_UNIT_EXTENSION_SCOPE",
+  "field_count": 2,
+  "provenance_path": "schemas/fund/020_listing_quote_unit_semantics.sql",
+  "scope": "Additive canonical dictionary extension for the two quote-unit columns introduced by migration 020. Does not rewrite listing_v1 or ref.currency.",
+  "compatibility": "FORWARD_ONLY_ADDITIVE"
+}
