@@ -61,7 +61,8 @@
     },
     {"order": 180, "id": "018_EXTENDED_SECURITY_IDENTIFIER_SCHEMES", "path": "schemas/fund/018_extended_security_identifier_schemes.sql"},
     {"order": 190, "id": "019_SHARE_CLASS_LISTING_CORE", "path": "schemas/fund/019_share_class_listing_core.sql"},
-    {"order": 200, "id": "020_LISTING_QUOTE_UNIT_SEMANTICS", "path": "schemas/fund/020_listing_quote_unit_semantics.sql"}
+    {"order": 200, "id": "020_LISTING_QUOTE_UNIT_SEMANTICS", "path": "schemas/fund/020_listing_quote_unit_semantics.sql"},
+    {"order": 210, "id": "021_LISTING_BUSINESS_STATUS", "path": "schemas/fund/021_listing_business_status.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
