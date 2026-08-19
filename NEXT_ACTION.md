@@ -1,195 +1,129 @@
 # Prochaine action autorisée
 
 ```text
-CURRENT_LOOP: OF-MAP-002 + OF-DATA-001_LISTING_EXTENSIONS + OF-LOOP-SOURCE-002 + OF-SOURCE-003
-CURRENT_TASK: LISTING_BATCHES_06_09_REMOTE_CI_ATTESTATION_PENDING / BATCH_10_CANDIDATE_AUDIT / FUNCTIONAL_INSTITUTIONAL_GAPS
-LAST_VERIFIED_WAVE: 15
-LAST_REMOTELY_VERIFIED_MIGRATION_CHAIN: 001..019_GREEN / RUN 32070768364
-CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..022
-LAST_REMOTELY_VERIFIED_MAPPING: BATCH_05_GREEN / RUN 32071858346
-CURRENT_IMPLEMENTED_MAPPING: BATCH_01..09 / 28_ROWS / 15_OF_IDS
-LAST_REMOTELY_VERIFIED_CANONICAL_UNION: 177_FIELDS / RUN 32071385088
-CURRENT_IMPLEMENTED_CANONICAL_INVENTORY: 180_FIELDS = 143_CORE + 34_LISTING_V1 + 2_QUOTE_UNIT_V1 + 1_LISTING_STATUS_V1
-NEXT_UNIT: BATCH_10_LISTING_IDENTIFIER_OR_INAV_AUDIT + REMOTE_CI_ATTESTATION + FUNCTIONAL_INSTITUTIONAL_GAP_WAVES
+CURRENT_LOOP: OF-MAP-002 + OF-DATA-001 + OF-LOOP-SOURCE-002 + OF-SOURCE-003
+CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..026
+LAST_REMOTELY_VERIFIED_MIGRATION_CHAIN: 001..019 / RUN 32070768364
+CURRENT_IMPLEMENTED_CANONICAL_INVENTORY: 184 = 143_CORE + 41_EXTENSIONS
+LAST_REMOTELY_VERIFIED_CANONICAL_UNION: 177 / RUN 32071385088
+CURRENT_IMPLEMENTED_MAPPING: BATCH_01..14 / 40_ROWS / 21_OF_IDS / 21_CANONICAL_IDS
+LAST_REMOTELY_VERIFIED_MAPPING: BATCH_05 / RUN 32071858346
+UNMAPPED_OPENFUNDS_IDS: 1848
 STATUS: FORWARD_ONLY_WORK_IN_PROGRESS_WITH_FAIL_CLOSED_REMOTE_CI_GATES
-WRITE_GATE: VERIFIED_OF_ID + VERIFIED_OBJECT_LEVEL + VERIFIED_CANONICAL_FIELD_ID + EXPLICIT_TRANSFORMATION + USAGE_OR_LICENCE_GATE + TDD_RED
+WRITE_GATE: VERIFIED_OF_ID + VERIFIED_FIELD_LEVEL + VERIFIED_CANONICAL_TARGET + EXPLICIT_TRANSFORMATION + LICENCE_OR_USAGE_GATE + TDD_CONTRACT
 ```
 
-## État gouverné — 18 août 2026
+## Gouvernance
 
-Le travail reste exclusivement sur :
+Travail exclusivement sur `architecture/africafunds-country-indicators-v0.1`.
 
-```text
-architecture/africafunds-country-indicators-v0.1
-```
+PR #1 : **DRAFT / OPEN / UNMERGED**. Ne pas toucher `main`, ne pas retargeter/fusionner la PR, ne pas activer production, ne pas créer de branche supplémentaire.
 
-La PR #1 reste **DRAFT / OPEN / UNMERGED**. Ne pas toucher `main`, ne pas retargeter ou fusionner la PR, ne pas activer de calcul production et ne pas déployer sans gate explicite.
-
-## Règle d'attestation
-
-Le connecteur GitHub disponible dans la conversation ne remonte actuellement pas les runs `push` ni des status checks exploitables pour les nouveaux HEAD. Par conséquent :
+Le connecteur GitHub ne remonte toujours aucun check exploitable sur les HEAD récents. Donc :
 
 ```text
 IMPLEMENTED != REMOTELY_GREEN
 ```
 
-Ne jamais inventer un numéro de run ou un verdict CI. Le dernier état distant effectivement attesté reste :
+Ne jamais inventer de numéro de run ou de verdict CI.
+
+## Migrations implémentées après le dernier GREEN distant
 
 ```text
-MIGRATIONS: 001..019 GREEN / 32070768364
-CANONICAL UNION: 177 FIELDS GREEN / 32071385088
-MAPPING: BATCH_05 GREEN / 32071858346
+020_LISTING_QUOTE_UNIT_SEMANTICS
+021_LISTING_BUSINESS_STATUS
+022_LISTING_VENDOR_IDENTIFIER_SCHEMES
+023_LISTING_IDENTIFIER_SUBJECT
+024_LISTING_INCEPTION_PRICE
+025_SHARE_CLASS_TRADING_PRICE_FREQUENCY
+026_SHARE_CLASS_NAV_FREQUENCY_DETAIL
 ```
 
-## Migrations Listing implémentées après le dernier GREEN distant
+Principes conservés :
 
-```text
-020_LISTING_QUOTE_UNIT_SEMANTICS      ORDER 200
-021_LISTING_BUSINESS_STATUS           ORDER 210
-022_LISTING_VENDOR_IDENTIFIER_SCHEMES ORDER 220
-```
-
-### Migration 020
-
-Ajoute à `fund.listing` :
-
-```text
-trading_quote_unit_code
-trading_quote_unit_factor
-```
-
-Décision : `GBX`, `EUX`, `USX` et codes similaires ne sont pas injectés comme fausses devises autonomes dans `ref.currency`.
-
-Aucune devise parentale ni facteur n'est inféré du code seul.
-
-Extension dictionnaire :
-
-```text
-data/dictionary/extensions/listing_quote_unit_v1/
-FIELD_COUNT: 2
-```
-
-### Migration 021
-
-Ajoute :
-
-```text
-fund.listing.listing_status
-NULLABLE
-ALLOWED: PLANNED / ACTIVE / SUSPENDED / DELISTED
-```
-
-`listing_status` est un statut métier, strictement distinct du `is_current` bitemporel. Une absence de statut source reste NULL ; aucun `DEFAULT ACTIVE` canonique.
-
-Extension dictionnaire :
-
-```text
-data/dictionary/extensions/listing_status_v1/
-FIELD_COUNT: 1
-```
-
-### Migration 022
-
-Étend les schemes de `fund.listing_identifier` :
-
-```text
-SEDOL
-TICKER
-LOCAL_CODE
-OTHER
-BLOOMBERG
-RIC
-```
-
-`BLOOMBERG` et `RIC` restent Listing-level et ne sont pas ajoutés à `fund.entity_identifier`.
+- `GBX/EUX/USX` restent des quote-unit codes, pas des fausses devises `ref.currency` ;
+- `listing_status` reste distinct de `is_current` ;
+- Bloomberg/RIC restent des schemes Listing dédiés et usage-gated ;
+- `identifier_subject` distingue `LISTING` de `INAV` ;
+- `inception_price` n'infère ni devise ni facteur ;
+- `nav_frequency` et `trading_price_frequency` sont deux concepts distincts ;
+- `nav_frequency_detail` conserve le texte libre source et ne remplace pas le code de fréquence.
 
 ## Inventaire canonique courant
 
 ```text
-CORE migration 015:          143
-listing_v1 migration 019:     34
-quote_unit_v1 migration 020:   2
-listing_status_v1 migration 021: 1
-TOTAL IMPLEMENTED:           180
+CORE migration 015:                         143
+listing_v1:                                  34
+listing_quote_unit_v1:                        2
+listing_status_v1:                            1
+listing_identifier_subject_v1:                1
+listing_inception_price_v1:                   1
+share_class_trading_price_frequency_v1:       1
+share_class_nav_frequency_detail_v1:          1
+TOTAL:                                       184
 ```
 
-Le validateur reste collision-free et accepte plusieurs extensions. Ne jamais réécrire `listing_v1` pour faire croire que les champs 020/021 existaient en migration 019.
+Aucune extension ne réécrit `spec_v1` ou `listing_v1` rétroactivement.
 
-## OF-MAP-002 — état implémenté jusqu'à Batch 09
+## OF-MAP-002 — état courant
 
 ```text
-REVIEWED_MAPPING_ROWS: 28
-MAPPED_EXTERNAL_IDS: 15
-UNMAPPED_EXTERNAL_IDS: 1854
-MAPPED_CANONICAL_IDS: 16
-CANONICAL_FIELDS_AVAILABLE: 180
+REVIEWED_MAPPING_ROWS:   40
+MAPPED_EXTERNAL_IDS:     21
+UNMAPPED_EXTERNAL_IDS: 1848
+MAPPED_CANONICAL_IDS:    21
+CANONICAL_FIELDS:       184
 ```
 
-### Batch 06
+### Batches 06–11 — Listing
+
+- Batch 06 : MIC, primary listing, listing date + valid_from_status.
+- Batch 07 : Listing Currency -> `trading_quote_unit_code`, sans parent/facteur inférés.
+- Batch 08 : Status Of Listing -> `listing_status`, sans default ACTIVE implicite.
+- Batch 09 : Bloomberg/RIC Listing identifiers, import/export désactivés jusqu'à revue d'usage.
+- Batch 10 : iNAV Bloomberg/RIC avec `identifier_subject=INAV`, usage-gated.
+- Batch 11 : Inception Price -> `listing.inception_price`, sans inférence de devise/facteur.
+
+### Batches 12–14 — fréquences Share Class
 
 ```text
-MAP-000017  OFST062030 MIC -> LISTING.VENUE_MIC
-MAP-000018  OFST062050 Primary Listing -> LISTING.IS_PRIMARY
-MAP-000019  OFST062000 Listing Date -> LISTING.VALID_FROM
-MAP-000020  OFST062000 Listing Date -> LISTING.VALID_FROM_STATUS=KNOWN
+MAP-000038  OFST020300 Valuation Frequency
+            -> OF_FUND_SHARE_CLASS_PROFILE_NAV_FREQUENCY
+
+MAP-000039  OFST020310 Trading Price Frequency
+            -> OF_FUND_SHARE_CLASS_PROFILE_TRADING_PRICE_FREQUENCY
+
+MAP-000040  OFST020305 Valuation Frequency Detail
+            -> OF_FUND_SHARE_CLASS_PROFILE_NAV_FREQUENCY_DETAIL
 ```
 
-Batch 05 a été rendu forward-compatible ; il ne fige plus la taille globale du registre.
-
-### Batch 07 — Listing Currency
+Vocabulaire officiel de fréquence :
 
 ```text
-MAP-000021
-OFST062010 -> OF_FUND_LISTING_TRADING_QUOTE_UNIT_CODE
+daily
+twice a week
+weekly
+twice a month
+monthly
+quarterly
+twice a year
+annually
+at least annually
 ```
 
-Gates :
+Mapping canonique réversible en codes uppercase/underscore. Le détail libre reste source-preserving.
+
+## Gates identifiants
+
+### SEDOL
 
 ```text
-NO_PARENT_CURRENCY_INFERENCE
-NO_FACTOR_INFERENCE
+IMPORT_SUPPORTED: NO
+EXPORT_SUPPORTED: NO
+ACTIVATION_GATE: EXPLICIT_SEDOL_LICENSING_CLEARANCE
 ```
 
-### Batch 08 — Listing business status
-
-```text
-MAP-000022
-OFST062045 -> OF_FUND_LISTING_LISTING_STATUS
-```
-
-Valeurs explicites :
-
-```text
-planned   -> PLANNED
-active    -> ACTIVE
-suspended -> SUSPENDED
-delisted  -> DELISTED
-```
-
-Gates :
-
-```text
-EXPLICIT_SOURCE_VALUE_ONLY
-NO_DEFAULT_ACTIVE_ON_ABSENCE
-NEVER_MAP_TO_IS_CURRENT
-```
-
-### Batch 09 — Bloomberg / RIC Listing identifiers
-
-```text
-OFST060000 Bloomberg Code Of Listing
-OFST060010 Reuters Code Of Listing
-MAP-000023..MAP-000028
-```
-
-Schemes dédiés :
-
-```text
-BLOOMBERG
-RIC
-```
-
-Gate runtime :
+### Bloomberg / RIC
 
 ```text
 IMPORT_SUPPORTED: NO
@@ -197,38 +131,18 @@ EXPORT_SUPPORTED: NO
 ACTIVATION_GATE: EXPLICIT_PROPRIETARY_IDENTIFIER_USAGE_REVIEW
 ```
 
-Ne pas confondre ce gate de prudence avec l'alerte SEDOL : pour Bloomberg/RIC, la sémantique est validée mais l'usage opérationnel d'identifiants propriétaires reste volontairement séparé.
-
-## SEDOL — gate inchangé
-
-```text
-OFST020040
-IMPORT_SUPPORTED: NO
-EXPORT_SUPPORTED: NO
-ACTIVATION_GATE: EXPLICIT_SEDOL_LICENSING_CLEARANCE
-```
-
-Ne jamais activer silencieusement ingestion, stockage ou distribution SEDOL.
-
 ## Prochaine unité OF-MAP-002
 
-Auditer exclusivement depuis le PDF officiel checksum-locké / pages officielles :
+Auditer les champs Share Class immédiatement voisins depuis la source officielle checksum-lockée, notamment :
 
 ```text
-TICKER / LOCAL LISTING IDENTIFIER candidates
-OFST060050 iNAV Bloomberg
-OFST060060 iNAV Reuters
-other Listing-level identifiers or venue metadata
+OFST020320 NAV Publication Time
+puis autres champs opérationnels Share Class compatibles avec le modèle canonique
 ```
 
-Règles :
+Avant tout mapping : vérifier OF-ID, Field Level, type, dépendances temporelles/timezone, cible canonique existante ou nécessité d'une migration additive.
 
-1. vérifier OF-ID exact, Field Level, type, description et exemples ;
-2. distinguer identité de Listing, identité iNAV et donnée calculée ;
-3. ne pas rabattre un identifiant vendor sur TICKER/OTHER si le standard le distingue ;
-4. ne pas créer de champ canonique avant un RED dédié ;
-5. séparer validation sémantique et droit d'usage ;
-6. `OFST062040 Exchange Place` reste différé car le standard privilégie MIC `OFST062030`.
+Ne pas modéliser une heure sans sa sémantique de fuseau si le standard la lie à un champ timezone distinct.
 
 ## Couverture institutionnelle
 
@@ -236,18 +150,14 @@ Règles :
 ORGANIZATION_SCOPE_ROLES: 199 = 195 VALIDATED + 4 PENDING
 COUNTRY_COVERAGE: 53 / 54
 UNCOVERED: ERYTHREE
+PENDING:
+  EGX INDEX_PROVIDER EGYPTE
+  NSE INDEX_PROVIDER KENYA
+  NGX INDEX_PROVIDER NIGERIA
+  CMA MONETARY_UNION CMA
 ```
 
-Résiduel à ne pas forcer :
-
-```text
-EGX  INDEX_PROVIDER   EGYPTE
-NSE  INDEX_PROVIDER   KENYA
-NGX  INDEX_PROVIDER   NIGERIA
-CMA  MONETARY_UNION   CMA
-```
-
-Audit récent EGX/NSE/NGX : aucune promotion, faute de preuve primaire suffisamment explicite de responsabilité provider/administrator.
+Ne pas forcer ces quatre cas.
 
 ## Gaps fonctionnels institutionnels
 
@@ -262,24 +172,11 @@ MONETARY_AUTHORITY_MISSING:              11
 STATISTICS_MISSING:                       3
 ```
 
-Priorité : assurance/pension puis fiscal/dette, avec preuves primaires officielles et sans créer d'institution artificielle lorsqu'une fonction n'est pas applicable.
+Priorité : assurance/pension puis fiscal/dette, preuves primaires officielles uniquement.
 
 ## OF-SOURCE-003
 
-Une organisation validée ne valide jamais automatiquement :
-
-```text
-ENDPOINT
-SERIE EXACTE
-FREQUENCE
-UNITE
-CONVENTION
-HISTORIQUE
-METHODE
-STATUT DE COLLECTE
-```
-
-Continuer indépendamment.
+Une organisation validée ne valide jamais automatiquement endpoint, série exacte, fréquence, unité, convention, historique, méthode ou statut de collecte. Continuer indépendamment.
 
 ## Blockers externes
 
@@ -296,12 +193,6 @@ PRODUCTION_API_UI       NOT_IMPLEMENTED
 PRODUCTION_DEPLOY       NOT_CONFIGURED
 ```
 
-## Preuve de checkpoint
-
-```text
-docs/00_PROJECT/OF_MAP_002_LISTING_BATCHES_06_09_CHECKPOINT_20260818.md
-```
-
 ## Interdictions maintenues
 
-Ne pas inventer de données, ne pas générer 1 869 faux `UNMAPPED`, ne pas réécrire les migrations déjà appliquées, ne pas activer les identifiants gated, ne pas fusionner/retargeter PR #1, ne pas modifier `main` et ne pas créer de branche supplémentaire.
+Ne pas inventer de données, ne pas générer 1 869 faux `UNMAPPED`, ne pas réécrire les migrations historiques, ne pas activer les identifiants gated, ne pas modifier `main`, ne pas fusionner/retargeter PR #1 et ne pas créer de nouvelle branche.
