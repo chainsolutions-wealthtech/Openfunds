@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_SHARE_CLASS_PROFILE_NAV_FREQUENCY_DETAIL",
+      "technical_name": "share_class_profile.nav_frequency_detail",
+      "entity_code": "SHARE_CLASS_PROFILE",
+      "physical_schema": "fund",
+      "physical_table": "share_class_profile",
+      "physical_column": "nav_frequency_detail",
+      "data_type": "text",
+      "nullable": true,
+      "definition_fr": "Détail libre qualifiant la fréquence de calcul ou publication de la VL, par exemple un jour précis du mois.",
+      "definition_en": "Free-text detail qualifying the NAV calculation or publication frequency, for example a specific weekday or day of month.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_REGULATOR_OR_FUND_DOCUMENT",
+      "validation_rule": "NULL_OR_NON_BLANK_SOURCE_TEXT",
+      "normalization_rule": "TRIM_OUTER_WHITESPACE_PRESERVE_SOURCE_TEXT",
+      "provenance_path": "schemas/fund/026_share_class_nav_frequency_detail.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
