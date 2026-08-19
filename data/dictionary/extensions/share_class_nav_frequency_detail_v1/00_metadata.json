@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_NAV_FREQUENCY_DETAIL_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_NAV_FREQUENCY_DETAIL_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/026_share_class_nav_frequency_detail.sql",
+  "scope": "Additive canonical free-text qualifier introduced by migration 026; complements nav_frequency and does not rewrite spec_v1."
+}
