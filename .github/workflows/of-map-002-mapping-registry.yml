@@ -16,6 +16,7 @@ on:
       - "tests/test_listing_inception_price_dictionary_extension.py"
       - "tests/test_share_class_trading_price_frequency_dictionary_extension.py"
       - "tests/test_share_class_nav_frequency_detail_dictionary_extension.py"
+      - "tests/test_valuation_time_semantics_dictionary_extension.py"
       - "tests/test_openfunds_mapping_batch02.py"
       - "tests/test_openfunds_mapping_batch03.py"
       - "tests/test_openfunds_mapping_batch04.py"
@@ -29,6 +30,7 @@ on:
       - "tests/test_openfunds_mapping_batch12.py"
       - "tests/test_openfunds_mapping_batch13.py"
       - "tests/test_openfunds_mapping_batch14.py"
+      - "tests/test_openfunds_mapping_batch15.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
@@ -64,6 +66,7 @@ jobs:
           python -m unittest -v tests.test_listing_inception_price_dictionary_extension
           python -m unittest -v tests.test_share_class_trading_price_frequency_dictionary_extension
           python -m unittest -v tests.test_share_class_nav_frequency_detail_dictionary_extension
+          python -m unittest -v tests.test_valuation_time_semantics_dictionary_extension
           python -m unittest -v tests.test_openfunds_mapping_batch02
           python -m unittest -v tests.test_openfunds_mapping_batch03
           python -m unittest -v tests.test_openfunds_mapping_batch04
@@ -77,6 +80,7 @@ jobs:
           python -m unittest -v tests.test_openfunds_mapping_batch12
           python -m unittest -v tests.test_openfunds_mapping_batch13
           python -m unittest -v tests.test_openfunds_mapping_batch14
+          python -m unittest -v tests.test_openfunds_mapping_batch15
 
   integration:
     name: mapping-registry-official-and-canonical-integration
@@ -106,6 +110,7 @@ jobs:
             --canonical-extension data/dictionary/extensions/listing_identifier_subject_v1 \
             --canonical-extension data/dictionary/extensions/listing_inception_price_v1 \
             --canonical-extension data/dictionary/extensions/share_class_trading_price_frequency_v1 \
-            --canonical-extension data/dictionary/extensions/share_class_nav_frequency_detail_v1
+            --canonical-extension data/dictionary/extensions/share_class_nav_frequency_detail_v1 \
+            --canonical-extension data/dictionary/extensions/valuation_time_semantics_v1
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
