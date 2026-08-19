@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_LISTING_INCEPTION_PRICE_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_LISTING_INCEPTION_PRICE_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/024_listing_inception_price.sql",
+  "scope": "Additive canonical field introduced by migration 024; does not rewrite listing_v1."
+}
