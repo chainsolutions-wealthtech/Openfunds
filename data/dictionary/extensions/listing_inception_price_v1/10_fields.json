@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_LISTING_INCEPTION_PRICE",
+      "technical_name": "listing.inception_price",
+      "entity_code": "LISTING",
+      "physical_schema": "fund",
+      "physical_table": "listing",
+      "physical_column": "inception_price",
+      "data_type": "numeric",
+      "nullable": true,
+      "definition_fr": "Prix observé lors de la première cotation de cette classe de parts sur cette place de marché.",
+      "definition_en": "Price observed at the first listing of this share class on this market venue.",
+      "history_method": "VERSIONED_WITH_LISTING_RECORD",
+      "source_role": "LISTING_SOURCE",
+      "validation_rule": "NULL_OR_GREATER_THAN_ZERO",
+      "normalization_rule": "DECIMAL_PRESERVE_SOURCE_SCALE",
+      "provenance_path": "schemas/fund/024_listing_inception_price.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
