@@ -26,39 +26,12 @@
     {"order": 90, "id": "009_BEAC_FX_COLLECTION_SEED", "path": "schemas/reference/009_beac_fx_collection_seed.sql"},
     {"order": 100, "id": "010_BEAC_FX_PARSER_V0_2", "path": "schemas/reference/010_beac_fx_parser_v0_2.sql"},
     {"order": 110, "id": "011_BEAC_FX_COLLECTION_VALIDATION", "path": "schemas/reference/011_beac_fx_collection_validation.sql"},
-    {
-      "order": 120,
-      "id": "012_VALIDATED_FX_REFERENCE_REGISTRY",
-      "path": "schemas/reference/012_validated_fx_reference_registry.sql",
-      "generator": {
-        "script": "scripts/generate_validated_fx_reference_sql.py",
-        "arguments": ["--check", "--source", "migrations/sources/012_validated_fx_reference_registry.csv", "--output", "schemas/reference/012_validated_fx_reference_registry.sql"],
-        "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
-      }
-    },
+    {"order": 120, "id": "012_VALIDATED_FX_REFERENCE_REGISTRY", "path": "schemas/reference/012_validated_fx_reference_registry.sql", "generator": {"script": "scripts/generate_validated_fx_reference_sql.py", "arguments": ["--check", "--source", "migrations/sources/012_validated_fx_reference_registry.csv", "--output", "schemas/reference/012_validated_fx_reference_registry.sql"], "mode": "CHECK_ONLY_FROZEN_ARTIFACT"}},
     {"order": 130, "id": "013_CANONICAL_ENDPOINT_MODEL", "path": "schemas/reference/013_canonical_endpoint_model.sql"},
     {"order": 140, "id": "014_BUSINESS_DATE_SEMANTICS", "path": "schemas/reference/014_business_date_semantics.sql"},
     {"order": 150, "id": "015_FUND_SUBFUND_SHARECLASS_CORE", "path": "schemas/fund/015_fund_subfund_shareclass_core.sql"},
-    {
-      "order": 160,
-      "id": "016_COUNTRY_INDICATOR_CATALOG",
-      "path": "schemas/reference/016_country_indicator_catalog.sql",
-      "generator": {
-        "script": "scripts/generate_country_indicator_catalog.py",
-        "arguments": ["--check", "--source", "data/indicator_catalog/v1/00_metadata.json", "--output", "schemas/reference/016_country_indicator_catalog.sql"],
-        "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
-      }
-    },
-    {
-      "order": 170,
-      "id": "017_CANONICAL_FUND_TAXONOMY_V0_1",
-      "path": "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql",
-      "generator": {
-        "script": "scripts/generate_canonical_taxonomy_sql.py",
-        "arguments": ["--check", "--source-dir", "migrations/sources/017_canonical_taxonomy_v0_1", "--output", "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"],
-        "mode": "CHECK_ONLY_FROZEN_ARTIFACT"
-      }
-    },
+    {"order": 160, "id": "016_COUNTRY_INDICATOR_CATALOG", "path": "schemas/reference/016_country_indicator_catalog.sql", "generator": {"script": "scripts/generate_country_indicator_catalog.py", "arguments": ["--check", "--source", "data/indicator_catalog/v1/00_metadata.json", "--output", "schemas/reference/016_country_indicator_catalog.sql"], "mode": "CHECK_ONLY_FROZEN_ARTIFACT"}},
+    {"order": 170, "id": "017_CANONICAL_FUND_TAXONOMY_V0_1", "path": "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql", "generator": {"script": "scripts/generate_canonical_taxonomy_sql.py", "arguments": ["--check", "--source-dir", "migrations/sources/017_canonical_taxonomy_v0_1", "--output", "schemas/taxonomy/017_canonical_fund_taxonomy_v0_1.sql"], "mode": "CHECK_ONLY_FROZEN_ARTIFACT"}},
     {"order": 180, "id": "018_EXTENDED_SECURITY_IDENTIFIER_SCHEMES", "path": "schemas/fund/018_extended_security_identifier_schemes.sql"},
     {"order": 190, "id": "019_SHARE_CLASS_LISTING_CORE", "path": "schemas/fund/019_share_class_listing_core.sql"},
     {"order": 200, "id": "020_LISTING_QUOTE_UNIT_SEMANTICS", "path": "schemas/fund/020_listing_quote_unit_semantics.sql"},
@@ -67,7 +40,8 @@
     {"order": 230, "id": "023_LISTING_IDENTIFIER_SUBJECT", "path": "schemas/fund/023_listing_identifier_subject.sql"},
     {"order": 240, "id": "024_LISTING_INCEPTION_PRICE", "path": "schemas/fund/024_listing_inception_price.sql"},
     {"order": 250, "id": "025_SHARE_CLASS_TRADING_PRICE_FREQUENCY", "path": "schemas/fund/025_share_class_trading_price_frequency.sql"},
-    {"order": 260, "id": "026_SHARE_CLASS_NAV_FREQUENCY_DETAIL", "path": "schemas/fund/026_share_class_nav_frequency_detail.sql"}
+    {"order": 260, "id": "026_SHARE_CLASS_NAV_FREQUENCY_DETAIL", "path": "schemas/fund/026_share_class_nav_frequency_detail.sql"},
+    {"order": 270, "id": "027_VALUATION_TIME_SEMANTICS", "path": "schemas/fund/027_valuation_time_semantics.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
