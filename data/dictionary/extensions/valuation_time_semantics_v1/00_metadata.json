@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_VALUATION_TIME_SEMANTICS_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_VALUATION_TIME_SEMANTICS_EXTENSION_SCOPE",
+  "field_count": 4,
+  "provenance_path": "schemas/fund/027_valuation_time_semantics.sql",
+  "scope": "Additive Fund valuation-point time/timezone and Share Class NAV publication time fields introduced by migration 027; does not rewrite spec_v1."
+}
