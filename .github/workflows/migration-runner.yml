@@ -23,6 +23,7 @@ on:
       - 'tests/test_share_class_trading_price_frequency_model.py'
       - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/test_valuation_time_semantics_model.py'
+      - 'tests/test_share_class_multicurrency_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -47,6 +48,7 @@ on:
       - 'tests/test_share_class_trading_price_frequency_model.py'
       - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/test_valuation_time_semantics_model.py'
+      - 'tests/test_share_class_multicurrency_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -114,6 +116,7 @@ jobs:
           python -m unittest -v tests.test_share_class_trading_price_frequency_model
           python -m unittest -v tests.test_share_class_nav_frequency_detail_model
           python -m unittest -v tests.test_valuation_time_semantics_model
+          python -m unittest -v tests.test_share_class_multicurrency_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -140,8 +143,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 27 then
-                  raise exception 'expected 27 governed migrations, got %', migration_count;
+              if migration_count <> 28 then
+                  raise exception 'expected 28 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -152,15 +155,10 @@ jobs:
               if to_regclass('market.fx_observation') is null then
                   raise exception 'market.fx_observation is missing';
               end if;
-              if not exists (
-                  select 1 from information_schema.columns
-                  where table_schema='ref' and table_name='entity_relationship' and column_name='valid_from_status'
-              ) then
+              if not exists (select 1 from information_schema.columns where table_schema='ref' and table_name='entity_relationship' and column_name='valid_from_status') then
                   raise exception 'business-date status contract is missing';
               end if;
-              if to_regclass('fund.entity') is null
-                 or to_regclass('fund.current_share_class_path') is null
-                 or to_regclass('fund.structure_quality_issue') is null then
+              if to_regclass('fund.entity') is null or to_regclass('fund.current_share_class_path') is null or to_regclass('fund.structure_quality_issue') is null then
                   raise exception 'canonical fund domain objects are missing';
               end if;
               if to_regclass('fund.listing') is null or to_regclass('fund.listing_identifier') is null then
@@ -191,6 +189,10 @@ jobs:
                  or not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='nav_publication_time') then
                   raise exception 'valuation-time semantics migration 027 columns are missing';
               end if;
+              if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='is_multicurrency')
+                 or to_regclass('fund.share_class_dealing_currency') is null then
+                  raise exception 'share-class multicurrency dealing migration 028 objects are missing';
+              end if;
               if to_regclass('fund.fund') is not null or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
               end if;
@@ -202,58 +204,31 @@ jobs:
               select count(*) into indicator_definition_count from ref.indicator_definition;
               if indicator_domain_count <> 18 then raise exception 'expected 18 indicator domains, got %', indicator_domain_count; end if;
               if indicator_definition_count <> 420 then raise exception 'expected 420 indicator definitions, got %', indicator_definition_count; end if;
-
-              select count(*) filter (where canonical_nature='RAW'),
-                     count(*) filter (where canonical_nature='METADATA'),
-                     count(*) filter (where canonical_nature='EVENT'),
-                     count(*) filter (where canonical_nature='CALCULATED')
-                into raw_count, metadata_count, event_count, calculated_count
-              from ref.indicator_definition;
+              select count(*) filter (where canonical_nature='RAW'), count(*) filter (where canonical_nature='METADATA'), count(*) filter (where canonical_nature='EVENT'), count(*) filter (where canonical_nature='CALCULATED')
+                into raw_count, metadata_count, event_count, calculated_count from ref.indicator_definition;
               if raw_count <> 298 or metadata_count <> 85 or event_count <> 7 or calculated_count <> 30 then
                   raise exception 'canonical nature counts drift: RAW %, METADATA %, EVENT %, CALCULATED %', raw_count, metadata_count, event_count, calculated_count;
               end if;
-
-              select count(*) into invalid_history_count from ref.indicator_definition
-              where history_status <> 'NOT_ASSERTED_BY_DEFINITION_CATALOGUE';
-              if invalid_history_count <> 0 then
-                  raise exception 'definition catalogue asserted loaded history for % rows', invalid_history_count;
-              end if;
+              select count(*) into invalid_history_count from ref.indicator_definition where history_status <> 'NOT_ASSERTED_BY_DEFINITION_CATALOGUE';
+              if invalid_history_count <> 0 then raise exception 'definition catalogue asserted loaded history for % rows', invalid_history_count; end if;
           end
           $$;
 
           insert into fund.entity(entity_id, entity_type, canonical_code)
           values ('00000000-0000-0000-0000-000000000181', 'SHARE_CLASS', 'TEST_IDENTIFIER_018');
 
-          insert into fund.entity_identifier(
-              entity_identifier_id, entity_id, identifier_scheme,
-              identifier_value, normalized_value,
-              effective_from_status, effective_to_status,
-              validation_status
-          ) values
+          insert into fund.entity_identifier(entity_identifier_id, entity_id, identifier_scheme, identifier_value, normalized_value, effective_from_status, effective_to_status, validation_status) values
           ('00000000-0000-0000-0000-000000000182','00000000-0000-0000-0000-000000000181','WKN','A1TEST2','A1TEST2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
           ('00000000-0000-0000-0000-000000000183','00000000-0000-0000-0000-000000000181','SEDOL','B0TEST1','B0TEST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
           ('00000000-0000-0000-0000-000000000184','00000000-0000-0000-0000-000000000181','VALOR','123456','123456','UNKNOWN','NOT_APPLICABLE','VALIDATED');
 
-          insert into fund.listing(
-              listing_id, share_class_id, venue_mic, is_primary,
-              trading_quote_unit_code, trading_quote_unit_factor, listing_status,
-              inception_price,
-              valid_from_status, valid_to_status, validation_status
-          ) values (
-              '00000000-0000-0000-0000-000000000190',
-              '00000000-0000-0000-0000-000000000181',
-              'XNAS', true, 'GBX', 0.01, 'SUSPENDED', 96.4,
-              'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
-          );
+          insert into fund.listing(listing_id, share_class_id, venue_mic, is_primary, trading_quote_unit_code, trading_quote_unit_factor, listing_status, inception_price, valid_from_status, valid_to_status, validation_status)
+          values ('00000000-0000-0000-0000-000000000190','00000000-0000-0000-0000-000000000181','XNAS',true,'GBX',0.01,'SUSPENDED',96.4,'UNKNOWN','NOT_APPLICABLE','VALIDATED');
 
           do $$
-          declare
-              persisted_status text;
-              persisted_is_current boolean;
-              persisted_inception_price numeric;
+          declare persisted_status text; persisted_is_current boolean; persisted_inception_price numeric;
           begin
-              select listing_status, is_current, inception_price
-                into persisted_status, persisted_is_current, persisted_inception_price
+              select listing_status, is_current, inception_price into persisted_status, persisted_is_current, persisted_inception_price
               from fund.listing where listing_id='00000000-0000-0000-0000-000000000190';
               if persisted_status <> 'SUSPENDED' then raise exception 'listing business status was not preserved'; end if;
               if persisted_is_current is not true then raise exception 'listing business status incorrectly changed bitemporal is_current'; end if;
@@ -261,11 +236,7 @@ jobs:
           end
           $$;
 
-          insert into fund.listing_identifier(
-              listing_identifier_id, listing_id, identifier_subject, identifier_scheme,
-              identifier_value, normalized_value,
-              effective_from_status, effective_to_status, validation_status
-          ) values
+          insert into fund.listing_identifier(listing_identifier_id, listing_id, identifier_subject, identifier_scheme, identifier_value, normalized_value, effective_from_status, effective_to_status, validation_status) values
           ('00000000-0000-0000-0000-000000000191','00000000-0000-0000-0000-000000000190','LISTING','SEDOL','B0LIST1','B0LIST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
           ('00000000-0000-0000-0000-000000000196','00000000-0000-0000-0000-000000000190','LISTING','BLOOMBERG','TREOT2','TREOT2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
           ('00000000-0000-0000-0000-000000000197','00000000-0000-0000-0000-000000000190','LISTING','RIC','TEST.PA','TEST.PA','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
@@ -278,37 +249,31 @@ jobs:
                   values ('00000000-0000-0000-0000-000000000185','00000000-0000-0000-0000-000000000181','UNSUPPORTED_SCHEME','BAD','BAD','UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'unsupported identifier scheme unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing(listing_id, share_class_id, is_primary, valid_from_status, valid_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000192','00000000-0000-0000-0000-000000000181',false,'UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'listing without exchange or MIC unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing(listing_id, share_class_id, venue_mic, is_primary, trading_quote_unit_factor, valid_from_status, valid_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000193','00000000-0000-0000-0000-000000000181','XNYS',false,0.01,'UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'quote-unit factor without code unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing(listing_id, share_class_id, venue_mic, is_primary, trading_quote_unit_code, valid_from_status, valid_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000194','00000000-0000-0000-0000-000000000181','XLON',false,'gbx','UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'lowercase quote-unit code unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing(listing_id, share_class_id, venue_mic, is_primary, listing_status, valid_from_status, valid_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000195','00000000-0000-0000-0000-000000000181','XPAR',false,'UNKNOWN_STATUS','UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'unknown listing business status unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing_identifier(listing_identifier_id, listing_id, identifier_subject, identifier_scheme, identifier_value, normalized_value, effective_from_status, effective_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000199','00000000-0000-0000-0000-000000000190','UNKNOWN_SUBJECT','RIC','BAD.PA','BAD.PA','UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'unknown listing identifier subject unexpectedly accepted';
               exception when check_violation then null; end;
-
               begin
                   insert into fund.listing(listing_id, share_class_id, venue_mic, is_primary, inception_price, valid_from_status, valid_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000200','00000000-0000-0000-0000-000000000181','XAMS',false,0,'UNKNOWN','NOT_APPLICABLE','VALIDATED');
