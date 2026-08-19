@@ -21,6 +21,7 @@ on:
       - 'tests/test_listing_identifier_subject_model.py'
       - 'tests/test_listing_inception_price_model.py'
       - 'tests/test_share_class_trading_price_frequency_model.py'
+      - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -43,6 +44,7 @@ on:
       - 'tests/test_listing_identifier_subject_model.py'
       - 'tests/test_listing_inception_price_model.py'
       - 'tests/test_share_class_trading_price_frequency_model.py'
+      - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -108,6 +110,7 @@ jobs:
           python -m unittest -v tests.test_listing_identifier_subject_model
           python -m unittest -v tests.test_listing_inception_price_model
           python -m unittest -v tests.test_share_class_trading_price_frequency_model
+          python -m unittest -v tests.test_share_class_nav_frequency_detail_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -134,8 +137,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 25 then
-                  raise exception 'expected 25 governed migrations, got %', migration_count;
+              if migration_count <> 26 then
+                  raise exception 'expected 26 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -207,6 +210,14 @@ jobs:
                     and column_name='trading_price_frequency'
               ) then
                   raise exception 'share-class trading price frequency migration 025 column is missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='share_class_profile'
+                    and column_name='nav_frequency_detail'
+              ) then
+                  raise exception 'share-class NAV frequency detail migration 026 column is missing';
               end if;
               if to_regclass('fund.fund') is not null
                  or to_regclass('fund.share_class') is not null then
