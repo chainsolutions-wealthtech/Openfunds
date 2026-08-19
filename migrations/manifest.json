@@ -65,7 +65,8 @@
     {"order": 210, "id": "021_LISTING_BUSINESS_STATUS", "path": "schemas/fund/021_listing_business_status.sql"},
     {"order": 220, "id": "022_LISTING_VENDOR_IDENTIFIER_SCHEMES", "path": "schemas/fund/022_listing_vendor_identifier_schemes.sql"},
     {"order": 230, "id": "023_LISTING_IDENTIFIER_SUBJECT", "path": "schemas/fund/023_listing_identifier_subject.sql"},
-    {"order": 240, "id": "024_LISTING_INCEPTION_PRICE", "path": "schemas/fund/024_listing_inception_price.sql"}
+    {"order": 240, "id": "024_LISTING_INCEPTION_PRICE", "path": "schemas/fund/024_listing_inception_price.sql"},
+    {"order": 250, "id": "025_SHARE_CLASS_TRADING_PRICE_FREQUENCY", "path": "schemas/fund/025_share_class_trading_price_frequency.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
