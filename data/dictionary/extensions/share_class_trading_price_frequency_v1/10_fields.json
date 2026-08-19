@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_SHARE_CLASS_PROFILE_TRADING_PRICE_FREQUENCY",
+      "technical_name": "share_class_profile.trading_price_frequency",
+      "entity_code": "SHARE_CLASS_PROFILE",
+      "physical_schema": "fund",
+      "physical_table": "share_class_profile",
+      "physical_column": "trading_price_frequency",
+      "data_type": "text",
+      "nullable": true,
+      "definition_fr": "Fréquence native de publication d'un prix de marché ou de négociation de la classe de parts, distincte de la fréquence de calcul ou publication de VL.",
+      "definition_en": "Native frequency at which a secondary-market or exchange trading price is published for the share class, distinct from NAV valuation frequency.",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_REGULATOR_OR_FUND_DOCUMENT",
+      "validation_rule": "GOVERNED_FREQUENCY_ENUM_WHEN_MAPPED",
+      "normalization_rule": "TRIM_AND_MAP_OFFICIAL_FREQUENCY_TO_CANONICAL_ENUM",
+      "provenance_path": "schemas/fund/025_share_class_trading_price_frequency.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
