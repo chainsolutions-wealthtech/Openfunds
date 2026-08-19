@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_TRADING_PRICE_FREQUENCY_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_TRADING_PRICE_FREQUENCY_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/025_share_class_trading_price_frequency.sql",
+  "scope": "Additive canonical field introduced by migration 025; keeps trading-price frequency distinct from nav_frequency and does not rewrite spec_v1."
+}
