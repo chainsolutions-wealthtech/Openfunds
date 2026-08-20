@@ -40,7 +40,8 @@
     {"order": 260, "id": "026_SHARE_CLASS_NAV_FREQUENCY_DETAIL", "path": "schemas/fund/026_share_class_nav_frequency_detail.sql"},
     {"order": 270, "id": "027_VALUATION_TIME_SEMANTICS", "path": "schemas/fund/027_valuation_time_semantics.sql"},
     {"order": 280, "id": "028_SHARE_CLASS_MULTICURRENCY_DEALING", "path": "schemas/fund/028_share_class_multicurrency_dealing.sql"},
-    {"order": 290, "id": "029_ENTITY_LIFECYCLE_PHASE", "path": "schemas/fund/029_entity_lifecycle_phase.sql"}
+    {"order": 290, "id": "029_ENTITY_LIFECYCLE_PHASE", "path": "schemas/fund/029_entity_lifecycle_phase.sql"},
+    {"order": 300, "id": "030_ENTITY_LIFECYCLE_EVENT_TYPES", "path": "schemas/fund/030_entity_lifecycle_event_types.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
