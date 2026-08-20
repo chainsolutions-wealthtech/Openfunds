@@ -24,6 +24,8 @@ on:
       - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/test_valuation_time_semantics_model.py'
       - 'tests/test_share_class_multicurrency_model.py'
+      - 'tests/test_entity_lifecycle_phase_model.py'
+      - 'tests/test_entity_lifecycle_event_types_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -49,6 +51,8 @@ on:
       - 'tests/test_share_class_nav_frequency_detail_model.py'
       - 'tests/test_valuation_time_semantics_model.py'
       - 'tests/test_share_class_multicurrency_model.py'
+      - 'tests/test_entity_lifecycle_phase_model.py'
+      - 'tests/test_entity_lifecycle_event_types_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -117,6 +121,8 @@ jobs:
           python -m unittest -v tests.test_share_class_nav_frequency_detail_model
           python -m unittest -v tests.test_valuation_time_semantics_model
           python -m unittest -v tests.test_share_class_multicurrency_model
+          python -m unittest -v tests.test_entity_lifecycle_phase_model
+          python -m unittest -v tests.test_entity_lifecycle_event_types_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -143,8 +149,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 28 then
-                  raise exception 'expected 28 governed migrations, got %', migration_count;
+              if migration_count <> 30 then
+                  raise exception 'expected 30 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -193,6 +199,9 @@ jobs:
                  or to_regclass('fund.share_class_dealing_currency') is null then
                   raise exception 'share-class multicurrency dealing migration 028 objects are missing';
               end if;
+              if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='entity_state' and column_name='lifecycle_phase') then
+                  raise exception 'entity lifecycle phase migration 029 column is missing';
+              end if;
               if to_regclass('fund.fund') is not null or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
               end if;
@@ -217,6 +226,23 @@ jobs:
           insert into fund.entity(entity_id, entity_type, canonical_code)
           values ('00000000-0000-0000-0000-000000000181', 'SHARE_CLASS', 'TEST_IDENTIFIER_018');
 
+          insert into fund.entity_state(
+              entity_state_id, entity_id, lifecycle_status, lifecycle_phase,
+              effective_from_status, effective_to_status, validation_status
+          ) values (
+              '00000000-0000-0000-0000-000000000186',
+              '00000000-0000-0000-0000-000000000181',
+              'SUSPENDED', 'DORMANT', 'UNKNOWN', 'NOT_APPLICABLE', 'VALIDATED'
+          );
+
+          insert into fund.entity_event(
+              event_id, event_type, effective_date, effective_date_status,
+              event_summary, validation_status, source_note
+          ) values
+          ('00000000-0000-0000-0000-000000000187','DORMANCY_START','2026-01-15','KNOWN','Lifecycle runtime fixture','VALIDATED','migration 030 runtime assertion'),
+          ('00000000-0000-0000-0000-000000000188','DORMANCY_END','2026-02-15','KNOWN','Lifecycle runtime fixture','VALIDATED','migration 030 runtime assertion'),
+          ('00000000-0000-0000-0000-000000000189','TERMINATION','2026-03-15','KNOWN','Lifecycle runtime fixture','VALIDATED','migration 030 runtime assertion');
+
           insert into fund.entity_identifier(entity_identifier_id, entity_id, identifier_scheme, identifier_value, normalized_value, effective_from_status, effective_to_status, validation_status) values
           ('00000000-0000-0000-0000-000000000182','00000000-0000-0000-0000-000000000181','WKN','A1TEST2','A1TEST2','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
           ('00000000-0000-0000-0000-000000000183','00000000-0000-0000-0000-000000000181','SEDOL','B0TEST1','B0TEST1','UNKNOWN','NOT_APPLICABLE','VALIDATED'),
@@ -226,13 +252,15 @@ jobs:
           values ('00000000-0000-0000-0000-000000000190','00000000-0000-0000-0000-000000000181','XNAS',true,'GBX',0.01,'SUSPENDED',96.4,'UNKNOWN','NOT_APPLICABLE','VALIDATED');
 
           do $$
-          declare persisted_status text; persisted_is_current boolean; persisted_inception_price numeric;
+          declare persisted_status text; persisted_is_current boolean; persisted_inception_price numeric; persisted_phase text;
           begin
               select listing_status, is_current, inception_price into persisted_status, persisted_is_current, persisted_inception_price
               from fund.listing where listing_id='00000000-0000-0000-0000-000000000190';
               if persisted_status <> 'SUSPENDED' then raise exception 'listing business status was not preserved'; end if;
               if persisted_is_current is not true then raise exception 'listing business status incorrectly changed bitemporal is_current'; end if;
               if persisted_inception_price <> 96.4 then raise exception 'listing inception price was not preserved'; end if;
+              select lifecycle_phase into persisted_phase from fund.entity_state where entity_state_id='00000000-0000-0000-0000-000000000186';
+              if persisted_phase <> 'DORMANT' then raise exception 'precise lifecycle phase was not preserved'; end if;
           end
           $$;
 
@@ -248,6 +276,11 @@ jobs:
                   insert into fund.entity_identifier(entity_identifier_id, entity_id, identifier_scheme, identifier_value, normalized_value, effective_from_status, effective_to_status, validation_status)
                   values ('00000000-0000-0000-0000-000000000185','00000000-0000-0000-0000-000000000181','UNSUPPORTED_SCHEME','BAD','BAD','UNKNOWN','NOT_APPLICABLE','VALIDATED');
                   raise exception 'unsupported identifier scheme unexpectedly accepted';
+              exception when check_violation then null; end;
+              begin
+                  insert into fund.entity_event(event_id, event_type, effective_date_status, event_summary, validation_status)
+                  values ('00000000-0000-0000-0000-000000000180','UNKNOWN_LIFECYCLE_EVENT','UNKNOWN','bad event','VALIDATED');
+                  raise exception 'unsupported lifecycle event type unexpectedly accepted';
               exception when check_violation then null; end;
               begin
                   insert into fund.listing(listing_id, share_class_id, is_primary, valid_from_status, valid_to_status, validation_status)
