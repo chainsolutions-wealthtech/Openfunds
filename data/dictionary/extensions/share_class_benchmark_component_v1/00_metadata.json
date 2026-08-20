@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_BENCHMARK_COMPONENT_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_BENCHMARK_COMPONENT_EXTENSION_SCOPE",
+  "field_count": 17,
+  "provenance_path": "schemas/fund/035_share_class_benchmark_components.sql",
+  "scope": "Ordered versioned Share Class benchmark components. Composite Openfunds pipe syntax and optional bracketed weights are normalized to rows and fields."
+}
