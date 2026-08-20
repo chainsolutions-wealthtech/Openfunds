@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_SHARE_CLASS_PROFILE_IS_ETF",
+      "technical_name": "share_class_profile.is_etf",
+      "entity_code": "SHARE_CLASS_PROFILE",
+      "physical_schema": "fund",
+      "physical_table": "share_class_profile",
+      "physical_column": "is_etf",
+      "data_type": "boolean",
+      "nullable": true,
+      "definition_fr": "Indique explicitement si la classe de parts est un ETF.",
+      "definition_en": "Explicitly indicates whether the share class is an Exchange Traded Fund (ETF).",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_FUND_DOCUMENT",
+      "validation_rule": "NULL_OR_BOOLEAN",
+      "normalization_rule": "OPENFUNDS_YES_NO_TO_BOOLEAN",
+      "provenance_path": "schemas/fund/032_share_class_etf_flag.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
