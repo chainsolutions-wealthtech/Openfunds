@@ -1,0 +1,23 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_FUND_ENTITY_STATE_LIFECYCLE_PHASE",
+      "technical_name": "entity_state.lifecycle_phase",
+      "entity_code": "FUND_ENTITY_STATE",
+      "physical_schema": "fund",
+      "physical_table": "entity_state",
+      "physical_column": "lifecycle_phase",
+      "data_type": "text",
+      "nullable": true,
+      "definition_fr": "Phase précise du cycle de vie explicitement observée, conservée séparément du statut général lifecycle_status.",
+      "definition_en": "Precisely evidenced lifecycle phase, preserved separately from the broader lifecycle_status.",
+      "allowed_values": ["PROJECTED", "TO_BE_LAUNCHED", "OFFERING_PERIOD", "ACTIVE", "DORMANT", "IN_LIQUIDATION", "TERMINATED"],
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_REGULATOR_OR_FUND_DOCUMENT",
+      "validation_rule": "NULL_OR_GOVERNED_LIFECYCLE_PHASE_ENUM",
+      "normalization_rule": "OPENFUNDS_LIFECYCLE_PHASE_TO_CANONICAL_ENUM",
+      "provenance_path": "schemas/fund/029_entity_lifecycle_phase.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
