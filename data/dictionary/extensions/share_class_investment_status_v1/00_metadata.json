@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_INVESTMENT_STATUS_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_INVESTMENT_STATUS_EXTENSION_SCOPE",
+  "field_count": 4,
+  "provenance_path": "schemas/fund/031_share_class_investment_status.sql",
+  "scope": "Additive Share Class dealing-access status semantics introduced by migration 031; distinct from lifecycle phase."
+}
