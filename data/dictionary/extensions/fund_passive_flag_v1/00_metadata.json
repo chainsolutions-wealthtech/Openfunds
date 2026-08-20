@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_FUND_PASSIVE_FLAG_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_FUND_PASSIVE_FLAG_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/033_fund_passive_flag.sql",
+  "scope": "Additive Fund-level passive/index-tracking classification introduced by migration 033; no Share Class inference."
+}
