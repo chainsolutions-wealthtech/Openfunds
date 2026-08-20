@@ -29,6 +29,7 @@ on:
       - 'tests/test_share_class_investment_status_model.py'
       - 'tests/test_share_class_etf_flag_model.py'
       - 'tests/test_fund_passive_flag_model.py'
+      - 'tests/test_fund_replication_methodology_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -59,6 +60,7 @@ on:
       - 'tests/test_share_class_investment_status_model.py'
       - 'tests/test_share_class_etf_flag_model.py'
       - 'tests/test_fund_passive_flag_model.py'
+      - 'tests/test_fund_replication_methodology_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -132,6 +134,7 @@ jobs:
           python -m unittest -v tests.test_share_class_investment_status_model
           python -m unittest -v tests.test_share_class_etf_flag_model
           python -m unittest -v tests.test_fund_passive_flag_model
+          python -m unittest -v tests.test_fund_replication_methodology_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -158,8 +161,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 33 then
-                  raise exception 'expected 33 governed migrations, got %', migration_count;
+              if migration_count <> 34 then
+                  raise exception 'expected 34 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -222,6 +225,10 @@ jobs:
               end if;
               if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='fund_profile' and column_name='is_passive') then
                   raise exception 'Fund passive flag migration 033 column is missing';
+              end if;
+              if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='fund_profile' and column_name='replication_methodology_first_level')
+                 or to_regclass('fund.replication_methodology_detail') is null then
+                  raise exception 'Fund replication methodology migration 034 objects are missing';
               end if;
               if to_regclass('fund.fund') is not null or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
