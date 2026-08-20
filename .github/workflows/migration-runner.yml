@@ -26,6 +26,7 @@ on:
       - 'tests/test_share_class_multicurrency_model.py'
       - 'tests/test_entity_lifecycle_phase_model.py'
       - 'tests/test_entity_lifecycle_event_types_model.py'
+      - 'tests/test_share_class_investment_status_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -53,6 +54,7 @@ on:
       - 'tests/test_share_class_multicurrency_model.py'
       - 'tests/test_entity_lifecycle_phase_model.py'
       - 'tests/test_entity_lifecycle_event_types_model.py'
+      - 'tests/test_share_class_investment_status_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -123,6 +125,7 @@ jobs:
           python -m unittest -v tests.test_share_class_multicurrency_model
           python -m unittest -v tests.test_entity_lifecycle_phase_model
           python -m unittest -v tests.test_entity_lifecycle_event_types_model
+          python -m unittest -v tests.test_share_class_investment_status_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -149,8 +152,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 30 then
-                  raise exception 'expected 30 governed migrations, got %', migration_count;
+              if migration_count <> 31 then
+                  raise exception 'expected 31 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -201,6 +204,12 @@ jobs:
               end if;
               if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='entity_state' and column_name='lifecycle_phase') then
                   raise exception 'entity lifecycle phase migration 029 column is missing';
+              end if;
+              if not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='investment_status')
+                 or not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='investment_status_description')
+                 or not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='investment_status_date')
+                 or not exists (select 1 from information_schema.columns where table_schema='fund' and table_name='share_class_profile' and column_name='investment_status_date_status') then
+                  raise exception 'share-class investment status migration 031 columns are missing';
               end if;
               if to_regclass('fund.fund') is not null or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
