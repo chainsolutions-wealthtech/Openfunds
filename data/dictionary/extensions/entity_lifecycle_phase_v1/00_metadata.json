@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_ENTITY_LIFECYCLE_PHASE_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_ENTITY_LIFECYCLE_PHASE_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/029_entity_lifecycle_phase.sql",
+  "scope": "Additive canonical lifecycle-phase precision introduced by migration 029; broad lifecycle_status remains unchanged."
+}
