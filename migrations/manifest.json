@@ -44,7 +44,8 @@
     {"order": 300, "id": "030_ENTITY_LIFECYCLE_EVENT_TYPES", "path": "schemas/fund/030_entity_lifecycle_event_types.sql"},
     {"order": 310, "id": "031_SHARE_CLASS_INVESTMENT_STATUS", "path": "schemas/fund/031_share_class_investment_status.sql"},
     {"order": 320, "id": "032_SHARE_CLASS_ETF_FLAG", "path": "schemas/fund/032_share_class_etf_flag.sql"},
-    {"order": 330, "id": "033_FUND_PASSIVE_FLAG", "path": "schemas/fund/033_fund_passive_flag.sql"}
+    {"order": 330, "id": "033_FUND_PASSIVE_FLAG", "path": "schemas/fund/033_fund_passive_flag.sql"},
+    {"order": 340, "id": "034_FUND_REPLICATION_METHODOLOGY", "path": "schemas/fund/034_fund_replication_methodology.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
