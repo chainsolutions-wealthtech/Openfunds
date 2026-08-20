@@ -108,6 +108,8 @@ UNMAPPED_OPENFUNDS_IDS: 1831
 MAPPED_CANONICAL_IDS: 35
 ```
 
+The governed migration runner is wired through migration 031. OF-MAP-002 is wired through Batch 19 and the 209-field canonical union. These are implementation statements only; remote CI attestation remains unavailable through the connected status surface.
+
 ## Non-regression invariants
 
 - lifecycle_phase does not overwrite lifecycle_status;
@@ -121,3 +123,5 @@ MAPPED_CANONICAL_IDS: 35
 ## Next safe work
 
 Continue OF-MAP-002 only from official checksum-locked semantics. Prefer fields that reuse existing canonical surfaces. Benchmark, fee, document, eligibility and other relational domains must be audited before schema creation and must not be flattened into lossy text fields for convenience.
+
+Migration 032 / Share Class ETF flag may proceed as a one-field additive extension because `OFST010580` is explicitly Share Class-level. Its Batch 20 registry row must only be written after the full existing registry can be reconstructed and revalidated without truncation risk.
