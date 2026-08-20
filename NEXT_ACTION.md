@@ -2,14 +2,15 @@
 
 ```text
 CURRENT_LOOP: OF-MAP-002 + OF-DATA-001 + OF-LOOP-SOURCE-002 + OF-SOURCE-003
-CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..031
+CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..032
 LAST_REMOTELY_VERIFIED_MIGRATION_CHAIN: 001..019 / RUN 32070768364
-CURRENT_IMPLEMENTED_CANONICAL_INVENTORY: 209 = 143_CORE + 66_EXTENSIONS
+CURRENT_IMPLEMENTED_CANONICAL_INVENTORY: 210 = 143_CORE + 67_EXTENSIONS
 LAST_REMOTELY_VERIFIED_CANONICAL_UNION: 177 / RUN 32071385088
 CURRENT_IMPLEMENTED_MAPPING: BATCH_01..19 / 72_ROWS / 38_OF_IDS / 35_CANONICAL_IDS
+BATCH_20_ETF_FLAG: RED_CONTRACT + MIGRATION_032 + DICTIONARY_EXTENSION_READY / REGISTRY_ROW_NOT_WRITTEN_DUE_FULL_FILE_RECONSTRUCTION_GATE
 LAST_REMOTELY_VERIFIED_MAPPING: BATCH_05 / RUN 32071858346
 UNMAPPED_OPENFUNDS_IDS: 1831
-STATUS: FORWARD_ONLY_WORK_IN_PROGRESS_WITH_FAIL_CLOSED_REMOTE_CI_GATES
+STATUS: FORWARD_ONLY_WORK_IN_PROGRESS_WITH_FAIL_CLOSED_REMOTE_CI_AND_REGISTRY_RECONSTRUCTION_GATES
 WRITE_GATE: VERIFIED_OF_ID + VERIFIED_FIELD_LEVEL + VERIFIED_CANONICAL_TARGET + EXPLICIT_TRANSFORMATION + LICENCE_OR_USAGE_GATE + TDD_CONTRACT
 ```
 
@@ -27,7 +28,7 @@ IMPLEMENTED != REMOTELY_GREEN
 
 Ne jamais inventer de numéro de run ou de verdict CI.
 
-## Migrations implémentées après le dernier GREEN distant
+## Chaîne de migrations implémentée
 
 ```text
 020_LISTING_QUOTE_UNIT_SEMANTICS
@@ -42,23 +43,8 @@ Ne jamais inventer de numéro de run ou de verdict CI.
 029_ENTITY_LIFECYCLE_PHASE
 030_ENTITY_LIFECYCLE_EVENT_TYPES
 031_SHARE_CLASS_INVESTMENT_STATUS
+032_SHARE_CLASS_ETF_FLAG
 ```
-
-## Invariants structuraux nouveaux
-
-- `GBX/EUX/USX` restent des quote-unit codes, pas des fausses devises `ref.currency`.
-- `listing_status` reste distinct de `is_current`.
-- Bloomberg/RIC restent des schemes Listing dédiés et usage-gated.
-- `identifier_subject` distingue `LISTING` de `INAV`.
-- `inception_price` n'infère ni devise ni facteur.
-- `nav_frequency` et `trading_price_frequency` sont distincts.
-- `nav_frequency_detail` conserve le texte source.
-- un label timezone source n'est jamais transformé silencieusement en zone IANA ; `OFST010252` est conservé séparément.
-- la devise de référence Share Class reste unique ; les devises additionnelles sont historisées dans `share_class_dealing_currency`.
-- `lifecycle_phase` conserve les sept phases Openfunds et ne remplace pas `lifecycle_status`.
-- les dates de dormance/offre/liquidation/termination sont des `entity_event`, ce qui permet les cycles répétés.
-- `investment_status` représente l'accès souscription/rachat et reste distinct du lifecycle.
-- une date de statut d'investissement absente n'est jamais inventée.
 
 ## Inventaire canonique courant
 
@@ -75,97 +61,102 @@ valuation_time_semantics_v1:                       4
 share_class_multicurrency_dealing_v1:             16
 entity_lifecycle_phase_v1:                         1
 share_class_investment_status_v1:                  4
-TOTAL:                                            209
+share_class_etf_flag_v1:                           1
+TOTAL IMPLEMENTED STRUCTURAL FIELDS:              210
 ```
 
 Aucune extension ne réécrit `spec_v1` ou `listing_v1` rétroactivement.
 
-## OF-MAP-002 — état courant
+## OF-MAP-002 — registre fermé jusqu'à Batch 19
 
 ```text
 REVIEWED_MAPPING_ROWS:   72
 MAPPED_EXTERNAL_IDS:     38
 UNMAPPED_EXTERNAL_IDS: 1831
 MAPPED_CANONICAL_IDS:    35
-CANONICAL_FIELDS:       209
+MAPPED_CANONICAL_UNION: 209
 ```
-
-### Batches 15–16 — temps et multicurrency
-
-- Batch 15 : `OFST010250`, `010251`, `010252`, `020320`; heure locale + timezone label + IANA + heure publication NAV, sans inférence label→IANA.
-- Batch 16 : `OFST020530`, `020535`; flag multidevise + lignes de devises additionnelles, sans écraser `currency_id`.
 
 ### Batches 17–18 — lifecycle
 
-- Batch 17 : `OFST020545` -> `entity_state.lifecycle_phase` avec sept phases précises.
-- Batch 18 : `OFST020558`, `020559`, `020560`, `020562`, `020563`, `020564`, `020566` -> événements versionnables (`event_type + effective_date + KNOWN`).
-- Les cycles `active/dormant` restent représentables plusieurs fois ; aucune date de dormance n'est figée dans une colonne unique.
+- `OFST020545` -> `entity_state.lifecycle_phase` avec sept phases précises.
+- `OFST020558`, `020559`, `020560`, `020562`, `020563`, `020564`, `020566` -> événements versionnables.
+- Les cycles `active/dormant` peuvent être répétés ; aucune dormance n'est réduite à une paire de colonnes statiques.
 
 ### Batch 19 — investment status
 
 ```text
 OFST023100 Investment Status
-  -> share_class_profile.investment_status
-
 OFST023105 Investment Status Description
-  -> share_class_profile.investment_status_description
-
 OFST023110 Investment Status Date
-  -> investment_status_date + investment_status_date_status=KNOWN
 ```
 
-Valeurs canoniques :
+Ces champs décrivent l'accès souscription/rachat et restent distincts de `lifecycle_phase`.
+
+## Batch 20 — ETF flag : gate en cours
+
+Source officielle vérifiée :
 
 ```text
-OPEN
-SOFT_CLOSED
-HARD_CLOSED
-CLOSED_FOR_REDEMPTION
-CLOSED_FOR_SUBSCRIPTION_AND_REDEMPTION
+OFST010580 Is ETF
+FIELD_LEVEL: Share Class
+DATA_TYPE: boolean
+VALUES: yes / no
 ```
+
+Migration 032 ajoute uniquement :
+
+```text
+fund.share_class_profile.is_etf boolean NULL
+```
+
+Extension : `data/dictionary/extensions/share_class_etf_flag_v1/` (1 champ).
+
+Le contrat RED `tests/test_openfunds_mapping_batch20.py` existe. La ligne de registre attendue est :
+
+```text
+OFST010580 -> OF_FUND_SHARE_CLASS_PROFILE_IS_ETF
+TRANSFORMATION: OPENFUNDS_YES_NO_TO_BOOLEAN
+```
+
+**Ne pas écrire MAP-000073 tant que le connecteur ne permet pas de reconstruire et relire la totalité des 72 lignes historiques sans troncature.** Le registre utilise un remplacement complet via Contents API ; un append à l'aveugle serait un risque de régression et est donc interdit.
+
+## Invariants permanents
+
+- quote-unit ≠ devise économique ;
+- Listing status ≠ `is_current` ;
+- Listing identity ≠ iNAV identity ;
+- lifecycle phase ≠ broad lifecycle status ;
+- investment status ≠ lifecycle phase ;
+- reference Share Class currency ≠ additional dealing currencies ;
+- timezone label ≠ timezone IANA ;
+- absence de date source ≠ date inventée ;
+- ETF est un attribut Share Class, pas Fund.
 
 ## Gates identifiants inchangés
 
-### SEDOL
-
 ```text
-IMPORT_SUPPORTED: NO
-EXPORT_SUPPORTED: NO
-ACTIVATION_GATE: EXPLICIT_SEDOL_LICENSING_CLEARANCE
+SEDOL: IMPORT/EXPORT NO — EXPLICIT_SEDOL_LICENSING_CLEARANCE
+BLOOMBERG/RIC: IMPORT/EXPORT NO — EXPLICIT_PROPRIETARY_IDENTIFIER_USAGE_REVIEW
 ```
 
-### Bloomberg / RIC
+## Prochaine unité sûre
 
-```text
-IMPORT_SUPPORTED: NO
-EXPORT_SUPPORTED: NO
-ACTIVATION_GATE: EXPLICIT_PROPRIETARY_IDENTIFIER_USAGE_REVIEW
-```
+1. fermer le gate de reconstruction du registre pour Batch20 ;
+2. intégrer 032/Batch20 aux workflows et au mapping manifest seulement après écriture sûre du registre ;
+3. auditer les champs ETF/index suivants (`OFST023800+`) avant toute architecture : index name/currency/vendor identifiers ne doivent pas être aplatis dans un seul champ benchmark ;
+4. poursuivre en parallèle OF-SOURCE-003 et les gaps institutionnels avec preuves primaires.
 
-## Prochaine unité OF-MAP-002
-
-Auditer le prochain domaine depuis le PDF officiel checksum-locké avant toute migration.
-
-Priorité : choisir un champ ou petit groupe qui peut être modélisé sans perte et sans créer de structure parallèle. Les domaines `benchmark`, `fees`, `documents`, `eligibility`, `distributions` et relations complexes doivent être normalisés plutôt qu'aplatis en texte pour accélérer artificiellement la couverture.
-
-Avant tout mapping : vérifier OF-ID, Field Level, type, cardinalité implicite, dépendances et cible canonique existante. TDD RED obligatoire pour toute évolution de schéma.
-
-## Couverture institutionnelle
+## Couverture institutionnelle inchangée
 
 ```text
 ORGANIZATION_SCOPE_ROLES: 199 = 195 VALIDATED + 4 PENDING
 COUNTRY_COVERAGE: 53 / 54
 UNCOVERED: ERYTHREE
-PENDING:
-  EGX INDEX_PROVIDER EGYPTE
-  NSE INDEX_PROVIDER KENYA
-  NGX INDEX_PROVIDER NIGERIA
-  CMA MONETARY_UNION CMA
+PENDING: EGX INDEX_PROVIDER / NSE INDEX_PROVIDER / NGX INDEX_PROVIDER / CMA MONETARY_UNION
 ```
 
-Ne pas forcer ces quatre cas.
-
-## Gaps fonctionnels institutionnels
+## Gaps fonctionnels
 
 ```text
 COUNTRIES_COMPLETE_FOR_7_REQUIRED_GROUPS: 0 / 54
@@ -177,12 +168,6 @@ INSURANCE_PENSION_REGULATION_MISSING:    44
 MONETARY_AUTHORITY_MISSING:              11
 STATISTICS_MISSING:                       3
 ```
-
-Priorité parallèle : assurance/pension puis fiscal/dette, preuves primaires officielles uniquement.
-
-## OF-SOURCE-003
-
-Une organisation validée ne valide jamais automatiquement endpoint, série exacte, fréquence, unité, convention, historique, méthode ou statut de collecte. Continuer indépendamment.
 
 ## Blockers externes
 
