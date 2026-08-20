@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_ETF_FLAG_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_ETF_FLAG_EXTENSION_SCOPE",
+  "field_count": 1,
+  "provenance_path": "schemas/fund/032_share_class_etf_flag.sql",
+  "scope": "Additive Share Class-level ETF classification introduced by migration 032; no Fund-level inference."
+}
