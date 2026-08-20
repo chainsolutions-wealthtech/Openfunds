@@ -1,0 +1,22 @@
+{
+  "fields": [
+    {
+      "field_id": "OF_FUND_FUND_PROFILE_IS_PASSIVE",
+      "technical_name": "fund_profile.is_passive",
+      "entity_code": "FUND_PROFILE",
+      "physical_schema": "fund",
+      "physical_table": "fund_profile",
+      "physical_column": "is_passive",
+      "data_type": "boolean",
+      "nullable": true,
+      "definition_fr": "Indique explicitement si le fonds suit un indice de très près (fonds passif).",
+      "definition_en": "Explicitly indicates whether the fund follows an index very closely (passive fund).",
+      "history_method": "BITEMPORAL_VERSIONED_ASSERTION",
+      "source_role": "OFFICIAL_FUND_DOCUMENT",
+      "validation_rule": "NULL_OR_BOOLEAN",
+      "normalization_rule": "OPENFUNDS_YES_NO_TO_BOOLEAN",
+      "provenance_path": "schemas/fund/033_fund_passive_flag.sql",
+      "status": "VALIDATED"
+    }
+  ]
+}
