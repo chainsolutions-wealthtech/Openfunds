@@ -1,8 +1,8 @@
-# OF-MAP-002 — Checkpoint Batches 17–19 — 2026-08-20
+# OF-MAP-002 — Checkpoint Batches 17–20 — 2026-08-20
 
 ## Scope
 
-This checkpoint records the forward-only Share Class lifecycle and investment-status wave implemented on `architecture/africafunds-country-indicators-v0.1`.
+This checkpoint records the forward-only Share Class lifecycle, investment-status and ETF-classification wave implemented on `architecture/africafunds-country-indicators-v0.1`.
 
 ## Governance
 
@@ -29,24 +29,13 @@ TERMINATED
 
 Dictionary extension: `data/dictionary/extensions/entity_lifecycle_phase_v1/` (1 field).
 
-Batch 17 maps `OFST020545 Share Class Lifecycle` to `OF_FUND_FUND_ENTITY_STATE_LIFECYCLE_PHASE` without collapsing the seven source phases.
+Batch 17 maps `OFST020545 Share Class Lifecycle` without collapsing the seven source phases.
 
 ## Migration 030 — lifecycle event types
 
-No new physical field is introduced. `fund.entity_event.event_type` is extended additively with:
+Extends `fund.entity_event.event_type` additively with subscription-period, dormancy, liquidation-start and termination events. Existing event types remain valid.
 
-```text
-SUBSCRIPTION_PERIOD_START
-SUBSCRIPTION_PERIOD_END
-DORMANCY_START
-DORMANCY_END
-LIQUIDATION_START
-TERMINATION
-```
-
-Existing event types remain valid. This event model is required because Openfunds lifecycle semantics permit active/dormant cycles to repeat over time.
-
-Batch 18 maps seven official lifecycle dates as versionable events:
+Batch 18 maps these lifecycle dates as versionable events:
 
 ```text
 OFST020558 Subscription Period Start Date
@@ -58,13 +47,11 @@ OFST020564 Liquidation Start Date
 OFST020566 Termination Date
 ```
 
-Each date maps to `event_type + effective_date + effective_date_status=KNOWN`, rather than being collapsed into one pair of entity-state boundaries.
+Each date maps to `event_type + effective_date + effective_date_status=KNOWN`. Repeating dormancy cycles therefore remain representable.
 
 ## Migration 031 — Share Class investment status
 
-Investment/dealing access is explicitly distinct from lifecycle.
-
-Adds to `fund.share_class_profile`:
+Adds:
 
 ```text
 investment_status
@@ -73,65 +60,66 @@ investment_status_date
 investment_status_date_status
 ```
 
-Canonical status values:
+Investment/dealing access remains distinct from lifecycle. Missing dates are never synthesized.
 
-```text
-OPEN
-SOFT_CLOSED
-HARD_CLOSED
-CLOSED_FOR_REDEMPTION
-CLOSED_FOR_SUBSCRIPTION_AND_REDEMPTION
-```
+Batch 19 maps `OFST023100`, `OFST023105` and `OFST023110`.
 
-Date knowledge coupling prevents invented dates: `KNOWN` requires a real date; `UNKNOWN` requires NULL.
+## Migration 032 / Batch 20 — Share Class ETF flag
 
-Dictionary extension: `data/dictionary/extensions/share_class_investment_status_v1/` (4 fields).
-
-Batch 19 maps:
-
-```text
-OFST023100 Investment Status
-OFST023105 Investment Status Description
-OFST023110 Investment Status Date
-```
-
-## Structural state after Batch 19
-
-```text
-CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..031
-CANONICAL_CORE_FIELDS: 143
-CANONICAL_EXTENSION_FIELDS: 66
-CANONICAL_FIELDS_TOTAL: 209
-REVIEWED_MAPPING_ROWS: 72
-MAPPED_OPENFUNDS_IDS: 38
-UNMAPPED_OPENFUNDS_IDS: 1831
-MAPPED_CANONICAL_IDS: 35
-```
-
-The governed migration runner is wired through migration 031. OF-MAP-002 is wired through Batch 19 and the 209-field canonical union. These are implementation statements only; remote CI attestation remains unavailable through the connected status surface.
-
-## Staged next migration 032 — Share Class ETF flag
-
-Official `OFST010580 Is ETF` is Share Class-level. Migration 032 and its one-field dictionary extension are implemented structurally:
+Official `OFST010580 Is ETF` is Share Class-level. Migration 032 adds only:
 
 ```text
 fund.share_class_profile.is_etf boolean NULL
-OF_FUND_SHARE_CLASS_PROFILE_IS_ETF
 ```
 
-The Batch20 RED contract also exists. The mapping registry row is deliberately not written yet because the connector currently truncates large reads of the 72-line registry and mutation requires complete-file replacement. No blind replacement is allowed under the zero-regression rule.
+Dictionary extension:
+
+```text
+data/dictionary/extensions/share_class_etf_flag_v1/
+FIELD_COUNT: 1
+FIELD_ID: OF_FUND_SHARE_CLASS_PROFILE_IS_ETF
+```
+
+The registry reconstruction gate was closed safely using the exact Git blob rather than a truncated file view. `MAP-000073` is therefore now present:
+
+```text
+OFST010580 -> OF_FUND_SHARE_CLASS_PROFILE_IS_ETF
+TRANSFORMATION: OPENFUNDS_YES_NO_TO_BOOLEAN
+INFORMATION_LOSS: NONE
+IMPORT_SUPPORTED: YES
+EXPORT_SUPPORTED: YES
+```
+
+No Fund-level ETF inference is permitted.
+
+## Structural state after Batch 20
+
+```text
+CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..032
+CANONICAL_CORE_FIELDS: 143
+CANONICAL_EXTENSION_FIELDS: 67
+CANONICAL_FIELDS_TOTAL: 210
+REVIEWED_MAPPING_ROWS: 73
+MAPPED_OPENFUNDS_IDS: 39
+UNMAPPED_OPENFUNDS_IDS: 1830
+MAPPED_CANONICAL_IDS: 36
+```
+
+OF-MAP-002 is wired through Batch20 and the 210-field union. Migration 032 is registered in the governed migration manifest. The migration-runner workflow still requires its final 031→032 count/test wiring before the 032 wave is structurally closed across all CI surfaces; remote CI attestation remains unavailable regardless.
 
 ## Non-regression invariants
 
 - lifecycle_phase does not overwrite lifecycle_status;
 - investment_status does not overwrite lifecycle_phase;
-- recurring dormancy is represented through events, not one static start/end pair;
+- recurring dormancy is represented through events;
 - source dates are never synthesized when absent;
+- ETF is Share Class-level and is never inferred at Fund level;
 - historical core dictionary and listing_v1 remain unchanged;
 - SEDOL and Bloomberg/RIC runtime usage gates remain unchanged;
-- ETF is Share Class-level and is never inferred at Fund level;
 - implemented does not mean remotely GREEN without observable CI evidence.
 
 ## Next safe work
 
-Close Batch20 only after the complete current registry can be reconstructed and re-read without truncation risk. Then audit ETF/index fields (`OFST023800+`) as a normalized index/benchmark domain; do not flatten index name, currency, Bloomberg/RIC identifiers and benchmark semantics into one text field.
+1. wire migration 032 into `migration-runner.yml` (32 migrations + ETF model test + column assertion) without altering historical runtime assertions;
+2. audit ETF/index fields from the official catalogue before creating a benchmark/index relational model;
+3. keep index name, currency, identifiers and benchmark semantics normalized rather than flattening them into one text field.
