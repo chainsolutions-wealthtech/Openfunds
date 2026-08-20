@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_FUND_REPLICATION_METHODOLOGY_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_FUND_REPLICATION_METHODOLOGY_EXTENSION_SCOPE",
+  "field_count": 16,
+  "provenance_path": "schemas/fund/034_fund_replication_methodology.sql",
+  "scope": "Additive Fund replication methodology first-level attribute plus versioned normalized second-level detail relation. Hybrid pipe-separated source values become multiple canonical rows."
+}
