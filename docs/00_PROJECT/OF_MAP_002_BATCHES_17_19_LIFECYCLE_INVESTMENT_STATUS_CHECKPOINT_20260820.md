@@ -110,6 +110,17 @@ MAPPED_CANONICAL_IDS: 35
 
 The governed migration runner is wired through migration 031. OF-MAP-002 is wired through Batch 19 and the 209-field canonical union. These are implementation statements only; remote CI attestation remains unavailable through the connected status surface.
 
+## Staged next migration 032 — Share Class ETF flag
+
+Official `OFST010580 Is ETF` is Share Class-level. Migration 032 and its one-field dictionary extension are implemented structurally:
+
+```text
+fund.share_class_profile.is_etf boolean NULL
+OF_FUND_SHARE_CLASS_PROFILE_IS_ETF
+```
+
+The Batch20 RED contract also exists. The mapping registry row is deliberately not written yet because the connector currently truncates large reads of the 72-line registry and mutation requires complete-file replacement. No blind replacement is allowed under the zero-regression rule.
+
 ## Non-regression invariants
 
 - lifecycle_phase does not overwrite lifecycle_status;
@@ -118,10 +129,9 @@ The governed migration runner is wired through migration 031. OF-MAP-002 is wire
 - source dates are never synthesized when absent;
 - historical core dictionary and listing_v1 remain unchanged;
 - SEDOL and Bloomberg/RIC runtime usage gates remain unchanged;
+- ETF is Share Class-level and is never inferred at Fund level;
 - implemented does not mean remotely GREEN without observable CI evidence.
 
 ## Next safe work
 
-Continue OF-MAP-002 only from official checksum-locked semantics. Prefer fields that reuse existing canonical surfaces. Benchmark, fee, document, eligibility and other relational domains must be audited before schema creation and must not be flattened into lossy text fields for convenience.
-
-Migration 032 / Share Class ETF flag may proceed as a one-field additive extension because `OFST010580` is explicitly Share Class-level. Its Batch 20 registry row must only be written after the full existing registry can be reconstructed and revalidated without truncation risk.
+Close Batch20 only after the complete current registry can be reconstructed and re-read without truncation risk. Then audit ETF/index fields (`OFST023800+`) as a normalized index/benchmark domain; do not flatten index name, currency, Bloomberg/RIC identifiers and benchmark semantics into one text field.
