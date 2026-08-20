@@ -19,6 +19,7 @@ on:
       - "tests/test_valuation_time_semantics_dictionary_extension.py"
       - "tests/test_share_class_multicurrency_dictionary_extension.py"
       - "tests/test_entity_lifecycle_phase_dictionary_extension.py"
+      - "tests/test_share_class_investment_status_dictionary_extension.py"
       - "tests/test_openfunds_mapping_batch02.py"
       - "tests/test_openfunds_mapping_batch03.py"
       - "tests/test_openfunds_mapping_batch04.py"
@@ -36,6 +37,7 @@ on:
       - "tests/test_openfunds_mapping_batch16.py"
       - "tests/test_openfunds_mapping_batch17.py"
       - "tests/test_openfunds_mapping_batch18.py"
+      - "tests/test_openfunds_mapping_batch19.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
@@ -74,6 +76,7 @@ jobs:
           python -m unittest -v tests.test_valuation_time_semantics_dictionary_extension
           python -m unittest -v tests.test_share_class_multicurrency_dictionary_extension
           python -m unittest -v tests.test_entity_lifecycle_phase_dictionary_extension
+          python -m unittest -v tests.test_share_class_investment_status_dictionary_extension
           python -m unittest -v tests.test_openfunds_mapping_batch02
           python -m unittest -v tests.test_openfunds_mapping_batch03
           python -m unittest -v tests.test_openfunds_mapping_batch04
@@ -91,6 +94,7 @@ jobs:
           python -m unittest -v tests.test_openfunds_mapping_batch16
           python -m unittest -v tests.test_openfunds_mapping_batch17
           python -m unittest -v tests.test_openfunds_mapping_batch18
+          python -m unittest -v tests.test_openfunds_mapping_batch19
 
   integration:
     name: mapping-registry-official-and-canonical-integration
@@ -123,6 +127,7 @@ jobs:
             --canonical-extension data/dictionary/extensions/share_class_nav_frequency_detail_v1 \
             --canonical-extension data/dictionary/extensions/valuation_time_semantics_v1 \
             --canonical-extension data/dictionary/extensions/share_class_multicurrency_dealing_v1 \
-            --canonical-extension data/dictionary/extensions/entity_lifecycle_phase_v1
+            --canonical-extension data/dictionary/extensions/entity_lifecycle_phase_v1 \
+            --canonical-extension data/dictionary/extensions/share_class_investment_status_v1
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
