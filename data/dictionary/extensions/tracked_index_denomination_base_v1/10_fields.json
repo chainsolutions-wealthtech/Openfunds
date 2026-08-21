@@ -1,0 +1,5 @@
+{
+  "fields": [
+    {"field_id":"OF_FUND_SHARE_CLASS_TRACKED_INDEX_DENOMINATION_BASE","technical_name":"share_class_tracked_index.denomination_base","entity_code":"SHARE_CLASS_TRACKED_INDEX","physical_schema":"fund","physical_table":"share_class_tracked_index","physical_column":"denomination_base","data_type":"numeric(20,10)","nullable":true,"definition_en":"Positive source-supplied multiplier defined as Fund Price divided by tracked Index; no price or index-level value is inferred.","history_method":"BITEMPORAL_VERSIONED_ASSERTION","provenance_path":"schemas/fund/039_tracked_index_denomination_base.sql","status":"VALIDATED"}
+  ]
+}
