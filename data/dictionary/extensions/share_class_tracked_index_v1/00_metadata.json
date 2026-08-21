@@ -1,0 +1,8 @@
+{
+  "dictionary_id": "OPENFUNDS_CANONICAL_SHARE_CLASS_TRACKED_INDEX_EXTENSION",
+  "dictionary_version": "1.0.0",
+  "status": "VALIDATED_SHARE_CLASS_TRACKED_INDEX_EXTENSION_SCOPE",
+  "field_count": 18,
+  "provenance_path": "schemas/fund/037_share_class_tracked_index.sql",
+  "scope": "Versioned ETF tracked-index name, currency semantics and index type without Share Class currency inference."
+}
