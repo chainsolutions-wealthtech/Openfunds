@@ -18,6 +18,7 @@ class ShareClassTrackedIndexModelTests(unittest.TestCase):
     def test_tracked_index_is_versioned_and_source_lineaged(self):
         self.assertTrue(MIGRATION.is_file())
         lower = MIGRATION.read_text(encoding="utf-8").lower()
+        compact = "".join(lower.split())
         self.assertIn("create table if not exists fund.share_class_tracked_index", lower)
         for token in (
             "share_class_id uuid not null",
@@ -38,7 +39,7 @@ class ShareClassTrackedIndexModelTests(unittest.TestCase):
             self.assertIn(token, lower)
         self.assertIn("references fund.entity(entity_id, entity_type)", lower)
         self.assertIn("references ref.currency(currency_id)", lower)
-        self.assertIn("'explicit_iso4217','local_currency','unknown'", lower.replace(" ", ""))
+        self.assertIn("'explicit_iso4217','local_currency','unknown'", compact)
         for token in ("'price'", "'performance'", "'performance_net_dividends'", "'performance_gross_dividends'"):
             self.assertIn(token, lower)
 
