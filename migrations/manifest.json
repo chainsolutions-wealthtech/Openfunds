@@ -47,7 +47,8 @@
     {"order": 330, "id": "033_FUND_PASSIVE_FLAG", "path": "schemas/fund/033_fund_passive_flag.sql"},
     {"order": 340, "id": "034_FUND_REPLICATION_METHODOLOGY", "path": "schemas/fund/034_fund_replication_methodology.sql"},
     {"order": 350, "id": "035_SHARE_CLASS_BENCHMARK_COMPONENTS", "path": "schemas/fund/035_share_class_benchmark_components.sql"},
-    {"order": 360, "id": "036_BENCHMARK_COMPONENT_IDENTIFIERS", "path": "schemas/fund/036_benchmark_component_identifiers.sql"}
+    {"order": 360, "id": "036_BENCHMARK_COMPONENT_IDENTIFIERS", "path": "schemas/fund/036_benchmark_component_identifiers.sql"},
+    {"order": 370, "id": "037_SHARE_CLASS_TRACKED_INDEX", "path": "schemas/fund/037_share_class_tracked_index.sql"}
   ],
   "excluded_sql": [
     {"path": "schemas/reference/country_indicator_information_model_v0.1.sql", "reason": "PROPOSAL_ONLY_NOT_A_MIGRATION_AND_CONTAINS_REJECTED_PARALLEL_ENDPOINT_MODEL"},
