@@ -23,6 +23,8 @@ on:
       - "tests/test_share_class_etf_flag_dictionary_extension.py"
       - "tests/test_fund_passive_flag_dictionary_extension.py"
       - "tests/test_fund_replication_methodology_dictionary_extension.py"
+      - "tests/test_share_class_benchmark_component_dictionary_extension.py"
+      - "tests/test_benchmark_component_identifier_dictionary_extension.py"
       - "tests/test_openfunds_mapping_batch02.py"
       - "tests/test_openfunds_mapping_batch03.py"
       - "tests/test_openfunds_mapping_batch04.py"
@@ -44,6 +46,8 @@ on:
       - "tests/test_openfunds_mapping_batch20.py"
       - "tests/test_openfunds_mapping_batch21.py"
       - "tests/test_openfunds_mapping_batch22.py"
+      - "tests/test_openfunds_mapping_batch23.py"
+      - "tests/test_openfunds_mapping_batch24.py"
       - "scripts/parse_openfunds_v2_13_0.py"
       - "scripts/canonical_field_dictionary.py"
       - "data/dictionary/spec_v1/**"
@@ -86,6 +90,8 @@ jobs:
           python -m unittest -v tests.test_share_class_etf_flag_dictionary_extension
           python -m unittest -v tests.test_fund_passive_flag_dictionary_extension
           python -m unittest -v tests.test_fund_replication_methodology_dictionary_extension
+          python -m unittest -v tests.test_share_class_benchmark_component_dictionary_extension
+          python -m unittest -v tests.test_benchmark_component_identifier_dictionary_extension
           python -m unittest -v tests.test_openfunds_mapping_batch02
           python -m unittest -v tests.test_openfunds_mapping_batch03
           python -m unittest -v tests.test_openfunds_mapping_batch04
@@ -107,6 +113,8 @@ jobs:
           python -m unittest -v tests.test_openfunds_mapping_batch20
           python -m unittest -v tests.test_openfunds_mapping_batch21
           python -m unittest -v tests.test_openfunds_mapping_batch22
+          python -m unittest -v tests.test_openfunds_mapping_batch23
+          python -m unittest -v tests.test_openfunds_mapping_batch24
 
   integration:
     name: mapping-registry-official-and-canonical-integration
@@ -143,6 +151,8 @@ jobs:
             --canonical-extension data/dictionary/extensions/share_class_investment_status_v1 \
             --canonical-extension data/dictionary/extensions/share_class_etf_flag_v1 \
             --canonical-extension data/dictionary/extensions/fund_passive_flag_v1 \
-            --canonical-extension data/dictionary/extensions/fund_replication_methodology_v1
+            --canonical-extension data/dictionary/extensions/fund_replication_methodology_v1 \
+            --canonical-extension data/dictionary/extensions/share_class_benchmark_component_v1 \
+            --canonical-extension data/dictionary/extensions/benchmark_component_identifier_v1
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
