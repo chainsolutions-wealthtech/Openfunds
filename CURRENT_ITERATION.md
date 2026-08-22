@@ -1,5 +1,60 @@
 # Itération courante
 
+## Itération active — Canonical Foundation Finalization
+
+```text
+DATE: 2026-08-22
+CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
+PROGRAM: OPENFUNDS_PRODUCT_FINALIZATION
+SUBPROJECT: CANONICAL_FOUNDATION_COMPLETION
+TASK_STREAM: OF-MAP-002
+ITERATION: A0_TO_A1
+STATUS: EN_COURS
+A0_STATUS: STRUCTURALLY_RECONCILED
+CURRENT_SUBTASK: TASK_4_REVIEW_OUTCOMES
+MIGRATIONS: 001..039
+CANONICAL_FIELDS: 295
+MAPPING_BATCHES: 01..27
+MAPPING_ROWS: 93
+MAPPED_OPENFUNDS_IDS: 50
+MAPPED_CANONICAL_IDS: 53
+UNMAPPED_OPENFUNDS_IDS: 1819
+RECENT_REMOTE_CI: PENDING_NOT_OBSERVABLE
+PR_1: DRAFT_OPEN_UNMERGED
+PRODUCTION_DEPLOYED: NO
+```
+
+### Hypothèse active
+
+Le socle canonique peut être terminé sans matérialiser aveuglément les 1 869 champs Openfunds : les familles nécessaires au produit sont modélisées et testées, tandis que les champs officiellement revus mais non nécessaires, sans équivalent ou gated sont classés avec un outcome explicite et vérifiable.
+
+### Objectif de l'itération
+
+1. fermer le registre machine-readable de review outcomes ;
+2. faire dériver la couverture globale depuis `MAPPING_REGISTRY.csv` + review outcomes ;
+3. conserver `TO_CONFIRM` comme blocker réel ;
+4. auditer A1 Identity / Names / Legal Structure depuis la source officielle v2.13.0 ;
+5. réutiliser le modèle canonique existant avant toute migration 040 ;
+6. appliquer RED → implémentation minimale → CI → diff → documentation ;
+7. ne jamais confondre progression structurale et GREEN CI distant.
+
+### Autorités de l'itération
+
+- `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
+- `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
+- `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
+- `docs/00_PROJECT/OF_CANONICAL_FOUNDATION_A0_RECONCILIATION_20260822.md`
+- `STATUS.md`
+- `NEXT_ACTION.md`
+
+### Interdictions actives
+
+Aucun `main`, nouvelle branche/PR, merge, retarget, passage Ready, activation production, données réelles, déploiement ou sous-domaine pendant ce sous-projet.
+
+---
+
+## Snapshot historique conservé — itération source du 2026-08-12
+
 ```text
 LOOP_ID: OF-LOOP-SOURCE-002
 ITERATION: 004
@@ -12,11 +67,11 @@ CURRENT_WAVE: 04
 CURRENT_MODE: READ_ONLY_AUDIT
 ```
 
-## Hypothèse courante
+## Hypothèse historique
 
 Les institutions nécessaires à la couverture des 54 pays peuvent être intégrées progressivement sans inventer de rôles, sans confondre organisation, endpoint, série et collecte, et sans transformer un inventaire de découverte en vérité runtime PostgreSQL.
 
-## Résultats cumulés
+## Résultats cumulés du snapshot
 
 ```text
 WAVE_01: +15 organisations / +22 relations / couverture 10 sur 54
@@ -29,26 +84,6 @@ CURRENT_COUNTRY_COVERAGE: 18 / 54
 REMAINING_COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 36
 ```
 
-La vague 03 a été validée par TDD : RED contrôlé, étape intermédiaire organisations-only, puis GREEN final `Institutional Registry` run `31595575537`, Python 3.11/3.12, 8/8 tests.
+La vague 03 avait été validée par TDD : RED contrôlé, étape intermédiaire organisations-only, puis GREEN final `Institutional Registry` run `31595575537`, Python 3.11/3.12, 8/8 tests.
 
-## Itération 004 — objectif
-
-1. résoudre le HEAD dynamiquement ;
-2. sélectionner un lot de pays parmi les 36 non couverts ;
-3. rechercher uniquement des sources officielles primaires actuelles ;
-4. séparer identité, rôle, endpoint et collecte ;
-5. bloquer tout domaine compromis, ambigu ou obsolète ;
-6. vérifier les collisions de codes ;
-7. produire une allowlist fermée avant toute nouvelle écriture ;
-8. appliquer ensuite RED → organisations → rôles → GREEN si le gate est satisfait.
-
-## Blockers conservés
-
-- `FMDQ` : rôle canonique à arbitrer ;
-- `SEC_ZAMBIA` : domaine institutionnel courant non fiable lors de l'audit vague 03 ;
-- `IRA/URBRA Uganda` : fonctions assurance/retraite séparées face à un rôle canonique combiné ;
-- `RBM FUND_REGULATOR` : preuve CIS/OPC insuffisante.
-
-## Interdictions
-
-Aucun nouvel endpoint, provider series, historique, migration runtime, branche, PR, merge, retargeting ou déploiement n’est autorisé pendant l’audit de vague 04.
+Les blockers historiques FMDQ, SEC Zambia, IRA/URBRA Uganda et RBM restent conservés dans les rapports source dédiés ; ce snapshot n'est plus la prochaine action globale du dépôt.
