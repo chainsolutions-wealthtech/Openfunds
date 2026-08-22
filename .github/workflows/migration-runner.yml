@@ -34,6 +34,7 @@ on:
       - 'tests/test_benchmark_component_identifier_model.py'
       - 'tests/test_share_class_tracked_index_model.py'
       - 'tests/test_tracked_index_identifier_model.py'
+      - 'tests/test_tracked_index_denomination_base_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   push:
@@ -69,6 +70,7 @@ on:
       - 'tests/test_benchmark_component_identifier_model.py'
       - 'tests/test_share_class_tracked_index_model.py'
       - 'tests/test_tracked_index_identifier_model.py'
+      - 'tests/test_tracked_index_denomination_base_model.py'
       - 'tests/sql/fund_domain_model_assert.sql'
       - '.github/workflows/migration-runner.yml'
   workflow_dispatch:
@@ -147,6 +149,7 @@ jobs:
           python -m unittest -v tests.test_benchmark_component_identifier_model
           python -m unittest -v tests.test_share_class_tracked_index_model
           python -m unittest -v tests.test_tracked_index_identifier_model
+          python -m unittest -v tests.test_tracked_index_denomination_base_model
 
       - name: Validate and display governed plan
         run: python scripts/run_migrations.py --plan
@@ -173,8 +176,8 @@ jobs:
           begin
               select count(*) into migration_count
               from openfunds_migration.schema_migration;
-              if migration_count <> 38 then
-                  raise exception 'expected 38 governed migrations, got %', migration_count;
+              if migration_count <> 39 then
+                  raise exception 'expected 39 governed migrations, got %', migration_count;
               end if;
               if to_regclass('source.endpoint') is null then
                   raise exception 'canonical source.endpoint is missing';
@@ -253,6 +256,14 @@ jobs:
               end if;
               if to_regclass('fund.tracked_index_identifier') is null then
                   raise exception 'Tracked index identifier migration 038 table is missing';
+              end if;
+              if not exists (
+                  select 1 from information_schema.columns
+                  where table_schema='fund'
+                    and table_name='share_class_tracked_index'
+                    and column_name='denomination_base'
+              ) then
+                  raise exception 'tracked-index denomination base migration 039 column is missing';
               end if;
               if to_regclass('fund.fund') is not null or to_regclass('fund.share_class') is not null then
                   raise exception 'legacy draft fund tables were activated';
