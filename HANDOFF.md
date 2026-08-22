@@ -1,115 +1,119 @@
 # Handoff Loop Engineering
 
+## Handoff actif — Openfunds Product Finalization
+
 ```text
-LOOP_ID: OF-LOOP-SOURCE-002
-TASK_ID: OF-SOURCE-002
+DATE: 2026-08-22
+LOOP_ID: OF-LOOP-PRODUCT-FINALIZATION-001
+TASK_STREAM: OF-MAP-002
+SUBPROJECT: CANONICAL_FOUNDATION_COMPLETION
 STATUS: EN_COURS
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
-LAST_VERIFIED_WAVE: 03
-WAVE_03_DATA_HEAD: 5024a9767b1b9aecf8a6cd52d315ccfbf8384389
-WAVE_03_CI_RUN: 31595575537
-NEXT_WAVE: 04_READ_ONLY_AUDIT
+PR_1: DRAFT / OPEN / UNMERGED
+PR_1_BASE: architecture/canonical-model-v1-bootstrap
+MIGRATIONS: 001..039
+LATEST_MIGRATION: 039_TRACKED_INDEX_DENOMINATION_BASE
+CANONICAL_FIELDS: 295
+MAPPING_BATCHES: BATCH_01..BATCH_27
+MAPPING_ROWS: 93
+MAPPED_OPENFUNDS_IDS: 50
+UNMAPPED_OPENFUNDS_IDS: 1819
+MAPPED_CANONICAL_IDS: 53
+LATEST_MAPPING: MAP-000093 / OFST023850
+RECENT_REMOTE_CI: PENDING_NOT_OBSERVABLE
+PRODUCTION_DEPLOYED: NO
 ```
 
-## Progression vérifiée
+## Autorités de reprise
 
-```text
-AFRICAN_COUNTRIES: 54
-COUNTRY_COVERAGE_BASELINE: 7 / 54
-AFTER_WAVE_01: 10 / 54
-AFTER_WAVE_02: 14 / 54
-AFTER_WAVE_03: 18 / 54
-COUNTRIES_WITHOUT_COUNTRY_SCOPED_ORGANIZATION: 36
+1. `00_START_HERE.md`
+2. `AGENTS.md`
+3. `SOURCE_OF_TRUTH.md`
+4. `STATUS.md`
+5. `NEXT_ACTION.md`
+6. `LOOP_STATE.md`
+7. `CURRENT_ITERATION.md`
+8. `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
+9. `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
+10. `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
+11. `docs/00_PROJECT/OF_CANONICAL_FOUNDATION_A0_RECONCILIATION_20260822.md`
 
-ORGANIZATIONS: 87 = 67 VALIDATED + 20 PENDING
-ORGANIZATION_SCOPE_ROLES: 134 = 90 VALIDATED + 44 PENDING
-SOURCE_ENDPOINTS: 43 = 20 VALIDATED + 23 PENDING
-```
+## A0 fermé structurellement
 
-## Vagues terminées
+Les surfaces machine sont alignées jusqu'à migration 039 / Batch 27 :
 
-### Vague 01
+- `migrations/manifest.json` : 39 migrations, ordre final 390 ;
+- `mapping_manifest.json` : 295 champs, 93 mappings, 50 OF-IDs, 53 cibles ;
+- OF-MAP-002 : extension 039 + Batch27 câblés ;
+- migration-runner : test 039 + compteur 39 + assertion `denomination_base` ;
+- mapping registry : append-only jusqu'à `MAP-000093`.
 
-```text
-BOTSWANA: BOB, NBFIRA, BSE, STATISTICS_BOTSWANA
-NAMIBIE: BON, NAMFISA, NSX, NSA_NAMIBIA
-ETHIOPIE: NBE, ECMA, ESX, ESS_ETHIOPIA
-UEMOA: AMF_UMOA, UMOA_TITRES
-CEMAC: COSUMAF
-GREEN_RUN: 31592700354
-```
-
-### Vague 02
-
-```text
-ALGERIE: BANQUE_ALGERIE, COSOB, SGBV, ONS_ALGERIE
-MAURICE: BOM, FSC_MAURITIUS, SEM, STATISTICS_MAURITIUS
-RWANDA: NBR, CMA_RWANDA, RSE, NISR
-TANZANIE: BOT, CMSA_TANZANIA, DSE, NBS_TANZANIA
-GREEN_RUN: 31594503714
-```
-
-### Vague 03
-
-```text
-OUGANDA: BOU, CMA_UGANDA, USE_UGANDA, UBOS
-ZAMBIE: BOZ, LUSE, ZAMSTATS, PIA_ZAMBIA
-ZIMBABWE: RBZ, SEC_ZIMBABWE, ZSE, ZIMSTAT, IPEC
-MALAWI: RBM, MSE_MALAWI, NSO_MALAWI
-GREEN_RUN: 31595575537
-TESTS: 8 / 8 PASS
-```
-
-## Protections actives
-
-```text
-FMDQ               REQUIRES_ROLE_MODEL_REVIEW
-SEC_ZAMBIA         CURRENT_OFFICIAL_DOMAIN_INTEGRITY_BLOCKER
-IRA_URBRA_UGANDA   COMBINED_ROLE_MODEL_MISMATCH
-RBM_FUND_REGULATOR PRIMARY_CIS_PROOF_NOT_SUFFICIENT
-```
-
-`SEC_ZAMBIA` est explicitement protégé par un test négatif après constat que le domaine historique principal retournait un contenu non institutionnel. `RBM/FUND_REGULATOR` est également protégé contre une promotion sans preuve CIS/OPC explicite.
-
-## Preuve de non-régression la plus récente
-
-```text
-WORKFLOW: Institutional Registry
-GREEN_RUN: 31595575537
-GREEN_HEAD: 5024a9767b1b9aecf8a6cd52d315ccfbf8384389
-PYTHON_3_11: SUCCESS
-PYTHON_3_12: SUCCESS
-TESTS: 8 / 8 PASS
-```
-
-## Fichiers principaux de la boucle
-
-- `docs/00_PROJECT/OF_SOURCE_002_BASELINE_AUDIT_20260812.md` ;
-- `docs/00_PROJECT/OF_SOURCE_002_WAVE_01_COMPLETION_20260812.md` ;
-- `docs/00_PROJECT/OF_SOURCE_002_WAVE_02_AUDIT_20260812.md` ;
-- `docs/00_PROJECT/OF_SOURCE_002_WAVE_02_COMPLETION_20260812.md` ;
-- `docs/00_PROJECT/OF_SOURCE_002_WAVE_03_AUDIT_20260812.md` ;
-- `docs/00_PROJECT/OF_SOURCE_002_WAVE_03_COMPLETION_20260812.md` ;
-- `scripts/validate_institutional_registry.py` ;
-- `tests/test_institutional_registry.py` ;
-- `.github/workflows/institutional-registry.yml`.
-
-## Limites
-
-Les CSV institutionnels restent des inventaires de découverte/revue conformément à ADR-021. Aucune migration runtime, aucun endpoint spécialisé, aucune provider series, aucune collecte ou série historique n’a été ajoutée par les vagues 01 à 03.
+Aucun GREEN récent n'est revendiqué : la surface connectée ne fournit pas de run/check exploitable pour les HEAD récents.
 
 ## Point de reprise exact
 
-1. résoudre le HEAD courant ;
-2. conserver `OF-SOURCE-002` en `EN_COURS` ;
-3. commencer `WAVE_04` uniquement en lecture seule ;
-4. sélectionner un lot parmi les 36 pays sans organisation country-scoped ;
-5. vérifier des sources officielles primaires actuelles uniquement ;
-6. contrôler l'intégrité des domaines ;
-7. classifier les rôles sans extrapolation ;
-8. vérifier les collisions de codes ;
-9. produire une allowlist fermée ;
-10. appliquer ensuite TDD RED → organisations → rôles → GREEN.
+```text
+NEXT_TASK: Task 4 — reason-classified Openfunds review outcomes
+NEXT_AFTER_TASK_4: A1 Identity / Names / Legal Structure
+NEXT_MIGRATION_NUMBER_IF_AND_ONLY_IF_REQUIRED: 040
+```
 
-Ne pas modifier PR nº2, `main`, la cible de PR nº1, créer branche/PR, déployer ou charger des historiques.
+### Task 4 — fichiers à créer
+
+```text
+data/openfunds/mapping/v2.13.0/REVIEW_OUTCOMES.csv
+scripts/validate_openfunds_review_outcomes.py
+tests/test_openfunds_review_outcomes.py
+```
+
+Le registre doit rester sparse et compléter `MAPPING_REGISTRY.csv`, pas le dupliquer. Les IDs mappés restent dérivés du registre existant.
+
+Allowed outcomes :
+
+```text
+MAPPED_CANONICAL
+MAPPED_DERIVED
+NO_CANONICAL_EQUIVALENT
+DEFERRED_NOT_REQUIRED_FOR_PRODUCT
+GATED_VENDOR_OR_LICENSE
+TO_CONFIRM
+```
+
+### Task 4 — tests obligatoires
+
+Le validator doit refuser : doublon OF-ID, OF-ID inconnu, outcome invalide, reason code absent sur un outcome non mappé et SHA source différent de la source officielle verrouillée.
+
+Le calcul fusionné doit produire au minimum : mapped, reviewed nonmapped/deferred, vendor gated, to-confirm, unreviewed et total officiel 1869.
+
+## Invariants actifs
+
+- ne jamais fabriquer des lignes `UNMAPPED` ;
+- `NULL != 0` ;
+- aucune date/devise/valeur synthétique ;
+- benchmark ≠ tracked index ;
+- lifecycle ≠ investment status ;
+- ETF Share Class ≠ passive Fund ;
+- vendor identifiers gated jusqu'à clearance ;
+- RIC case-preserving ;
+- historique migration/mapping immuable ;
+- aucune migration 040 avant audit officiel démontrant un manque canonique réel.
+
+## Blockers externes
+
+```text
+PERSISTENT_PRODUCTION_DB    NOT_CONFIGURED
+IMMUTABLE_RAW_STORE         NOT_CONFIGURED
+COMPLETE_HISTORIES          NOT_LOADED
+SEDOL_RUNTIME               LICENSING_CLEARANCE_REQUIRED
+BLOOMBERG_RIC_RUNTIME       PROPRIETARY_USAGE_REVIEW_REQUIRED
+RFR_MAR_WTI                 NOT_FULLY_VALIDATED_OR_ACTIVE
+PRODUCTION_API_UI           NOT_IMPLEMENTED
+PRODUCTION_DEPLOY           NOT_CONFIGURED
+```
+
+---
+
+## Handoff historique — OF-LOOP-SOURCE-002
+
+Le handoff institutionnel précédent reste historique et ses rapports restent valides dans leur périmètre. Son dernier snapshot vérifié était Wave 03, run `31595575537`, avec Wave 04 en audit lecture seule. Cette boucle n'est plus la prochaine action globale du projet mais ne doit pas être supprimée ni réécrite rétroactivement.
