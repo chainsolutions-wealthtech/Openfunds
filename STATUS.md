@@ -1,5 +1,60 @@
 # État vérifié du projet
 
+## État courant — supersède les compteurs historiques ci-dessous
+
+```text
+STATUS_DATE: 2026-08-22
+CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
+CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
+FINALIZATION_MASTER_DESIGN: APPROVED
+CANONICAL_FOUNDATION_SPEC: APPROVED
+CANONICAL_FOUNDATION_A0: STRUCTURALLY_RECONCILED
+MIGRATIONS_IMPLEMENTED: 001..039
+LATEST_MIGRATION: 039_TRACKED_INDEX_DENOMINATION_BASE
+CANONICAL_FIELDS: 295 = 143_CORE + 152_EXTENSIONS
+OPENFUNDS_MAPPING_BATCHES: BATCH_01..BATCH_27
+MAPPING_ROWS: 93
+MAPPED_OPENFUNDS_IDS: 50
+UNMAPPED_OPENFUNDS_IDS: 1819
+MAPPED_CANONICAL_IDS: 53
+LATEST_MAPPING_ID: MAP-000093
+RECENT_REMOTE_CI_ATTESTATION: PENDING_NOT_OBSERVABLE
+PR_1: DRAFT / OPEN / UNMERGED
+PRODUCTION_DEPLOYED: NO
+PERSISTENT_PRODUCTION_POSTGRESQL: NOT_CONFIGURED
+IMMUTABLE_PRODUCTION_RAW_STORE: NOT_CONFIGURED
+COMPLETE_REAL_HISTORIES_LOADED: NO
+PRODUCTION_API_UI: NOT_IMPLEMENTED
+```
+
+Références de reprise :
+
+- `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
+- `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
+- `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
+- `docs/00_PROJECT/OF_CANONICAL_FOUNDATION_A0_RECONCILIATION_20260822.md`
+
+La règle de preuve reste :
+
+```text
+IMPLEMENTED != REMOTELY_GREEN
+```
+
+Les surfaces GitHub connectées ne remontent toujours pas de run/check exploitable pour les HEAD récents. Aucun verdict GREEN récent n'est donc inventé.
+
+## Prochaine action courante
+
+```text
+TASK: Canonical Foundation / Task 4
+OBJECTIVE: reason-classified Openfunds review outcomes registry
+THEN: A1 identity / names / legal structure
+NO_DEPLOYMENT: TRUE
+```
+
+---
+
+## État historique conservé — snapshot du 2026-08-12
+
 ```text
 STATUS_DATE: 2026-08-12
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
@@ -90,16 +145,6 @@ STATUS: VERIFIED_COMPLETE
 
 ## Limites conservées
 
-Aucun historique pays/fonds, NAV, AUM, dividende ou portefeuille n’est chargé. Aucun PostgreSQL persistant, stockage objet permanent, catalogue officiel Openfunds, mapping officiel, API, UI, merge ou déploiement n’est réalisé par `OF-SOURCE-002`.
+Aucun historique pays/fonds, NAV, AUM, dividende ou portefeuille n’est chargé. Aucun PostgreSQL persistant, stockage objet permanent, API, UI, merge ou déploiement n’était réalisé dans ce snapshot `OF-SOURCE-002`.
 
 Conformément à ADR-021, les grands CSV institutionnels restent des inventaires de découverte/revue ; ils ne deviennent pas automatiquement la vérité runtime PostgreSQL.
-
-## Prochaine action
-
-```text
-NEXT: OF-SOURCE-002 / WAVE_04
-INITIAL_MODE: READ_ONLY_AUDIT
-OBJECTIVE: sélectionner un nouveau lot contrôlé parmi les 36 pays sans organisation nationale
-WRITE_GATE: CURRENT_OFFICIAL_PRIMARY_EVIDENCE + COLLISION_REVIEW + CLOSED_ALLOWLIST
-OF-MAP-001: BLOCKED_OFFICIAL_OPENFUNDS_CATALOGUE_UNAVAILABLE
-```
