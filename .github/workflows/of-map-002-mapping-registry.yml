@@ -8,7 +8,9 @@ on:
     paths:
       - "data/openfunds/mapping/v2.13.0/**"
       - "scripts/validate_openfunds_mapping_registry.py"
+      - "scripts/validate_openfunds_review_outcomes.py"
       - "tests/test_openfunds_mapping_registry.py"
+      - "tests/test_openfunds_review_outcomes.py"
       - "tests/test_openfunds_mapping_canonical_extensions.py"
       - "tests/test_listing_quote_unit_dictionary_extension.py"
       - "tests/test_listing_status_dictionary_extension.py"
@@ -82,6 +84,7 @@ jobs:
       - name: Run mapping registry contract
         run: |
           python -m unittest -v tests.test_openfunds_mapping_registry
+          python -m unittest -v tests.test_openfunds_review_outcomes
           python -m unittest -v tests.test_openfunds_mapping_canonical_extensions
           python -m unittest -v tests.test_listing_quote_unit_dictionary_extension
           python -m unittest -v tests.test_listing_status_dictionary_extension
@@ -169,5 +172,11 @@ jobs:
             --canonical-extension data/dictionary/extensions/share_class_tracked_index_v1 \
             --canonical-extension data/dictionary/extensions/tracked_index_identifier_v1 \
             --canonical-extension data/dictionary/extensions/tracked_index_denomination_base_v1
+          python scripts/validate_openfunds_review_outcomes.py \
+            --outcomes data/openfunds/mapping/v2.13.0/REVIEW_OUTCOMES.csv \
+            --registry data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv \
+            --manifest data/openfunds/mapping/v2.13.0/mapping_manifest.json \
+            --pdf data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf \
+            --sha256-file data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
       - name: Assert repository unchanged
         run: test -z "$(git status --porcelain=v1 -uall)"
