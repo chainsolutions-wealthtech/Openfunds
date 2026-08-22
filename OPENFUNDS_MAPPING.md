@@ -1,311 +1,203 @@
 # MAPPING OPENFUNDS VERS LE MODELE CANONIQUE
 
-Dernière mise à jour : `2026-08-17`.
-
-## 1. Statut réel
+## État courant — 2026-08-22
 
 ```text
-VERSION OFFICIELLE VERIFIEE          2.13.0
-DATE DE RELEASE                      2026-03-23
-DOCUMENT                             FINAL
-LICENCE DOCUMENT OFFICIEL            CC BY-ND 4.0 / attribution openfunds.org
-ARCHIVE OFFICIELLE                   BYTE-IDENTICAL / CHECKSUM-LOCKED
-SHA256                               40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4
-PDF                                  745 PAGES / 2,957,096 OCTETS
-INVENTAIRE OFFICIEL                  1,869 OF-ID
-IDS CONCRETS                         1,849
-TEMPLATES PAYS XX                    20
-CANONICAL CORE                       143 FIELDS
-CANONICAL LISTING EXTENSION          34 FIELDS
-CANONICAL INVENTORY FOR MAPPING      177 FIELDS
-REVIEWED MAPPING ROWS                16
-MAPPED EXTERNAL OF-ID                8
-UNMAPPED EXTERNAL OF-ID              1,861
-MAPPED CANONICAL FIELD_ID            10
-OF-MAP-001                           TERMINE
-OF-MAP-002                           EN_COURS — BATCH 01..05 VALIDES
+VERSION_OFFICIELLE                    2.13.0 FINAL / 2026-03-23
+SOURCE_SHA256                         40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4
+OFFICIAL_FIELD_RECORDS                1869
+CONCRETE_IDS                          1849
+PARAMETERIZED_XX_TEMPLATES              20
+CANONICAL_CORE_FIELDS                  143
+CANONICAL_EXTENSION_FIELDS             152
+CANONICAL_TOTAL_FIELDS                 295
+REVIEWED_MAPPING_ROWS                   93
+MAPPED_EXTERNAL_IDS                     50
+UNMAPPED_EXTERNAL_IDS                 1819
+MAPPED_CANONICAL_IDS                    53
+LATEST_BATCH                            27
+LATEST_MAPPING                    MAP-000093
+OF-MAP-001                         TERMINE
+OF-MAP-002                         EN_COURS
+RECENT_REMOTE_CI                  PENDING_NOT_OBSERVABLE
 ```
 
-## 2. Sources gouvernées
+Le registre canonique est fermé structurellement jusqu'à Batch 27. Cela ne signifie ni mapping complet des 1 869 records, ni GREEN CI récent, ni activation production.
 
-Archive officielle :
+## Autorités machine
 
 ```text
 data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf
-```
-
-Checksum :
-
-```text
 data/openfunds/official/v2.13.0/openfunds_fields_v2.13.0.pdf.sha256
-```
-
-Parser checksum-gated :
-
-```text
 scripts/parse_openfunds_v2_13_0.py
-```
-
-Registre :
-
-```text
 data/openfunds/mapping/v2.13.0/MAPPING_REGISTRY.csv
-```
-
-Manifeste :
-
-```text
 data/openfunds/mapping/v2.13.0/mapping_manifest.json
-```
-
-Validateur :
-
-```text
 scripts/validate_openfunds_mapping_registry.py
 ```
 
-## 3. Architecture canonique disponible
-
-Le dictionnaire migration-015 reste immuable :
+Le registre de revue complémentaire est désormais :
 
 ```text
-data/dictionary/spec_v1/
-143 champs
-version 1.0.0
-VALIDATED_FUND_CORE_SCOPE
+data/openfunds/mapping/v2.13.0/REVIEW_OUTCOMES.csv
+scripts/validate_openfunds_review_outcomes.py
+tests/test_openfunds_review_outcomes.py
 ```
 
-La migration 019 a créé un modèle distinct de cotation :
+`REVIEW_OUTCOMES.csv` est volontairement **sparse**. Il ne duplique pas les OF-IDs présents dans `MAPPING_REGISTRY.csv`.
+
+## Doctrine de couverture reason-classifiée
+
+Pour tout OF-ID officiel, le résultat final doit être dérivable vers une catégorie explicite :
 
 ```text
-fund.listing
-fund.listing_identifier
-```
-
-Son dictionnaire est une extension additive :
-
-```text
-data/dictionary/extensions/listing_v1/
-34 champs
-version 1.0.0
-VALIDATED_LISTING_EXTENSION_SCOPE
-```
-
-Le validateur construit au runtime une union collision-free :
-
-```text
-143 + 34 = 177 FIELD_ID
-```
-
-Les collisions de FIELD_ID, incohérences d'entité ou dérives du `field_count` échouent fermées. Le core 143 n'est pas réécrit par les extensions.
-
-ADR :
-
-```text
-docs/02_ARCHITECTURE/ADR-031_CANONICAL_LISTING_DICTIONARY_EXTENSION.md
-```
-
-## 4. Principes de mapping
-
-Le canonique est la représentation interne ; Openfunds est un standard externe versionné.
-
-```text
-OPENFUNDS FIELD
-→ SOURCE VERSION + SHA256
-→ FIELD LEVEL / TYPE / VALUES / LICENCE
-→ PARSING
-→ TRANSFORMATION EXPLICITE
-→ CANONICAL ENTITY
-→ CANONICAL FIELD_ID
-→ VALIDATION
-→ IMPORT/EXPORT GATES
-```
-
-Règles impératives :
-
-1. aucun OF-ID, nom, niveau, type ou valeur autorisée ne peut être inventé ;
-2. l'archive officielle n'est jamais modifiée ;
-3. un champ externe ne devient pas automatiquement une colonne ;
-4. `CANONICAL_ENTITY` doit correspondre à l'entité gouvernée du FIELD_ID ;
-5. une transformation doit être déterministe ;
-6. toute perte d'information est explicite ;
-7. `XX` reste un template et n'est pas développé artificiellement ;
-8. les doublons `(EXTERNAL_FIELD_ID, CANONICAL_FIELD_ID)` sont interdits ;
-9. un mapping sémantiquement valide peut rester non activable si une licence ou une dépendance runtime l'impose ;
-10. le registre contient uniquement des mappings réellement revus — aucun catalogue artificiel de 1 869 lignes `UNMAPPED` ;
-11. les anciens batches doivent rester forward-compatible et ne jamais figer la taille totale future du registre.
-
-## 5. Batches vérifiés
-
-### Batch 01 — domicile + ISIN
-
-Run GREEN : `32065216172`.
-
-```text
-OFST010010 Fund Domicile Alpha-2
-→ OF_FUND_FUND_ENTITY_STATE_DOMICILE_COUNTRY_ID
-→ ISO_3166_ALPHA2_TO_REF_GEOGRAPHY_UUID
-
-OFST020000 ISIN
-→ identifier_value
-→ identifier_scheme = ISIN
-→ normalized_value
-```
-
-### Batch 02 — devises Fund / Share Class
-
-Run GREEN : `32067722365`.
-
-```text
-OFST010410 Fund Currency
-→ OF_FUND_FUND_PROFILE_BASE_CURRENCY_ID
-→ ISO_4217_TO_REF_CURRENCY_UUID
-
-OFST020540 Share Class Currency
-→ OF_FUND_SHARE_CLASS_PROFILE_CURRENCY_ID
-→ ISO_4217_TO_REF_CURRENCY_UUID
-```
-
-### Batch 03 — Valor + WKN
-
-Run GREEN : `32069647430`.
-
-```text
-OFST020010 Valor
-→ value / scheme VALOR / normalized value
-
-OFST020015 WKN
-→ value / scheme WKN / normalized value
-```
-
-SEDOL a été volontairement différé à ce stade parce que son `Field Level` officiel est `Listing`.
-
-### Batch 04 — distribution policy
-
-Run GREEN : `32070575644`.
-
-```text
-OFST020400 Share Class Distribution Policy
-accumulating                → ACCUMULATING
-accumulating & distributing → MIXED
-distributing                → DISTRIBUTING
-```
-
-Aucune perte d'information.
-
-### Batch 05 — SEDOL au bon niveau Listing
-
-Audit officiel checksum-locké : `32071520665`.
-
-Run GREEN mapping : `32071858346`.
-
-Le record officiel établit :
-
-```text
-OF-ID       OFST020040
-FIELD NAME  SEDOL
-FIELD LEVEL Listing
-DATA TYPE   string
-```
-
-Mapping :
-
-```text
-OFST020040
-→ OF_FUND_LISTING_IDENTIFIER_IDENTIFIER_VALUE
-→ OF_FUND_LISTING_IDENTIFIER_IDENTIFIER_SCHEME
-→ OF_FUND_LISTING_IDENTIFIER_NORMALIZED_VALUE
+MAPPED_CANONICAL
+MAPPED_DERIVED
+NO_CANONICAL_EQUIVALENT
+DEFERRED_NOT_REQUIRED_FOR_PRODUCT
+GATED_VENDOR_OR_LICENSE
+TO_CONFIRM
+UNREVIEWED   # état calculé de travail, jamais matérialisé comme fausse ligne de mapping
 ```
 
 Règles :
 
-```text
-IDENTITY
-CONSTANT_SEDOL
-TRIM_AND_UPPERCASE_SEDOL
-```
+1. les catégories mappées sont dérivées de `MAPPING_REGISTRY.csv` ;
+2. le fichier sparse ne stocke que les décisions non mappées/deferred/gated/TO_CONFIRM ;
+3. un OF-ID déjà mappé ne peut pas être dupliqué dans `REVIEW_OUTCOMES.csv` ;
+4. chaque décision sparse exige un `REASON_CODE` ;
+5. chaque OF-ID et chaque source reference doivent exister dans l'inventaire officiel checksum-locké ;
+6. `TO_CONFIRM` reste un blocker et n'est jamais compté comme terminé ;
+7. les templates `XX` restent des templates ;
+8. `DEFERRED_NOT_REQUIRED_FOR_PRODUCT` est une décision de périmètre produit, pas un jugement sur l'importance générale du champ Openfunds ;
+9. aucune génération artificielle de 1 869 lignes `UNMAPPED` n'est autorisée.
 
-Le record officiel contient une alerte de licence pouvant concerner ingestion, stockage ou distribution. Par conséquent :
+Le validator calcule une partition : mapped / reviewed nonmapped / vendor gated / to-confirm / unreviewed. La somme doit être exactement 1 869.
 
-```text
-SEMANTIC_MAPPING    VALIDATED
-INFORMATION_LOSS    NONE
-IMPORT_SUPPORTED    NO
-EXPORT_SUPPORTED    NO
-ACTIVATION_GATE     EXPLICIT_SEDOL_LICENSING_CLEARANCE
-```
-
-Preuve permanente :
+## Principes de mapping permanents
 
 ```text
-docs/00_PROJECT/OF_MAP_002_BATCH_05_SEDOL_COMPLETION_20260817.md
+OPENFUNDS FIELD
+→ OFFICIAL VERSION + SHA256
+→ FIELD LEVEL / TYPE / VALUES / CARDINALITY
+→ EXISTING CANONICAL TARGET AUDIT
+→ RED CONTRACT
+→ OPTIONAL FORWARD MIGRATION IF NEEDED
+→ EXPLICIT TRANSFORMATION
+→ CANONICAL FIELD / RELATION
+→ VALIDATION
+→ IMPORT/EXPORT GATES
+→ DIFF REVIEW
 ```
 
-## 6. Couverture actuelle
+- Openfunds est un standard d'échange, jamais le schéma physique runtime.
+- Un champ externe ne devient pas automatiquement une colonne.
+- Une valeur absente ne devient ni zéro, ni date, ni devise inventée.
+- Les concepts répétables deviennent des relations/lignes versionnées, pas des pipe strings canoniques.
+- Les vendor identifiers gardent leur scheme propre et leurs gates d'usage.
+- Les tests historiques ne figent pas la taille cumulative future du registre.
+
+## Batches 01–05 — baselines distantes vérifiées
 
 ```text
-OFFICIAL_FIELDS                1869
-REVIEWED_MAPPING_ROWS            16
-MAPPED_EXTERNAL_IDS               8
-UNMAPPED_EXTERNAL_IDS          1861
-CANONICAL_FIELDS_AVAILABLE      177
-MAPPED_CANONICAL_IDS             10
+Batch 01 domicile/ISIN              GREEN 32065216172
+Batch 02 Fund/ShareClass currency   GREEN 32067722365
+Batch 03 Valor/WKN                  GREEN 32069647430
+Batch 04 distribution policy        GREEN 32070575644
+Batch 05 SEDOL Listing              GREEN 32071858346
 ```
 
-Cette faible couverture n'est pas un défaut du registre : elle reflète la règle de ne valider que des équivalences démontrées.
+SEDOL reste runtime import/export `NO` derrière `EXPLICIT_SEDOL_LICENSING_CLEARANCE`.
 
-## 7. Validation technique
+## Batches 06–19 — modèle Listing, temps, multicurrency, lifecycle
 
-Le validateur :
+Implémentés structurellement, mais sans nouvelle attestation distante observable :
 
-- reparse le PDF checksum-locké ;
-- reconstruit les 143 FIELD_ID du core ;
-- charge les extensions canoniques explicitement déclarées ;
-- rejette les collisions ;
-- vérifie les entités ;
-- rejette les OF-ID inconnus ;
-- rejette les FIELD_ID inconnus ;
-- vérifie source SHA/reference ;
-- laisse le checkout inchangé.
+- MIC, primary listing, listing date ;
+- quote-unit semantics ;
+- listing business status ;
+- Bloomberg/RIC Listing et iNAV identifiers ;
+- listing inception price ;
+- NAV/trading-price frequencies ;
+- valuation time + IANA semantics ;
+- additional dealing currencies ;
+- precise lifecycle phase ;
+- repeatable lifecycle events ;
+- investment/dealing access status.
 
-Union core+Listing GREEN : `32071385088`.
+Invariants : Listing status ≠ bitemporal `is_current`; iNAV ≠ Listing identity; timezone label ≠ IANA; lifecycle ≠ investment status.
 
-Batch 05 GREEN complet : `32071858346`.
+## Batches 20–27 — ETF / passive / replication / benchmark / tracked index
 
-## 8. Prochaine unité — Batch 06
+### Batch 20
 
-Auditer dans le PDF officiel les champs de niveau `Listing` qui peuvent exploiter directement migration 019 :
+`OFST010580 Is ETF` -> Share Class `is_etf`. Jamais inféré au niveau Fund.
+
+### Batch 21
+
+`OFST010720 Is Passive Fund` -> Fund `is_passive`. Jamais utilisé pour inférer ETF.
+
+### Batch 22
+
+`OFST010900/010901` -> méthodologie de réplication Fund. Les détails `hybrid` sont normalisés en lignes.
+
+### Batch 23
+
+`OFST023200 Benchmark` -> composantes benchmark ordonnées : ordre, nom, poids optionnel explicite.
+
+### Batch 24
+
+`OFST023205` -> identifiants Bloomberg des composantes benchmark, alignés par ordre. Runtime `NO/NO` derrière revue d'usage propriétaire projet.
+
+### Batch 25
+
+`OFST023800/023805/023810` -> tracked index Share Class : nom, devise/mode, type.
+
+`OFST023805` vide signifie explicitement `LOCAL_CURRENCY` avec `currency_id = NULL` ; aucune devise Share Class n'est inventée.
+
+### Batch 26
+
+`OFST023820/023830` -> identifiants tracked-index Bloomberg/RIC. RIC reste case-sensitive ; normalisation trim-only.
+
+### Batch 27
+
+`OFST023850 Denomination Base` -> ratio positif explicite `Fund Price / Index`.
+
+Aucun prix de fonds ni niveau d'index n'est déduit de ce ratio.
+
+## Gates ouverts
 
 ```text
-VENUE / MIC
-LISTING CURRENCY
-TICKER / LOCAL LISTING IDENTIFIER
-PRIMARY LISTING INDICATOR
+PRODUCT_REQUIRED_FAMILIES          EN_COURS
+REASON_CLASSIFIED_1869_REVIEW      EN_COURS
+RECENT_REMOTE_CI                   PENDING_NOT_OBSERVABLE
+SEDOL_RUNTIME                      LICENSING_CLEARANCE_REQUIRED
+BLOOMBERG_RIC_RUNTIME              PROPRIETARY_USAGE_REVIEW_REQUIRED
+PERSISTENT_POSTGRESQL              NOT_CONFIGURED
+IMMUTABLE_RAW_STORE                NOT_CONFIGURED
+COMPLETE_HISTORIES                 NOT_LOADED
+BENCHMARK_RFR_MAR                  NOT_FULLY_VALIDATED
+WTI_WTI_BENCH                      NOT_ACTIVE
+PRODUCTION_API_UI                  NOT_IMPLEMENTED
+PRODUCTION_DEPLOYMENT              NOT_CONFIGURED
 ```
 
-Pour chaque candidat :
+## Prochaine famille — A1 Identity / Names / Legal Structure
 
-1. rechercher l'OF-ID exact dans l'archive checksum-lockée ;
-2. vérifier `Field Level`, type, description, valeurs et licence ;
-3. confirmer que le champ canonique 019 existe ;
-4. écrire un contrat TDD RED ;
-5. ajouter uniquement les mappings démontrés ;
-6. exiger GREEN Python 3.11/3.12 + intégration PDF officielle.
+Avant toute migration 040 :
 
-Les noms Fund/SubFund/Umbrella, documents, frais, benchmarks, eligibility, ESG et autres domaines complexes restent des boucles séparées : ne pas créer de fausses équivalences pour accélérer artificiellement le taux de couverture.
+1. extraire les OF-IDs exacts relatifs aux noms Fund/SubFund/Share Class, langue, structure umbrella, legal form et rôles organisationnels ;
+2. contrôler Field Level, datatype, cardinalité et valeurs officielles ;
+3. auditer migration 015 et les relations/événements déjà présents ;
+4. réutiliser le canonique existant si possible ;
+5. écrire le RED de la famille ;
+6. créer migration 040 uniquement si un besoin produit réel n'est pas représentable sans perte ;
+7. append mappings uniquement après preuve ;
+8. vérifier le diff puis réconcilier manifest/CI/docs.
 
-## 9. Gates encore ouverts
+Manufacturer, Management Company et Investment Manager doivent rester des rôles distincts ; aucune égalité implicite n'est autorisée.
 
-```text
-FULL_1869_FIELD_MAPPING       EN_COURS
-SEDOL_RUNTIME                 BLOQUE_PAR_LICENCE
-PERSISTENT_POSTGRESQL         NON_CONFIGURE
-IMMUTABLE_RAW_STORE           NON_CONFIGURE
-COMPLETE_HISTORIES            NON_CHARGES
-BENCHMARK_RFR_MAR             NON_COMPLETEMENT_VALIDES
-WTI_WTI_BENCH                 NOT_ACTIVE
-PRODUCTION_API_UI             NON_IMPLEMENTE
-PRODUCTION_DEPLOYMENT         NON_CONFIGURE
-```
+---
 
-`OF-MAP-001` est `TERMINE`. `OF-MAP-002` reste `EN_COURS` jusqu'à revue explicite du catalogue, sans objectif artificiel de 100 % si certains champs n'ont pas d'équivalent canonique ou sont juridiquement/techniquement non activables.
+## Historique de référence
+
+Les rapports datés sous `docs/00_PROJECT/` conservent les états et preuves de chaque batch antérieur. Le présent document est la vue courante et ne réécrit pas rétroactivement ces checkpoints.
