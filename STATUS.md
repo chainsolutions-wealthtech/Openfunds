@@ -3,9 +3,11 @@
 ## État courant — supersède les compteurs historiques ci-dessous
 
 ```text
-STATUS_DATE: 2026-08-22
+STATUS_DATE: 2026-09-10
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
+GOVERNANCE_SOCLE: REGULATORY_STYLE_RECONCILED
+GOVERNANCE_TASK: OF-DOC-003
 FINALIZATION_MASTER_DESIGN: APPROVED
 CANONICAL_FOUNDATION_SPEC: APPROVED
 CANONICAL_FOUNDATION_A0: STRUCTURALLY_RECONCILED
@@ -18,7 +20,12 @@ MAPPED_OPENFUNDS_IDS: 50
 UNMAPPED_OPENFUNDS_IDS: 1819
 MAPPED_CANONICAL_IDS: 53
 LATEST_MAPPING_ID: MAP-000093
-RECENT_REMOTE_CI_ATTESTATION: PENDING_NOT_OBSERVABLE
+LAST_GOVERNANCE_BASELINE_HEAD: eeaa07194fcb46fa0cf0859d5061a30ffc5602c0
+LAST_OBSERVED_MAPPING_CI_HEAD: 275ec7a10658cfc5a9f5822eb2315bf01138fc10
+RECENT_REMOTE_CI_ATTESTATION: FAILURE_KNOWN
+RECENT_REMOTE_CI_RUN: 32541124896
+RECENT_REMOTE_CI_FAILURE: BATCH_07_EXPECTS_NO_PARENT_CURRENCY_INFERENCE_IN_NOTES
+GITHUB_RULESETS: NONE_OBSERVED
 PR_1: DRAFT / OPEN / UNMERGED
 PRODUCTION_DEPLOYED: NO
 PERSISTENT_PRODUCTION_POSTGRESQL: NOT_CONFIGURED
@@ -29,6 +36,10 @@ PRODUCTION_API_UI: NOT_IMPLEMENTED
 
 Références de reprise :
 
+- `00_START_HERE.md`
+- `SOURCE_OF_TRUTH.md`
+- `LOOP_ENGINEERING.md`
+- `DEFINITION_OF_DONE.md`
 - `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
 - `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
 - `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
@@ -38,15 +49,33 @@ La règle de preuve reste :
 
 ```text
 IMPLEMENTED != REMOTELY_GREEN
+COMMIT_CREATED != LOOP_VERIFIED
 ```
 
-Les surfaces GitHub connectées ne remontent toujours pas de run/check exploitable pour les HEAD récents. Aucun verdict GREEN récent n'est donc inventé.
+### Réconciliation CI du 2026-09-10
+
+Contrairement au snapshot du 2026-08-22, la surface GitHub permet maintenant d'observer un run récent pertinent. Le run `OF-MAP-002 Mapping Registry` `32541124896`, exécuté sur `275ec7a10658cfc5a9f5822eb2315bf01138fc10`, est en échec. L'intégration officielle/canonique passe, tandis que les jobs unitaires Python 3.11 et 3.12 échouent sur le contrat Batch 07 : `NO_PARENT_CURRENCY_INFERENCE` est attendu dans `NOTES` et absent de la ligne testée.
+
+Ce défaut est conservé comme gap technique réel ; la migration documentaire `OF-DOC-003` ne l'affaiblit pas et ne le masque pas.
+
+### Réconciliation gouvernance du 2026-09-10
+
+Le socle de continuité a été renforcé additivement sur la branche existante :
+
+- `00_START_HERE.md` impose la découverte et la réconciliation Git avant écriture ;
+- `SOURCE_OF_TRUTH.md` formalise la hiérarchie des autorités et l'indépendance vis-à-vis de la mémoire des agents ;
+- `LOOP_ENGINEERING.md` porte la boucle complète `DISCOVER → ... → VERIFY_REMOTE_STATE → SELECT_NEXT` ;
+- `DEFINITION_OF_DONE.md` formalise les critères de clôture et les non-claims ;
+- aucune règle métier Regulatory n'a été transposée ;
+- aucune branche/PR n'a été créée, aucun retarget/merge n'a été réalisé, `main` n'a pas été modifiée ;
+- aucun GitHub Ruleset n'est actuellement observé : l'enforcement natif GitHub reste un gap distinct de la gouvernance documentaire.
 
 ## Prochaine action courante
 
 ```text
-TASK: Canonical Foundation / Task 4
-OBJECTIVE: reason-classified Openfunds review outcomes registry
+TASK: OF-MAP-002 / CI RECONCILIATION
+OBJECTIVE: RESTORE THE EXISTING BATCH_07 CONTRACT WITHOUT WEAKENING TESTS
+THEN: Canonical Foundation / Task 4 reason-classified Openfunds review outcomes registry
 THEN: A1 identity / names / legal structure
 NO_DEPLOYMENT: TRUE
 ```
