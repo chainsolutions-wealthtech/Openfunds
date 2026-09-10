@@ -1,6 +1,41 @@
 # TODO — REGISTRE DES TACHES OPENFUNDS
 
-Dernière mise à jour : `2026-08-17`.
+Dernière mise à jour : `2026-09-10`.
+
+## Réconciliation courante — 2026-09-10
+
+Cette section supersède uniquement les statuts courants obsolètes ; toutes les sections historiques ci-dessous sont conservées.
+
+```text
+OF-DOC-003: VERIFIED_COMPLETE_DOCUMENTARY_SOCLE
+OF-MAP-002: EN_COURS / CI_FAILURE_KNOWN
+CURRENT_GATE: RESTORE_BATCH_07_NO_PARENT_CURRENCY_INFERENCE_CONTRACT
+NEXT_AFTER_GREEN: TASK_4_REVIEW_OUTCOMES
+GITHUB_RULESETS: NONE_OBSERVED
+PRODUCTION_DEPLOYED: NO
+```
+
+### OF-DOC-003 — résultat de la réconciliation
+
+Le socle de gouvernance de type Regulatory a été transposé **comme mécanisme**, sans copier le métier Regulatory :
+
+- `00_START_HERE.md` réconcilié avec contrôle Git avant écriture ;
+- `SOURCE_OF_TRUTH.md` renforcé avec hiérarchie des autorités et mémoire canonique dans Git ;
+- `LOOP_ENGINEERING.md` complété avec la boucle `DISCOVER → ... → VERIFY_REMOTE_STATE → SELECT_NEXT` ;
+- `DEFINITION_OF_DONE.md` ajouté ;
+- `STATUS.md`, `NEXT_ACTION.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md` et `HANDOFF.md` réconciliés ;
+- preuve : `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md` ;
+- aucun code métier, migration, mapping, test, branche, PR, `main`, production ou donnée réelle modifié par cette tranche.
+
+Le gap GitHub natif reste ouvert : aucun Ruleset n'est observé. Il ne bloque pas la clôture **documentaire** de `OF-DOC-003`, mais empêche de qualifier le dépôt de gouvernance entièrement enforced par GitHub.
+
+### OF-MAP-002 — gate CI avant Task 4
+
+Le run `OF-MAP-002 Mapping Registry` `32541124896` observé sur `275ec7a10658cfc5a9f5822eb2315bf01138fc10` est rouge : l'intégration officielle/canonique passe, mais les jobs unitaires Python 3.11 et 3.12 échouent parce que le contrat Batch 07 attend `NO_PARENT_CURRENCY_INFERENCE` dans `NOTES`.
+
+La prochaine action est de réconcilier cette incohérence **sans supprimer ni affaiblir le test**, puis de reprendre Task 4.
+
+---
 
 ## 1. REGLES
 
