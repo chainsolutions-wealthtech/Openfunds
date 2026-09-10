@@ -4,21 +4,61 @@ Toutes les modifications importantes du projet sont consignées ici. Les commits
 
 ## [UNRELEASED]
 
+### 2026-09-10 — Réconciliation du socle de gouvernance `OF-DOC-003`
+
+#### Renforcé
+
+- `00_START_HERE.md` : ordre de découverte, contrôle Git avant écriture, analyse d'impact et résolution dynamique du HEAD ;
+- `SOURCE_OF_TRUTH.md` : hiérarchie explicite des autorités et dépôt Git versionné comme mémoire canonique indépendante des agents IA ;
+- `LOOP_ENGINEERING.md` : boucle complète `DISCOVER → BASELINE → SELECT → IMPACT_ANALYSIS → IMPLEMENT_COMPATIBLY → VERIFY → REGRESSION_CHECK → CORRECT_IF_REQUIRED → VERIFY_AGAIN → PERSIST_STATE → COMMIT → VERIFY_REMOTE_STATE → SELECT_NEXT` ;
+- `STATUS.md`, `NEXT_ACTION.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md` et `HANDOFF.md` : réconciliation de l'état courant et du point de reprise.
+
+#### Ajouté
+
+- `DEFINITION_OF_DONE.md` ;
+- `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md`.
+
+#### CI réconciliée
+
+- le run `OF-MAP-002 Mapping Registry` `32541124896` sur `275ec7a10658cfc5a9f5822eb2315bf01138fc10` est réellement observable et rouge ;
+- l'intégration officielle/canonique passe ;
+- les jobs unitaires Python 3.11 et 3.12 échouent sur le contrat Batch 07, qui attend `NO_PARENT_CURRENCY_INFERENCE` dans `NOTES` ;
+- aucun test n'a été supprimé ou affaibli par cette migration documentaire ;
+- prochaine action : restaurer ce contrat CI, puis reprendre Task 4 `review outcomes`.
+
+#### Gouvernance GitHub
+
+- aucun Ruleset GitHub observé ; l'enforcement natif reste un gap explicite ;
+- PR #1 conservée Draft / Open / Unmerged ;
+- aucune nouvelle branche/PR, aucun retarget/merge, aucun force-push, aucune modification de `main` et aucun déploiement.
+
+#### Non modifié
+
+- aucune règle métier Openfunds ;
+- aucune migration 001..039 ;
+- aucun mapping ou outcome ;
+- aucun test ou workflow ;
+- aucune donnée réelle ou production ;
+- aucune règle métier propre au dépôt Regulatory n'a été importée.
+
 ### A décider
 
-- poursuite incrémentale du mapping Openfunds v2.13.0 après bootstrap validé et Batch 01 vérifié ;
+- poursuite incrémentale du mapping Openfunds v2.13.0 après restauration du contrat CI existant ;
 - PostgreSQL persistant et stockage brut immuable ;
 - complétude des institutions et mappings sources des 54 pays ;
-- méthodologies WTI Bench, risque sans risque et MAR encore ouvertes.
+- méthodologies WTI Bench, risque sans risque et MAR encore ouvertes ;
+- éventuel enforcement natif GitHub par Ruleset, à traiter dans un gate administratif distinct.
 
 ### Limites connues
 
 - PR #1 non fusionnée ;
 - branche `main` minimale ;
+- aucun GitHub Ruleset observé ;
+- CI `OF-MAP-002` actuellement rouge sur le contrat Batch 07 ;
 - PostgreSQL persistant non configuré ;
 - stockage brut permanent absent ;
 - historique FX limité à un snapshot validé par zone ;
-- mapping Openfunds encore partiel : 4 lignes validées / 2 OF-ID officiels sur 1 869 (`OF-MAP-002` en cours) ;
+- mapping Openfunds encore partiel ;
 - API et produits analytiques actifs non implémentés.
 
 ## [2026-08-17] — TAXONOMIE POSTGRESQL, OPENFUNDS ET COUVERTURE INSTITUTIONNELLE
