@@ -1,5 +1,57 @@
 # Journal de travail Loop Engineering
 
+## Boucle OF-LOOP-DOC-003-RECONCILIATION-20260910 — 2026-09-10
+
+```text
+TASK_ID: OF-DOC-003
+START_HEAD: eeaa07194fcb46fa0cf0859d5061a30ffc5602c0
+CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
+MODE: DOCUMENTARY_GOVERNANCE_RECONCILIATION
+STATUS: PERSISTED / REMOTE_FINAL_VERIFICATION_PENDING
+PR_1: DRAFT / OPEN / UNMERGED
+GITHUB_RULESETS: NONE_OBSERVED
+PRODUCTION_DEPLOYED: NO
+```
+
+### Discovery / baseline
+
+Les autorités racines, la branche existante, la PR #1, les workflows récents, les règles GitHub observables et le socle Regulatory de référence ont été relus avant écriture. Openfunds possédait déjà un socle important ; la décision a donc été de renforcer l'existant et non de recopier ou remplacer son architecture documentaire.
+
+Baseline de départ : `eeaa07194fcb46fa0cf0859d5061a30ffc5602c0`.
+
+La CI récente est devenue observable. Le run `OF-MAP-002 Mapping Registry` `32541124896` sur `275ec7a10658cfc5a9f5822eb2315bf01138fc10` est rouge : l'intégration officielle/canonique passe, les jobs unitaires Python 3.11 et 3.12 échouent parce que le contrat Batch 07 attend `NO_PARENT_CURRENCY_INFERENCE` dans `NOTES`.
+
+### Implémentation documentaire
+
+- `00_START_HERE.md` réconcilié ;
+- `SOURCE_OF_TRUTH.md` renforcé ;
+- `LOOP_ENGINEERING.md` complété ;
+- `DEFINITION_OF_DONE.md` ajouté ;
+- `STATUS.md`, `NEXT_ACTION.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md`, `TODO.md`, `SUIVI.md`, `HANDOFF.md` et `CHANGELOG.md` synchronisés ;
+- rapport `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md` ajouté.
+
+### Non-régression par périmètre
+
+Aucun code métier, migration, mapping, donnée d'outcome, test, workflow, `main`, branche supplémentaire, PR supplémentaire, retargeting, merge, force-push, production ou donnée réelle n'a été modifié par cette tranche.
+
+Aucune règle métier du dépôt Regulatory n'a été transposée.
+
+### Gaps ouverts
+
+```text
+OF_MAP_002_CI: FAILURE_KNOWN
+GITHUB_NATIVE_RULESET: NONE_OBSERVED
+PERSISTENT_PRODUCTION_DB: NOT_CONFIGURED
+IMMUTABLE_RAW_STORE: NOT_CONFIGURED
+PRODUCTION: NOT_DEPLOYED
+```
+
+### Prochaine action
+
+Réconcilier le contrat Batch 07 de `OF-MAP-002` sans affaiblir les tests, obtenir la preuve CI Python 3.11/3.12 + intégration, puis reprendre Task 4 review outcomes.
+
+---
+
 ## Boucle OF-LOOP-DATA-001 — 2026-08-05
 
 ```text
