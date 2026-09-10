@@ -1,19 +1,19 @@
 # Prochaine action autorisée
 
 ```text
-STATUS_DATE: 2026-08-22
+STATUS_DATE: 2026-09-10
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 PR_1: DRAFT / OPEN / UNMERGED
+CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
 CURRENT_IMPLEMENTED_MIGRATION_CHAIN: 001..039
 LATEST_MIGRATION: 039_TRACKED_INDEX_DENOMINATION_BASE / ORDER 390
 CURRENT_CANONICAL_INVENTORY: 295 = 143_CORE + 152_EXTENSIONS
 CURRENT_MAPPING: BATCH_01..27 / 93_ROWS / 50_OF_IDS / 53_CANONICAL_IDS
 UNMAPPED_OPENFUNDS_IDS: 1819
 LATEST_MAPPING: MAP-000093 / OFST023850
-LAST_REMOTELY_VERIFIED_MIGRATION_CHAIN: 001..019 / RUN 32070768364
-LAST_REMOTELY_VERIFIED_CANONICAL_UNION: 177 / RUN 32071385088
-LAST_REMOTELY_VERIFIED_MAPPING: BATCH_05 / RUN 32071858346
-RECENT_REMOTE_CI: PENDING_NOT_OBSERVABLE
+LAST_OBSERVED_MAPPING_CI_HEAD: 275ec7a10658cfc5a9f5822eb2315bf01138fc10
+LAST_OBSERVED_MAPPING_CI_RUN: 32541124896
+RECENT_REMOTE_CI: FAILURE_KNOWN
 PRODUCTION_DEPLOYED: NO
 ```
 
@@ -22,38 +22,61 @@ PRODUCTION_DEPLOYED: NO
 Lire dans cet ordre :
 
 1. `00_START_HERE.md`
-2. `AGENTS.md`
-3. `SOURCE_OF_TRUTH.md`
-4. `STATUS.md`
-5. ce fichier
-6. `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
-7. `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
-8. `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
-9. `docs/00_PROJECT/OF_CANONICAL_FOUNDATION_A0_RECONCILIATION_20260822.md`
+2. `GOVERNANCE.md`
+3. `README.md`
+4. `AGENTS.md`
+5. `SOURCE_OF_TRUTH.md`
+6. `STATUS.md`
+7. ce fichier
+8. `LOOP_STATE.md`
+9. `CURRENT_ITERATION.md`
+10. `LOOP_ENGINEERING.md`
+11. `DEFINITION_OF_DONE.md`
+12. `TODO.md` / `SUIVI.md`
+13. `DECISIONS.md` / ADR pertinents
+14. les spécifications et tests de la tâche sélectionnée.
 
-## A0 — état
+Résoudre le HEAD GitHub courant avant toute écriture. Les SHA présents ici décrivent des preuves datées et ne remplacent jamais cette vérification.
+
+## Action immédiate — restaurer le contrat CI existant de OF-MAP-002
+
+Le dernier run pertinent observé `OF-MAP-002 Mapping Registry` (`32541124896`) est rouge sur son HEAD `275ec7a10658cfc5a9f5822eb2315bf01138fc10`.
+
+État observé :
 
 ```text
-MACHINE_MANIFESTS_ALIGNED: YES THROUGH MIGRATION_039 / BATCH_27
-OF_MAP_002_WIRED_THROUGH_BATCH_27: YES
-MIGRATION_RUNNER_WIRED_THROUGH_039: YES
-MAPPING_REGISTRY_APPEND_ONLY_THROUGH_MAP_000093: YES
-RECENT_REMOTE_GREEN_ATTESTED: NO / NOT OBSERVABLE
+OFFICIAL_CANONICAL_INTEGRATION: PASS
+UNIT_TEST_PYTHON_3_11: FAILURE
+UNIT_TEST_PYTHON_3_12: FAILURE
+FAILURE_CONTRACT: BATCH_07 / NO_PARENT_CURRENCY_INFERENCE
 ```
 
-`IMPLEMENTED != REMOTELY_GREEN` reste une règle dure.
+Le test attend que `NO_PARENT_CURRENCY_INFERENCE` soit présent dans `NOTES` pour la ligne Batch 07 concernée. La prochaine intervention technique doit déterminer, à partir du contrat, de l'historique Git, du mapping source et des tests, si la ligne de données a perdu cette note ou si une autre incohérence compatible explique l'échec.
 
-## Prochaine unité : Task 4 — reason-classified review outcomes
+### Règles de correction
 
-Créer un registre machine-readable complémentaire pour les OF-IDs officiellement revus mais volontairement non représentés par une ligne de mapping canonique.
+- ne pas supprimer ou affaiblir l'assertion pour obtenir du vert ;
+- ne pas inventer de sémantique métier ;
+- conserver l'invariant déjà documenté : devise locale/tracked-index non inférée d'une devise parent ;
+- utiliser TDD/RED → GREEN pour toute correction de comportement ou fixture ;
+- vérifier Python 3.11 et 3.12 ;
+- vérifier également le job d'intégration officielle/canonique ;
+- comparer les outputs et compteurs avec la baseline ;
+- persister les preuves avant de déclarer le run vert.
 
-Fichiers prévus :
+## Ensuite — Canonical Foundation / Task 4
+
+Une fois la CI existante restaurée, reprendre la Task 4 `reason-classified Openfunds review outcomes registry`.
+
+Les surfaces existent déjà :
 
 ```text
 data/openfunds/mapping/v2.13.0/REVIEW_OUTCOMES.csv
 scripts/validate_openfunds_review_outcomes.py
 tests/test_openfunds_review_outcomes.py
 ```
+
+Le registre `REVIEW_OUTCOMES.csv` observé lors de la réconciliation du 2026-09-10 contient actuellement son en-tête gouverné mais aucune ligne d'outcome ne doit être inventée. Continuer seulement à partir des cas réellement revus et prouvés.
 
 Outcomes autorisés :
 
@@ -66,7 +89,7 @@ GATED_VENDOR_OR_LICENSE
 TO_CONFIRM
 ```
 
-### Règles
+### Règles Task 4
 
 - ne jamais générer 1 869 faux `UNMAPPED` ;
 - le registre d'outcomes reste sparse pour les cas explicitement revus non mappés/gated/deferred ;
@@ -75,7 +98,7 @@ TO_CONFIRM
 - `TO_CONFIRM` reste un blocker ;
 - chaque outcome non mappé possède un reason code ;
 - l'OF-ID doit exister dans l'inventaire officiel checksum-locked v2.13.0 ;
-- le SHA source doit rester `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4`.
+- le SHA source reste `40b562a10e92cf809449302e8c9eacf785f5c8a66ff644d1a5c36fc4380cebb4` tant que la source officielle versionnée ne change pas.
 
 Le validator doit calculer :
 
@@ -112,17 +135,18 @@ Aucun numéro de migration ne doit être réservé à l'avance. Créer migration
 ## Blockers externes conservés
 
 ```text
-PERSISTENT_DB           NOT_CONFIGURED
-IMMUTABLE_RAW_STORE     NOT_CONFIGURED
-COMPLETE_HISTORIES      NOT_LOADED
-SEDOL_RUNTIME           EXPLICIT_LICENSING_CLEARANCE_REQUIRED
-BLOOMBERG_RIC_RUNTIME   EXPLICIT_PROPRIETARY_IDENTIFIER_USAGE_REVIEW_REQUIRED
-BENCHMARK_RFR_MAR       NOT_FULLY_VALIDATED
-WTI_WTI_BENCH           NOT_ACTIVE
-PRODUCTION_API_UI       NOT_IMPLEMENTED
-PRODUCTION_DEPLOY       NOT_CONFIGURED
+GITHUB_NATIVE_RULESET    NONE_OBSERVED
+PERSISTENT_DB            NOT_CONFIGURED
+IMMUTABLE_RAW_STORE      NOT_CONFIGURED
+COMPLETE_HISTORIES       NOT_LOADED
+SEDOL_RUNTIME            EXPLICIT_LICENSING_CLEARANCE_REQUIRED
+BLOOMBERG_RIC_RUNTIME    EXPLICIT_PROPRIETARY_IDENTIFIER_USAGE_REVIEW_REQUIRED
+BENCHMARK_RFR_MAR        NOT_FULLY_VALIDATED
+WTI_WTI_BENCH            NOT_ACTIVE
+PRODUCTION_API_UI        NOT_IMPLEMENTED
+PRODUCTION_DEPLOY        NOT_CONFIGURED
 ```
 
 ## Interdictions
 
-Ne pas toucher `main`, ne pas créer de branche/PR supplémentaire, ne pas retargeter/fusionner/mettre Ready PR #1, ne pas déployer, ne pas activer production et ne pas charger des données réelles sans porte explicite.
+Ne pas toucher `main`, ne pas créer de branche/PR supplémentaire, ne pas retargeter/fusionner/mettre Ready PR #1, ne pas force-push ou réécrire l'historique, ne pas déployer, ne pas activer production et ne pas charger des données réelles sans porte explicite.
