@@ -7,8 +7,12 @@ TASK_ID: OF-DOC-003
 START_HEAD: eeaa07194fcb46fa0cf0859d5061a30ffc5602c0
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 MODE: DOCUMENTARY_GOVERNANCE_RECONCILIATION
-STATUS: PERSISTED / REMOTE_FINAL_VERIFICATION_PENDING
+STATUS: VERIFIED_COMPLETE_DOCUMENTARY_SOCLE
+REMOTE_VERIFIED_HEAD_BEFORE_CLOSURE_LOG: 1c977e06b7f8720b5c46770e2b7577009a2338b9
+COMPARE_FROM_START: AHEAD_14 / BEHIND_0
 PR_1: DRAFT / OPEN / UNMERGED
+FINAL_HEAD_LEGACY_STATUSES_AT_VERIFICATION: 0
+ACTIONS_TRIGGERED_BY_DOCUMENTARY_COMMITS_AT_VERIFICATION: NONE_OBSERVED
 GITHUB_RULESETS: NONE_OBSERVED
 PRODUCTION_DEPLOYED: NO
 ```
@@ -29,6 +33,27 @@ La CI récente est devenue observable. Le run `OF-MAP-002 Mapping Registry` `325
 - `DEFINITION_OF_DONE.md` ajouté ;
 - `STATUS.md`, `NEXT_ACTION.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md`, `TODO.md`, `SUIVI.md`, `HANDOFF.md` et `CHANGELOG.md` synchronisés ;
 - rapport `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md` ajouté.
+
+### Vérification distante de clôture
+
+La comparaison GitHub `eeaa07194fcb46fa0cf0859d5061a30ffc5602c0...1c977e06b7f8720b5c46770e2b7577009a2338b9` a été observée avant cette écriture de clôture :
+
+```text
+STATUS: AHEAD
+AHEAD_BY: 14
+BEHIND_BY: 0
+MERGE_BASE: eeaa07194fcb46fa0cf0859d5061a30ffc5602c0
+HEAD: 1c977e06b7f8720b5c46770e2b7577009a2338b9
+DATA_FILES_IN_DIFF: NONE_OBSERVED
+TEST_FILES_IN_DIFF: NONE_OBSERVED
+MIGRATION_FILES_IN_DIFF: NONE_OBSERVED
+```
+
+La PR #1 a été revérifiée `OPEN`, `DRAFT`, `UNMERGED`, avec la même branche de tête `architecture/africafunds-country-indicators-v0.1` et la même base `architecture/canonical-model-v1-bootstrap`.
+
+Le HEAD `1c977e06b7f8720b5c46770e2b7577009a2338b9` ne portait aucun legacy status (`total_count=0`). Aucun run GitHub Actions du 2026-09-10 n'était observé sur les commits documentaires ; le dernier run pertinent visible restait `OF-MAP-002 Mapping Registry` `32541124896`, rouge sur `275ec7a...`. Aucun Ruleset GitHub n'était observé.
+
+Cette preuve clôt `OF-DOC-003` au niveau **socle documentaire et méthodologique** uniquement. Elle ne ferme pas `OF-MAP-002`, ne rend pas la CI produit verte et ne constitue aucune autorisation de merge ou de production.
 
 ### Non-régression par périmètre
 
@@ -187,7 +212,7 @@ Les actifs de recherche de la PR nº2 ont été exploités en lecture seule et c
 
 ```text
 BOTSWANA: BOB, NBFIRA, BSE, STATISTICS_BOTSWANA
-NAMIBIE: BON, NAMFISA, NSX, NSA_NAMIBIA
+NAMIBIE: BON, NAMFIRA, NSX, NSA_NAMIBIA
 ETHIOPIE: NBE, ECMA, ESX, ESS_ETHIOPIA
 UEMOA: AMF_UMOA, UMOA_TITRES
 CEMAC: COSUMAF
