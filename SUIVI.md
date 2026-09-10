@@ -1,8 +1,69 @@
 # SUIVI — JOURNAL DE CONTINUITE DU PROJET OPENFUNDS
 
-Dernière mise à jour : `2026-08-17`
+Dernière mise à jour : `2026-09-10`
 Branche : `architecture/africafunds-country-indicators-v0.1`  
 PR principale : `#1` — brouillon, ouverte, non fusionnée ; résoudre dynamiquement la fusionnabilité avant toute action.
+
+## MISE A JOUR DU 10 SEPTEMBRE 2026 — SOCLE DE GOUVERNANCE OF-DOC-003 RECONCILIE
+
+```text
+TASK_ID: OF-DOC-003
+LOOP_ID: OF-LOOP-DOC-003-RECONCILIATION-20260910
+START_HEAD: eeaa07194fcb46fa0cf0859d5061a30ffc5602c0
+CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
+PR_1: DRAFT / OPEN / UNMERGED
+GOVERNANCE_SOCLE: VERIFIED_COMPLETE_DOCUMENTARY_SOCLE
+BUSINESS_CODE_CHANGED: NO
+MIGRATIONS_CHANGED: NO
+MAPPING_DATA_CHANGED: NO
+TESTS_CHANGED: NO
+MAIN_CHANGED: NO
+NEW_BRANCH_OR_PR: NO
+PRODUCTION_CHANGED: NO
+GITHUB_RULESETS: NONE_OBSERVED
+```
+
+### Objet
+
+Le mécanisme de gouvernance utilisé dans `chainsolutions-wealthtech/Regulatory` a servi de référence méthodologique uniquement. Aucune règle métier Regulatory n'a été importée dans Openfunds. L'intégration a renforcé les autorités déjà présentes, conformément à la règle `REUTILISER → CORRIGER → RENFORCER → ETENDRE → MIGRER COMPATIBLEMENT`.
+
+### Réalisé
+
+- `00_START_HERE.md` réconcilié : ordre de lecture, contrôle Git avant écriture, analyse d'impact et résolution dynamique du HEAD ;
+- `SOURCE_OF_TRUTH.md` renforcé : hiérarchie des autorités, GitHub propriétaire de l'état Git, mémoire canonique dans le dépôt, assistants/conversations explicitement non canoniques ;
+- `LOOP_ENGINEERING.md` complété avec la boucle intégrale `DISCOVER → BASELINE → SELECT → IMPACT_ANALYSIS → IMPLEMENT_COMPATIBLY → VERIFY → REGRESSION_CHECK → CORRECT_IF_REQUIRED → VERIFY_AGAIN → PERSIST_STATE → COMMIT → VERIFY_REMOTE_STATE → SELECT_NEXT` ;
+- `DEFINITION_OF_DONE.md` créé à la racine ;
+- `STATUS.md`, `NEXT_ACTION.md`, `LOOP_STATE.md`, `CURRENT_ITERATION.md`, `TODO.md`, `HANDOFF.md` et `CHANGELOG.md` réconciliés ;
+- rapport de preuve : `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md`.
+
+### CI réellement observée
+
+L'ancien statut `PENDING_NOT_OBSERVABLE` n'est plus exact. Le workflow `OF-MAP-002 Mapping Registry` run `32541124896`, observé sur `275ec7a10658cfc5a9f5822eb2315bf01138fc10`, est rouge :
+
+```text
+OFFICIAL_CANONICAL_INTEGRATION: PASS
+UNIT_PYTHON_3_11: FAILURE
+UNIT_PYTHON_3_12: FAILURE
+FAILURE_CONTRACT: BATCH_07 / NO_PARENT_CURRENCY_INFERENCE EXPECTED IN NOTES
+```
+
+Cette défaillance préexistante n'a pas été masquée, corrigée implicitement ou transformée en succès documentaire. Aucun test n'a été supprimé ou affaibli.
+
+### Point exact de reprise courant
+
+```text
+1. RESOLVE CURRENT REMOTE HEAD
+2. READ 00_START_HERE / GOVERNANCE / AGENTS / SOURCE_OF_TRUTH / STATUS / NEXT_ACTION
+3. RESTORE OF-MAP-002 BATCH_07 CONTRACT WITHOUT WEAKENING TESTS
+4. VERIFY PYTHON_3_11 + PYTHON_3_12 + OFFICIAL_CANONICAL_INTEGRATION
+5. PERSIST GREEN OR FAILURE EVIDENCE
+6. THEN RESUME TASK_4 REVIEW_OUTCOMES
+7. THEN A1 IDENTITY / NAMES / LEGAL STRUCTURE
+```
+
+Aucun Ruleset GitHub n'étant observé, l'enforcement natif reste un gap ouvert distinct. Il ne doit être modifié que dans un gate administratif explicite.
+
+---
 
 ## 1. ETAT GENERAL DU PROJET
 
