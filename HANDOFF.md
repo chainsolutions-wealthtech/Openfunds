@@ -3,13 +3,14 @@
 ## Handoff actif — Openfunds Product Finalization
 
 ```text
-DATE: 2026-08-22
+DATE: 2026-09-10
 LOOP_ID: OF-LOOP-PRODUCT-FINALIZATION-001
 TASK_STREAM: OF-MAP-002
 SUBPROJECT: CANONICAL_FOUNDATION_COMPLETION
 STATUS: EN_COURS
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 CURRENT_HEAD_POLICY: RESOLVE_DYNAMICALLY
+GOVERNANCE_RECONCILIATION: OF-DOC-003 / COMPLETE_SOCLE_TRANCHE
 PR_1: DRAFT / OPEN / UNMERGED
 PR_1_BASE: architecture/canonical-model-v1-bootstrap
 MIGRATIONS: 001..039
@@ -21,23 +22,49 @@ MAPPED_OPENFUNDS_IDS: 50
 UNMAPPED_OPENFUNDS_IDS: 1819
 MAPPED_CANONICAL_IDS: 53
 LATEST_MAPPING: MAP-000093 / OFST023850
-RECENT_REMOTE_CI: PENDING_NOT_OBSERVABLE
+RECENT_REMOTE_CI: FAILURE_KNOWN
+RECENT_REMOTE_CI_RUN: 32541124896
+RECENT_REMOTE_CI_HEAD: 275ec7a10658cfc5a9f5822eb2315bf01138fc10
+GITHUB_RULESETS: NONE_OBSERVED
 PRODUCTION_DEPLOYED: NO
 ```
 
 ## Autorités de reprise
 
 1. `00_START_HERE.md`
-2. `AGENTS.md`
-3. `SOURCE_OF_TRUTH.md`
-4. `STATUS.md`
-5. `NEXT_ACTION.md`
-6. `LOOP_STATE.md`
-7. `CURRENT_ITERATION.md`
-8. `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
-9. `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
-10. `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
-11. `docs/00_PROJECT/OF_CANONICAL_FOUNDATION_A0_RECONCILIATION_20260822.md`
+2. `GOVERNANCE.md`
+3. `README.md`
+4. `AGENTS.md`
+5. `SOURCE_OF_TRUTH.md`
+6. `STATUS.md`
+7. `NEXT_ACTION.md`
+8. `LOOP_STATE.md`
+9. `CURRENT_ITERATION.md`
+10. `LOOP_ENGINEERING.md`
+11. `DEFINITION_OF_DONE.md`
+12. `TODO.md` et `SUIVI.md`
+13. `DECISIONS.md` / ADR pertinents
+14. `WORK_LOG.md`
+15. `CHANGELOG.md`
+16. `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md`
+17. spécifications, plans, tests et fichiers directement concernés par la tâche suivante.
+
+Toujours résoudre le HEAD distant courant avant écriture. Les SHA de ce fichier sont des preuves datées et non une substitution à GitHub.
+
+## Gouvernance réconciliée
+
+La tranche `OF-DOC-003` du 2026-09-10 a renforcé le socle de continuité sans copier le métier Regulatory :
+
+- mémoire canonique = dépôt Git versionné ;
+- conversations et assistants = non canoniques ;
+- ordre de découverte obligatoire ;
+- hiérarchie des sources de vérité ;
+- Loop Engineering détaillé jusqu'à `VERIFY_REMOTE_STATE` ;
+- Definition of Done racine ;
+- CI réconciliée avec la preuve réellement observable ;
+- aucune branche/PR/main/production modifiée hors branche de contrôle existante.
+
+Rapport : `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md`.
 
 ## A0 fermé structurellement
 
@@ -49,23 +76,41 @@ Les surfaces machine sont alignées jusqu'à migration 039 / Batch 27 :
 - migration-runner : test 039 + compteur 39 + assertion `denomination_base` ;
 - mapping registry : append-only jusqu'à `MAP-000093`.
 
-Aucun GREEN récent n'est revendiqué : la surface connectée ne fournit pas de run/check exploitable pour les HEAD récents.
+Cette fermeture structurelle n'est pas une preuve de CI récente verte.
+
+## CI réellement observée
+
+```text
+WORKFLOW: OF-MAP-002 Mapping Registry
+RUN: 32541124896
+HEAD: 275ec7a10658cfc5a9f5822eb2315bf01138fc10
+OVERALL: FAILURE
+OFFICIAL_CANONICAL_INTEGRATION: PASS
+PYTHON_3_11_UNIT: FAILURE
+PYTHON_3_12_UNIT: FAILURE
+FAILURE: BATCH_07_EXPECTS_NO_PARENT_CURRENCY_INFERENCE_IN_NOTES
+```
+
+Ne jamais supprimer ou affaiblir l'assertion pour obtenir du vert. La correction doit être déterminée à partir du contrat, du mapping, de l'historique et des tests.
 
 ## Point de reprise exact
 
 ```text
-NEXT_TASK: Task 4 — reason-classified Openfunds review outcomes
+NEXT_TASK: Restore OF-MAP-002 Batch 07 contract and remote CI
+NEXT_AFTER_GREEN: Task 4 — reason-classified Openfunds review outcomes
 NEXT_AFTER_TASK_4: A1 Identity / Names / Legal Structure
 NEXT_MIGRATION_NUMBER_IF_AND_ONLY_IF_REQUIRED: 040
 ```
 
-### Task 4 — fichiers à créer
+### Task 4 — surfaces déjà présentes
 
 ```text
 data/openfunds/mapping/v2.13.0/REVIEW_OUTCOMES.csv
 scripts/validate_openfunds_review_outcomes.py
 tests/test_openfunds_review_outcomes.py
 ```
+
+`REVIEW_OUTCOMES.csv` contient actuellement son en-tête gouverné. Ne créer aucune ligne sans revue réelle et preuve correspondante.
 
 Le registre doit rester sparse et compléter `MAPPING_REGISTRY.csv`, pas le dupliquer. Les IDs mappés restent dérivés du registre existant.
 
@@ -97,11 +142,14 @@ Le calcul fusionné doit produire au minimum : mapped, reviewed nonmapped/deferr
 - vendor identifiers gated jusqu'à clearance ;
 - RIC case-preserving ;
 - historique migration/mapping immuable ;
-- aucune migration 040 avant audit officiel démontrant un manque canonique réel.
+- aucune migration 040 avant audit officiel démontrant un manque canonique réel ;
+- `IMPLEMENTED != REMOTELY_GREEN` ;
+- `COMMIT_CREATED != LOOP_VERIFIED`.
 
 ## Blockers externes
 
 ```text
+GITHUB_NATIVE_RULESET       NONE_OBSERVED
 PERSISTENT_PRODUCTION_DB    NOT_CONFIGURED
 IMMUTABLE_RAW_STORE         NOT_CONFIGURED
 COMPLETE_HISTORIES          NOT_LOADED
