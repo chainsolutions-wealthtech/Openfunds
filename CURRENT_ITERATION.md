@@ -3,7 +3,7 @@
 ## Itération active — Canonical Foundation Finalization
 
 ```text
-DATE: 2026-08-22
+DATE: 2026-09-10
 CONTROL_BRANCH: architecture/africafunds-country-indicators-v0.1
 PROGRAM: OPENFUNDS_PRODUCT_FINALIZATION
 SUBPROJECT: CANONICAL_FOUNDATION_COMPLETION
@@ -11,7 +11,7 @@ TASK_STREAM: OF-MAP-002
 ITERATION: A0_TO_A1
 STATUS: EN_COURS
 A0_STATUS: STRUCTURALLY_RECONCILED
-CURRENT_SUBTASK: TASK_4_REVIEW_OUTCOMES
+CURRENT_SUBTASK: RESTORE_OF_MAP_002_CI_THEN_TASK_4_REVIEW_OUTCOMES
 MIGRATIONS: 001..039
 CANONICAL_FIELDS: 295
 MAPPING_BATCHES: 01..27
@@ -19,7 +19,10 @@ MAPPING_ROWS: 93
 MAPPED_OPENFUNDS_IDS: 50
 MAPPED_CANONICAL_IDS: 53
 UNMAPPED_OPENFUNDS_IDS: 1819
-RECENT_REMOTE_CI: PENDING_NOT_OBSERVABLE
+RECENT_REMOTE_CI: FAILURE_KNOWN
+RECENT_REMOTE_CI_RUN: 32541124896
+RECENT_REMOTE_CI_HEAD: 275ec7a10658cfc5a9f5822eb2315bf01138fc10
+GOVERNANCE_SOCLE: RECONCILED_2026_09_10
 PR_1: DRAFT_OPEN_UNMERGED
 PRODUCTION_DEPLOYED: NO
 ```
@@ -28,18 +31,27 @@ PRODUCTION_DEPLOYED: NO
 
 Le socle canonique peut être terminé sans matérialiser aveuglément les 1 869 champs Openfunds : les familles nécessaires au produit sont modélisées et testées, tandis que les champs officiellement revus mais non nécessaires, sans équivalent ou gated sont classés avec un outcome explicite et vérifiable.
 
+Cette hypothèse produit reste inchangée par la réconciliation de gouvernance. En revanche, la prochaine unité doit d'abord restaurer le contrat CI existant : un test Batch 07 attend `NO_PARENT_CURRENCY_INFERENCE` dans `NOTES` et échoue actuellement sur Python 3.11/3.12.
+
 ### Objectif de l'itération
 
-1. fermer le registre machine-readable de review outcomes ;
-2. faire dériver la couverture globale depuis `MAPPING_REGISTRY.csv` + review outcomes ;
-3. conserver `TO_CONFIRM` comme blocker réel ;
-4. auditer A1 Identity / Names / Legal Structure depuis la source officielle v2.13.0 ;
-5. réutiliser le modèle canonique existant avant toute migration 040 ;
-6. appliquer RED → implémentation minimale → CI → diff → documentation ;
-7. ne jamais confondre progression structurale et GREEN CI distant.
+1. réconcilier et restaurer le contrat `OF-MAP-002` Batch 07 sans affaiblir les tests ;
+2. obtenir la preuve CI correspondante ;
+3. fermer ensuite le registre machine-readable de review outcomes ;
+4. faire dériver la couverture globale depuis `MAPPING_REGISTRY.csv` + review outcomes ;
+5. conserver `TO_CONFIRM` comme blocker réel ;
+6. auditer A1 Identity / Names / Legal Structure depuis la source officielle v2.13.0 ;
+7. réutiliser le modèle canonique existant avant toute migration 040 ;
+8. appliquer RED → implémentation minimale → CI → diff → documentation ;
+9. ne jamais confondre progression structurale et GREEN CI distant.
 
 ### Autorités de l'itération
 
+- `00_START_HERE.md`
+- `SOURCE_OF_TRUTH.md`
+- `LOOP_ENGINEERING.md`
+- `DEFINITION_OF_DONE.md`
+- `docs/00_PROJECT/OF_DOC_003_GOVERNANCE_RECONCILIATION_20260910.md`
 - `docs/superpowers/specs/2026-08-22-openfunds-product-finalization-design.md`
 - `docs/superpowers/specs/2026-08-22-openfunds-canonical-foundation-completion-design.md`
 - `docs/superpowers/plans/2026-08-22-openfunds-canonical-foundation-completion-plan.md`
@@ -49,7 +61,7 @@ Le socle canonique peut être terminé sans matérialiser aveuglément les 1 869
 
 ### Interdictions actives
 
-Aucun `main`, nouvelle branche/PR, merge, retarget, passage Ready, activation production, données réelles, déploiement ou sous-domaine pendant ce sous-projet.
+Aucun `main`, nouvelle branche/PR, merge, retarget, passage Ready, force-push, réécriture d'historique, activation production, données réelles, déploiement ou sous-domaine pendant ce sous-projet sans gate explicite.
 
 ---
 
